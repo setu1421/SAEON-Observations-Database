@@ -96,7 +96,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -168,7 +168,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to save sensor");
             }
         }
@@ -191,7 +191,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
     #region Instruments
     protected void InstrumentLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             if (e.Parameters["SensorID"] != null && e.Parameters["SensorID"].ToString() != "-1")
             {
@@ -209,7 +209,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     MessageBoxes.Error(ex, "Error", "Unable to refresh instruments grid");
                 }
             }
@@ -234,7 +234,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
 
     protected void InstrumentLinkSave(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -290,7 +290,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to link sensor");
             }
         }
@@ -308,7 +308,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
     [DirectMethod]
     public void DeleteInstrumentLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
@@ -318,7 +318,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to delete instrument link");
             }
         }

@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using SAEON.Observations.Data;
-using Ext.Net;
-using FileHelpers.Dynamic;
-using FileHelpers;
-using SubSonic;
-using System.Xml;
-using System.Xml.Xsl;
+﻿using Ext.Net;
 using SAEON.Logs;
+using SAEON.Observations.Data;
+using System;
 
 public partial class _UnitsOfMeasure : System.Web.UI.Page
 {
@@ -102,7 +92,7 @@ public partial class _UnitsOfMeasure : System.Web.UI.Page
     #region Phenomena
     protected void UnitOfMeasurePhenomenaGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             if (e.Parameters["UnitOfMeasureID"] != null && e.Parameters["UnitOfMeasureID"].ToString() != "-1")
             {
@@ -118,7 +108,7 @@ public partial class _UnitsOfMeasure : System.Web.UI.Page
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     MessageBoxes.Error(ex, "Error", "Unable to refresh phenomena grid");
                 }
             }

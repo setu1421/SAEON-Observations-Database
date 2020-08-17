@@ -1,5 +1,4 @@
 ﻿using Ext.Net;
-using SAEON.Logs;
 using SAEON.Observations.Data;
 using SubSonic;
 using System;
@@ -23,7 +22,7 @@ public class DataQueryRepository : BaseRepository
         SqlQuery q = new Select().From(VObservation.Schema);
 
         GetPagedQuery(ref q, e, paramPrefix);
-        //Logging.Verbose("GetPagedList SQL: {sql}", q.BuildSqlStatement());
+        //SAEONLogs.Verbose("GetPagedList SQL: {sql}", q.BuildSqlStatement());
         VObservationCollection col = q.ExecuteAsCollection<VObservationCollection>();
         return col.ToList<object>();
     }
@@ -50,7 +49,7 @@ public class DataQueryRepository : BaseRepository
         //    q.Or(VObservation.Columns.PhenomenonOfferingID).In(offerings);
 
         GetPagedQuery(ref q, e, paramPrefix);
-        //Logging.Verbose("GetPagedFilteredList SQL: {sql}", q.BuildSqlStatement());
+        //SAEONLogs.Verbose("GetPagedFilteredList SQL: {sql}", q.BuildSqlStatement());
         VObservationCollection col = q.ExecuteAsCollection<VObservationCollection>();
         return col.ToList<object>();
     }
@@ -160,7 +159,7 @@ public class DataQueryRepository : BaseRepository
         storeRefreshDataEventArgs.Total = total;
 
         int currenPage = storeRefreshDataEventArgs.Start / storeRefreshDataEventArgs.Limit + 1;
-        //Logging.Verbose("CurrentPage: {currentPage} Start: {Start} Limit: {Limit} Total: {total}", currenPage, storeRefreshDataEventArgs.Start, storeRefreshDataEventArgs.Limit, total);
+        //SAEONLogs.Verbose("CurrentPage: {currentPage} Start: {Start} Limit: {Limit} Total: {total}", currenPage, storeRefreshDataEventArgs.Start, storeRefreshDataEventArgs.Limit, total);
         if (storeRefreshDataEventArgs.Limit > total)
             q.Paged(currenPage, total);
         else

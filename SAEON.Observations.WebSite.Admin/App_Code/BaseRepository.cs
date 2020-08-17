@@ -45,10 +45,10 @@ public static class DataTableExtensions
                         values.Add(v.ToString().DoubleQuoted());
                     }
                     //else if (v is DateTime date)
-                    else if (v is DateTime)
+                    else if (v is DateTime time)
                     {
                         //DateTime date = ((DateTime)v).ToUniversalTime().ToLocalTime();
-                        DateTime date = DateTime.SpecifyKind(((DateTime)v), DateTimeKind.Local);
+                        DateTime date = DateTime.SpecifyKind(time, DateTimeKind.Local);
                         //values.Add(date.ToString("o"));
                         values.Add(date.ToString("yyyy-MM-ddTHH:mm:ss.fffK"));
                     }
@@ -116,7 +116,7 @@ public class BaseRepository
     /// <returns></returns>
     public static void GetPagedQuery(ref SqlQuery q, StoreRefreshDataEventArgs e, string filters)
     {
-        using (Logging.MethodCall(typeof(BaseRepository)))
+        using (SAEONLogs.MethodCall(typeof(BaseRepository)))
         {
 
             if (!string.IsNullOrEmpty(filters))
@@ -196,21 +196,21 @@ public class BaseRepository
 
             int total = q.GetRecordCount();
             int currentPage = (e.Start / e.Limit) + 1;
-            Logging.Verbose("e.Limit: {Limit} e.Start: {Start} e.Total: {Total} CurrentPage: {CurrentPage} Total: {Total}", e.Limit, e.Start, e.Total, currentPage, total);
+            SAEONLogs.Verbose("e.Limit: {Limit} e.Start: {Start} e.Total: {Total} CurrentPage: {CurrentPage} Total: {Total}", e.Limit, e.Start, e.Total, currentPage, total);
             e.Total = total;
             if (e.Limit > e.Total)
                 q.Paged(currentPage, e.Total);
             else
                 q.Paged(currentPage, e.Limit);
-            Logging.Verbose("Sql: {sql}", q.BuildSqlStatement());
+            SAEONLogs.Verbose("Sql: {sql}", q.BuildSqlStatement());
         }
     }
 
     //public enum ExportTypes { Csv, Excel };
 
-    public static void Export(SqlQuery query, string visCols, string exportType, string fileName, HttpResponse response, Action<DataTable> doLogging = null)
+    public static void Export(SqlQuery query, string visCols, string exportType, string fileName, HttpResponse response, Action<DataTable> doSAEONLogs = null)
     {
-        using (Logging.MethodCall(typeof(BaseRepository), new MethodCallParameters { { "Columns", visCols }, { "ExportType", exportType }, { "FileName", fileName } }))
+        using (SAEONLogs.MethodCall(typeof(BaseRepository), new MethodCallParameters { { "Columns", visCols }, { "ExportType", exportType }, { "FileName", fileName } }))
         {
             var result = -1;
             try
@@ -226,7 +226,7 @@ public class BaseRepository
                         colCaptions.Add(item.Key.Replace(" ", "").Replace("/", ""));
                     }
                 }
-                Logging.Verbose("Sql: {sql}", query.BuildSqlStatement());
+                SAEONLogs.Verbose("Sql: {sql}", query.BuildSqlStatement());
                 DataTable dt = query.ExecuteDataSet().Tables[0];
                 result = dt.Rows.Count;
                 for (int k = 0; k < dt.Columns.Count; k++)
@@ -239,7 +239,7 @@ public class BaseRepository
                         }
                     }
                 }
-                doLogging?.Invoke(dt);
+                doSAEONLogs?.Invoke(dt);
                 response.Clear();
                 byte[] bytes;
                 switch (exportType)
@@ -269,7 +269,7 @@ public class BaseRepository
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 throw;
             }
         }
@@ -277,7 +277,7 @@ public class BaseRepository
 
     public static void Export(string tableName, string filters, string visCols, string sortCol, string sortDir, string exportType, string fileName, HttpResponse response)
     {
-        using (Logging.MethodCall(typeof(BaseRepository), new MethodCallParameters { { "TableName", tableName }, { "Filters", filters }, { "Columns", visCols }, { "SortBy", sortCol },
+        using (SAEONLogs.MethodCall(typeof(BaseRepository), new MethodCallParameters { { "TableName", tableName }, { "Filters", filters }, { "Columns", visCols }, { "SortBy", sortCol },
             { "SortDir", sortDir }, { "ExportType", exportType }, { "FileName", fileName } }))
         {
             try
@@ -363,7 +363,7 @@ public class BaseRepository
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 throw;
             }
         }

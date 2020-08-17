@@ -68,7 +68,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -133,7 +133,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to save instrument");
             }
         }
@@ -198,7 +198,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
 
     protected void OrganisationLinkSave(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -240,7 +240,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to link organisation");
             }
         }
@@ -258,7 +258,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
     [DirectMethod]
     public void DeleteOrganisationLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
@@ -268,7 +268,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to delete organisation link");
             }
         }
@@ -284,7 +284,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
     #region Stations
     protected void StationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             if (e.Parameters["InstrumentID"] != null && e.Parameters["InstrumentID"].ToString() != "-1")
             {
@@ -302,7 +302,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     MessageBoxes.Error(ex, "Error", "Unable to refresh sensors grid");
                 }
             }
@@ -327,7 +327,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
 
     protected void StationLinkSave(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -381,7 +381,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to link station");
             }
         }
@@ -399,7 +399,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
     [DirectMethod]
     public void DeleteStationLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
@@ -409,7 +409,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to delete station link");
             }
         }
@@ -426,7 +426,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
     #region Sensors
     protected void SensorLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             if (e.Parameters["InstrumentID"] != null && e.Parameters["InstrumentID"].ToString() != "-1")
             {
@@ -444,7 +444,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     MessageBoxes.Error(ex, "Error", "Unable to refresh sensors grid");
                 }
             }
@@ -469,7 +469,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
 
     protected void SensorLinkSave(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -513,7 +513,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to link sensor");
             }
         }
@@ -531,7 +531,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSensorLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
@@ -541,7 +541,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to delete sensor link");
             }
         }

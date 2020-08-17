@@ -1,5 +1,5 @@
-﻿//#define DetailedLogging
-//#define VeryDetailedLogging
+﻿//#define DetailedSAEONLogs
+//#define VeryDetailedSAEONLogs
 using FileHelpers;
 using FileHelpers.Dynamic;
 using NCalc;
@@ -197,14 +197,14 @@ public class ImportSchemaHelper : IDisposable
     /// <param name="InputStream"></param>
     public ImportSchemaHelper(DataSource ds, DataSchema schema, string data, ImportBatch batch, Sensor sensor = null)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "DataSource", ds.Name }, { "Schema", schema.Name }, { "ImportBatch", batch.Code }, { "Sensor", sensor?.Name } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "DataSource", ds.Name }, { "Schema", schema.Name }, { "ImportBatch", batch.Code }, { "Sensor", sensor?.Name } }))
         {
             dataSource = ds;
             dataSchema = schema;
             Sensor = sensor;
             LogBadValues = ConfigurationManager.AppSettings["LogBadValues"].IsTrue();
             UseParallel = ConfigurationManager.AppSettings["UseParallel"].IsTrue();
-            Logging.Information("Checking Schema");
+            SAEONLogs.Information("Checking Schema");
             if (schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Time") && !schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Date"))
             {
                 throw new Exception("Schema has a Time but no Date column");
@@ -221,7 +221,7 @@ public class ImportSchemaHelper : IDisposable
             {
                 throw new Exception("Schema has a Longitude but no Latitude column");
             }
-            Logging.Information("Create ClassBuilder");
+            SAEONLogs.Information("Create ClassBuilder");
             Type recordType;
             if (schema.DataSourceTypeID == new Guid(DataSourceType.CSV))
             {
@@ -266,16 +266,16 @@ public class ImportSchemaHelper : IDisposable
                     if (columnsNotInSchema.Any())
                     {
                         batch.Issues += "Columns in data file but not in schema - " + string.Join(", ", columnsNotInSchema) + Environment.NewLine;
-                        Logging.Warning("Columns in data file but not in schema: {columns}", columnsNotInSchema);
+                        SAEONLogs.Warning("Columns in data file but not in schema: {columns}", columnsNotInSchema);
                     }
                     var columnsNotInDataFile = schema.SchemaColumnRecords().Select(c => c.Name.ToLower()).Except(cb.Fields.Select(f => f.FieldName.ToLower()));
                     if (columnsNotInDataFile.Any())
                     {
                         batch.Issues += "Columns in schema but not in data file - " + string.Join(", ", columnsNotInDataFile) + Environment.NewLine;
-                        Logging.Warning("Columns in schema but not in data file: {columns}", columnsNotInDataFile);
+                        SAEONLogs.Warning("Columns in schema but not in data file: {columns}", columnsNotInDataFile);
                     }
                 }
-                //Logging.Information("Class: {class}", cb.GetClassSourceCode(NetLanguage.CSharp));
+                //SAEONLogs.Information("Class: {class}", cb.GetClassSourceCode(NetLanguage.CSharp));
                 recordType = cb.CreateRecordClass();
                 engine = new DelimitedFileEngine(recordType);
             }
@@ -321,20 +321,20 @@ public class ImportSchemaHelper : IDisposable
                 //    if (columnsNotInSchema.Any())
                 //    {
                 //        batch.Issues += "Columns in data file but not in schema - " + string.Join(", ", columnsNotInSchema) + Environment.NewLine;
-                //        Logging.Warning("Columns in data file but not in schema: {columns}", columnsNotInSchema);
+                //        SAEONLogs.Warning("Columns in data file but not in schema: {columns}", columnsNotInSchema);
                 //    }
                 //    var columnsNotInDataFile = schema.SchemaColumnRecords().Select(c => c.Name.ToLower()).Except(cb.Fields.Select(f => f.FieldName.ToLower()));
                 //    if (columnsNotInDataFile.Any())
                 //    {
                 //        batch.Issues += "Columns in schema but not in data file - " + string.Join(", ", columnsNotInDataFile) + Environment.NewLine;
-                //        Logging.Warning("Columns in schema but not in data file: {columns}", columnsNotInDataFile);
+                //        SAEONLogs.Warning("Columns in schema but not in data file: {columns}", columnsNotInDataFile);
                 //    }
                 //}
-                //Logging.Information("Class: {class}", cb.GetClassSourceCode(NetLanguage.CSharp));
+                //SAEONLogs.Information("Class: {class}", cb.GetClassSourceCode(NetLanguage.CSharp));
                 recordType = cb.CreateRecordClass();
                 engine = new FixedFileEngine(recordType);
             }
-            Logging.Information("Create Engine");
+            SAEONLogs.Information("Create Engine");
             if (engine == null)
             {
                 throw new NullReferenceException("Engine cannot be null");
@@ -357,17 +357,17 @@ public class ImportSchemaHelper : IDisposable
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            Logging.Information("Saving import file");
+            SAEONLogs.Information("Saving import file");
             SaveDocument(fileName, data);
             stopwatch.Stop();
-            Logging.Information("Saved import file in {time}", stopwatch.Elapsed.TimeStr());
+            SAEONLogs.Information("Saved import file in {time}", stopwatch.Elapsed.TimeStr());
             stopwatch.Restart();
-            Logging.Information("Reading DataTable");
+            SAEONLogs.Information("Reading DataTable");
             //dtResults = engine.ReadStringAsDT(data);
             dtResults = CommonEngine.RecordsToDataTable(engine.ReadString(data), recordType);
-            //Logging.Information(dtResults.Dump());
+            //SAEONLogs.Information(dtResults.Dump());
             stopwatch.Stop();
-            Logging.Information("Read DataTable in {time}", stopwatch.Elapsed.TimeStr());
+            SAEONLogs.Information("Read DataTable in {time}", stopwatch.Elapsed.TimeStr());
             dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
         }
     }
@@ -386,7 +386,7 @@ public class ImportSchemaHelper : IDisposable
     /// </summary>
     private void BuildSchemaDefinition()
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             for (int i = 0; i < dtResults.Columns.Count; i++)
             {
@@ -517,7 +517,7 @@ public class ImportSchemaHelper : IDisposable
                 concatedatetime = true;
             }
 
-            Logging.Verbose("Schema: {Count:n0} Columns: {Columns:n0}", SchemaDefs.Count, SchemaDefs.Select(i => i.FieldName).ToList());
+            SAEONLogs.Verbose("Schema: {Count:n0} Columns: {Columns:n0}", SchemaDefs.Count, SchemaDefs.Select(i => i.FieldName).ToList());
         }
     }
 
@@ -547,21 +547,21 @@ public class ImportSchemaHelper : IDisposable
     /// </summary>
     public void ProcessSchema()
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
-                Logging.Information("Processing schema");
+                SAEONLogs.Information("Processing schema");
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
                 var stageStopwatch = new Stopwatch();
                 stageStopwatch.Start();
-                Logging.Information("Building schema definition");
+                SAEONLogs.Information("Building schema definition");
                 BuildSchemaDefinition();
-                Logging.Information("Built schema definition in {time}", stageStopwatch.Elapsed.TimeStr());
+                SAEONLogs.Information("Built schema definition in {time}", stageStopwatch.Elapsed.TimeStr());
                 var nMax = dtResults.Rows.Count;
                 var n = 1;
-                Logging.Information("Processing {count:n0} rows", nMax);
+                SAEONLogs.Information("Processing {count:n0} rows", nMax);
                 stageStopwatch.Restart();
                 if (UseParallel)
                 {
@@ -578,7 +578,7 @@ public class ImportSchemaHelper : IDisposable
                     }
                     catch (Exception ex)
                     {
-                        Logging.Exception(ex);
+                        SAEONLogs.Exception(ex);
                         throw;
                     }
                 }
@@ -594,7 +594,7 @@ public class ImportSchemaHelper : IDisposable
                         var total = TimeSpan.FromSeconds(elapsed.TotalSeconds / progress);
                         if (reportPorgress)
                         {
-                            Logging.Information("{progress:p0} {row:n0} of {rows:n0} rows in {min} of {mins}, {rowTime}/row, {numRowsInSec:n3} rows/sec", progress, n, nMax, elapsed.TimeStr(), total.TimeStr(), TimeSpan.FromSeconds(elapsed.TotalSeconds / n).TimeStr(), n / elapsed.TotalSeconds);
+                            SAEONLogs.Information("{progress:p0} {row:n0} of {rows:n0} rows in {min} of {mins}, {rowTime}/row, {numRowsInSec:n3} rows/sec", progress, n, nMax, elapsed.TimeStr(), total.TimeStr(), TimeSpan.FromSeconds(elapsed.TotalSeconds / n).TimeStr(), n / elapsed.TotalSeconds);
                             lastProgress100 = progress100;
                         }
                         ProcessRow(row, n);
@@ -602,8 +602,8 @@ public class ImportSchemaHelper : IDisposable
                     }
                 }
                 stageStopwatch.Stop();
-                Logging.Information("Processed {count:n0} rows in {elapsed}, {rowTime}/row, {numRowsInSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
-                Logging.Information("Checking for duplicates in batch");
+                SAEONLogs.Information("Processed {count:n0} rows in {elapsed}, {rowTime}/row, {numRowsInSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
+                SAEONLogs.Information("Checking for duplicates in batch");
                 stageStopwatch.Restart();
                 SchemaValues.CompleteAdding();
                 var dupGroups = SchemaValues.GroupBy(i => new { i.SensorID, i.DateValue, i.DataValue, i.PhenomenonOfferingID, i.PhenomenonUOMID, i.Elevation }).Where(g => g.Count() > 1).ToList();
@@ -612,25 +612,25 @@ public class ImportSchemaHelper : IDisposable
                 {
                     foreach (var value in dupValues.Take(100))
                     {
-                        Logging.Information("RowNum: {rowNum} Date: {date}", value.RowNum, value.DateValue);
+                        SAEONLogs.Information("RowNum: {rowNum} Date: {date}", value.RowNum, value.DateValue);
                     }
-                    //Logging.Information("Bad Rows: {badRows}", dupValues.Select(i => i.RowNum).ToArray());
-                    Logging.Information("Duplicates: Groups: {groups} Values: {values}", dupGroups.Count, dupValues.Count);
+                    //SAEONLogs.Information("Bad Rows: {badRows}", dupValues.Select(i => i.RowNum).ToArray());
+                    SAEONLogs.Information("Duplicates: Groups: {groups} Values: {values}", dupGroups.Count, dupValues.Count);
                     foreach (var schval in dupValues)
                     {
                         schval.IsDuplicateInBatch = true;
                         schval.InvalidStatuses.Insert(0, Status.DuplicateInBatch);
                     }
-                    Logging.Information("Found {count:n0} duplicates in batch", dupValues.Count());
+                    SAEONLogs.Information("Found {count:n0} duplicates in batch", dupValues.Count());
                 }
                 stageStopwatch.Stop();
-                Logging.Information("Checked for duplicates in batch in {elapsed}", stageStopwatch.Elapsed.TimeStr());
+                SAEONLogs.Information("Checked for duplicates in batch in {elapsed}", stageStopwatch.Elapsed.TimeStr());
                 stopwatch.Stop();
-                Logging.Information("Processed {values} schema values in {time}", SchemaValues.Count, stopwatch.Elapsed.TimeStr());
+                SAEONLogs.Information("Processed {values} schema values in {time}", SchemaValues.Count, stopwatch.Elapsed.TimeStr());
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 throw;
             }
         }
@@ -642,17 +642,17 @@ public class ImportSchemaHelper : IDisposable
     /// <param name="dr"></param>
     private void ProcessRow(DataRow dr, int rowNum)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Row", rowNum } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Row", rowNum } }))
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
                 var stageStart = stopwatch.Elapsed;
-#if VeryDetailedLogging
-                Logging.Information("ProcessRow({RowNum})", rowNum);
+#if VeryDetailedSAEONLogs
+                SAEONLogs.Information("ProcessRow({RowNum})", rowNum);
 #endif
-                //Logging.Verbose(dr.Dump());
+                //SAEONLogs.Verbose(dr.Dump());
                 DateTime dttme = DateTime.MinValue,
                 dt = DateTime.MinValue,
                 tm = DateTime.MinValue;
@@ -684,7 +684,7 @@ public class ImportSchemaHelper : IDisposable
                         catch (Exception ex)
                         {
                             var exc = new FormatException($"{ex.Message} Row#: {rowNum} Date: {sDateValue} Format: {dtdef.Dateformat}", ex);
-                            Logging.Exception(exc);
+                            SAEONLogs.Exception(exc);
                             throw exc;
                         }
                     }
@@ -706,7 +706,7 @@ public class ImportSchemaHelper : IDisposable
                             catch (Exception ex)
                             {
                                 var exc = new FormatException($"{ex.Message} Row#: {rowNum} Time: {sTimeValue} Format: {tmdef.Timeformat}", ex);
-                                Logging.Exception(exc);
+                                SAEONLogs.Exception(exc);
                                 throw exc;
                             }
                         }
@@ -748,8 +748,8 @@ public class ImportSchemaHelper : IDisposable
 
                     if (def.IsOffering)
                     {
-#if VeryDetailedLogging
-                        Logging.Information("Sensor: {sensor} {elapsed} {stage}", i + 1, stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+#if VeryDetailedSAEONLogs
+                        SAEONLogs.Information("Sensor: {sensor} {elapsed} {stage}", i + 1, stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
                         stageStart = stopwatch.Elapsed;
 #endif
                         var rec = new SchemaValue()
@@ -779,9 +779,9 @@ public class ImportSchemaHelper : IDisposable
                             rec.InvalidStatuses.Add(Status.UOMInvalid);
                         }
 
-                        if (Logging.Level == LogEventLevel.Verbose)
+                        if (SAEONLogs.Level == LogEventLevel.Verbose)
                         {
-                            Logging.Verbose("Row#: {row} Index: {Index} Column: {Column} Phenomenon: {Phenomenon} Offering: {Offering} Phenomenon: {Phenomenon} UnitOfMeasure: {UnitOfMeasure}",
+                            SAEONLogs.Verbose("Row#: {row} Index: {Index} Column: {Column} Phenomenon: {Phenomenon} Offering: {Offering} Phenomenon: {Phenomenon} UnitOfMeasure: {UnitOfMeasure}",
                                 rowNum, def.Index, def.FieldName, def.PhenomenonOffering?.Phenomenon?.Name, def.PhenomenonOffering?.Offering?.Name, def.PhenomenonOUM?.Phenomenon?.Name, def.PhenomenonOUM?.UnitOfMeasure?.Unit);
                         }
                         if (ErrorInTime)
@@ -818,8 +818,8 @@ public class ImportSchemaHelper : IDisposable
 
                         if (!ErrorInDate)
                         {
-#if VeryDetailedLogging
-                            Logging.Information("Error checks {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+#if VeryDetailedSAEONLogs
+                            SAEONLogs.Information("Error checks {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
                             stageStart = stopwatch.Elapsed;
 #endif
                             // Find sensor based on DateValue
@@ -828,7 +828,7 @@ public class ImportSchemaHelper : IDisposable
                             bool foundTooLate = false;
                             if (def.Sensors.Count > 0)
                             {
-                                Logging.Verbose("Row#: {row} Sensors: {sensors}", rowNum, def.Sensors.Select(s => s.Name).ToList());
+                                SAEONLogs.Verbose("Row#: {row} Sensors: {sensors}", rowNum, def.Sensors.Select(s => s.Name).ToList());
                             }
                             foreach (var sensor in def.Sensors)
                             {
@@ -843,13 +843,13 @@ public class ImportSchemaHelper : IDisposable
 
                                 if (dates.StartDate.HasValue && (rec.DateValue < dates.StartDate.Value))
                                 {
-                                    Logging.Error("Row#: {row} Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", rowNum, sensor.Name, dates.StartDate, rec.DateValue, rec);
+                                    SAEONLogs.Error("Row#: {row} Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", rowNum, sensor.Name, dates.StartDate, rec.DateValue, rec);
                                     foundTooEarly = true;
                                     continue;
                                 }
                                 if (dates.EndDate.HasValue && (rec.DateValue > dates.EndDate.Value))
                                 {
-                                    Logging.Error("Row#: {row} Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", rowNum, sensor.Name, dates.EndDate, rec.DateValue, rec);
+                                    SAEONLogs.Error("Row#: {row} Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", rowNum, sensor.Name, dates.EndDate, rec.DateValue, rec);
                                     foundTooLate = true;
                                     continue;
                                 }
@@ -866,15 +866,15 @@ public class ImportSchemaHelper : IDisposable
 
                                 if (LogBadValues)
                                 {
-                                    Logging.Error("Row#: {row} Index: {Index} FieldName: {FieldName} Sensor not found Sensors: {sensors}", rowNum, def.Index, def.FieldName, def.Sensors.Select(s => s.Name).ToList());
+                                    SAEONLogs.Error("Row#: {row} Index: {Index} FieldName: {FieldName} Sensor not found Sensors: {sensors}", rowNum, def.Index, def.FieldName, def.Sensors.Select(s => s.Name).ToList());
                                 }
                                 rec.SensorNotFound = true;
                                 rec.SensorID = def.Sensors.FirstOrDefault()?.Id;
                                 rec.InvalidStatuses.Add(Status.SensorNotFound);
                             }
                         }
-#if VeryDetailedLogging
-                        Logging.Information("Sensor lookup {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+#if VeryDetailedSAEONLogs
+                        SAEONLogs.Information("Sensor lookup {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
                         stageStart = stopwatch.Elapsed;
 #endif
                         if (String.IsNullOrEmpty(RawValue) || def.IsEmptyValue && RawValue.Trim() == def.EmptyValue)
@@ -921,7 +921,7 @@ public class ImportSchemaHelper : IDisposable
                                     rec.RawValueInvalid = true;
                                     rec.InvalidRawValue = RawValue;
                                     rec.InvalidStatuses.Add(Status.ValueInvalid);
-                                    Logging.Exception(ex, "Row#: {row} Col: {ColName} RawValue: {RawValue} DataRow: {Dump}", rowNum, def.FieldName, RawValue, dr.Dump());
+                                    SAEONLogs.Exception(ex, "Row#: {row} Col: {ColName} RawValue: {RawValue} DataRow: {Dump}", rowNum, def.FieldName, RawValue, dr.Dump());
                                 }
                             }
                             if (numberIsOk)
@@ -935,8 +935,8 @@ public class ImportSchemaHelper : IDisposable
                                 }
                             }
                         }
-#if VeryDetailedLogging
-                        Logging.Information("Transformations {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+#if VeryDetailedSAEONLogs
+                        SAEONLogs.Information("Transformations {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
                         stageStart = stopwatch.Elapsed;
 #endif
                         // Location
@@ -955,7 +955,7 @@ public class ImportSchemaHelper : IDisposable
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logging.Exception(ex, "Row#: {row} RawLatitude: {RawLatitude} DataRow: {Dump}", rowNum, RawValue, dr.Dump());
+                                    SAEONLogs.Exception(ex, "Row#: {row} RawLatitude: {RawLatitude} DataRow: {Dump}", rowNum, RawValue, dr.Dump());
                                 }
                                 try
                                 {
@@ -963,7 +963,7 @@ public class ImportSchemaHelper : IDisposable
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logging.Exception(ex, "Row#: {row} RawLongitude: {RawLongitude} DataRow: {Dump}", rowNum, RawValue, dr.Dump());
+                                    SAEONLogs.Exception(ex, "Row#: {row} RawLongitude: {RawLongitude} DataRow: {Dump}", rowNum, RawValue, dr.Dump());
                                 }
                             }
                         }
@@ -978,12 +978,12 @@ public class ImportSchemaHelper : IDisposable
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logging.Exception(ex, "Row#: {row} RawElevation: {RawElevation} DataRow: {Dump}", rowNum, RawValue, dr.Dump());
+                                    SAEONLogs.Exception(ex, "Row#: {row} RawElevation: {RawElevation} DataRow: {Dump}", rowNum, RawValue, dr.Dump());
                                 }
                             }
                         }
-#if VeryDetailedLogging
-                        Logging.Verbose("Location {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+#if VeryDetailedSAEONLogs
+                        SAEONLogs.Verbose("Location {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
                         stageStart = stopwatch.Elapsed;
 #endif
                         if (!string.IsNullOrWhiteSpace(RowComment))
@@ -994,31 +994,31 @@ public class ImportSchemaHelper : IDisposable
                         rec.CorrelationID = correlationID;
 
                         CheckDuplicate(def, rec);
-#if VeryDetailedLogging
-                        Logging.Information("Duplicate {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+#if VeryDetailedSAEONLogs
+                        SAEONLogs.Information("Duplicate {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
                         stageStart = stopwatch.Elapsed;
 #endif
 
                         //                        CheckIsDuplicate(def, rec);
-                        //#if VeryDetailedLogging
-                        //                        Logging.Information("IsDuplicate {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+                        //#if VeryDetailedSAEONLogs
+                        //                        SAEONLogs.Information("IsDuplicate {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
                         //                        stageStart = stopwatch.Elapsed;
                         //#endif
                         //                        CheckIsDuplicateOfNull(def, rec);
-                        //#if VeryDetailedLogging
-                        //                        Logging.Information("IsDuplicateOfNull {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+                        //#if VeryDetailedSAEONLogs
+                        //                        SAEONLogs.Information("IsDuplicateOfNull {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
                         //                        stageStart = stopwatch.Elapsed;
                         //#endif
                         SchemaValues.Add(rec);
                     }
                 }
-#if DetailedLogging || VeryDetailedLogging
-                Logging.Information("ProcessRow({RowNum}) in {elapsed}", rowNum, stopwatch.Elapsed.TimeStr());
+#if DetailedSAEONLogs || VeryDetailedSAEONLogs
+                SAEONLogs.Information("ProcessRow({RowNum}) in {elapsed}", rowNum, stopwatch.Elapsed.TimeStr());
 #endif
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex, "Row#: {row} DataRow: {Dump}", rowNum, dr.Dump());
+                SAEONLogs.Exception(ex, "Row#: {row} DataRow: {Dump}", rowNum, dr.Dump());
                 throw;
             }
         }
@@ -1095,14 +1095,14 @@ public class ImportSchemaHelper : IDisposable
     /// </summary>
     private void TransformValue(DataSourceTransformation trns, ref SchemaValue rec, int rowNum, bool isEmpty = false)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
                 bool valid = true;
-                if (Logging.Level == LogEventLevel.Verbose)
+                if (SAEONLogs.Level == LogEventLevel.Verbose)
                 {
-                    Logging.Verbose("Row#: {row} Phenomenon: {Phenomenon} Offering: {Offering} {TransOfferingID} {RecOfferingID} UnitOfMeasure: {UnitOfMeasure} {TransUnitOfMeasureID} {RecUnitOfMeasureID} StartDate: {StartDate} EndDate: {EndDate} Date: {Date}",
+                    SAEONLogs.Verbose("Row#: {row} Phenomenon: {Phenomenon} Offering: {Offering} {TransOfferingID} {RecOfferingID} UnitOfMeasure: {UnitOfMeasure} {TransUnitOfMeasureID} {RecUnitOfMeasureID} StartDate: {StartDate} EndDate: {EndDate} Date: {Date}",
                         rowNum, trns?.Phenomenon?.Name, trns?.PhenomenonOffering?.Offering?.Name, trns?.PhenomenonOfferingID, rec?.PhenomenonOfferingID,
                         trns?.PhenomenonUOM?.UnitOfMeasure?.Unit, trns?.PhenomenonUOMID, rec?.PhenomenonUOMID, trns?.StartDate, trns?.EndDate, rec.DateValue);
                 }
@@ -1125,7 +1125,7 @@ public class ImportSchemaHelper : IDisposable
 
                 if (!process)
                 {
-                    Logging.Verbose("Row#: {row} Ignoring transformation", rowNum);
+                    SAEONLogs.Verbose("Row#: {row} Ignoring transformation", rowNum);
                     //rec.DataValue = rec.RawValue;
                     return;
                 }
@@ -1143,13 +1143,13 @@ public class ImportSchemaHelper : IDisposable
                             exp.Parameters["value"] = rec.RawValue;
                             object val = exp.Evaluate();
                             rec.DataValue = Utilities.ParseDouble(val.ToString());
-                            Logging.Verbose("Row#: {row} Correction Raw: {RawValue} Data: {DataValue}", rowNum, rec.RawValue, rec.DataValue);
+                            SAEONLogs.Verbose("Row#: {row} Correction Raw: {RawValue} Data: {DataValue}", rowNum, rec.RawValue, rec.DataValue);
                         }
                     }
                     else if (trns.TransformationType.Code == TransformationType.RatingTable)
                     {
                         rec.DataValue = trns.GetRatingValue(rec.RawValue.Value);
-                        Logging.Verbose("Row#: {row} Rating Raw: {RawValue} Data: {DataValue}", rowNum, rec.RawValue, rec.DataValue);
+                        SAEONLogs.Verbose("Row#: {row} Rating Raw: {RawValue} Data: {DataValue}", rowNum, rec.RawValue, rec.DataValue);
                     }
                     else if (trns.TransformationType.Code == TransformationType.QualityControlValues)
                     {
@@ -1169,7 +1169,7 @@ public class ImportSchemaHelper : IDisposable
                             valid = false;
                         }
 
-                        Logging.Verbose("Row#: {row} QualityControl Valid: {Valid}", rowNum, valid);
+                        SAEONLogs.Verbose("Row#: {row} QualityControl Valid: {Valid}", rowNum, valid);
                         if (!valid)
                         {
                             rec.InvalidStatuses.Add(Status.TransformValueInvalid);
@@ -1192,7 +1192,7 @@ public class ImportSchemaHelper : IDisposable
                             rec.DataValue = rec.RawValue;
                         }
 
-                        Logging.Verbose("Row#: {row} Lookup Valid: {Valid} Raw: {RawValue} Data: {DataValue}", rowNum, valid, rec.RawValue, rec.DataValue);
+                        SAEONLogs.Verbose("Row#: {row} Lookup Valid: {Valid} Raw: {RawValue} Data: {DataValue}", rowNum, valid, rec.RawValue, rec.DataValue);
                         if (!valid)
                         {
                             rec.InvalidStatuses.Add(Status.TransformValueInvalid);
@@ -1313,11 +1313,11 @@ public class ImportSchemaHelper : IDisposable
                                 throw new EvaluateException($"Error in expression - {expr.Error}");
                             }
                             var valueStr = expr.Evaluate();
-                            //Logging.Verbose("ValueStr: {value}", valueStr);
+                            //SAEONLogs.Verbose("ValueStr: {value}", valueStr);
                             var value = Utilities.ParseDouble(valueStr.ToString());
-                            //Logging.Verbose("Value: {value}", value);
+                            //SAEONLogs.Verbose("Value: {value}", value);
                             rec.DataValue = value;
-                            Logging.Verbose("Row#: {row} Valid: {Valid} ValueStr: {ValueStr} Value: {Value} Raw: {RawValue} Data: {DataValue}", rowNum, true, valueStr, value, rec.RawValue, rec.DataValue);
+                            SAEONLogs.Verbose("Row#: {row} Valid: {Valid} ValueStr: {ValueStr} Value: {Value} Raw: {RawValue} Data: {DataValue}", rowNum, true, valueStr, value, rec.RawValue, rec.DataValue);
                         }
                         catch (Exception ex)
                         {
@@ -1325,7 +1325,7 @@ public class ImportSchemaHelper : IDisposable
                             rec.DataSourceTransformationID = trns.Id;
                             rec.DataValueInvalid = true;
                             rec.InvalidDataValue = rec.RawValue?.ToString();
-                            Logging.Verbose("Row#: {row} Value: {Valid} Raw: {RawValue} Expr: {expr} Ex: {Exception}", rowNum, false, rec.RawValue, trns.Definition, ex.Message);
+                            SAEONLogs.Verbose("Row#: {row} Value: {Valid} Raw: {RawValue} Expr: {expr} Ex: {Exception}", rowNum, false, rec.RawValue, trns.Definition, ex.Message);
                             throw;
                         }
                     }
@@ -1344,7 +1344,7 @@ public class ImportSchemaHelper : IDisposable
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex, "Row#: {row} dtid: {dtid} rec: {@rec})", rowNum, trns.Id, rec);
+                SAEONLogs.Exception(ex, "Row#: {row} dtid: {dtid} rec: {@rec})", rowNum, trns.Id, rec);
                 throw;
             }
         }

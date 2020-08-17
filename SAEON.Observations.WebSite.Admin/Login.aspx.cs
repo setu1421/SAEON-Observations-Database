@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Ext.Net;
+using SAEON.Logs;
+using Serilog;
+using System;
+using System.Threading;
 using System.Web;
 using System.Web.Security;
-using Ext.Net;
-using Serilog;
-using System.Threading;
-using SAEON.Logs;
 
 /// <summary>
 /// Summary description for Login
@@ -20,7 +18,7 @@ public partial class _Login : System.Web.UI.Page
             bool isValid = Membership.ValidateUser(this.txtUsername.Text, this.txtPassword.Text);
             try
             {
-                Logging.Information("Login: {UserName} {Valid}", txtUsername.Text, isValid);
+                SAEONLogs.Information("Login: {UserName} {Valid}", txtUsername.Text, isValid);
                 Auditing.Log(GetType(), new MethodCallParameters {
                     { "UserName", txtUsername.Text },
                     { "Valid", isValid }
@@ -28,7 +26,7 @@ public partial class _Login : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
             }
             if (isValid)
             {

@@ -94,7 +94,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -158,7 +158,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to save instrument");
             }
         }
@@ -226,7 +226,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSchema(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -251,7 +251,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to delete Schema");
             }
         }
@@ -262,7 +262,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     #region Schema Columns
     protected void SchemaColumnsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             if (e.Parameters["DataSchemaID"] != null && e.Parameters["DataSchemaID"].ToString() != "-1")
             {
@@ -278,7 +278,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     MessageBoxes.Error(ex, "Error", "Unable to refresh SchemaColumns grid");
                 }
             }
@@ -287,10 +287,10 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
     protected void ValidateColumnField(object sender, RemoteValidationEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             e.Success = true;
-            Logging.Verbose("Column: {ID}", e.ID);
+            SAEONLogs.Verbose("Column: {ID}", e.ID);
             if (e.ID == "tfColumnName")
             {
                 RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
@@ -347,7 +347,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     .AndExpression(SchemaColumn.Columns.PhenomenonOfferingID).IsNull().Or(SchemaColumn.Columns.PhenomenonOfferingID).IsEqualTo(cbOffering.SelectedItem.Value).CloseExpression()
                     .AndExpression(SchemaColumn.Columns.PhenomenonUOMID).IsNull().Or(SchemaColumn.Columns.PhenomenonUOMID).IsEqualTo(cbUnitOfMeasure.SelectedItem.Value).CloseExpression();
                 var col = q.ExecuteAsCollection<SchemaColumnCollection>();
-                //Logging.Verbose("Count: {count} Any: {any} SQL: {sql}", col.Count, col.Any(), q.BuildSqlStatement());
+                //SAEONLogs.Verbose("Count: {count} Any: {any} SQL: {sql}", col.Count, col.Any(), q.BuildSqlStatement());
                 if (col.Any())
                 {
                     e.Success = false;
@@ -359,7 +359,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
     protected void SchemaColumnSave(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -447,7 +447,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to save SchemaColumn");
             }
         }
@@ -465,7 +465,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSchemaColumn(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -475,7 +475,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to delete SchemaColumn");
             }
         }
@@ -609,7 +609,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void SchemaColumnUp(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -647,7 +647,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to move SchemaColumn up");
             }
         }
@@ -656,7 +656,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void SchemaColumnDown(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -694,7 +694,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to move SchemaColumn down");
             }
         }
@@ -704,7 +704,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     #region Data Sources
     protected void DataSourcesGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             if (e.Parameters["DataSchemaID"] != null && e.Parameters["DataSchemaID"].ToString() != "-1")
             {
@@ -720,7 +720,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     MessageBoxes.Error(ex, "Error", "Unable to refresh DataSources grid");
                 }
             }
@@ -739,7 +739,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void DeleteDataSource(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -753,7 +753,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to delete DataSource");
             }
         }
@@ -780,7 +780,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
     protected void DataSourceLinksSave(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             RowSelectionModel sm = AvailableDataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
             RowSelectionModel DataSchemaRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
@@ -807,7 +807,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                         }
                         catch (Exception ex)
                         {
-                            Logging.Exception(ex);
+                            SAEONLogs.Exception(ex);
                             MessageBoxes.Error(ex, "Error", "Unable to link DataSource");
                         }
                     }
@@ -840,7 +840,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void CopyDataSchema(Guid aId)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -895,7 +895,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error("Error", "Unable to copy schema");
             }
         }
@@ -943,7 +943,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
     public void SchemaCopySave(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -1014,7 +1014,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error("Error", "Unable to copy schema");
             }
         }

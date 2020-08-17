@@ -4,7 +4,6 @@ using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using SAEON.OpenXML;
 using System;
-using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.IO;
 using System.Linq;
@@ -32,9 +31,9 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
     //    }
     //    catch (Exception ex)
     //    {
-    //        using (Logging.MethodCall(GetType()))
+    //        using (SAEONLogs.MethodCall(GetType()))
     //        {
-    //            Logging.Exception(ex, "Row: {Row} Col: {Col} ExpectedType: {ExpectedType} ReturnedType: {ReturnedType} Value: {Value}", row, col, typeof(T).Name, array[row, col].GetType().Name, array[row, col]);
+    //            SAEONLogs.Exception(ex, "Row: {Row} Col: {Col} ExpectedType: {ExpectedType} ReturnedType: {ReturnedType} Value: {Value}", row, col, typeof(T).Name, array[row, col].GetType().Name, array[row, col]);
     //            throw;
     //        }
     //    }
@@ -49,9 +48,9 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
-                Logging.Exception(ex, "Row: {Row} Col: {Col} Value: {Value}", row, col, array[row, col]);
+                SAEONLogs.Exception(ex, "Row: {Row} Col: {Col} Value: {Value}", row, col, array[row, col]);
                 throw;
             }
         }
@@ -66,9 +65,9 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
-                Logging.Exception(ex, "Row: {Row} Col: {Col} Value: {Value}", row, col, array[row, col]);
+                SAEONLogs.Exception(ex, "Row: {Row} Col: {Col} Value: {Value}", row, col, array[row, col]);
                 throw;
             }
         }
@@ -83,9 +82,9 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
-                Logging.Exception(ex, "Row: {Row} Col: {Col} Value: {Value}", row, col, array[row, col]);
+                SAEONLogs.Exception(ex, "Row: {Row} Col: {Col} Value: {Value}", row, col, array[row, col]);
                 throw;
             }
         }
@@ -113,12 +112,12 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
             }
             catch (DbEntityValidationException ex)
             {
-                Logging.Exception(ex, "Errors: {Errors}", ex.EntityValidationErrors.SelectMany(i => i.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList());
+                SAEONLogs.Exception(ex, "Errors: {Errors}", ex.EntityValidationErrors.SelectMany(i => i.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList());
                 throw;
             }
         }
 
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             if (!TemplateFile.HasFile)
             {
@@ -128,25 +127,25 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
             }
             try
             {
-                Logging.Information("FileName: {FileName}", TemplateFile.PostedFile.FileName);
+                SAEONLogs.Information("FileName: {FileName}", TemplateFile.PostedFile.FileName);
                 using (SpreadsheetDocument doc = SpreadsheetDocument.Open(TemplateFile.PostedFile.InputStream, false))
                 {
                     var saeonOrganisationId = dbContext.Organisations.First(i => i.Code == "SAEON").Id;
                     var ownerRoleId = dbContext.OrganisationRoles.First(i => i.Code == "Owner").Id;
                     var CSVTypeId = dbContext.DataSourceTypes.First(i => i.Code == "CSV").Id;
                     // Programmes
-                    Logging.Information("Adding Programmes");
+                    SAEONLogs.Information("Adding Programmes");
                     var programmes = ExcelHelper.GetRangeValues(doc, "Programmes!A3:F102");
                     var programmesList = ExcelHelper.GetRangeValues(doc, "Programmes!H3:J102");
                     for (int rProgramme = 0; rProgramme < programmesList.GetUpperBound(0) + 1; rProgramme++)
                     {
                         var programmeCode = GetString(programmesList, rProgramme, 0);
-                        //Logging.Verbose("Row: {Row} Code: {Code}", rProgramme, programmeCode);
+                        //SAEONLogs.Verbose("Row: {Row} Code: {Code}", rProgramme, programmeCode);
                         if (string.IsNullOrWhiteSpace(programmeCode)) continue;
                         var programme = dbContext.Programmes.FirstOrDefault(i => i.Code == programmeCode);
                         if (programme != null)
                         {
-                            Logging.Verbose("Ignoring Programme {ProgrammeCode}", programmeCode);
+                            SAEONLogs.Verbose("Ignoring Programme {ProgrammeCode}", programmeCode);
                         }
                         else
                         {
@@ -160,14 +159,14 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                                 EndDate = GetDate(programmes, rProgramme, 5),
                                 UserId = AuthHelper.GetLoggedInUserId
                             };
-                            //Logging.Verbose("Adding programme {@Programme}", programme);
+                            //SAEONLogs.Verbose("Adding programme {@Programme}", programme);
                             dbContext.Programmes.Add(programme);
                             SaveChanges();
-                            Logging.Verbose("Added Programme {ProgrammeCode}", programmeCode);
+                            SAEONLogs.Verbose("Added Programme {ProgrammeCode}", programmeCode);
                         }
                     }
                     // Projects
-                    Logging.Information("Adding Projects");
+                    SAEONLogs.Information("Adding Projects");
                     var projectProgrammes = ExcelHelper.GetRangeValues(doc, "Projects!A3:B102");
                     var projects = ExcelHelper.GetRangeValues(doc, "Projects!D3:I102");
                     var projectsList = ExcelHelper.GetRangeValues(doc, "Projects!K3:M102");
@@ -178,7 +177,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                         var project = dbContext.Projects.FirstOrDefault(i => i.Code == projectCode);
                         if (project != null)
                         {
-                            Logging.Verbose("Ignoring Project {ProjectCode}", projectCode);
+                            SAEONLogs.Verbose("Ignoring Project {ProjectCode}", projectCode);
                         }
                         else
                         {
@@ -194,14 +193,14 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                                 EndDate = GetDate(projects, rProject, 5),
                                 UserId = AuthHelper.GetLoggedInUserId
                             };
-                            //Logging.Verbose("Adding Project {@Project}", project);
+                            //SAEONLogs.Verbose("Adding Project {@Project}", project);
                             dbContext.Projects.Add(project);
                             SaveChanges();
-                            Logging.Verbose("Added Project {ProjectCode}", projectCode);
+                            SAEONLogs.Verbose("Added Project {ProjectCode}", projectCode);
                         }
                     }
                     // Sites
-                    Logging.Information("Adding Sites");
+                    SAEONLogs.Information("Adding Sites");
                     var sites = ExcelHelper.GetRangeValues(doc, "Sites!A3:F102");
                     var sitesList = ExcelHelper.GetRangeValues(doc, "Sites!H3:J102");
                     for (int rSite = 0; rSite < sitesList.GetUpperBound(0) + 1; rSite++)
@@ -211,7 +210,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                         var site = dbContext.Sites.FirstOrDefault(i => i.Code == siteCode);
                         if (site != null)
                         {
-                            Logging.Verbose("Ignoring Site {SiteCode}", siteCode);
+                            SAEONLogs.Verbose("Ignoring Site {SiteCode}", siteCode);
                         }
                         else
                         {
@@ -225,7 +224,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                                 EndDate = GetDate(sites, rSite, 5),
                                 UserId = AuthHelper.GetLoggedInUserId
                             };
-                            //Logging.Verbose("Adding Site {@Site}", site);
+                            //SAEONLogs.Verbose("Adding Site {@Site}", site);
                             dbContext.Sites.Add(site);
                             SaveChanges();
                             var siteId = dbContext.Sites.First(i => i.Code == siteCode).Id;
@@ -234,13 +233,13 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                                 "  (OrganisationID, SiteID, OrganisationRoleID, UserID) " +
                                 "Values " +
                                $"  ('{saeonOrganisationId}','{siteId}','{ownerRoleId}','{AuthHelper.GetLoggedInUserId}')";
-                            //Logging.Verbose("Sql: {Sql}", sql);
+                            //SAEONLogs.Verbose("Sql: {Sql}", sql);
                             dbContext.Database.ExecuteSqlCommand(sql);
-                            Logging.Verbose("Added Site {SiteCode}", siteCode);
+                            SAEONLogs.Verbose("Added Site {SiteCode}", siteCode);
                         }
                     }
                     // Stations
-                    Logging.Information("Adding Stations");
+                    SAEONLogs.Information("Adding Stations");
                     var stationProjects = ExcelHelper.GetRangeValues(doc, "Stations!A3:B102");
                     var stationSites = ExcelHelper.GetRangeValues(doc, "Stations!D3:E102");
                     var stations = ExcelHelper.GetRangeValues(doc, "Stations!G3:O102");
@@ -252,7 +251,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                         var station = dbContext.Stations.FirstOrDefault(i => i.Code == stationCode);
                         if (station != null)
                         {
-                            Logging.Verbose("Ignoring Station {StationCode}", stationCode);
+                            SAEONLogs.Verbose("Ignoring Station {StationCode}", stationCode);
                         }
                         else
                         {
@@ -271,7 +270,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                                 EndDate = GetDate(stations, rStation, 8),
                                 UserId = AuthHelper.GetLoggedInUserId
                             };
-                            //Logging.Verbose("Adding Station {@Station}", station);
+                            //SAEONLogs.Verbose("Adding Station {@Station}", station);
                             dbContext.Stations.Add(station);
                             SaveChanges();
                             var stationId = dbContext.Stations.First(i => i.Code == stationCode).Id;
@@ -282,13 +281,13 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                                 "  (ProjectID, StationID, UserID) " +
                                 "Values " +
                                $"  ('{projectId}','{stationId}','{AuthHelper.GetLoggedInUserId}')";
-                            //Logging.Verbose("Sql: {Sql}", sql);
+                            //SAEONLogs.Verbose("Sql: {Sql}", sql);
                             dbContext.Database.ExecuteSqlCommand(sql);
-                            Logging.Verbose("Added Station {StationCode}", stationCode);
+                            SAEONLogs.Verbose("Added Station {StationCode}", stationCode);
                         }
                     }
                     // Instruments
-                    Logging.Information("Adding Instruments");
+                    SAEONLogs.Information("Adding Instruments");
                     var instrumentStations = ExcelHelper.GetRangeValues(doc, "Instruments!A3:B102");
                     var instrumentInstrumentTypes = ExcelHelper.GetRangeValues(doc, "Instruments!D3:E102");
                     var instrumentManufacturers = ExcelHelper.GetRangeValues(doc, "Instruments!G3:H102");
@@ -301,7 +300,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                         var instrument = dbContext.Instruments.FirstOrDefault(i => i.Code == instrumentCode);
                         if (instrument != null)
                         {
-                            Logging.Verbose("Ignoring Instrument {InstrumentCode}", instrumentCode);
+                            SAEONLogs.Verbose("Ignoring Instrument {InstrumentCode}", instrumentCode);
                         }
                         else
                         {
@@ -318,7 +317,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                                 EndDate = GetDate(instruments, rInstrument, 8),
                                 UserId = AuthHelper.GetLoggedInUserId
                             };
-                            //Logging.Verbose("Adding Instrument {@Instrument}", instrument);
+                            //SAEONLogs.Verbose("Adding Instrument {@Instrument}", instrument);
                             dbContext.Instruments.Add(instrument);
                             SaveChanges();
                             var instrumentId = dbContext.Instruments.First(i => i.Code == instrumentCode).Id;
@@ -329,13 +328,13 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                                 "  (StationID, InstrumentID, UserID) " +
                                 "Values " +
                                $"  ('{stationId}','{instrumentId}','{AuthHelper.GetLoggedInUserId}')";
-                            //Logging.Verbose("Sql: {Sql}", sql);
+                            //SAEONLogs.Verbose("Sql: {Sql}", sql);
                             dbContext.Database.ExecuteSqlCommand(sql);
-                            Logging.Verbose("Added Instrument {InstrumentCode}", instrumentCode);
+                            SAEONLogs.Verbose("Added Instrument {InstrumentCode}", instrumentCode);
                         }
                     }
                     // DataSchemas
-                    Logging.Information("Adding DataSchemas");
+                    SAEONLogs.Information("Adding DataSchemas");
                     var dataSchemasList = ExcelHelper.GetRangeValues(doc, "Instruments!Y3:AA102");
                     for (int rInstrument = 0; rInstrument < instrumentsList.GetUpperBound(0) + 1; rInstrument++)
                     {
@@ -344,7 +343,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                         var dataSchema = dbContext.DataSchemas.FirstOrDefault(i => i.Code == dataSchemaCode);
                         if (dataSchema != null)
                         {
-                            Logging.Verbose("Ignoring DataSchema {DataSchemaCode}", dataSchemaCode);
+                            SAEONLogs.Verbose("Ignoring DataSchema {DataSchemaCode}", dataSchemaCode);
                         }
                         else
                         {
@@ -356,14 +355,14 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                                 DataSourceTypeId = CSVTypeId,
                                 UserId = AuthHelper.GetLoggedInUserId
                             };
-                            //Logging.Verbose("Adding DataSchema {@DataSchema}", dataSchema);
+                            //SAEONLogs.Verbose("Adding DataSchema {@DataSchema}", dataSchema);
                             dbContext.DataSchemas.Add(dataSchema);
                             SaveChanges();
-                            Logging.Verbose("Added DataSchema {DataSchemaCode}", dataSchemaCode);
+                            SAEONLogs.Verbose("Added DataSchema {DataSchemaCode}", dataSchemaCode);
                         }
                     }
                     // DataSources
-                    Logging.Information("Adding DataSources");
+                    SAEONLogs.Information("Adding DataSources");
                     var dataSourcesList = ExcelHelper.GetRangeValues(doc, "Instruments!AC3:AE102");
                     for (int rInstrument = 0; rInstrument < instrumentsList.GetUpperBound(0) + 1; rInstrument++)
                     {
@@ -372,7 +371,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                         var dataSource = dbContext.DataSources.FirstOrDefault(i => i.Code == dataSourceCode);
                         if (dataSource != null)
                         {
-                            Logging.Verbose("Ignoring DataSource {DataSourceCode}", dataSourceCode);
+                            SAEONLogs.Verbose("Ignoring DataSource {DataSourceCode}", dataSourceCode);
                         }
                         else
                         {
@@ -388,14 +387,14 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                                 LastUpdate = new DateTime(1900, 1, 1),
                                 UserId = AuthHelper.GetLoggedInUserId
                             };
-                            //Logging.Verbose("Adding DataSources {@DataSource}", dataSource);
+                            //SAEONLogs.Verbose("Adding DataSources {@DataSource}", dataSource);
                             dbContext.DataSources.Add(dataSource);
                             SaveChanges();
-                            Logging.Verbose("Added DataSource {DataSourceCode}", dataSourceCode);
+                            SAEONLogs.Verbose("Added DataSource {DataSourceCode}", dataSourceCode);
                         }
                     }
                     // Phenomena
-                    Logging.Information("Adding Phenomena");
+                    SAEONLogs.Information("Adding Phenomena");
                     var phenomena = ExcelHelper.GetRangeValues(doc, "Phenomena!A3:D102");
                     for (int rPhenomenon = 0; rPhenomenon < phenomena.GetUpperBound(0) + 1; rPhenomenon++)
                     {
@@ -404,7 +403,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                         var phenomenon = dbContext.Phenomena.FirstOrDefault(i => i.Code == phenomenonCode);
                         if (phenomenon != null)
                         {
-                            Logging.Verbose("Ignoring Phenomenon {PhenomenonCode}", phenomenonCode);
+                            SAEONLogs.Verbose("Ignoring Phenomenon {PhenomenonCode}", phenomenonCode);
                         }
                         else
                         {
@@ -416,14 +415,14 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                                 Url = GetString(phenomena, rPhenomenon, 3),
                                 UserId = AuthHelper.GetLoggedInUserId
                             };
-                            //Logging.Verbose("Adding Phenomenon {@Phenomenon}", phenomenon);
+                            //SAEONLogs.Verbose("Adding Phenomenon {@Phenomenon}", phenomenon);
                             dbContext.Phenomena.Add(phenomenon);
                             SaveChanges();
-                            Logging.Verbose("Added Phenomenon {PhenomenonCode}", phenomenonCode);
+                            SAEONLogs.Verbose("Added Phenomenon {PhenomenonCode}", phenomenonCode);
                         }
                     }
                     // Sensors
-                    Logging.Information("Adding Sensors");
+                    SAEONLogs.Information("Adding Sensors");
                     var sensorInstruments = ExcelHelper.GetRangeValues(doc, "Sensors!A3:B102");
                     var sensorPhenomena = ExcelHelper.GetRangeValues(doc, "Sensors!D3:E102");
                     var sensors = ExcelHelper.GetRangeValues(doc, "Sensors!G3:N102");
@@ -435,7 +434,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                         var sensor = dbContext.Sensors.FirstOrDefault(i => i.Code == sensorCode);
                         if (sensor != null)
                         {
-                            Logging.Verbose("Ignoring Sensor {SensorCode}", sensorCode);
+                            SAEONLogs.Verbose("Ignoring Sensor {SensorCode}", sensorCode);
                         }
                         else
                         {
@@ -456,7 +455,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                                 PhenomenonId = dbContext.Phenomena.First(i => i.Code == phenomenaCode).Id,
                                 UserId = AuthHelper.GetLoggedInUserId
                             };
-                            //Logging.Verbose("Adding Sensor {@Sensor}", sensor);
+                            //SAEONLogs.Verbose("Adding Sensor {@Sensor}", sensor);
                             dbContext.Sensors.Add(sensor);
                             SaveChanges();
                             var instrumentId = dbContext.Instruments.First(i => i.Code == instrumentCode).Id;
@@ -466,9 +465,9 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                                 "  (InstrumentID, SensorID, UserID) " +
                                 "Values " +
                                $"  ('{instrumentId}','{sensorId}','{AuthHelper.GetLoggedInUserId}')";
-                            //Logging.Verbose("Sql: {Sql}", sql);
+                            //SAEONLogs.Verbose("Sql: {Sql}", sql);
                             dbContext.Database.ExecuteSqlCommand(sql);
-                            Logging.Verbose("Added Sensor {SensorCode}", sensorCode);
+                            SAEONLogs.Verbose("Added Sensor {SensorCode}", sensorCode);
                         }
                     }
                 }
@@ -477,7 +476,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 ExtNet.Msg.Hide();
                 MessageBoxes.Error("Error", ex.Message);
             }

@@ -18,7 +18,7 @@ public partial class Admin_CreateFolders : System.Web.UI.Page
 
     protected void CreateClick(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             if (!TemplateFile.HasFile)
             {
@@ -34,7 +34,7 @@ public partial class Admin_CreateFolders : System.Web.UI.Page
             }
             try
             {
-                Logging.Information("FileName: {FileName}",TemplateFile.PostedFile.FileName);
+                SAEONLogs.Information("FileName: {FileName}", TemplateFile.PostedFile.FileName);
                 using (SpreadsheetDocument doc = SpreadsheetDocument.Open(TemplateFile.PostedFile.InputStream, false))
                 {
 
@@ -44,7 +44,7 @@ public partial class Admin_CreateFolders : System.Web.UI.Page
                         if (!string.IsNullOrWhiteSpace(instrument))
                         {
                             var splits = instrument.Split(new string[] { ", " }, StringSplitOptions.None);
-                            Logging.Information("Programme: {Programmee} Project: {Project} Site: {Site} Station: {Station} Instrument: {Instrument}", splits[0], splits[1], splits[2], splits[3], splits[4]);
+                            SAEONLogs.Information("Programme: {Programmee} Project: {Project} Site: {Site} Station: {Station} Instrument: {Instrument}", splits[0], splits[1], splits[2], splits[3], splits[4]);
                             Directory.CreateDirectory(Path.Combine(ObservationsFolder.Text, splits[0], splits[1], splits[2], splits[3], splits[4], "Operational metadata"));
                             Directory.CreateDirectory(Path.Combine(ObservationsFolder.Text, splits[0], splits[1], splits[2], splits[3], splits[4], "Files", "Version 00"));
                             Directory.CreateDirectory(Path.Combine(ObservationsFolder.Text, splits[0], splits[1], splits[2], splits[3], splits[4], "Files", "Version 01"));
@@ -57,7 +57,7 @@ public partial class Admin_CreateFolders : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 ExtNet.Msg.Hide();
                 MessageBoxes.Error("Error", ex.Message);
             }

@@ -18,14 +18,14 @@ namespace SAEON.Observations.Azure
         //private const string CosmosDBPartitionKey = "/importBatch/id";
         private const string CosmosDBPartitionKey = "/importBatchId";
 
-        public static bool Enabled { get; private set; } = false;
-        public static bool StorageEnabled { get; private set; } = false;
-        public static bool CosmosDBEnabled { get; private set; } = false;
-        public static bool CosmosDBBulkEnabled { get; private set; } = false;
+        public static bool Enabled { get; private set; }
+        public static bool StorageEnabled { get; private set; }
+        public static bool CosmosDBEnabled { get; private set; }
+        public static bool CosmosDBBulkEnabled { get; private set; }
         public int BatchSize => int.Parse(ConfigurationManager.AppSettings["AzureCosmosDBBatchSize"] ?? AzureCosmosDB<ObservationItem>.DefaultBatchSize.ToString());
 
-        private AzureStorage Storage = null;
-        private AzureCosmosDB<ObservationItem> CosmosDB = null;
+        private AzureStorage Storage;
+        private AzureCosmosDB<ObservationItem> CosmosDB;
 
         static ObservationsAzure()
         {

@@ -38,7 +38,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
     protected void NodeLoad(object sender, NodeLoadEventArgs e)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "NodeID", e.NodeID } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "NodeID", e.NodeID } }))
             try
             {
                 if (e.NodeID.StartsWith("Organisations"))
@@ -49,10 +49,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 .Distinct()
                                 .OrderAsc(Organisation.Columns.Name)
                                 .ExecuteAsCollection<OrganisationCollection>();
-                    Logging.Verbose("Organisations: {count}", col.Count());
+                    SAEONLogs.Verbose("Organisations: {count}", col.Count());
                     foreach (var item in col)
                     {
-                        Logging.Verbose("Organisation: {name}", item.Name);
+                        SAEONLogs.Verbose("Organisation: {name}", item.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Organisation_" + item.Id.ToString(), item.Name, Icon.ResultsetNext);
                         e.Nodes.Add(node);
                         AsyncTreeNode root = new AsyncTreeNode("Sites_" + item.Id.ToString() + "|" + node.NodeID, "Sites")
@@ -73,10 +73,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 .Distinct()
                                 .OrderAsc(SAEON.Observations.Data.Site.Columns.Name)
                                 .ExecuteAsCollection<SiteCollection>();
-                    Logging.Verbose("Sites: {count}", col.Count());
+                    SAEONLogs.Verbose("Sites: {count}", col.Count());
                     foreach (var item in col)
                     {
-                        Logging.Verbose("Site: {name}", item.Name);
+                        SAEONLogs.Verbose("Site: {name}", item.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Site_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
                         {
                             Checked = ThreeStateBool.False
@@ -100,10 +100,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 .Distinct()
                                 .OrderAsc(Station.Columns.Name)
                                 .ExecuteAsCollection<StationCollection>();
-                    Logging.Verbose("Stations: {count}", col.Count());
+                    SAEONLogs.Verbose("Stations: {count}", col.Count());
                     foreach (var item in col)
                     {
-                        Logging.Verbose("Station: {name}", item.Name);
+                        SAEONLogs.Verbose("Station: {name}", item.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Station_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
                         {
                             Checked = ThreeStateBool.False
@@ -138,10 +138,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .Distinct()
                         .OrderAsc(Instrument.Columns.Name)
                         .ExecuteAsCollection<InstrumentCollection>();
-                    Logging.Verbose("Instruments: {count}", col.Count());
+                    SAEONLogs.Verbose("Instruments: {count}", col.Count());
                     foreach (var item in col)
                     {
-                        Logging.Verbose("Instrument: {name}", item.Name);
+                        SAEONLogs.Verbose("Instrument: {name}", item.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Instrument_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
                         {
                             Checked = ThreeStateBool.False
@@ -176,10 +176,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .Distinct()
                         .OrderAsc(Sensor.Columns.Name)
                         .ExecuteAsCollection<SensorCollection>();
-                    Logging.Verbose("Sensors: {count}", col.Count());
+                    SAEONLogs.Verbose("Sensors: {count}", col.Count());
                     foreach (var item in col)
                     {
-                        Logging.Verbose("Sensor: {name}", item.Name);
+                        SAEONLogs.Verbose("Sensor: {name}", item.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Sensor_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
                         {
                             Icon = Icon.ResultsetNext,
@@ -219,7 +219,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex, "Unable to load node {nodeID}", e.NodeID);
+                SAEONLogs.Exception(ex, "Unable to load node {nodeID}", e.NodeID);
                 throw;
             }
     }
@@ -257,7 +257,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             var count = Convert.ToInt64(i.Compute("Count(ValueDate)", ""));
             var start = Convert.ToDateTime(i.Compute("Min(ValueDate)", ""));
             var end = Convert.ToDateTime(i.Compute("Max(ValueDate)", ""));
-            Logging.Verbose("Count: {count} Start: {start} End: {end}", count, start, end);
+            SAEONLogs.Verbose("Count: {count} Start: {start} End: {end}", count, start, end);
             log += $" Result -> Rows: {count:N0} Start: {start.ToString("dd MMM yyyy")} End: {end.ToString("dd MMM yyyy")}";
             Auditing.Log(GetType(), new MethodCallParameters { { "Log", log } });
         });
@@ -270,7 +270,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
     private SqlQuery BuildQuery(out string log, string[] columns = null)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Columns", columns } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Columns", columns } }))
         {
             try
             {
@@ -295,7 +295,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         QueryDataClassList.Add(new QueryDataClass() { NodeID = item.NodeID, ID = new Guid(items[0].Item2), Type = items[0].Item1 });
                     }
 
-                    Logging.Verbose("Items: {@QueryDataClassList}", QueryDataClassList);
+                    SAEONLogs.Verbose("Items: {@QueryDataClassList}", QueryDataClassList);
 
                     #region buildQ
                     foreach (QueryDataClass item in QueryDataClassList)
@@ -303,7 +303,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
                         int count = 0;
                         List<Tuple<string, string>> items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
-                        Logging.Verbose("Items: {@items}", items);
+                        SAEONLogs.Verbose("Items: {@items}", items);
                         PhenomenonOffering phenomenonOffering = null;
                         Phenomenon phenomenon = null;
                         Sensor sensor = null;
@@ -397,12 +397,12 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                     }
                     #endregion buildQ
                 }
-                Logging.Verbose("SQL: {sql}", q.BuildSqlStatement());
+                SAEONLogs.Verbose("SQL: {sql}", q.BuildSqlStatement());
                 return q;
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 throw;
             }
         }
@@ -410,7 +410,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
     protected void ObservationsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -427,7 +427,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 throw;
             }
         }
@@ -437,7 +437,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
     public SqlQuery BuildQ(string json, string visCols, string sortCol, string sortDir, out string log)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -541,7 +541,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 throw;
             }
         }

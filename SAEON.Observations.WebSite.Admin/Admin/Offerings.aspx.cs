@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using SAEON.Observations.Data;
-using Ext.Net;
-using SubSonic;
-using System.Xml;
-using System.Xml.Xsl;
+﻿using Ext.Net;
 using SAEON.Logs;
+using SAEON.Observations.Data;
+using System;
 
 /// <summary>
 /// Summary description for Offering
@@ -100,7 +94,7 @@ public partial class _Offerings : System.Web.UI.Page
     #region Phenomena
     protected void OfferingPhenomenaGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             if (e.Parameters["OfferingID"] != null && e.Parameters["OfferingID"].ToString() != "-1")
             {
@@ -116,7 +110,7 @@ public partial class _Offerings : System.Web.UI.Page
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     MessageBoxes.Error(ex, "Error", "Unable to refresh phenomena grid");
                 }
             }

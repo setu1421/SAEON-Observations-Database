@@ -61,7 +61,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -99,7 +99,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to save programme");
             }
         }
@@ -161,7 +161,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
 
     protected void ProjectLinksSave(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             RowSelectionModel sm = AvailableProjectsGrid.SelectionModel.Primary as RowSelectionModel;
             RowSelectionModel programmeRow = ProgrammesGrid.SelectionModel.Primary as RowSelectionModel;
@@ -187,7 +187,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
                         }
                         catch (Exception ex)
                         {
-                            Logging.Exception(ex);
+                            SAEONLogs.Exception(ex);
                             MessageBoxes.Error(ex, "Error", "Unable to link programme");
                         }
                 }

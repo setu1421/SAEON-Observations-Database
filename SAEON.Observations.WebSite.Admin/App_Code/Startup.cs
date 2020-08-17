@@ -11,9 +11,9 @@ public static class Startup
 {
     public static void Run()
     {
-        Logging
+        SAEONLogs
             .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebSite.Admin {Date}.txt"))
-            .Create();
+            .Initialize();
         string docPath = ConfigurationManager.AppSettings["DocumentsPath"];
         if (!string.IsNullOrEmpty(docPath))
         {
