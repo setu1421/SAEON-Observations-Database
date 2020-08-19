@@ -44,30 +44,20 @@ namespace SAEON.Observations.QuerySite
                     services.AddCors();
                     services.Configure<CookiePolicyOptions>(options =>
                     {
-                        options.CheckConsentNeeded = context => true; // consent required
+                        // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                        options.CheckConsentNeeded = context => true;
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
-                    //services.Configure<CookiePolicyOptions>(options =>
-                    //{
-                    //    options.Secure = CookieSecurePolicy.Always;
-                    //    options.HttpOnly = HttpOnlyPolicy.Always;
-                    //    options.MinimumSameSitePolicy = SameSiteMode.None;
-                    //    //options.OnAppendCookie = cookieContext =>
-                    //    //    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
-                    //    //options.OnDeleteCookie = cookieContext =>
-                    //    //    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
-                    //});
                     services.AddDistributedMemoryCache();
                     services.AddSession(options =>
                     {
-                        //options.IdleTimeout = TimeSpan.FromSeconds(10);
-                        options.Cookie.HttpOnly = true;
+                        options.Cookie.HttpOnly = false;
                         options.Cookie.IsEssential = true;
-                        options.Cookie.Name = ".SAEON.Observations.QuerySite";
                     });
                     services.AddAuthentication(options =>
                     {
-                        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                         options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                     })
                     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -114,12 +104,15 @@ namespace SAEON.Observations.QuerySite
                     else
                     {
                         app.UseExceptionHandler("/Home/Error");
+                        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                        app.UseHsts();
                     }
+                    app.UseHttpsRedirection();
                     app.UseStaticFiles();
 
+                    app.UseCookiePolicy();
                     app.UseRouting();
                     app.UseCors();
-                    app.UseCookiePolicy();
                     app.UseAuthentication();
                     app.UseAuthorization();
                     app.UseSession();

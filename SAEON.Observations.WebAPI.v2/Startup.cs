@@ -57,10 +57,13 @@ namespace SAEON.Observations.WebAPI
                         options.AddPolicy(TenantPolicyDefaults.AuthorizationPolicy, policy => policy.AddRequirements(new TenantAuthorizationRequirement(Configuration[TenantPolicyDefaults.ConfigKeyTenants], Configuration[TenantPolicyDefaults.ConfigKeyDefaultTenant])));
                     });
                     services.AddScoped<IAuthorizationHandler, TenantAuthorizationHandler>();
-                    services.AddAuthentication(OAuth2IntrospectionDefaults.AuthenticationScheme)
+                    services
+                        .AddAuthentication(OAuth2IntrospectionDefaults.AuthenticationScheme)
                         .AddOAuth2Introspection(options =>
                         {
                             options.IntrospectionEndpoint = Configuration["AuthenticationServerIntrospectionUrl"];
+                            options.EnableCaching = true;
+                            options.SaveToken = true;
                             //options.ClientId = "client_id_for_introspection_endpoint";
                             //options.ClientSecret = "client_secret_for_introspection_endpoint";
                         });
@@ -72,10 +75,11 @@ namespace SAEON.Observations.WebAPI
                     //   });
                     //services.AddSingleton<IPostConfigureOptions<ODPAuthenticationOptions>, ODPAuthenticationPostConfigureOptions>();
                     //services.AddScoped<ODPAuthenticationHandler>();
-                    services.AddMvc().AddJsonOptions(options =>
-                    {
-                        options.JsonSerializerOptions.IgnoreNullValues = true;
-                    });
+                    services.AddMvc()
+                        .AddJsonOptions(options =>
+                        {
+                            options.JsonSerializerOptions.IgnoreNullValues = true;
+                        });
                     services.AddHttpContextAccessor();
                     services.AddScoped<HttpContext>(p => p.GetService<IHttpContextAccessor>()?.HttpContext);
                     services.AddHealthChecks()

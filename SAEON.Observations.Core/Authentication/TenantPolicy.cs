@@ -21,8 +21,8 @@ namespace SAEON.Observations.Core
 
     public class TenantAuthorizationRequirement : IAuthorizationRequirement
     {
-        public string Tenants { get; private set; } = null;
-        public string DefaultTenant { get; private set; } = null;
+        public string Tenants { get; private set; }
+        public string DefaultTenant { get; private set; }
 
         public TenantAuthorizationRequirement(string tenants, string defaultTenant)
         {
@@ -94,7 +94,7 @@ namespace SAEON.Observations.Core
             {
                 var tenant = request?.Headers[TenantPolicyDefaults.HeaderKeyTenant].FirstOrDefault();
                 SAEONLogs.Debug("Request: {Request} Config: {Config}", tenant, config?[TenantPolicyDefaults.ConfigKeyDefaultTenant]);
-                if (string.IsNullOrWhiteSpace(tenant)) tenant = config[TenantPolicyDefaults.ConfigKeyDefaultTenant];
+                if (string.IsNullOrWhiteSpace(tenant)) tenant = config?[TenantPolicyDefaults.ConfigKeyDefaultTenant];
                 return tenant;
             }
         }

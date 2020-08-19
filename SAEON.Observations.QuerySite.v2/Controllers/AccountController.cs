@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using SAEON.Logs;
+using SAEON.Observations.Core;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SAEON.Observations.QuerySite.Controllers
@@ -31,20 +31,32 @@ namespace SAEON.Observations.QuerySite.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //[Authorize]
+        public IActionResult ClearAccessToken()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    HttpContext.Session.Remove("AccessToken");
+                    return NoContent();
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+
+        }
+
         public IActionResult ClaimsQuerySite()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    var result = new
-                    {
-                        User,
-                        User.Identity.IsAuthenticated,
-                        Claims = User.Claims.Select(c => new { c.Type, c.Value })
-                    };
-                    SAEONLogs.Information("Claims: {claims}", result);
+                    var result = HttpContext.GetUserInfo();
+                    SAEONLogs.Information("UserInfo: {UserInfo}", result);
                     return new JsonResult(result);
                 }
                 catch (Exception ex)
@@ -54,15 +66,35 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-        public async Task<IActionResult> ClaimsWeBAPIAsync()
+
+        [Authorize]
+        public IActionResult ClaimsQuerySiteUser()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    using (var client = await GetWebAPIClient())
+                    var result = HttpContext.GetUserInfo();
+                    SAEONLogs.Information("UserInfo: {UserInfo}", result);
+                    return new JsonResult(result);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public async Task<IActionResult> ClaimsWebAPIAsync()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    using (var client = await GetWebAPIClient(false))
                     {
-                        var response = await client.GetAsync("ClaimsWebAPI");
+                        var response = await client.GetAsync("Claims/ClaimsWebAPI");
                         if (!response.IsSuccessStatusCode)
                         {
                             SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
@@ -70,7 +102,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         }
                         response.EnsureSuccessStatusCode();
                         var claims = await response.Content.ReadAsStringAsync();
-                        SAEONLogs.Information("Claims: {Claims}", claims);
+                        SAEONLogs.Information("UserInfo: {UserInfo}", claims);
                         return Content(claims);
                     }
                 }
@@ -83,7 +115,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         }
 
-        public async Task<IActionResult> ClaimsWeBAPITokenAsync()
+        public async Task<IActionResult> ClaimsWebAPITokenAsync()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -91,7 +123,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     using (var client = await GetWebAPIClient())
                     {
-                        var response = await client.GetAsync("ClaimsWebAPIToken");
+                        var response = await client.GetAsync("Claims/ClaimsWebAPIToken");
                         if (!response.IsSuccessStatusCode)
                         {
                             SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
@@ -99,7 +131,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         }
                         response.EnsureSuccessStatusCode();
                         var claims = await response.Content.ReadAsStringAsync();
-                        SAEONLogs.Information("Claims: {Claims}", claims);
+                        SAEONLogs.Information("UserInfo: {UserInfo}", claims);
                         return Content(claims);
                     }
                 }

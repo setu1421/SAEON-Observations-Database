@@ -81,7 +81,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        protected async Task<HttpClient> GetWebAPIClient()
+        protected async Task<HttpClient> GetWebAPIClient(bool useAccessToken = true)
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -92,7 +92,10 @@ namespace SAEON.Observations.QuerySite.Controllers
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Zip));
                     client.DefaultRequestHeaders.Add(TenantPolicyDefaults.HeaderKeyTenant, HttpContext.Session.GetString(TenantPolicyDefaults.HeaderKeyTenant));
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetAccessToken());
+                    if (useAccessToken)
+                    {
+                        client.SetBearerToken(await GetAccessToken());
+                    }
                     client.BaseAddress = new Uri(config["WebAPIUrl"]);
                     return client;
                 }
@@ -103,5 +106,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+
     }
 }

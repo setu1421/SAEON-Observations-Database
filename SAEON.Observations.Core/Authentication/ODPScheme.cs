@@ -23,8 +23,8 @@ namespace SAEON.Observations.Core.Authentication
 
     public class ODPAuthenticationOptions : AuthenticationSchemeOptions
     {
-        public string IntrospectionUrl { get; set; } = null;
-        public bool RequireLogin { get; set; } = false;
+        public string IntrospectionUrl { get; set; }
+        public bool RequireLogin { get; set; }
     }
 
     public class ODPAuthenticationPostConfigureOptions : IPostConfigureOptions<ODPAuthenticationOptions>
@@ -58,22 +58,7 @@ namespace SAEON.Observations.Core.Authentication
                 try
                 {
                     SAEONLogs.Debug("IntrospectionUrl: {IntrospectionUrl}", Options.IntrospectionUrl);
-                    if (!Request.Headers.ContainsKey("Authorization"))
-                    {
-                        //Authorization header not in request
-                        return AuthenticateResult.NoResult();
-                    }
-                    if (!AuthenticationHeaderValue.TryParse(Request.Headers["Authorization"], out AuthenticationHeaderValue headerValue))
-                    {
-                        //Invalid Authorization header
-                        return AuthenticateResult.NoResult();
-                    }
-                    if (!"Bearer".Equals(headerValue.Scheme, StringComparison.OrdinalIgnoreCase))
-                    {
-                        //Not Bearer authentication header
-                        return AuthenticateResult.NoResult();
-                    }
-                    var token = headerValue.Parameter;
+                    var token = Request.GetBearerToken();
                     if (string.IsNullOrWhiteSpace(token))
                     {
                         SAEONLogs.Error("ODP Authorization Failed, no token");
@@ -144,10 +129,8 @@ namespace SAEON.Observations.Core.Authentication
             return AddODP(builder, ODPAuthenticationDefaults.AuthenticationScheme, configureOptions);
         }
 
-        public static AuthenticationBuilder AddODP(this AuthenticationBuilder builder, string authenticationScheme, Action<ODPAuthenticationOptions> configureOptions)
-        {
-            return builder.AddScheme<ODPAuthenticationOptions, ODPAuthenticationHandler>(authenticationScheme, configureOptions);
-        }
+        public static AuthenticationBuilder AddODP(this AuthenticationBuilder builder, string authenticationScheme, Action<ODPAuthenticationOptions> configureOptions) =>
+            builder.AddScheme<ODPAuthenticationOptions, ODPAuthenticationHandler>(authenticationScheme, configureOptions);
     }
 }
 #endif

@@ -36,7 +36,7 @@ namespace SAEON.Observations.Core
         public bool IsExpanded { get; set; }
         public bool IsSelected { get; set; }
         public bool IsChecked { get; set; }
-        public LinkAttribute ToolTip { get; set; } = null;
+        public LinkAttribute ToolTip { get; set; }
     }
 
     public class LocationNode : TreeNode
@@ -104,7 +104,7 @@ namespace SAEON.Observations.Core
     public class DataMatrixRow
     {
         public List<Object> Columns { get; } = new List<object>();
-        internal DataMatrix Matrix { get; set; } = null;
+        internal DataMatrix Matrix { get; set; }
 
         public DataMatrixRow() { }
 
@@ -220,7 +220,7 @@ namespace SAEON.Observations.Core
                 }
                 else
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(dmCol.Name);
             }
@@ -236,7 +236,7 @@ namespace SAEON.Observations.Core
                     }
                     else
                     {
-                        sb.Append(",");
+                        sb.Append(',');
                     }
                     sb.Append(dmCol.AsString(dmRow[dmCol.Name]));
                 }
@@ -294,19 +294,19 @@ namespace SAEON.Observations.Core
         /// Lookup on GeoNames in format Name:Country:Lat:Lon
         /// </summary>
         public List<string> Places { get; } = new List<string>();
-        public double? LatitudeNorth { get; set; } = null; // + N to -S
-        public double? LatitudeSouth { get; set; } = null; // + N to -S
-        public double? LongitudeWest { get; set; } = null; // -W to +E
-        public double? LongitudeEast { get; set; } = null; // -W to +E
-        public double? ElevationMinimum { get; set; } = null; // m
-        public double? ElevationMaximum { get; set; } = null; // m
-        public DateTime? StartDate { get; set; } = null;
-        public DateTime? EndDate { get; set; } = null;
+        public double? LatitudeNorth { get; set; } // + N to -S
+        public double? LatitudeSouth { get; set; } // + N to -S
+        public double? LongitudeWest { get; set; } // -W to +E
+        public double? LongitudeEast { get; set; } // -W to +E
+        public double? ElevationMinimum { get; set; } // m
+        public double? ElevationMaximum { get; set; } // m
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 
     public class DataWizardApproximation
     {
-        public long RowCount { get; set; } = 0;
+        public long RowCount { get; set; }
         public List<string> Errors { get; } = new List<string>();
     }
 

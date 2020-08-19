@@ -1,18 +1,20 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using IdentityModel.AspNetCore.OAuth2Introspection;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using System;
-using System.Linq;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
-    [Route("[controller]")]
+    //[Route("[controller]")]
+    [Route("[controller]/[action]")]
     [ApiController]
-    //[Authorize(Policy = Constants.ODPAuthorizationPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
     public class ClaimsController : ControllerBase
     {
+
         [HttpGet]
         public IActionResult ClaimsWebAPI()
         {
@@ -20,13 +22,8 @@ namespace SAEON.Observations.WebAPI.Controllers
             {
                 try
                 {
-                    var result = new
-                    {
-                        User,
-                        User.Identity.IsAuthenticated,
-                        Claims = User.Claims.Select(c => new { c.Type, c.Value })
-                    };
-                    SAEONLogs.Information("Claims: {claims}", result);
+                    var result = HttpContext.GetUserInfo();
+                    SAEONLogs.Information("UserInfo: {UserInfo}", result);
                     return new JsonResult(result);
                 }
                 catch (Exception ex)
@@ -36,22 +33,17 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
             }
         }
+
         [HttpGet]
-        [Authorize(Policy = TenantPolicyDefaults.AuthorizationPolicy)]
-        //[Route("ClaimsApiToken")]
+        [Authorize(AuthenticationSchemes = OAuth2IntrospectionDefaults.AuthenticationScheme, Policy = TenantPolicyDefaults.AuthorizationPolicy)]
         public IActionResult ClaimsWebAPIToken()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    var result = new
-                    {
-                        User,
-                        User.Identity.IsAuthenticated,
-                        Claims = User.Claims.Select(c => new { c.Type, c.Value })
-                    };
-                    SAEONLogs.Information("Claims: {claims}", result);
+                    var result = HttpContext.GetUserInfo();
+                    SAEONLogs.Information("UserInfo: {UserInfo}", result);
                     return new JsonResult(result);
                 }
                 catch (Exception ex)
