@@ -46,17 +46,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Azure.Core, Version=1.4.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
-      <HintPath>..\packages\Azure.Core.1.4.0\lib\netstandard2.0\Azure.Core.dll</HintPath>
+    <Reference Include="Azure.Core, Version=1.4.1.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>..\packages\Azure.Core.1.4.1\lib\netstandard2.0\Azure.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Azure.Storage.Blobs, Version=12.5.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
-      <HintPath>..\packages\Azure.Storage.Blobs.12.5.0\lib\netstandard2.0\Azure.Storage.Blobs.dll</HintPath>
+    <Reference Include="Azure.Storage.Blobs, Version=12.5.1.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>..\packages\Azure.Storage.Blobs.12.5.1\lib\netstandard2.0\Azure.Storage.Blobs.dll</HintPath>
     </Reference>
-    <Reference Include="Azure.Storage.Common, Version=12.5.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
-      <HintPath>..\packages\Azure.Storage.Common.12.5.0\lib\netstandard2.0\Azure.Storage.Common.dll</HintPath>
+    <Reference Include="Azure.Storage.Common, Version=12.5.1.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>..\packages\Azure.Storage.Common.12.5.1\lib\netstandard2.0\Azure.Storage.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Azure.Storage.Queues, Version=12.4.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
-      <HintPath>..\packages\Azure.Storage.Queues.12.4.0\lib\netstandard2.0\Azure.Storage.Queues.dll</HintPath>
+    <Reference Include="Azure.Storage.Queues, Version=12.4.1.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>..\packages\Azure.Storage.Queues.12.4.1\lib\netstandard2.0\Azure.Storage.Queues.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Azure.Cosmos.Client, Version=3.12.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.Cosmos.3.12.0\lib\netstandard2.0\Microsoft.Azure.Cosmos.Client.dll</HintPath>
@@ -70,8 +70,8 @@
     <Reference Include="Microsoft.Azure.Cosmos.Serialization.HybridRow, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.Cosmos.3.12.0\lib\netstandard2.0\Microsoft.Azure.Cosmos.Serialization.HybridRow.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Azure.Cosmos.Table, Version=1.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.Cosmos.Table.1.0.7\lib\netstandard2.0\Microsoft.Azure.Cosmos.Table.dll</HintPath>
+    <Reference Include="Microsoft.Azure.Cosmos.Table, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Cosmos.Table.1.0.8\lib\netstandard2.0\Microsoft.Azure.Cosmos.Table.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Azure.DocumentDB.Core, Version=2.11.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.DocumentDB.Core.2.11.6\lib\netstandard1.6\Microsoft.Azure.DocumentDB.Core.dll</HintPath>
@@ -97,11 +97,11 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Azure.CosmosDB, Version=1.0.163.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Azure.CosmosDB.1.0.163\lib\net472\SAEON.Azure.CosmosDB.dll</HintPath>
+    <Reference Include="SAEON.Azure.CosmosDB, Version=1.0.164.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Azure.CosmosDB.1.0.164\lib\net472\SAEON.Azure.CosmosDB.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Azure.Storage, Version=1.0.68.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Azure.Storage.1.0.68\lib\net472\SAEON.Azure.Storage.dll</HintPath>
+    <Reference Include="SAEON.Azure.Storage, Version=1.0.69.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Azure.Storage.1.0.69\lib\net472\SAEON.Azure.Storage.dll</HintPath>
     </Reference>
     <Reference Include="SAEON.Core, Version=1.0.25.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Core.1.0.25\lib\net472\SAEON.Core.dll</HintPath>
@@ -109,8 +109,8 @@
     <Reference Include="SAEON.Logs.NetFramework, Version=1.0.22.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Logs.NetFramework.1.0.22\lib\net472\SAEON.Logs.NetFramework.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Observations.Azure, Version=1.0.147.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Observations.Azure.1.0.147\lib\net472\SAEON.Observations.Azure.dll</HintPath>
+    <Reference Include="SAEON.Observations.Azure, Version=1.0.148.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Observations.Azure.1.0.148\lib\net472\SAEON.Observations.Azure.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.9.0\lib\net46\Serilog.dll</HintPath>

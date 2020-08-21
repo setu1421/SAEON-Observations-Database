@@ -98,12 +98,12 @@ namespace SAEON.Observations.Azure
                     if (StorageEnabled)
                     {
                         SAEONLogs.Verbose("Ensuring Storage Container exists");
-                        await Storage.EnsureContainerAsync(ObservationsAzure.BlobStorageContainer);
+                        await Storage.EnsureContainerAsync(BlobStorageContainer).ConfigureAwait(false);
                     }
                     if (CosmosDBEnabled)
                     {
                         SAEONLogs.Verbose("Ensuring CosmosDB Container exists");
-                        await CosmosDB.EnsureContainerAsync();
+                        await CosmosDB.EnsureContainerAsync().ConfigureAwait(false);
                     }
                 }
                 catch (Exception ex)
@@ -142,7 +142,7 @@ namespace SAEON.Observations.Azure
                 {
                     var date = DateTime.Now;
                     var blobContainerClient = Storage.GetBlobContainerClient(BlobStorageContainer);
-                    await blobContainerClient.UploadBlobAsync($"{folder}/{fileName}", fileContents);
+                    await blobContainerClient.UploadBlobAsync($"{folder}/{fileName}", fileContents).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -178,7 +178,7 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    return await CosmosDB.GetItemAsync(item, i => i.ImportBatchId);
+                    return await CosmosDB.GetItemAsync(item, i => i.ImportBatchId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -200,7 +200,7 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    return await CosmosDB.GetItemWithCostAsync(item, i => i.ImportBatchId);
+                    return await CosmosDB.GetItemWithCostAsync(item, i => i.ImportBatchId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -223,7 +223,7 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    return await CosmosDB.GetItemsAsync(predicate);
+                    return await CosmosDB.GetItemsAsync(predicate).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -245,7 +245,7 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    return await CosmosDB.GetItemsWithCostAsync(predicate);
+                    return await CosmosDB.GetItemsWithCostAsync(predicate).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -267,7 +267,7 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    return (await CosmosDB.CreateItemWithCostAsync(item, i => i.ImportBatchId)).cost;
+                    return (await CosmosDB.CreateItemWithCostAsync(item, i => i.ImportBatchId).ConfigureAwait(false)).cost;
                 }
                 catch (Exception ex)
                 {
@@ -289,7 +289,7 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    return (await CosmosDB.ReplaceItemWithCostAsync(item, i => i.ImportBatchId)).cost;
+                    return (await CosmosDB.ReplaceItemWithCostAsync(item, i => i.ImportBatchId).ConfigureAwait(false)).cost;
                 }
                 catch (Exception ex)
                 {
@@ -311,7 +311,7 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    return (await CosmosDB.UpsertItemWithCostAsync(item, i => i.ImportBatchId)).cost;
+                    return (await CosmosDB.UpsertItemWithCostAsync(item, i => i.ImportBatchId).ConfigureAwait(false)).cost;
                 }
                 catch (Exception ex)
                 {
@@ -333,7 +333,7 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    return await CosmosDB.UpsertItemsAsync(items, i => i.ImportBatchId);
+                    return await CosmosDB.UpsertItemsAsync(items, i => i.ImportBatchId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -355,7 +355,7 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    return (await CosmosDB.DeleteItemWithCostAsync(item, i => i.ImportBatchId)).cost;
+                    return (await CosmosDB.DeleteItemWithCostAsync(item, i => i.ImportBatchId).ConfigureAwait(false)).cost;
                 }
                 catch (Exception ex)
                 {
@@ -377,7 +377,7 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    return await CosmosDB.DeleteItemsAsync(i => i.ImportBatch.Id == importBatchId, i => i.ImportBatchId);
+                    return await CosmosDB.DeleteItemsAsync(i => i.ImportBatch.Id == importBatchId, i => i.ImportBatchId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
