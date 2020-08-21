@@ -1,12 +1,9 @@
 using AutoMapper;
 using HealthChecks.UI.Client;
-using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Core;
+using SAEON.Observations.Core.Authentication;
 using SAEON.Observations.Core.Entities;
 using System;
 
@@ -32,7 +30,7 @@ namespace SAEON.Observations.WebAPI
             }
             catch (Exception ex)
             {
-                SAEONLogs.Exception(ex, "Unable to configure application");
+                SAEONLogs.Exception(ex, "Unable to start application");
                 throw;
             }
         }
@@ -46,19 +44,27 @@ namespace SAEON.Observations.WebAPI
             {
                 try
                 {
-                    services.AddCors();
+                    //services.AddCors();
                     services.AddAutoMapper(typeof(Startup));
-                    services.AddControllersWithViews();
                     services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
                     services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                         .AddCookie();
-                    services.AddAuthorization(options =>
-                    {
-                        options.AddPolicy(TenantPolicyDefaults.AuthorizationPolicy, policy => policy.AddRequirements(new TenantAuthorizationRequirement(Configuration[TenantPolicyDefaults.ConfigKeyTenants], Configuration[TenantPolicyDefaults.ConfigKeyDefaultTenant])));
-                    });
-                    services.AddScoped<IAuthorizationHandler, TenantAuthorizationHandler>();
+                    services.AddAuthentication()
+                       .AddODPAccessToken(options =>
+                       {
+                           options.IntrospectionUrl = Configuration["AuthenticationServerIntrospectionUrl"];
+                       })
+                       .AddODPIdToken(options =>
+                         {
+                             options.IntrospectionUrl = Configuration["AuthenticationServerIntrospectionUrl"];
+                         })
+                      .AddTenant(options =>
+                       {
+                           options.Tenants = Configuration[TenantAuthenticationDefaults.ConfigKeyTenants];
+                           options.DefaultTenant = Configuration[TenantAuthenticationDefaults.ConfigKeyDefaultTenant];
+                       });
                     services
-                        .AddAuthentication(OAuth2IntrospectionDefaults.AuthenticationScheme)
+                        .AddAuthentication()
                         .AddOAuth2Introspection(options =>
                         {
                             options.IntrospectionEndpoint = Configuration["AuthenticationServerIntrospectionUrl"];
@@ -67,29 +73,20 @@ namespace SAEON.Observations.WebAPI
                             //options.ClientId = "client_id_for_introspection_endpoint";
                             //options.ClientSecret = "client_secret_for_introspection_endpoint";
                         });
-                    //services.AddAuthentication(ODPAuthenticationDefaults.AuthenticationScheme)
-                    //   .AddODP(options =>
-                    //   {
-                    //       //options.IntrospectionUrl = Configuration[ODPAuthenticationDefaults.ConfigKeyIntrospectionUrl];
-                    //       options.IntrospectionUrl = Configuration[Constants.AuthenticationServerIntrospectionUrl];
-                    //   });
-                    //services.AddSingleton<IPostConfigureOptions<ODPAuthenticationOptions>, ODPAuthenticationPostConfigureOptions>();
-                    //services.AddScoped<ODPAuthenticationHandler>();
-                    services.AddMvc()
-                        .AddJsonOptions(options =>
-                        {
-                            options.JsonSerializerOptions.IgnoreNullValues = true;
-                        });
+
                     services.AddHttpContextAccessor();
-                    services.AddScoped<HttpContext>(p => p.GetService<IHttpContextAccessor>()?.HttpContext);
+                    //services.AddScoped<HttpContext>(p => p.GetService<IHttpContextAccessor>()?.HttpContext);
+
                     services.AddHealthChecks()
                         .AddUrlGroup(new Uri(Configuration["AuthenticationServerHealthCheckUrl"]), "AuthenticationServerUrl")
                         .AddUrlGroup(new Uri(Configuration["AuthenticationServerIntrospectionHealthCheckUrl"]), "AuthenticationServerIntrospectionUrl")
                         .AddDbContextCheck<ObservationsDbContext>("ObservationsDatabase");
+
                     services.AddDbContext<ObservationsDbContext>();
-                    services.AddSwaggerGen(c =>
+
+                    services.AddSwaggerGen(options =>
                     {
-                        c.SwaggerDoc("v1", new OpenApiInfo
+                        options.SwaggerDoc("v1", new OpenApiInfo
                         {
                             Title = "SAEON.Observations.WebAPI",
                             Version = "v1",
@@ -98,9 +95,10 @@ namespace SAEON.Observations.WebAPI
                             License = new OpenApiLicense { Name = "Creative Commons Attribution-ShareAlike 4.0 International License", Url = new Uri("https://creativecommons.org/licenses/by-sa/4.0/") }
 
                         });
-                        c.IncludeXmlComments("SAEON.Observations.WebAPI.v2.xml");
-                        c.SchemaFilter<SwaggerIgnoreFilter>();
+                        options.IncludeXmlComments("SAEON.Observations.WebAPI.v2.xml");
+                        options.SchemaFilter<SwaggerIgnoreFilter>();
                     });
+                    services.AddControllersWithViews();
                 }
                 catch (Exception ex)
                 {
@@ -126,18 +124,18 @@ namespace SAEON.Observations.WebAPI
                         app.UseExceptionHandler("/Home/Error");
                         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                         app.UseHsts();
-                        app.UseHttpsRedirection();
                     }
+                    app.UseHttpsRedirection();
                     app.UseStaticFiles();
 
                     app.UseRouting();
-                    app.UseCors();
+                    //app.UseCors();
                     app.UseAuthentication();
                     app.UseAuthorization();
                     app.UseSwagger();
-                    app.UseSwaggerUI(c =>
+                    app.UseSwaggerUI(options =>
                     {
-                        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SAEON.Observations.WebAPI");
+                        options.SwaggerEndpoint("/swagger/v1/swagger.json", "SAEON.Observations.WebAPI");
                     });
 
                     app.UseEndpoints(endpoints =>

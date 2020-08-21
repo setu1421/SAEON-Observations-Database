@@ -2036,13 +2036,11 @@ namespace SAEON.Observations.Core.Entities
 #else
         private readonly IConfiguration _config;
         private readonly IHttpContextAccessor _httpContectAccessor;
-        //private readonly TenantAuthenticationHandler _tenantAuthenticationHandler;
 
-        public ObservationsDbContext(DbContextOptions<ObservationsDbContext> options, IConfiguration config, /*TenantAuthenticationHandler tenantAuthenticationHandler,*/ IHttpContextAccessor httpContextAccessor) : base(options)
+        public ObservationsDbContext(DbContextOptions<ObservationsDbContext> options, IConfiguration config, IHttpContextAccessor httpContextAccessor) : base(options)
         {
             _config = config;
             _httpContectAccessor = httpContextAccessor;
-            //_tenantAuthenticationHandler = tenantAuthenticationHandler;
             Database.SetCommandTimeout(30 * 60);
         }
 #endif
@@ -2173,8 +2171,7 @@ namespace SAEON.Observations.Core.Entities
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
-                //var tenant = TenantAuthenticationHandler.GetTenantFromHeaders(_httpContectAccessor.HttpContext.Request, _tenantAuthenticationHandler.Options);
-                var tenant = TenantAuthorizationHandler.GetTenantFromHeaders(_httpContectAccessor.HttpContext.Request, _config);
+                var tenant = TenantAuthenticationHandler.GetTenantFromHeaders(_httpContectAccessor.HttpContext.Request, _config);
                 var connectionString = _config.GetConnectionString(tenant);
                 optionsBuilder.UseSqlServer(connectionString);
                 //SAEONLogs.Debug("Tenant: {Tenant} ConnectionString: {ConnectionString}", tenant, connectionString);

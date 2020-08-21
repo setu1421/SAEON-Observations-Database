@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using SAEON.Logs;
-using SAEON.Observations.Core;
+using SAEON.Observations.Core.Authentication;
 using SAEON.Observations.QuerySite.Controllers;
 using System.Diagnostics;
 
@@ -48,8 +48,8 @@ namespace SAEON.Observations.QuerySite.Models
             using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Name", Name } }))
             {
                 SAEONLogs.Information("Tenant: {Tenant}", Name);
-                HttpContext.Session.SetString(TenantPolicyDefaults.HeaderKeyTenant, Name);
-                SAEONLogs.Information("Session: {Tenant}", HttpContext.Session.GetString(TenantPolicyDefaults.HeaderKeyTenant));
+                HttpContext.Session.SetString(TenantAuthenticationDefaults.HeaderKeyTenant, Name);
+                SAEONLogs.Information("Session: {Tenant}", HttpContext.Session.GetString(TenantAuthenticationDefaults.HeaderKeyTenant));
                 return RedirectToAction("Index", "Home");
             }
         }

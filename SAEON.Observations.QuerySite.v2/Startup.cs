@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using SAEON.Core;
 using SAEON.Logs;
@@ -27,7 +28,7 @@ namespace SAEON.Observations.QuerySite
             }
             catch (Exception ex)
             {
-                SAEONLogs.Exception(ex, "Unable to configure application");
+                SAEONLogs.Exception(ex, "Unable to start application");
                 throw;
             }
         }
@@ -41,7 +42,9 @@ namespace SAEON.Observations.QuerySite
             {
                 try
                 {
-                    services.AddCors();
+                    IdentityModelEventSource.ShowPII = true;
+
+                    //services.AddCors();
                     services.Configure<CookiePolicyOptions>(options =>
                     {
                         // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -54,28 +57,29 @@ namespace SAEON.Observations.QuerySite
                         options.Cookie.HttpOnly = false;
                         options.Cookie.IsEssential = true;
                     });
-                    services.AddAuthentication(options =>
-                    {
-                        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-                    })
-                    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
-                    {
-                        options.Authority = Configuration["AuthenticationServerUrl"];
-                        options.ClientId = Configuration["QuerySiteClientID"];
-                        options.ClientSecret = Configuration["QuerySiteClientSecret"];
-                        options.Scope.Clear();
-                        options.Scope.Add(OpenIdConnectScope.OpenId);
-                        //options.Scope.Add(OpenIdConnectScope.OfflineAccess);
-                        options.Scope.Add("SAEON.Observations.WebAPI");
-                        options.ResponseType = OpenIdConnectResponseType.Code;
-                        options.SaveTokens = true;
-                        options.GetClaimsFromUserInfoEndpoint = true;
-                        SAEONLogs.Information("Options: {@Options}", options);
-                        //options.Validate();
-                    });
+                    services
+                        .AddAuthentication(options =>
+                        {
+                            options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                            options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                            options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                        })
+                        .AddCookie()
+                        .AddOpenIdConnect(options =>
+                        {
+                            options.Authority = Configuration["AuthenticationServerUrl"];
+                            options.ClientId = Configuration["QuerySiteClientID"];
+                            options.ClientSecret = Configuration["QuerySiteClientSecret"];
+                            options.Scope.Clear();
+                            options.Scope.Add(OpenIdConnectScope.OpenId);
+                            //options.Scope.Add(OpenIdConnectScope.OfflineAccess);
+                            options.Scope.Add("SAEON.Observations.WebAPI");
+                            options.ResponseType = OpenIdConnectResponseType.Code;
+                            options.SaveTokens = true;
+                            options.GetClaimsFromUserInfoEndpoint = true;
+                            SAEONLogs.Information("Options: {@Options}", options);
+                            //options.Validate();
+                        });
                     services.AddHttpContextAccessor();
                     services.AddHealthChecks()
                        .AddUrlGroup(new Uri(Configuration["AuthenticationServerHealthCheckUrl"]), "AuthenticationServerUrl")
@@ -112,7 +116,7 @@ namespace SAEON.Observations.QuerySite
 
                     app.UseCookiePolicy();
                     app.UseRouting();
-                    app.UseCors();
+                    //app.UseCors();
                     app.UseAuthentication();
                     app.UseAuthorization();
                     app.UseSession();

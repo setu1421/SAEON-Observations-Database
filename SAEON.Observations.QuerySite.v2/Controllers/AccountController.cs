@@ -92,7 +92,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    using (var client = await GetWebAPIClient(false))
+                    using (var client = GetWebAPIClient())
                     {
                         var response = await client.GetAsync("Claims/ClaimsWebAPI");
                         if (!response.IsSuccessStatusCode)
@@ -115,15 +115,16 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         }
 
-        public async Task<IActionResult> ClaimsWebAPITokenAsync()
+        public async Task<IActionResult> ClaimsWebAPIAccessTokenAsync()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    using (var client = await GetWebAPIClient())
+                    using (var client = await GetWebAPIClientWithAccessToken())
                     {
-                        var response = await client.GetAsync("Claims/ClaimsWebAPIToken");
+                        SAEONLogs.Verbose("Calling WebAPI");
+                        var response = await client.GetAsync("Claims/ClaimsWebAPIAccessToken");
                         if (!response.IsSuccessStatusCode)
                         {
                             SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
@@ -142,5 +143,64 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+
+        public async Task<IActionResult> ClaimsWebAPIIdTokenAsync()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    using (var client = await GetWebAPIClientWithIdToken())
+                    {
+                        var response = await client.GetAsync("Claims/ClaimsWebAPIIdToken");
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                            SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                        }
+                        response.EnsureSuccessStatusCode();
+                        var claims = await response.Content.ReadAsStringAsync();
+                        SAEONLogs.Information("UserInfo: {UserInfo}", claims);
+                        return Content(claims);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public async Task<IActionResult> GetBearerToken()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    using (var client = await GetWebAPIClientWithAccessToken(false))
+                    {
+                        //client.SetBearerToken("ag3JOPT14XGbSM9C4QUwkNTolO0PgHijZLiEfKbPPW0.Y9VI5WMTdh_oKV2Bj0PW4UYiyUqgCPBF4fEkaeQJRpw");
+                        var response = await client.GetAsync("Claims/GetBearerToken");
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                            SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                        }
+                        response.EnsureSuccessStatusCode();
+                        var token = await response.Content.ReadAsStringAsync();
+                        SAEONLogs.Information("BearerToken: {BearerToken}", token);
+                        return Content(token);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+
+        }
+
     }
 }

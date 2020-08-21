@@ -1,7 +1,9 @@
 ﻿#if NETCOREAPP3_1
-/*
+using AutoMapper.Configuration;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
@@ -101,14 +103,14 @@ namespace SAEON.Observations.Core.Authentication
             }
         }
 
-        public static string GetTenantFromHeaders(HttpRequest request, TenantAuthenticationOptions options)
+        public static string GetTenantFromHeaders(HttpRequest request, Microsoft.Extensions.Configuration.IConfiguration config)
         {
             using (SAEONLogs.MethodCall(typeof(TenantAuthenticationHandler)))
             {
                 if (request == null) throw new ArgumentNullException(nameof(request));
-                if (options == null) throw new ArgumentNullException(nameof(options));
-                var tenants = (options.Tenants ?? string.Empty).Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                var defaultTenant = (options.DefaultTenant ?? string.Empty);
+                if (config == null) throw new ArgumentNullException(nameof(config));
+                var tenants = (config[TenantAuthenticationDefaults.ConfigKeyTenants] ?? string.Empty).Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                var defaultTenant = (config[TenantAuthenticationDefaults.ConfigKeyDefaultTenant] ?? string.Empty);
                 string tenant = defaultTenant;
                 if (request.Headers.TryGetValue(TenantAuthenticationDefaults.HeaderKeyTenant, out StringValues values))
                 {
@@ -118,7 +120,6 @@ namespace SAEON.Observations.Core.Authentication
                 return tenant;
             }
         }
-
     }
 
     public static class TenantAuthenticationExtensions
@@ -140,9 +141,10 @@ namespace SAEON.Observations.Core.Authentication
 
         public static AuthenticationBuilder AddTenant(this AuthenticationBuilder builder, string authenticationScheme, Action<TenantAuthenticationOptions> configureOptions)
         {
+            builder.Services.AddSingleton<IPostConfigureOptions<TenantAuthenticationOptions>, TenantAuthenticationPostConfigureOptions>();
+            //builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<TenantAuthenticationOptions>, TenantAuthenticationPostConfigureOptions>());
             return builder.AddScheme<TenantAuthenticationOptions, TenantAuthenticationHandler>(authenticationScheme, configureOptions);
         }
     }
 }
-*/
 #endif

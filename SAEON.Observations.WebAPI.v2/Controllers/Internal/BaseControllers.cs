@@ -1,10 +1,9 @@
-﻿using IdentityModel.AspNetCore.OAuth2Introspection;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using SAEON.Logs;
-using SAEON.Observations.Core;
+using SAEON.Observations.Core.Authentication;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,9 +12,8 @@ using System.Linq;
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     [Route("internal/[controller]")]
+    [Authorize(AuthenticationSchemes = ODPAccessTokenAuthenticationDefaults.AuthenticationScheme + "," + TenantAuthenticationDefaults.AuthenticationScheme)]
     [ApiController]
-    [Authorize(Policy = TenantPolicyDefaults.AuthorizationPolicy)]
-    [Authorize(AuthenticationSchemes = OAuth2IntrospectionDefaults.AuthenticationScheme)]
     [ApiExplorerSettings(IgnoreApi = true)]
     public abstract class BaseController<TController> : ControllerBase where TController : BaseController<TController>
     {

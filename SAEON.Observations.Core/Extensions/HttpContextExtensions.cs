@@ -1,5 +1,8 @@
 ﻿#if NETCOREAPP3_1
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using SAEON.Observations.Core.Authentication;
 using System.Linq;
 
 namespace SAEON.Observations.Core
@@ -9,10 +12,11 @@ namespace SAEON.Observations.Core
         public static object GetUserInfo(this HttpContext context)
         {
             var session = (ISession)context.RequestServices.GetService(typeof(ISession));
+            var config = context.RequestServices.GetRequiredService<IConfiguration>();
             var result = new
             {
-                TenantFromHeader = TenantAuthorizationHandler.GetTenantFromHeaders(context.Request, null),
-                TenantFromSession = session?.GetString(TenantPolicyDefaults.HeaderKeyTenant),
+                TenantFromHeader = TenantAuthenticationHandler.GetTenantFromHeaders(context.Request, config),
+                TenantFromSession = session?.GetString(TenantAuthenticationDefaults.HeaderKeyTenant),
                 TokenFromSession = session?.GetString("AccessToken"),
                 TokenFromRequest = context.Request?.GetBearerToken(),
                 context.User.Identity.IsAuthenticated,
