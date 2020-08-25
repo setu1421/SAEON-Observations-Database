@@ -49,30 +49,41 @@ namespace SAEON.Observations.WebAPI
                     services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
                     services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                         .AddCookie();
-                    services.AddAuthentication()
-                       .AddODPAccessToken(options =>
-                       {
-                           options.IntrospectionUrl = Configuration["AuthenticationServerIntrospectionUrl"];
-                       })
-                       .AddODPIdToken(options =>
-                         {
-                             options.IntrospectionUrl = Configuration["AuthenticationServerIntrospectionUrl"];
-                         })
-                      .AddTenant(options =>
-                       {
-                           options.Tenants = Configuration[TenantAuthenticationDefaults.ConfigKeyTenants];
-                           options.DefaultTenant = Configuration[TenantAuthenticationDefaults.ConfigKeyDefaultTenant];
-                       });
                     services
                         .AddAuthentication()
-                        .AddOAuth2Introspection(options =>
+                        .AddODPAccessToken(options =>
                         {
-                            options.IntrospectionEndpoint = Configuration["AuthenticationServerIntrospectionUrl"];
-                            options.EnableCaching = true;
-                            options.SaveToken = true;
-                            //options.ClientId = "client_id_for_introspection_endpoint";
-                            //options.ClientSecret = "client_secret_for_introspection_endpoint";
+                            options.IntrospectionUrl = Configuration["AuthenticationServerIntrospectionUrl"];
+                        })
+                        .AddODPIdToken(options =>
+                        {
+                            options.IntrospectionUrl = Configuration["AuthenticationServerIntrospectionUrl"];
+                        })
+                        .AddTenant(options =>
+                        {
+                            options.Tenants = Configuration[TenantAuthenticationDefaults.ConfigKeyTenants];
+                            options.DefaultTenant = Configuration[TenantAuthenticationDefaults.ConfigKeyDefaultTenant];
                         });
+                    services
+                         .AddAuthorization(options =>
+                         {
+                             options.AddPolicy(ClientAllowPolicyDefaults.AuthorizationPolicy, policy =>
+                             {
+                                 policy.AddAuthenticationSchemes(ODPAccessTokenAuthenticationDefaults.AuthenticationScheme);
+                                 policy.AddAuthenticationSchemes(ODPIdTokenAuthenticationDefaults.AuthenticationScheme);
+                                 policy.RequireAuthenticatedUser();
+                                 policy.RequireClaim("ClientId", "SAEON.Observations.QuerySite");
+                             });
+                             options.AddPolicy(ClientDenyPolicyDefaults.AuthorizationPolicy, policy =>
+                             {
+                                 policy.AddAuthenticationSchemes(ODPAccessTokenAuthenticationDefaults.AuthenticationScheme);
+                                 policy.AddAuthenticationSchemes(ODPIdTokenAuthenticationDefaults.AuthenticationScheme);
+                                 policy.RequireAuthenticatedUser();
+                                 policy.RequireAssertion(context =>
+                                    !context.User.HasClaim("ClientId", "SAEON.Observations.WebAPI.Postman") &&
+                                    !context.User.HasClaim("ClientId", "SAEON.Observations.WebAPI.Swagger"));
+                             });
+                         });
 
                     services.AddHttpContextAccessor();
                     //services.AddScoped<HttpContext>(p => p.GetService<IHttpContextAccessor>()?.HttpContext);

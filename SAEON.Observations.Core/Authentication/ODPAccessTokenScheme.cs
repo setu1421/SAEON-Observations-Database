@@ -19,6 +19,8 @@ namespace SAEON.Observations.Core.Authentication
     public static class ODPAccessTokenAuthenticationDefaults
     {
         public const string AuthenticationScheme = "ODPAccessToken";
+        public const string AllowedClientsPolicy = "ODPAllowedClientsAccessToken";
+        public const string DeniedClientsPolicy = "ODPDeniedClientsAccessToken";
     }
 
     public class ODPAccessTokenAuthenticationOptions : AuthenticationSchemeOptions

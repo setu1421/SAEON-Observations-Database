@@ -144,6 +144,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
+        [Authorize]
         public async Task<IActionResult> ClaimsWebAPIIdTokenAsync()
         {
             using (SAEONLogs.MethodCall(GetType()))

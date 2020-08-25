@@ -1,8 +1,4 @@
-﻿#define UseODP
-#if !UseODP
-using IdentityModel.AspNetCore.OAuth2Introspection;
-#endif
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SAEON.Logs;
@@ -39,11 +35,8 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         [HttpGet]
-#if UseODP
-        [Authorize(AuthenticationSchemes = ODPAccessTokenAuthenticationDefaults.AuthenticationScheme + "," + TenantAuthenticationDefaults.AuthenticationScheme)]
-#else
-        [Authorize(AuthenticationSchemes = OAuth2IntrospectionDefaults.AuthenticationScheme + "," + TenantAuthenticationDefaults.AuthenticationScheme)]
-#endif
+        [Authorize(AuthenticationSchemes = TenantAuthenticationDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = ODPAccessTokenAuthenticationDefaults.AuthenticationScheme, Policy = ClientAllowPolicyDefaults.AuthorizationPolicy)]
         public IActionResult ClaimsWebAPIAccessToken()
         {
             using (SAEONLogs.MethodCall(GetType()))
@@ -65,11 +58,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = TenantAuthenticationDefaults.AuthenticationScheme)]
-#if UseODP
-        [Authorize(AuthenticationSchemes = ODPIdTokenAuthenticationDefaults.AuthenticationScheme)]
-#else
-        [Authorize(AuthenticationSchemes = OAuth2IntrospectionDefaults.AuthenticationScheme)]
-#endif
+        [Authorize(AuthenticationSchemes = ODPIdTokenAuthenticationDefaults.AuthenticationScheme, Policy = ClientAllowPolicyDefaults.AuthorizationPolicy)]
         public IActionResult ClaimsWebAPIIdToken()
         {
             using (SAEONLogs.MethodCall(GetType()))

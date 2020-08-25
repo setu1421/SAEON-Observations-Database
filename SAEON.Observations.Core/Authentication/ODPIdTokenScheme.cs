@@ -20,6 +20,8 @@ namespace SAEON.Observations.Core.Authentication
     public static class ODPIdTokenAuthenticationDefaults
     {
         public const string AuthenticationScheme = "ODPIdToken";
+        public const string AllowedClientsPolicy = "ODPAllowedClientsIdToken";
+        public const string DeniedClientsPolicy = "ODPDeniedClientsIdToken";
     }
 
     public class ODPIdTokenAuthenticationOptions : AuthenticationSchemeOptions
