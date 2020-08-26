@@ -12,7 +12,8 @@ using System.Linq;
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     [Route("internal/[controller]")]
-    [Authorize(AuthenticationSchemes = ODPAccessTokenAuthenticationDefaults.AuthenticationScheme + "," + TenantAuthenticationDefaults.AuthenticationScheme)]
+    [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
+    [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
     public abstract class BaseController<TController> : ControllerBase where TController : BaseController<TController>

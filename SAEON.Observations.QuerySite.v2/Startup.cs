@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using SAEON.Core;
 using SAEON.Logs;
+using SAEON.Observations.Core.Authentication;
 using System;
 
 namespace SAEON.Observations.QuerySite
@@ -68,12 +69,12 @@ namespace SAEON.Observations.QuerySite
                         .AddOpenIdConnect(options =>
                         {
                             options.Authority = Configuration["AuthenticationServerUrl"];
-                            options.ClientId = Configuration["QuerySiteClientID"];
+                            options.ClientId = ODPAuthenticationDefaults.QuerySiteClientId;
                             options.ClientSecret = Configuration["QuerySiteClientSecret"];
                             options.Scope.Clear();
                             options.Scope.Add(OpenIdConnectScope.OpenId);
                             //options.Scope.Add(OpenIdConnectScope.OfflineAccess);
-                            options.Scope.Add("SAEON.Observations.WebAPI");
+                            options.Scope.Add(ODPAuthenticationDefaults.WebAPIClientId);
                             options.ResponseType = OpenIdConnectResponseType.Code;
                             options.SaveTokens = true;
                             options.GetClaimsFromUserInfoEndpoint = true;
@@ -82,8 +83,8 @@ namespace SAEON.Observations.QuerySite
                         });
                     services.AddHttpContextAccessor();
                     services.AddHealthChecks()
-                       .AddUrlGroup(new Uri(Configuration["AuthenticationServerHealthCheckUrl"]), "AuthenticationServerUrl")
-                       .AddUrlGroup(new Uri(Configuration["WebAPIHealthCheckUrl"]), "WebAPIUrl");
+                       .AddUrlGroup(new Uri(Configuration["AuthenticationServerHealthCheckUrl"]), "Authentication Server")
+                       .AddUrlGroup(new Uri(Configuration["WebAPIHealthCheckUrl"]), "WebAPI");
                     services.AddControllersWithViews();
                 }
                 catch (Exception ex)

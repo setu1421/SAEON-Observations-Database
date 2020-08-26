@@ -23,7 +23,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 try
                 {
                     var result = HttpContext.GetUserInfo();
-                    SAEONLogs.Information("UserInfo: {UserInfo}", result);
+                    SAEONLogs.Information("UserInfo: {@UserInfo}", result);
                     return new JsonResult(result);
                 }
                 catch (Exception ex)
@@ -35,8 +35,8 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = TenantAuthenticationDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = ODPAccessTokenAuthenticationDefaults.AuthenticationScheme, Policy = ClientAllowPolicyDefaults.AuthorizationPolicy)]
+        [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
+        [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
         public IActionResult ClaimsWebAPIAccessToken()
         {
             using (SAEONLogs.MethodCall(GetType()))
@@ -45,7 +45,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 {
                     //SAEONLogs.Information("Token: {Token}", HttpContext.Request.GetBearerToken());
                     var result = HttpContext.GetUserInfo();
-                    SAEONLogs.Information("UserInfo: {UserInfo}", result);
+                    SAEONLogs.Information("UserInfo: {@UserInfo}", result);
                     return new JsonResult(result);
                 }
                 catch (Exception ex)
@@ -57,8 +57,8 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = TenantAuthenticationDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = ODPIdTokenAuthenticationDefaults.AuthenticationScheme, Policy = ClientAllowPolicyDefaults.AuthorizationPolicy)]
+        [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
+        [Authorize(Policy = ODPAuthenticationDefaults.IdTokenPolicy)]
         public IActionResult ClaimsWebAPIIdToken()
         {
             using (SAEONLogs.MethodCall(GetType()))
@@ -67,7 +67,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 {
                     //SAEONLogs.Information("Token: {Token}", HttpContext.Request.GetBearerToken());
                     var result = HttpContext.GetUserInfo();
-                    SAEONLogs.Information("UserInfo: {UserInfo}", result);
+                    SAEONLogs.Information("UserInfo: {@UserInfo}", result);
                     return new JsonResult(result);
                 }
                 catch (Exception ex)

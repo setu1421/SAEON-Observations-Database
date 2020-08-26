@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SAEON.Observations.Core.Authentication;
+using SAEON.Observations.Core.Extensions;
 using System.Linq;
 
 namespace SAEON.Observations.Core
@@ -17,13 +18,13 @@ namespace SAEON.Observations.Core
             {
                 TenantFromHeader = TenantAuthenticationHandler.GetTenantFromHeaders(context.Request, config),
                 TenantFromSession = session?.GetString(TenantAuthenticationDefaults.HeaderKeyTenant),
-                TokenFromSession = session?.GetString("AccessToken"),
+                TokenFromSession = session?.GetString(ODPAuthenticationDefaults.SessionToken),
                 TokenFromRequest = context.Request?.GetBearerToken(),
                 context.User.Identity.IsAuthenticated,
                 UserId = context.GetLoggedInUserId(),
                 UserName = context.GetLoggedInUserName(),
                 UserEmail = context.GetLoggedInUserEmail(),
-                Claims = context.User.Claims.Select(c => new { c.Type, c.Value }).ToArray()
+                Claims = context.User.Claims.ToClaimsList()
             };
             return result;
         }

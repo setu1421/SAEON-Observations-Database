@@ -9,7 +9,7 @@
     <Description>SAEON Observations - Core</Description>
     <Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.339</Version>
+    <Version>1.0.349</Version>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
@@ -48,7 +48,7 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
-    <PackageReference Include="SAEON.Logs.NetCore" Version="1.0.41" />
+    <PackageReference Include="SAEON.Logs.NetCore" Version="1.0.44" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.5.1" />
   </ItemGroup>
 

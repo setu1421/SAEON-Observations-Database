@@ -51,13 +51,9 @@ namespace SAEON.Observations.WebAPI
                         .AddCookie();
                     services
                         .AddAuthentication()
-                        .AddODPAccessToken(options =>
+                        .AddODP(options =>
                         {
-                            options.IntrospectionUrl = Configuration["AuthenticationServerIntrospectionUrl"];
-                        })
-                        .AddODPIdToken(options =>
-                        {
-                            options.IntrospectionUrl = Configuration["AuthenticationServerIntrospectionUrl"];
+                            options.IntrospectionUrl = Configuration[ODPAuthenticationDefaults.ConfigKeyIntrospectionUrl];
                         })
                         .AddTenant(options =>
                         {
@@ -67,30 +63,15 @@ namespace SAEON.Observations.WebAPI
                     services
                          .AddAuthorization(options =>
                          {
-                             options.AddPolicy(ClientAllowPolicyDefaults.AuthorizationPolicy, policy =>
-                             {
-                                 policy.AddAuthenticationSchemes(ODPAccessTokenAuthenticationDefaults.AuthenticationScheme);
-                                 policy.AddAuthenticationSchemes(ODPIdTokenAuthenticationDefaults.AuthenticationScheme);
-                                 policy.RequireAuthenticatedUser();
-                                 policy.RequireClaim("ClientId", "SAEON.Observations.QuerySite");
-                             });
-                             options.AddPolicy(ClientDenyPolicyDefaults.AuthorizationPolicy, policy =>
-                             {
-                                 policy.AddAuthenticationSchemes(ODPAccessTokenAuthenticationDefaults.AuthenticationScheme);
-                                 policy.AddAuthenticationSchemes(ODPIdTokenAuthenticationDefaults.AuthenticationScheme);
-                                 policy.RequireAuthenticatedUser();
-                                 policy.RequireAssertion(context =>
-                                    !context.User.HasClaim("ClientId", "SAEON.Observations.WebAPI.Postman") &&
-                                    !context.User.HasClaim("ClientId", "SAEON.Observations.WebAPI.Swagger"));
-                             });
+                             options.AddODPPolicies();
+                             options.AddTenantPolicy();
                          });
 
                     services.AddHttpContextAccessor();
-                    //services.AddScoped<HttpContext>(p => p.GetService<IHttpContextAccessor>()?.HttpContext);
 
                     services.AddHealthChecks()
-                        .AddUrlGroup(new Uri(Configuration["AuthenticationServerHealthCheckUrl"]), "AuthenticationServerUrl")
-                        .AddUrlGroup(new Uri(Configuration["AuthenticationServerIntrospectionHealthCheckUrl"]), "AuthenticationServerIntrospectionUrl")
+                        .AddUrlGroup(new Uri(Configuration["AuthenticationServerHealthCheckUrl"]), "Authentication Server")
+                        .AddUrlGroup(new Uri(Configuration["AuthenticationServerIntrospectionHealthCheckUrl"]), "Authentication Server Introspection")
                         .AddDbContextCheck<ObservationsDbContext>("ObservationsDatabase");
 
                     services.AddDbContext<ObservationsDbContext>();

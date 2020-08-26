@@ -1,13 +1,13 @@
 ﻿#if NETCOREAPP3_1
-using AutoMapper.Configuration;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using SAEON.Logs;
+using SAEON.Observations.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +23,8 @@ namespace SAEON.Observations.Core.Authentication
         public const string ConfigKeyTenants = "Tenants";
         public const string ConfigKeyDefaultTenant = "DefaultTenant";
         public const string HeaderKeyTenant = "Tenant";
+        public const string TenantClaim = "Tenant";
+        public const string TenantPolicy = "TenantPolicy";
     }
 
     public class TenantAuthenticationOptions : AuthenticationSchemeOptions
@@ -88,11 +90,11 @@ namespace SAEON.Observations.Core.Authentication
                         SAEONLogs.Error("Tenant Authorization Failed (Unknown tenant)");
                         return Task.FromResult(AuthenticateResult.Fail("Unknown tenant"));
                     }
-                    var claims = new[] { new Claim("Tenant", tenant) };
+                    var claims = new[] { new Claim(TenantAuthenticationDefaults.TenantClaim, tenant) };
                     var identity = new ClaimsIdentity(claims, TenantAuthenticationDefaults.AuthenticationScheme);
                     var principal = new ClaimsPrincipal(identity);
                     var ticket = new AuthenticationTicket(principal, TenantAuthenticationDefaults.AuthenticationScheme);
-                    SAEONLogs.Debug("Tenant {Tenant} authentication succeeded", tenant);
+                    SAEONLogs.Debug("Tenant authentication succeeded Tenant: {Tenant} Claims: {@Claims}", tenant, claims.ToClaimsList());
                     return Task.FromResult(AuthenticateResult.Success(ticket));
                 }
                 catch (Exception ex)
@@ -144,6 +146,16 @@ namespace SAEON.Observations.Core.Authentication
             builder.Services.AddSingleton<IPostConfigureOptions<TenantAuthenticationOptions>, TenantAuthenticationPostConfigureOptions>();
             //builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<TenantAuthenticationOptions>, TenantAuthenticationPostConfigureOptions>());
             return builder.AddScheme<TenantAuthenticationOptions, TenantAuthenticationHandler>(authenticationScheme, configureOptions);
+        }
+
+        public static void AddTenantPolicy(this AuthorizationOptions options)
+        {
+            options.AddPolicy(TenantAuthenticationDefaults.TenantPolicy, policy =>
+            {
+                policy.AddAuthenticationSchemes(TenantAuthenticationDefaults.AuthenticationScheme);
+                policy.RequireAuthenticatedUser();
+                policy.RequireClaim(TenantAuthenticationDefaults.TenantClaim);
+            });
         }
     }
 }
