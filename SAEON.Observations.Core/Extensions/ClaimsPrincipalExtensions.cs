@@ -12,8 +12,9 @@ namespace SAEON.Observations.Core
         public static bool GetUserIsAdmin(this ClaimsPrincipal principal)
         {
             return
-                principal.HasClaim(c => c.Type == ODPAuthenticationDefaults.IdTokenClaim) &&
-                principal.HasClaim(c => c.Type == ODPAuthenticationDefaults.AdminTokenClaim);
+                principal.Identity.IsAuthenticated &&
+                principal.HasClaim(c => c.Type == ClaimTypes.NameIdentifier) &&
+                principal.IsInRole("admin");
         }
 
         public static string GetUserName(this ClaimsPrincipal principal)

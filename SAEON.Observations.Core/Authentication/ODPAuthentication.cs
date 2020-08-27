@@ -133,7 +133,7 @@ namespace SAEON.Observations.Core
                                 {
                                     claims.Add(new Claim(ClaimTypes.Role, userRole));
                                 }
-                                if (userRoles.Contains("Admin"))
+                                if (userRoles.Contains("admin"))
                                 {
                                     claims.Add(new Claim(ODPAuthenticationDefaults.AdminTokenClaim, true.ToString()));
                                 }
@@ -201,7 +201,7 @@ namespace SAEON.Observations.Core
 
         public static void AddODPAdminPolicy(this AuthorizationOptions options)
         {
-            options.AddPolicy(ODPAuthenticationDefaults.IdTokenPolicy, policy =>
+            options.AddPolicy(ODPAuthenticationDefaults.AdminTokenPolicy, policy =>
             {
                 policy.AddAuthenticationSchemes(ODPAuthenticationDefaults.AuthenticationScheme);
                 policy.RequireAuthenticatedUser();
