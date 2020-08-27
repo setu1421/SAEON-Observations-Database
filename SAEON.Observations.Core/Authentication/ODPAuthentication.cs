@@ -1,12 +1,10 @@
-﻿#if NETCOREAPP3_1
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using SAEON.Logs;
-using SAEON.Observations.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +15,15 @@ using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace SAEON.Observations.Core.Authentication
+namespace SAEON.Observations.Core
 {
     public static class ODPAuthenticationDefaults
     {
         public const string AuthenticationScheme = "ODP";
         public const string AccessTokenClaim = "ODPAccessToken";
         public const string AccessTokenPolicy = "ODPAccessToken";
+        public const string AdminTokenClaim = "ODPAdminToken";
+        public const string AdminTokenPolicy = "ODPAdminPolicy";
         public const string AllowedClientsPolicy = "ODPAllowedClients";
         public const string ClientIdClaim = "ClientId";
         public const string ConfigKeyIntrospectionUrl = "AuthenticationServerIntrospectionUrl";
@@ -108,7 +108,8 @@ namespace SAEON.Observations.Core.Authentication
                                 var clientId = jObj.Value<string>("client_id");
                                 var claims = new List<Claim> {
                                     new Claim(ODPAuthenticationDefaults.ClientIdClaim, clientId),
-                                    new Claim(ODPAuthenticationDefaults.AccessTokenClaim, token) };
+                                    new Claim(ODPAuthenticationDefaults.AccessTokenClaim, token)
+                                };
                                 var identity = new ClaimsIdentity(claims, ODPAuthenticationDefaults.AuthenticationScheme);
                                 var principal = new ClaimsPrincipal(identity);
                                 var ticket = new AuthenticationTicket(principal, ODPAuthenticationDefaults.AuthenticationScheme);
@@ -131,6 +132,10 @@ namespace SAEON.Observations.Core.Authentication
                                 foreach (var userRole in userRoles)
                                 {
                                     claims.Add(new Claim(ClaimTypes.Role, userRole));
+                                }
+                                if (userRoles.Contains("Admin"))
+                                {
+                                    claims.Add(new Claim(ODPAuthenticationDefaults.AdminTokenClaim, true.ToString()));
                                 }
                                 var identity = new ClaimsIdentity(claims, ODPAuthenticationDefaults.AuthenticationScheme);
                                 var principal = new ClaimsPrincipal(identity);
@@ -194,6 +199,17 @@ namespace SAEON.Observations.Core.Authentication
             });
         }
 
+        public static void AddODPAdminPolicy(this AuthorizationOptions options)
+        {
+            options.AddPolicy(ODPAuthenticationDefaults.IdTokenPolicy, policy =>
+            {
+                policy.AddAuthenticationSchemes(ODPAuthenticationDefaults.AuthenticationScheme);
+                policy.RequireAuthenticatedUser();
+                policy.RequireClaim(ODPAuthenticationDefaults.IdTokenClaim);
+                policy.RequireClaim(ODPAuthenticationDefaults.AdminTokenClaim);
+            });
+        }
+
         public static void AddODPAllowedClientsPolicy(this AuthorizationOptions options)
         {
             options.AddPolicy(ODPAuthenticationDefaults.AllowedClientsPolicy, policy =>
@@ -220,9 +236,9 @@ namespace SAEON.Observations.Core.Authentication
         {
             options.AddODPAccessTokenPolicy();
             options.AddODPIdTokenPolicy();
+            options.AddODPAdminPolicy();
             options.AddODPAllowedClientsPolicy();
             options.AddODPDeniedClientsPolicy();
         }
     }
 }
-#endif

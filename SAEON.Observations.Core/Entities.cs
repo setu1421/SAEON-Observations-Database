@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using SAEON.Observations.Core.Authentication;
 using System.Text.Json.Serialization;
 #endif
 using SAEON.Logs;
@@ -20,7 +19,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace SAEON.Observations.Core.Entities
+namespace SAEON.Observations.Core
 {
     public static class EntityConfig
     {

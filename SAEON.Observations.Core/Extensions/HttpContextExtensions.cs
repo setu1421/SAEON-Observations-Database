@@ -1,10 +1,6 @@
-﻿#if NETCOREAPP3_1
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SAEON.Observations.Core.Authentication;
-using SAEON.Observations.Core.Extensions;
-using System.Linq;
 
 namespace SAEON.Observations.Core
 {
@@ -21,6 +17,7 @@ namespace SAEON.Observations.Core
                 TokenFromSession = session?.GetString(ODPAuthenticationDefaults.SessionToken),
                 TokenFromRequest = context.Request?.GetBearerToken(),
                 context.User.Identity.IsAuthenticated,
+                IsAdmin = context.GetLoggedInUserIsAdmin(),
                 UserId = context.GetLoggedInUserId(),
                 UserName = context.GetLoggedInUserName(),
                 UserEmail = context.GetLoggedInUserEmail(),
@@ -34,6 +31,10 @@ namespace SAEON.Observations.Core
             return context.User.GetUserId();
         }
 
+        public static bool GetLoggedInUserIsAdmin(this HttpContext context)
+        {
+            return context.User.GetUserIsAdmin();
+        }
         public static string GetLoggedInUserName(this HttpContext context)
         {
             return context.User.GetUserName();
@@ -45,4 +46,3 @@ namespace SAEON.Observations.Core
         }
     }
 }
-#endif

@@ -1,5 +1,4 @@
-﻿#if NETCOREAPP3_1
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,15 +6,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using SAEON.Logs;
-using SAEON.Observations.Core.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace SAEON.Observations.Core.Authentication
+namespace SAEON.Observations.Core
 {
     public static class TenantAuthenticationDefaults
     {
@@ -159,4 +156,3 @@ namespace SAEON.Observations.Core.Authentication
         }
     }
 }
-#endif

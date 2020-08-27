@@ -1,9 +1,14 @@
 ﻿//#define IsTest
+//#define CosmosDb
 using Ext.Net;
+#if UseCosmosDb
 using SAEON.Azure.CosmosDB;
+#endif
 using SAEON.Core;
 using SAEON.Logs;
-using SAEON.Observations.Azure;
+#if UseCosmosDb
+sing SAEON.Observations.Azure;
+#endif
 using SAEON.Observations.Data;
 using SubSonic;
 using System;
@@ -203,6 +208,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }
     }
 
+#if UseCosmosDb
     private void CreateCosmosDBItems(SharedDbConnectionScope connScope, Guid importBatchId)
     {
         if (!(ObservationsAzure.Enabled && ObservationsAzure.CosmosDBEnabled)) return;
@@ -315,6 +321,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             SAEONLogs.Information("Deleted CosmosDB items for ImportBatch {importBatchId} in {elapsed}, ReadCost: {ReadCost} DeleteCost: {DeleteCost} TotalCost: {TotalCost}", importBatchId, stopwatch.Elapsed.TimeStr(), readCost, deleteCost, totalCost);
         }
     }
+#endif
 
     //public void FileSelected(object sender, DirectEventArgs e)
     //{
@@ -891,7 +898,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 // Summaries
                                 CreateSummary(connScope, batch.Id);
                                 // Documents
+#if UseCosmosDb
                                 CreateCosmosDBItems(connScope, batch.Id);
+#endif
                                 Auditing.Log(GetType(), new MethodCallParameters { { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status } });
                                 batch.DurationInSecs = (int)durationStopwatch.Elapsed.TotalSeconds;
                                 batch.Save();
@@ -1298,7 +1307,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             t = stopwatch.Elapsed;
                             SAEONLogs.Information("Deleted summaries for ImportBatch {ImportBatchID} in {Elapsed}", importBatchId, (stopwatch.Elapsed - t).TimeStr());
                             ImportBatch.Delete(importBatchId);
+#if UseCosmosDb
                             DeleteCosmosDBItems(importBatchId);
+#endif
                         }
                         ts.Complete();
                         stopwatch.Stop();

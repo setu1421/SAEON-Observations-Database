@@ -1,11 +1,14 @@
 ﻿//#define DetailedSAEONLogs
 //#define VeryDetailedSAEONLogs
+//#define UseCosmosDb
 using FileHelpers;
 using FileHelpers.Dynamic;
 using NCalc;
 using SAEON.Core;
 using SAEON.Logs;
+#if UseCosmosDb
 using SAEON.Observations.Azure;
+#endif
 using SAEON.Observations.Data;
 using Serilog.Events;
 using SubSonic;
@@ -133,7 +136,9 @@ public class ImportSchemaHelper : IDisposable
 
     private bool concatedatetime = false;
 
+#if UseCosmosDb
     private readonly ObservationsAzure Azure = new ObservationsAzure();
+#endif
 
     private readonly bool LogBadValues = false;
     private readonly bool UseParallel = true;
@@ -378,7 +383,9 @@ public class ImportSchemaHelper : IDisposable
         var yearMonth = DateTime.Now.ToString("yyyyMM");
         Directory.CreateDirectory(Path.Combine(docPath, yearMonth));
         File.WriteAllText(Path.Combine(docPath, yearMonth, fileName), fileContents);
+#if UseCosmosDb
         Azure.Upload($"Uploads/{yearMonth}", fileName, fileContents);
+#endif
     }
 
     /// <summary>

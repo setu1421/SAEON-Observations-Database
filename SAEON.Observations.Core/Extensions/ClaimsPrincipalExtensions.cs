@@ -1,5 +1,4 @@
-﻿#if NETCOREAPP3_1
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 namespace SAEON.Observations.Core
 {
@@ -8,6 +7,13 @@ namespace SAEON.Observations.Core
         public static string GetUserId(this ClaimsPrincipal principal)
         {
             return principal.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
+
+        public static bool GetUserIsAdmin(this ClaimsPrincipal principal)
+        {
+            return
+                principal.HasClaim(c => c.Type == ODPAuthenticationDefaults.IdTokenClaim) &&
+                principal.HasClaim(c => c.Type == ODPAuthenticationDefaults.AdminTokenClaim);
         }
 
         public static string GetUserName(this ClaimsPrincipal principal)
@@ -21,4 +27,3 @@ namespace SAEON.Observations.Core
         }
     }
 }
-#endif

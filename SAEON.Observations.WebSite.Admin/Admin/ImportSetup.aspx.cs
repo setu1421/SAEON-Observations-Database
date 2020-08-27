@@ -1,7 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
 using Ext.Net;
 using SAEON.Logs;
-using SAEON.Observations.Core.Entities;
+using SAEON.Observations.Core;
 using SAEON.OpenXML;
 using System;
 using System.Data.Entity.Validation;
@@ -214,7 +214,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                         }
                         else
                         {
-                            site = new SAEON.Observations.Core.Entities.Site
+                            site = new SAEON.Observations.Core.Site
                             {
                                 Code = siteCode,
                                 Name = GetString(sitesList, rSite, 1),

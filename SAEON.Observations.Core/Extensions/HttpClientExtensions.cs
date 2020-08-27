@@ -1,5 +1,4 @@
-﻿#if NETCOREAPP3_1
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 
 namespace SAEON.Observations.Core
@@ -12,5 +11,3 @@ namespace SAEON.Observations.Core
         }
     }
 }
-#endif
-

@@ -1,6 +1,4 @@
-﻿#if NET472
-using SAEON.Logs;
-using SAEON.Observations.Core.Entities;
+﻿using SAEON.Logs;
 using System;
 using System.Data.Entity;
 
@@ -25,4 +23,3 @@ namespace SAEON.Observations.Core
         }
     }
 }
-#endif

@@ -1,5 +1,8 @@
-﻿using SAEON.Logs;
+﻿//#define UseCosmosDb
+using SAEON.Logs;
+#if UseCosmosDb
 using SAEON.Observations.Azure;
+#endif
 using System.Configuration;
 using System.IO;
 using System.Web.Hosting;
@@ -24,6 +27,8 @@ public static class Startup
                 //Directory.CreateDirectory(Path.Combine(path, "Downloads"));
             }
         }
+#if UseCosmosDb
         new ObservationsAzure().Initialize();
+#endif
     }
 }
