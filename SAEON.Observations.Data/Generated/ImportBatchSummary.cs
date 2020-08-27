@@ -613,85 +613,92 @@ namespace SAEON.Observations.Data
 		
 		#region ForeignKey Properties
 		
-        SAEON.Observations.Data.ImportBatch _ImportBatch = null;
+        private SAEON.Observations.Data.ImportBatch _ImportBatch = null;
 		/// <summary>
 		/// Returns a ImportBatch ActiveRecord object related to this ImportBatchSummary
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.ImportBatch ImportBatch
 		{
+//			get { return SAEON.Observations.Data.ImportBatch.FetchByID(this.ImportBatchID); }  
 			get { return _ImportBatch ?? (_ImportBatch = SAEON.Observations.Data.ImportBatch.FetchByID(this.ImportBatchID)); }
 			set { SetColumnValue("ImportBatchID", value.Id); }
 		}
 		
 		
-        SAEON.Observations.Data.Instrument _Instrument = null;
+        private SAEON.Observations.Data.Instrument _Instrument = null;
 		/// <summary>
 		/// Returns a Instrument ActiveRecord object related to this ImportBatchSummary
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Instrument Instrument
 		{
+//			get { return SAEON.Observations.Data.Instrument.FetchByID(this.InstrumentID); }  
 			get { return _Instrument ?? (_Instrument = SAEON.Observations.Data.Instrument.FetchByID(this.InstrumentID)); }
 			set { SetColumnValue("InstrumentID", value.Id); }
 		}
 		
 		
-        SAEON.Observations.Data.PhenomenonOffering _PhenomenonOffering = null;
+        private SAEON.Observations.Data.PhenomenonOffering _PhenomenonOffering = null;
 		/// <summary>
 		/// Returns a PhenomenonOffering ActiveRecord object related to this ImportBatchSummary
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.PhenomenonOffering PhenomenonOffering
 		{
+//			get { return SAEON.Observations.Data.PhenomenonOffering.FetchByID(this.PhenomenonOfferingID); }  
 			get { return _PhenomenonOffering ?? (_PhenomenonOffering = SAEON.Observations.Data.PhenomenonOffering.FetchByID(this.PhenomenonOfferingID)); }
 			set { SetColumnValue("PhenomenonOfferingID", value.Id); }
 		}
 		
 		
-        SAEON.Observations.Data.PhenomenonUOM _PhenomenonUOM = null;
+        private SAEON.Observations.Data.PhenomenonUOM _PhenomenonUOM = null;
 		/// <summary>
 		/// Returns a PhenomenonUOM ActiveRecord object related to this ImportBatchSummary
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.PhenomenonUOM PhenomenonUOM
 		{
+//			get { return SAEON.Observations.Data.PhenomenonUOM.FetchByID(this.PhenomenonUOMID); }  
 			get { return _PhenomenonUOM ?? (_PhenomenonUOM = SAEON.Observations.Data.PhenomenonUOM.FetchByID(this.PhenomenonUOMID)); }
 			set { SetColumnValue("PhenomenonUOMID", value.Id); }
 		}
 		
 		
-        SAEON.Observations.Data.Sensor _Sensor = null;
+        private SAEON.Observations.Data.Sensor _Sensor = null;
 		/// <summary>
 		/// Returns a Sensor ActiveRecord object related to this ImportBatchSummary
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Sensor Sensor
 		{
+//			get { return SAEON.Observations.Data.Sensor.FetchByID(this.SensorID); }  
 			get { return _Sensor ?? (_Sensor = SAEON.Observations.Data.Sensor.FetchByID(this.SensorID)); }
 			set { SetColumnValue("SensorID", value.Id); }
 		}
 		
 		
-        SAEON.Observations.Data.Site _Site = null;
+        private SAEON.Observations.Data.Site _Site = null;
 		/// <summary>
 		/// Returns a Site ActiveRecord object related to this ImportBatchSummary
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Site Site
 		{
+//			get { return SAEON.Observations.Data.Site.FetchByID(this.SiteID); }  
 			get { return _Site ?? (_Site = SAEON.Observations.Data.Site.FetchByID(this.SiteID)); }
 			set { SetColumnValue("SiteID", value.Id); }
 		}
 		
 		
-        SAEON.Observations.Data.Station _Station = null;
+        private SAEON.Observations.Data.Station _Station = null;
 		/// <summary>
 		/// Returns a Station ActiveRecord object related to this ImportBatchSummary
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Station Station
 		{
+//			get { return SAEON.Observations.Data.Station.FetchByID(this.StationID); }  
 			get { return _Station ?? (_Station = SAEON.Observations.Data.Station.FetchByID(this.StationID)); }
 			set { SetColumnValue("StationID", value.Id); }
 		}

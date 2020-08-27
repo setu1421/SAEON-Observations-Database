@@ -401,37 +401,40 @@ namespace SAEON.Observations.Data
 		
 		#region ForeignKey Properties
 		
-        SAEON.Observations.Data.AspnetUser _AspnetUser = null;
+        private SAEON.Observations.Data.AspnetUser _AspnetUser = null;
 		/// <summary>
 		/// Returns a AspnetUser ActiveRecord object related to this InstrumentSensor
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetUser AspnetUser
 		{
+//			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }  
 			get { return _AspnetUser ?? (_AspnetUser = SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId)); }
 			set { SetColumnValue("UserId", value.UserId); }
 		}
 		
 		
-        SAEON.Observations.Data.Instrument _Instrument = null;
+        private SAEON.Observations.Data.Instrument _Instrument = null;
 		/// <summary>
 		/// Returns a Instrument ActiveRecord object related to this InstrumentSensor
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Instrument Instrument
 		{
+//			get { return SAEON.Observations.Data.Instrument.FetchByID(this.InstrumentID); }  
 			get { return _Instrument ?? (_Instrument = SAEON.Observations.Data.Instrument.FetchByID(this.InstrumentID)); }
 			set { SetColumnValue("InstrumentID", value.Id); }
 		}
 		
 		
-        SAEON.Observations.Data.Sensor _Sensor = null;
+        private SAEON.Observations.Data.Sensor _Sensor = null;
 		/// <summary>
 		/// Returns a Sensor ActiveRecord object related to this InstrumentSensor
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Sensor Sensor
 		{
+//			get { return SAEON.Observations.Data.Sensor.FetchByID(this.SensorID); }  
 			get { return _Sensor ?? (_Sensor = SAEON.Observations.Data.Sensor.FetchByID(this.SensorID)); }
 			set { SetColumnValue("SensorID", value.Id); }
 		}

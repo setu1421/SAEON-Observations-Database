@@ -338,37 +338,40 @@ namespace SAEON.Observations.Data
 		
 		#region ForeignKey Properties
 		
-        SAEON.Observations.Data.AspnetUser _AspnetUser = null;
+        private SAEON.Observations.Data.AspnetUser _AspnetUser = null;
 		/// <summary>
 		/// Returns a AspnetUser ActiveRecord object related to this ProjectStation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetUser AspnetUser
 		{
+//			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }  
 			get { return _AspnetUser ?? (_AspnetUser = SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId)); }
 			set { SetColumnValue("UserId", value.UserId); }
 		}
 		
 		
-        SAEON.Observations.Data.Project _Project = null;
+        private SAEON.Observations.Data.Project _Project = null;
 		/// <summary>
 		/// Returns a Project ActiveRecord object related to this ProjectStation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Project Project
 		{
+//			get { return SAEON.Observations.Data.Project.FetchByID(this.ProjectID); }  
 			get { return _Project ?? (_Project = SAEON.Observations.Data.Project.FetchByID(this.ProjectID)); }
 			set { SetColumnValue("ProjectID", value.Id); }
 		}
 		
 		
-        SAEON.Observations.Data.Station _Station = null;
+        private SAEON.Observations.Data.Station _Station = null;
 		/// <summary>
 		/// Returns a Station ActiveRecord object related to this ProjectStation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Station Station
 		{
+//			get { return SAEON.Observations.Data.Station.FetchByID(this.StationID); }  
 			get { return _Station ?? (_Station = SAEON.Observations.Data.Station.FetchByID(this.StationID)); }
 			set { SetColumnValue("StationID", value.Id); }
 		}

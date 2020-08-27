@@ -453,7 +453,7 @@ namespace <%=provider.GeneratedNamespace%>
                         }
 %>
 
-        <%=fkClassQualified%> _<%=fkMethod%> = null;
+        private <%=fkClassQualified%> _<%=fkMethod%> = null;
 
 		/// <summary>
 		/// Returns a <%=fkClass%> ActiveRecord object related to this <%=className%>
@@ -461,12 +461,13 @@ namespace <%=provider.GeneratedNamespace%>
 		/// </summary>
 		public <%=fkClassQualified%> <%=fkMethod%>
 		{
+//			get { return <%=fkClassQualified%>.FetchByID(this.<%=fkID%>); }  
 			get { return _<%=fkMethod%> ?? (_<%=fkMethod%> = <%=fkClassQualified%>.FetchByID(this.<%=fkID%>)); }
 			set { SetColumnValue("<%=fkColumnID%>", value.<%=fkTbl.PrimaryKey.PropertyName%>); }
 		}
 		
 		<%
-                        usedPropertyNames.Add(fk.ClassName);
+                        usedPropertyNames.Add(fk.ClassName); 
                     }
                 }
             }

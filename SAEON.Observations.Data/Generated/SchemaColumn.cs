@@ -488,73 +488,79 @@ namespace SAEON.Observations.Data
 		
 		#region ForeignKey Properties
 		
-        SAEON.Observations.Data.AspnetUser _AspnetUser = null;
+        private SAEON.Observations.Data.AspnetUser _AspnetUser = null;
 		/// <summary>
 		/// Returns a AspnetUser ActiveRecord object related to this SchemaColumn
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetUser AspnetUser
 		{
+//			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }  
 			get { return _AspnetUser ?? (_AspnetUser = SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId)); }
 			set { SetColumnValue("UserId", value.UserId); }
 		}
 		
 		
-        SAEON.Observations.Data.DataSchema _DataSchema = null;
+        private SAEON.Observations.Data.DataSchema _DataSchema = null;
 		/// <summary>
 		/// Returns a DataSchema ActiveRecord object related to this SchemaColumn
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.DataSchema DataSchema
 		{
+//			get { return SAEON.Observations.Data.DataSchema.FetchByID(this.DataSchemaID); }  
 			get { return _DataSchema ?? (_DataSchema = SAEON.Observations.Data.DataSchema.FetchByID(this.DataSchemaID)); }
 			set { SetColumnValue("DataSchemaID", value.Id); }
 		}
 		
 		
-        SAEON.Observations.Data.Phenomenon _Phenomenon = null;
+        private SAEON.Observations.Data.Phenomenon _Phenomenon = null;
 		/// <summary>
 		/// Returns a Phenomenon ActiveRecord object related to this SchemaColumn
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Phenomenon Phenomenon
 		{
+//			get { return SAEON.Observations.Data.Phenomenon.FetchByID(this.PhenomenonID); }  
 			get { return _Phenomenon ?? (_Phenomenon = SAEON.Observations.Data.Phenomenon.FetchByID(this.PhenomenonID)); }
 			set { SetColumnValue("PhenomenonID", value.Id); }
 		}
 		
 		
-        SAEON.Observations.Data.PhenomenonOffering _PhenomenonOffering = null;
+        private SAEON.Observations.Data.PhenomenonOffering _PhenomenonOffering = null;
 		/// <summary>
 		/// Returns a PhenomenonOffering ActiveRecord object related to this SchemaColumn
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.PhenomenonOffering PhenomenonOffering
 		{
+//			get { return SAEON.Observations.Data.PhenomenonOffering.FetchByID(this.PhenomenonOfferingID); }  
 			get { return _PhenomenonOffering ?? (_PhenomenonOffering = SAEON.Observations.Data.PhenomenonOffering.FetchByID(this.PhenomenonOfferingID)); }
 			set { SetColumnValue("PhenomenonOfferingID", value.Id); }
 		}
 		
 		
-        SAEON.Observations.Data.PhenomenonUOM _PhenomenonUOM = null;
+        private SAEON.Observations.Data.PhenomenonUOM _PhenomenonUOM = null;
 		/// <summary>
 		/// Returns a PhenomenonUOM ActiveRecord object related to this SchemaColumn
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.PhenomenonUOM PhenomenonUOM
 		{
+//			get { return SAEON.Observations.Data.PhenomenonUOM.FetchByID(this.PhenomenonUOMID); }  
 			get { return _PhenomenonUOM ?? (_PhenomenonUOM = SAEON.Observations.Data.PhenomenonUOM.FetchByID(this.PhenomenonUOMID)); }
 			set { SetColumnValue("PhenomenonUOMID", value.Id); }
 		}
 		
 		
-        SAEON.Observations.Data.SchemaColumnType _SchemaColumnType = null;
+        private SAEON.Observations.Data.SchemaColumnType _SchemaColumnType = null;
 		/// <summary>
 		/// Returns a SchemaColumnType ActiveRecord object related to this SchemaColumn
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.SchemaColumnType SchemaColumnType
 		{
+//			get { return SAEON.Observations.Data.SchemaColumnType.FetchByID(this.SchemaColumnTypeID); }  
 			get { return _SchemaColumnType ?? (_SchemaColumnType = SAEON.Observations.Data.SchemaColumnType.FetchByID(this.SchemaColumnTypeID)); }
 			set { SetColumnValue("SchemaColumnTypeID", value.Id); }
 		}

@@ -360,49 +360,53 @@ namespace SAEON.Observations.Data
 		
 		#region ForeignKey Properties
 		
-        SAEON.Observations.Data.AspnetUser _AspnetUser = null;
+        private SAEON.Observations.Data.AspnetUser _AspnetUser = null;
 		/// <summary>
 		/// Returns a AspnetUser ActiveRecord object related to this OrganisationStation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetUser AspnetUser
 		{
+//			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }  
 			get { return _AspnetUser ?? (_AspnetUser = SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId)); }
 			set { SetColumnValue("UserId", value.UserId); }
 		}
 		
 		
-        SAEON.Observations.Data.Organisation _Organisation = null;
+        private SAEON.Observations.Data.Organisation _Organisation = null;
 		/// <summary>
 		/// Returns a Organisation ActiveRecord object related to this OrganisationStation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Organisation Organisation
 		{
+//			get { return SAEON.Observations.Data.Organisation.FetchByID(this.OrganisationID); }  
 			get { return _Organisation ?? (_Organisation = SAEON.Observations.Data.Organisation.FetchByID(this.OrganisationID)); }
 			set { SetColumnValue("OrganisationID", value.Id); }
 		}
 		
 		
-        SAEON.Observations.Data.OrganisationRole _OrganisationRole = null;
+        private SAEON.Observations.Data.OrganisationRole _OrganisationRole = null;
 		/// <summary>
 		/// Returns a OrganisationRole ActiveRecord object related to this OrganisationStation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.OrganisationRole OrganisationRole
 		{
+//			get { return SAEON.Observations.Data.OrganisationRole.FetchByID(this.OrganisationRoleID); }  
 			get { return _OrganisationRole ?? (_OrganisationRole = SAEON.Observations.Data.OrganisationRole.FetchByID(this.OrganisationRoleID)); }
 			set { SetColumnValue("OrganisationRoleID", value.Id); }
 		}
 		
 		
-        SAEON.Observations.Data.Station _Station = null;
+        private SAEON.Observations.Data.Station _Station = null;
 		/// <summary>
 		/// Returns a Station ActiveRecord object related to this OrganisationStation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Station Station
 		{
+//			get { return SAEON.Observations.Data.Station.FetchByID(this.StationID); }  
 			get { return _Station ?? (_Station = SAEON.Observations.Data.Station.FetchByID(this.StationID)); }
 			set { SetColumnValue("StationID", value.Id); }
 		}
