@@ -13,5 +13,5 @@ from
   vObservationExpansion
 group by
   ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID
-OPTION(RECOMPILE)
+--OPTION(RECOMPILE)
 commit transaction

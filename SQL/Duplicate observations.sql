@@ -31,4 +31,4 @@ from
 	   (o.PhenomenonUOMID = vImportBatchSummary.PhenomenonUOMID)
 --order by 
 --  Code, SiteName, StationName, InstrumentName, SensorName, ValueDate, DataValue, OfferingName, UnitOfMeasureUnit, Elevation
---OPTION(RECOMPILE)
+OPTION(RECOMPILE)
