@@ -1,12 +1,10 @@
 ﻿using SAEON.Observations.Core;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
-    [RoutePrefix("Internal/Features")]
-    public class FeaturesController : BaseListController<FeatureNode>
+    public class FeaturesController : BaseController<FeatureNode>
     {
         protected override List<FeatureNode> GetList()
         {
@@ -47,7 +45,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     };
                     result.Add(offering);
                 }
-                if (unit?.Id != feature. PhenomenonUnitID)
+                if (unit?.Id != feature.PhenomenonUnitID)
                 {
                     unit = new FeatureNode
                     {

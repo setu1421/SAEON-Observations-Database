@@ -1,60 +1,45 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using SAEON.Observations.WebAPI.Models;
+using System.Diagnostics;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : Controller
     {
-        /// <summary>
-        /// Observations Database WebAPI home page
-        /// </summary>
-        /// <returns></returns>
-        [Route]
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        /// <summary>
-        /// About the Observations Database WebAPO
-        /// </summary>
-        /// <returns></returns>
         [Route("About")]
-        public ActionResult About()
+        public IActionResult About()
         {
             return View();
         }
 
-        /// <summary>
-        /// Contact SAEON
-        /// </summary>
-        /// <returns></returns>
         [Route("Contact")]
-        public ActionResult Contact()
+        public IActionResult Contact()
         {
             return View();
         }
 
-        /// <summary>
-        /// GraphQL
-        /// </summary>
-        /// <returns></returns>
         [Route("GraphQL")]
-        public ActionResult GraphQL()
+        public IActionResult GraphQL()
         {
             return View();
         }
 
         [Route("HowToCite")]
-        public ActionResult HowToCite()
+        public IActionResult HowToCite()
         {
             return View();
         }
 
-        [Route("SwaggerFrame")]
-        public ActionResult SwaggerFrame()
+        public IActionResult Index()
         {
             return View();
         }
 
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
     }
 }

@@ -1,35 +1,35 @@
-﻿using SAEON.AspNet.WebApi;
+﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using SAEON.Logs;
-using SAEON.Observations.Core.Entities;
+using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
-using System.Web.Http;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    [TenantAuthorization]
-    public abstract class BaseEntityController<TEntity> : ApiController where TEntity : BaseEntity
+    [Route("Api/[controller]")]
+    [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
+    //[Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+    [ApiController]
+    public abstract class BaseController<TEntity> : ControllerBase where TEntity : BaseEntity
     {
-        //protected const int PageSize = 25;
-        //protected const int MaxTop = 500;
-        //protected const int MaxAll = 10000;
-
-        private ObservationsDbContext dbContext = null;
-        protected ObservationsDbContext DbContext => dbContext ?? (dbContext = new ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request)));
+        private ObservationsDbContext _dbContext;
+        protected ObservationsDbContext DbContext => _dbContext ??= HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
 
         [NotMapped]
         public string EntitySetName { get; protected set; }
         [NotMapped]
         public List<string> NavigationLinks { get; } = new List<string>();
 
-        protected void UpdateRequest(bool isMany)
+        protected void UpdateRequest()
         {
-            EntityConfig.BaseUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/Api";
+            EntityConfig.BaseUrl = Request.GetUri().GetLeftPart(UriPartial.Authority) + "/Api";
         }
 
         /// <summary>
@@ -64,282 +64,23 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// </summary>
         /// <returns>ListOf(TEntity)</returns>
         [HttpGet]
-        [Route]
+        //[Route]
         public virtual IQueryable<TEntity> GetAll()
         {
-            using (Logging.MethodCall<TEntity>(GetType()))
+            using (SAEONLogs.MethodCall<TEntity>(GetType()))
             {
                 try
                 {
-                    UpdateRequest(true);
+                    UpdateRequest();
+                    SAEONLogs.Verbose("uri: {uri}", Request.GetUri());
                     return GetQuery();
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex, "Unable to get all");
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
         }
     }
-
-    public abstract class IDEntityController<TEntity> : BaseEntityController<TEntity> where TEntity : GuidIdEntity
-    {
-        /// <summary>
-        /// Get a TEntity by Id
-        /// </summary>
-        /// <param name="id">The Id of the TEntity</param>
-        /// <returns>TEntity</returns>
-        [HttpGet]
-        [Route("{id:guid}")]
-        //[ResponseType(typeof(TEntity))] required in derived classes
-        public virtual async Task<IHttpActionResult> GetByIdAsync([FromUri] Guid id)
-        {
-            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
-            {
-                try
-                {
-                    UpdateRequest(false);
-                    TEntity item = await GetQuery(i => (i.Id == id)).FirstOrDefaultAsync();
-                    if (item == null)
-                    {
-                        Logging.Error("{id} not found", id);
-                        return NotFound();
-                    }
-                    return Ok(item);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex, "Unable to get {id}", id);
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Related Entity TEntity.TRelated
-        /// </summary>
-        /// <typeparam name="TRelated"></typeparam>
-        /// <param name="id">Id of TEntity</param>
-        /// <param name="select">Lambda to select TRelated</param>
-        /// <returns>TaskOf(IHttpActionResult)</returns>
-        //[HttpGet] Required in calling classes
-        //[ResponseType(typeof(TRelated))] Required in calling classes
-        //[Route("{id:guid}/TRelated")] Required in calling classes
-        protected async Task<IHttpActionResult> GetSingleAsync<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
-        {
-            using (Logging.MethodCall<TEntity, TRelated>(GetType()))
-            {
-                try
-                {
-                    UpdateRequest(false);
-                    if (!await GetQuery(i => (i.Id == id)).AnyAsync())
-                    {
-                        Logging.Error("{id} not found", id);
-                        return NotFound();
-                    }
-                    return Ok(await GetQuery(i => (i.Id == id)).Select(select).FirstOrDefaultAsync());
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex, "Unable to get {id}", id);
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Related Entity TEntity.TRelated
-        /// </summary>
-        /// <typeparam name="TRelated"></typeparam>
-        /// <param name="id">Id of TEntity</param>
-        /// <param name="select">Lambda to select TRelated</param>
-        /// <returns>TaskOf(IHttpActionResult)</returns>
-        //[HttpGet] Required in calling classes
-        //[ResponseType(typeof(TRelated))] Required in calling classes
-        //[Route("{id:guid}/TRelated")] Required in calling classes
-        protected TRelated GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
-        {
-            using (Logging.MethodCall<TEntity, TRelated>(GetType()))
-            {
-                try
-                {
-                    UpdateRequest(false);
-                    if (!GetQuery(i => (i.Id == id)).Any())
-                    {
-                        Logging.Error("{id} not found", id);
-                        throw new ArgumentException($"{id} not found");
-                    }
-                    return GetQuery(i => (i.Id == id)).Select(select).FirstOrDefault();
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex, "Unable to get {id}", id);
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Get IQueryableOf(TRelated)
-        /// </summary>
-        /// <typeparam name="TRelated"></typeparam>
-        /// <param name="id">Id of TEntity</param>
-        /// <param name="select">Lambda to select ListOf(TRelated)</param>
-        /// <returns>IQueryableOf(TRelated)</returns>
-        //[HttpGet]
-        //[Route("{id:guid}/TRelated")] Required in derived classes
-        protected IQueryable<TRelated> GetManyWithGuidId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : GuidIdEntity
-        {
-            using (Logging.MethodCall<TEntity, TRelated>(GetType()))
-            {
-                try
-                {
-                    UpdateRequest(true);
-                    return GetQuery(i => i.Id == id).SelectMany(select);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex, "Unable to get {id}", id);
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Get IQueryableOf(TRelated)
-        /// </summary>
-        /// <typeparam name="TRelated"></typeparam>
-        /// <param name="id">Id of TEntity</param>
-        /// <param name="select">Lambda to select ListOf(TRelated)</param>
-        /// <returns>IQueryableOf(TRelated)</returns>
-        //[HttpGet]
-        //[Route("{id:guid}/TRelated")] Required in derived classes
-        protected IQueryable<TRelated> GetManyWithIntId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : IntIdEntity
-        {
-            using (Logging.MethodCall<TEntity, TRelated>(GetType()))
-            {
-                try
-                {
-                    UpdateRequest(true);
-                    return GetQuery(i => i.Id == id).SelectMany(select);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex, "Unable to get {id}", id);
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Get IQueryableOf(TRelated)
-        /// </summary>
-        /// <typeparam name="TRelated"></typeparam>
-        /// <param name="id">Id of TEntity</param>
-        /// <param name="select">Lambda to select ListOf(TRelated)</param>
-        /// <returns>IQueryableOf(TRelated)</returns>
-        //[HttpGet]
-        //[Route("{id:guid}/TRelated")] Required in derived classes
-        protected IQueryable<TRelated> GetManyWithLongId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : LongIdEntity
-        {
-            using (Logging.MethodCall<TEntity, TRelated>(GetType()))
-            {
-                try
-                {
-                    UpdateRequest(true);
-                    return GetQuery(i => i.Id == id).SelectMany(select);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex, "Unable to get {id}", id);
-                    throw;
-                }
-            }
-        }
-
-    }
-
-    public abstract class NamedApiController<TEntity> : IDEntityController<TEntity> where TEntity : NamedEntity
-    {
-        protected override List<Expression<Func<TEntity, object>>> GetOrderBys()
-        {
-            var result = base.GetOrderBys();
-            result.Add(i => i.Name);
-            return result;
-        }
-
-        /// <summary>
-        /// Get a TEntity by Name
-        /// </summary>
-        /// <param name="name">The Name of the TEntity</param>
-        /// <returns>TEntity</returns>
-        [HttpGet]
-        [Route]
-        //[ResponseType(typeof(TEntity))] required in derived classes
-        public virtual async Task<IHttpActionResult> GetByNameAsync([FromUri] string name)
-        {
-            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Name", name } }))
-            {
-                try
-                {
-                    UpdateRequest(false);
-                    TEntity item = await GetQuery(i => (i.Name == name)).FirstOrDefaultAsync();
-                    if (item == null)
-                    {
-                        Logging.Error("{name} not found", name);
-                        return NotFound();
-                    }
-                    return Ok(item);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex, "Unable to get {name}", name);
-                    throw;
-                }
-            }
-        }
-    }
-
-    public abstract class CodedApiController<TEntity> : NamedApiController<TEntity> where TEntity : CodedEntity
-    {
-        protected override List<Expression<Func<TEntity, object>>> GetOrderBys()
-        {
-            var result = base.GetOrderBys();
-            result.Insert(0, i => i.Code);
-            return result;
-        }
-
-        /// <summary>
-        /// Get a TEntity by Code
-        /// </summary>
-        /// <param name="code">The Code of the TEntity</param>
-        /// <returns>TEntity</returns>
-        [HttpGet]
-        [Route]
-        //[ResponseType(typeof(TEntity))] required in derived classes
-        public virtual async Task<IHttpActionResult> GetByCodeAsync([FromUri] string code)
-        {
-            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Code", code } }))
-            {
-                try
-                {
-                    UpdateRequest(false);
-                    TEntity item = await GetQuery(i => (i.Code == code)).FirstOrDefaultAsync();
-                    if (item == null)
-                    {
-                        Logging.Error("{code} not found", code);
-                        return NotFound();
-                    }
-                    return Ok(item);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex, "Unable to get {code}", code);
-                    throw;
-                }
-            }
-        }
-    }
-
 }

@@ -6,7 +6,7 @@ namespace SAEON.Observations.Core
 {
     public static class HttpContextExtensions
     {
-        public static object GetUserInfo(this HttpContext context)
+        public static object UserInfo(this HttpContext context)
         {
             var session = (ISession)context.RequestServices.GetService(typeof(ISession));
             var config = context.RequestServices.GetRequiredService<IConfiguration>();
@@ -14,35 +14,36 @@ namespace SAEON.Observations.Core
             {
                 TenantFromHeader = TenantAuthenticationHandler.GetTenantFromHeaders(context.Request, config),
                 TenantFromSession = session?.GetString(TenantAuthenticationDefaults.HeaderKeyTenant),
-                TokenFromSession = session?.GetString(ODPAuthenticationDefaults.SessionToken),
-                TokenFromRequest = context.Request?.GetBearerToken(),
+                SessionAccessToken = session?.GetString(ODPAuthenticationDefaults.SessionAccessToken),
+                SessionIdToken = session?.GetString(ODPAuthenticationDefaults.SessionIdToken),
+                BearerToken = context.Request?.GetBearerToken(),
                 context.User.Identity.IsAuthenticated,
-                IsAdmin = context.GetLoggedInUserIsAdmin(),
-                UserId = context.GetLoggedInUserId(),
-                UserName = context.GetLoggedInUserName(),
-                UserEmail = context.GetLoggedInUserEmail(),
+                UserIsAdmin = context.UserIsAdmin(),
+                UserId = context.UserId(),
+                UserName = context.UserName(),
+                UserEmail = context.UserEmail(),
                 Claims = context.User.Claims.ToClaimsList()
             };
             return result;
         }
 
-        public static string GetLoggedInUserId(this HttpContext context)
+        public static string UserId(this HttpContext context)
         {
-            return context.User.GetUserId();
+            return context.User.UserId();
         }
 
-        public static bool GetLoggedInUserIsAdmin(this HttpContext context)
+        public static bool UserIsAdmin(this HttpContext context)
         {
-            return context.User.GetUserIsAdmin();
+            return context.User.IsAdmin();
         }
-        public static string GetLoggedInUserName(this HttpContext context)
+        public static string UserName(this HttpContext context)
         {
-            return context.User.GetUserName();
+            return context.User.Name();
         }
 
-        public static string GetLoggedInUserEmail(this HttpContext context)
+        public static string UserEmail(this HttpContext context)
         {
-            return context.User.GetUserEmail();
+            return context.User.Email();
         }
     }
 }

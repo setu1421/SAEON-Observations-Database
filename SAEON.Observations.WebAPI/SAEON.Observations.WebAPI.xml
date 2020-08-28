@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SAEON.Observations.WebAPI</name>
+    </assembly>
+    <members>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.Internal.BaseController`1.GetList">
+            <summary>
+            query for items
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.Internal.BaseController`1.GetAll">
+            <summary>
+            Get all TEntity
+            </summary>
+            <returns>ListOf(TEntity)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.OData.BaseController`1.GetOrderBys">
+            <summary>
+            Overwrite to order of entities
+            </summary>
+            <returns>ListOf(PredicateOf(TEntity))</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.OData.BaseController`1.GetQuery(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            query for items
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.OData.BaseController`1.Get">
+            <summary>
+            Get all entities
+            </summary>
+            <returns>ListOf(TEntity)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.BaseController`1.GetOrderBys">
+            <summary>
+            Overwrite to order of entities
+            </summary>
+            <returns>ListOf(PredicateOf(TEntity))</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.BaseController`1.GetQuery(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            query for items
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.BaseController`1.GetAll">
+            <summary>
+            Get all TEntity
+            </summary>
+            <returns>ListOf(TEntity)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InventoryDatasetsController.GetAll">
+            <summary>
+            Inventory of Datasets
+            </summary>
+            <returns>ListOf(InventoryDataStream)</returns>
+        </member>
+    </members>
+</doc>

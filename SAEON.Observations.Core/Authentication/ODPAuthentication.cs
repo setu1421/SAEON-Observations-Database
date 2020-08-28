@@ -30,7 +30,8 @@ namespace SAEON.Observations.Core
         public const string DeniedClientsPolicy = "ODPDeniedClients";
         public const string IdTokenClaim = "ODPIdToken";
         public const string IdTokenPolicy = "ODPIdToken";
-        public const string SessionToken = "ODPToken";
+        public const string SessionAccessToken = "ODPAccessToken";
+        public const string SessionIdToken = "ODPIdToken";
         public const string QuerySiteClientId = "SAEON.Observations.QuerySite";
         public const string WebAPIClientId = "SAEON.Observations.WebAPI";
         public const string WebAPIPostmanClientId = "SAEON.Observations.WebAPI.Postman";

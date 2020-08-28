@@ -1286,9 +1286,11 @@ namespace SAEON.Observations.Core
         public DateTime? EndDate { get; set; }
     }
 
-    [Table("vInventoryDatasets")]
+    //[Table("vInventoryDatasets")]
+    //[Keyless]
     public class InventoryDataset : BaseEntity
     {
+        // Remove once OData allows Keyless views
         [Key]
         public long Id { get; set; }
         public Guid SiteId { get; set; }
@@ -1317,9 +1319,11 @@ namespace SAEON.Observations.Core
         public DateTime? EndDate { get; set; }
     }
 
-    [Table("vInventorySensors")]
+    //[Table("vInventorySensors")]
+    //[Keyless]
     public class InventorySensor : BaseEntity
     {
+        // Remove once OData allows Keyless views
         [Key]
         public long Id { get; set; }
         public Guid SiteId { get; set; }
@@ -1525,9 +1529,13 @@ namespace SAEON.Observations.Core
     //    public Sensor Sensor { get; set; }
     //}
 
-    [Table("vStationDatasets")]
-    public class Dataset : LongIdEntity
+    //[Table("vStationDatasets")]
+    //[Keyless]
+    public class Dataset : BaseEntity
     {
+        // Remove once OData allows Keyless views
+        [Key]
+        public long Id { get; set; }
         public Guid StationId { get; set; }
         public string StationCode { get; set; }
         public string StationName { get; set; }
@@ -2184,6 +2192,9 @@ namespace SAEON.Observations.Core
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Feature>().HasNoKey().ToView("vFeatures");
             modelBuilder.Entity<Location>().HasNoKey().ToView("vLocations");
+            modelBuilder.Entity<InventoryDataset>().HasNoKey().ToView("vInventoryDatasets");
+            modelBuilder.Entity<InventorySensor>().HasNoKey().ToView("vInventorySensors");
+            modelBuilder.Entity<Dataset>().HasNoKey().ToView("vStationDatasets");
             //> Remove once EFCore has many to many
             modelBuilder.Entity<InstrumentSensor>().HasKey(e => new { e.InstrumentId, e.SensorId });
             modelBuilder.Entity<InstrumentSensor>().HasOne(i => i.Instrument).WithMany(i => i.InstrumentSensors).HasForeignKey(pt => pt.InstrumentId);

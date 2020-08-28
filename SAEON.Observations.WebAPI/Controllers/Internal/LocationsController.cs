@@ -1,12 +1,11 @@
 ﻿using SAEON.Observations.Core;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
-    [RoutePrefix("Internal/Locations")]
-    public class LocationsController : BaseListController<LocationNode>
+
+    public class LocationsController : BaseController<LocationNode>
     {
         protected override List<LocationNode> GetList()
         {
