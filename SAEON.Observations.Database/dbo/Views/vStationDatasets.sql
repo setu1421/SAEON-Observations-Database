@@ -1,4 +1,4 @@
-﻿CREATE VIEW [dbo].[vStationDataStreams]
+﻿CREATE VIEW [dbo].[vStationDatasets]
 AS
 Select
   Row_Number() over (order by StationCode, PhenomenonCode, OfferingCode, UnitOfMeasureCode) ID, s.*
