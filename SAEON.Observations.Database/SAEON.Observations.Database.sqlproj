@@ -540,6 +540,7 @@
     <None Include="ObservationsTest.publish.xml" />
     <None Include="ObservationsSACTN.publish.xml" />
     <None Include="ObservationsFynbos.publish.xml" />
+    <None Include="ObservationsElwandle.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\120\SqlSchemas\master.dacpac">

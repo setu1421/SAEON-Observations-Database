@@ -4,15 +4,19 @@
     [Name]        VARCHAR (150)    NOT NULL,
     [Description] VARCHAR (5000)   NULL,
     [Url] VARCHAR(250) NULL, 
+	[DigitalObjectIdentifierID] Int null,
     [UserId]      UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Organisation_AddedAt] DEFAULT (getdate()), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Organisation_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
     CONSTRAINT [PK_Organisation] PRIMARY KEY CLUSTERED ([ID]),
+    Constraint [FK_Organisation_DigitalObjectIdentifierID] Foreign Key ([DigitalObjectIdentifierID]) References [dbo].[DigitalObjectIdentifiers] ([ID]),
     CONSTRAINT [FK_Organisation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [UX_Organisation_Code] UNIQUE ([Code]),
     CONSTRAINT [UX_Organisation_Name] UNIQUE ([Name])
 );
+GO
+CREATE INDEX [IX_Organisation_DigitalObjectIdentifierID] ON [dbo].[Organisation]([DigitalObjectIdentifierID])
 GO
 CREATE INDEX [IX_Organisation_CodeName] ON [dbo].[Organisation] ([Code],[Name])
 GO

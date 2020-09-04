@@ -1,0 +1,111 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[DigitalObjectIdentifiers].[DOIType] on table [dbo].[DigitalObjectIdentifiers] must be added, but the
+         column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work.
+         To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the
+         generation of smart-defaults as a deployment option.
+       The column [dbo].[DigitalObjectIdentifiers].[MetadataJson] on table [dbo].[DigitalObjectIdentifiers] must be added, but
+         the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not
+         work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable
+         the generation of smart-defaults as a deployment option.
+       The column [dbo].[DigitalObjectIdentifiers].[MetadataJsonSha256] on table [dbo].[DigitalObjectIdentifiers] must be
+         added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script
+         will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values,
+         or enable the generation of smart-defaults as a deployment option.
+       The column [dbo].[DigitalObjectIdentifiers].[MetadataUrl] on table [dbo].[DigitalObjectIdentifiers] must be added, but
+         the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not
+         work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable
+         the generation of smart-defaults as a deployment option.
+       The column [dbo].[DigitalObjectIdentifiers].[OpenDataPlatformID] on table [dbo].[DigitalObjectIdentifiers] must be
+         added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script
+         will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values,
+         or enable the generation of smart-defaults as a deployment option.
+       The column [dbo].[DigitalObjectIdentifiers].[ParentID] on table [dbo].[DigitalObjectIdentifiers] must be added, but the
+         column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work.
+         To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the
+         generation of smart-defaults as a deployment option.
+
+** User actions
+     Alter
+       [dbo].[DigitalObjectIdentifiers] (Table)
+       [dbo].[Observation] (Table)
+       [dbo].[Organisation] (Table)
+       [dbo].[Programme] (Table)
+       [dbo].[Project] (Table)
+       [dbo].[Site] (Table)
+       [dbo].[Station] (Table)
+       [dbo].[vImportBatchSummary] (View)
+     Create
+       [dbo].[UX_DigitalObjectIdentifiers_DOIType_Name] (Unique Constraint)
+       [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_DOIType] (Index)
+       [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_ParentID] (Index)
+       [dbo].[Organisation].[IX_Organisation_DigitalObjectIdentifierID] (Index)
+       [dbo].[Programme].[IX_Programme_DigitalObjectIdentifierID] (Index)
+       [dbo].[Project].[IX_Project_DigitalObjectIdentifierID] (Index)
+       [dbo].[Site].[IX_Site_DigitalObjectIdentifierID] (Index)
+       [dbo].[Station].[IX_Station_DigitalObjectIdentifierID] (Index)
+       [dbo].[FK_DigitalObjectIdentifiers_ParentID] (Foreign Key)
+       [dbo].[FK_Organisation_DigitalObjectIdentifierID] (Foreign Key)
+       [dbo].[FK_Programme_DigitalObjectIdentifierID] (Foreign Key)
+       [dbo].[FK_Project_DigitalObjectIdentifierID] (Foreign Key)
+       [dbo].[FK_Site_DigitalObjectIdentifierID] (Foreign Key)
+       [dbo].[FK_Station_DigitalObjectIdentifierID] (Foreign Key)
+       [dbo].[vStationDatasets] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Create
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Refresh
+       [dbo].[vUserDownloads] (View)
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vSensorThingsAPIObservations] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationJSON] (View)
+       [dbo].[vStationObservations] (View)
+       [dbo].[vInstrumentOrganisation] (View)
+       [dbo].[vLocations] (View)
+       [dbo].[vOrganisationInstrument] (View)
+       [dbo].[vOrganisationSite] (View)
+       [dbo].[vOrganisationStation] (View)
+       [dbo].[vSiteOrganisation] (View)
+       [dbo].[vStationOrganisation] (View)
+       [dbo].[vProject] (View)
+       [dbo].[vProjectStation] (View)
+       [dbo].[vDataLog] (View)
+       [dbo].[vSensor] (View)
+       [dbo].[vSensorDates] (View)
+       [dbo].[vStation] (View)
+       [dbo].[vInventoryDatasets] (View)
+       [dbo].[vInventorySensors] (View)
+       [dbo].[vSensorThingsAPIDatastreams] (View)
+       [dbo].[vSensorThingsAPIObservedProperties] (View)
+       [dbo].[vSensorThingsAPISensors] (View)
+       [dbo].[vSensorLocation] (View)
+       [dbo].[vSensorThingsAPIInstrumentDates] (View)
+       [dbo].[vSensorThingsAPIStationDates] (View)
+       [dbo].[vStationInstrument] (View)
+       [dbo].[vSensorThingsAPIThings] (View)
+       [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIFeaturesOfInterest] (View)
+       [dbo].[vSensorThingsAPIHistoricalLocations] (View)
+
+The column [dbo].[DigitalObjectIdentifiers].[DOIType] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[DigitalObjectIdentifiers].[MetadataJson] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[DigitalObjectIdentifiers].[MetadataJsonSha256] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[DigitalObjectIdentifiers].[MetadataUrl] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[DigitalObjectIdentifiers].[OpenDataPlatformID] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[DigitalObjectIdentifiers].[ParentID] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+If this deployment is executed, changes to [dbo].[Site] might introduce run-time errors in [dbo].[vDataQuery].
+If this deployment is executed, changes to [dbo].[Station] might introduce run-time errors in [dbo].[vDataQuery].
+If this deployment is executed, changes to [dbo].[vObservationExpansion] might introduce run-time errors in [dbo].[vSensorObservations].
+

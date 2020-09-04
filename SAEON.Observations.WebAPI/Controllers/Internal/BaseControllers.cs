@@ -11,15 +11,18 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     [Route("Internal/[controller]")]
     [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
-    [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+    //[Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
     [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
-    public abstract class BaseController<TEntity> : ControllerBase where TEntity : BaseEntity
+    public abstract class BaseController : ControllerBase
     {
         //protected IConfiguration Config => _config ?? (_config = HttpContext.RequestServices.GetService<IConfiguration>());
         private ObservationsDbContext _dbContext;
         protected ObservationsDbContext DbContext => _dbContext ??= HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
+    }
 
+    public abstract class BaseController<TEntity> : BaseController where TEntity : BaseEntity
+    {
         /// <summary>
         /// query for items
         /// </summary>
