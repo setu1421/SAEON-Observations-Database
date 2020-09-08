@@ -11,5 +11,6 @@ Set
 where
   Code = 'SAEON'
 Delete DigitalObjectIdentifiers
-DBCC CheckIdent('DigitalObjectIdentifiers',Reseed, 1)
+--DBCC CheckIdent('DigitalObjectIdentifiers')
+DBCC CheckIdent('DigitalObjectIdentifiers',Reseed, 0)
 drop view if exists vStationDataStreams

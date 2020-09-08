@@ -54,6 +54,8 @@ GO
 /*
 The column [dbo].[DigitalObjectIdentifiers].[DOIType] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
 
+The column [dbo].[DigitalObjectIdentifiers].[MetadataHtml] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+
 The column [dbo].[DigitalObjectIdentifiers].[MetadataJson] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
 
 The column [dbo].[DigitalObjectIdentifiers].[MetadataJsonSha256] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
@@ -61,8 +63,6 @@ The column [dbo].[DigitalObjectIdentifiers].[MetadataJsonSha256] on table [dbo].
 The column [dbo].[DigitalObjectIdentifiers].[MetadataUrl] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
 
 The column [dbo].[DigitalObjectIdentifiers].[OpenDataPlatformID] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
-
-The column [dbo].[DigitalObjectIdentifiers].[ParentID] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
 */
 
 --IF EXISTS (select top 1 1 from [dbo].[DigitalObjectIdentifiers])
@@ -106,7 +106,9 @@ ALTER TABLE [dbo].[DigitalObjectIdentifiers]
         [DOIUrl]             AS               'https://doi.org/10.15493/obsdb.' + CONVERT (VARCHAR (20), CONVERT (VARBINARY (1), DOIType), 2) + '.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
         [MetadataJson]       VARCHAR (5000)   NOT NULL,
         [MetadataJsonSha256] BINARY (32)      NOT NULL,
+        [MetadataHtml]       VARCHAR (5000)   NOT NULL,
         [MetadataUrl]        VARCHAR (250)    NOT NULL,
+        [ObjectStoreUrl]     VARCHAR (250)    NULL,
         [OpenDataPlatformID] UNIQUEIDENTIFIER NOT NULL;
 
 

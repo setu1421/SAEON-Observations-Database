@@ -5,6 +5,7 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{39023EE1-BD0D-43AE-AFBE-8E1AFCA89433}"
 	ProjectSection(SolutionItems) = preProject
+		..\Digital Object Identifiers.sql = ..\Digital Object Identifiers.sql
 		ObservationsElwandle 2.0.63.publish.sql = ObservationsElwandle 2.0.63.publish.sql
 		ObservationsElwandle 2.0.63.publish.txt = ObservationsElwandle 2.0.63.publish.txt
 		ObservationsFynbos 2.0.63.publish.sql = ObservationsFynbos 2.0.63.publish.sql
@@ -21,7 +22,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8100AAEB-C8A1-4548-B78A-8C36E55F93C1}.Default|Default.ActiveCfg = Default
+		{5C15B233-3C80-47AA-9971-547D2086DDE4}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

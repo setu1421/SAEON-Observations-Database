@@ -9,6 +9,7 @@ using System.Collections.Generic;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
+
     [Route("Internal/[controller]")]
     [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
@@ -16,7 +17,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     [ApiExplorerSettings(IgnoreApi = true)]
     public abstract class BaseController : ControllerBase
     {
-        //protected IConfiguration Config => _config ?? (_config = HttpContext.RequestServices.GetService<IConfiguration>());
         private ObservationsDbContext _dbContext;
         protected ObservationsDbContext DbContext => _dbContext ??= HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
     }

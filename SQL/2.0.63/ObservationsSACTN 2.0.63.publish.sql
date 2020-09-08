@@ -52,7 +52,11 @@ USE [$(DatabaseName)];
 
 GO
 /*
+The column [dbo].[DigitalObjectIdentifiers].[Code] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+
 The column [dbo].[DigitalObjectIdentifiers].[DOIType] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+
+The column [dbo].[DigitalObjectIdentifiers].[MetadataHtml] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
 
 The column [dbo].[DigitalObjectIdentifiers].[MetadataJson] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
 
@@ -60,13 +64,20 @@ The column [dbo].[DigitalObjectIdentifiers].[MetadataJsonSha256] on table [dbo].
 
 The column [dbo].[DigitalObjectIdentifiers].[MetadataUrl] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
 
-The column [dbo].[DigitalObjectIdentifiers].[OpenDataPlatformID] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
-
-The column [dbo].[DigitalObjectIdentifiers].[ParentID] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column Name on table [dbo].[DigitalObjectIdentifiers] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
 */
 
 --IF EXISTS (select top 1 1 from [dbo].[DigitalObjectIdentifiers])
 --    RAISERROR (N'Rows were detected. The schema update is terminating because data loss might occur.', 16, 127) WITH NOWAIT
+
+GO
+PRINT N'Dropping [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_Name]...';
+
+
+GO
+DROP INDEX [IX_DigitalObjectIdentifiers_Name]
+    ON [dbo].[DigitalObjectIdentifiers];
+
 
 GO
 PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueDecade]...';
@@ -99,15 +110,22 @@ ALTER TABLE [dbo].[DigitalObjectIdentifiers] DROP COLUMN [DOI], COLUMN [DOIUrl];
 
 
 GO
+ALTER TABLE [dbo].[DigitalObjectIdentifiers] ALTER COLUMN [Name] VARCHAR (1000) NOT NULL;
+
+
+GO
 ALTER TABLE [dbo].[DigitalObjectIdentifiers]
     ADD [ParentID]           INT              NULL,
         [DOIType]            TINYINT          NOT NULL,
         [DOI]                AS               '10.15493/obsdb.' + CONVERT (VARCHAR (20), CONVERT (VARBINARY (1), DOIType), 2) + '.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
         [DOIUrl]             AS               'https://doi.org/10.15493/obsdb.' + CONVERT (VARCHAR (20), CONVERT (VARBINARY (1), DOIType), 2) + '.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
+        [Code]               VARCHAR (1000)   NOT NULL,
         [MetadataJson]       VARCHAR (5000)   NOT NULL,
         [MetadataJsonSha256] BINARY (32)      NOT NULL,
+        [MetadataHtml]       VARCHAR (5000)   NOT NULL,
         [MetadataUrl]        VARCHAR (250)    NOT NULL,
-        [OpenDataPlatformID] UNIQUEIDENTIFIER NOT NULL;
+        [ObjectStoreUrl]     VARCHAR (250)    NULL,
+        [OpenDataPlatformID] UNIQUEIDENTIFIER NULL;
 
 
 GO
@@ -121,6 +139,15 @@ PRINT N'Creating [dbo].[UX_DigitalObjectIdentifiers_DOIType_Name]...';
 GO
 ALTER TABLE [dbo].[DigitalObjectIdentifiers]
     ADD CONSTRAINT [UX_DigitalObjectIdentifiers_DOIType_Name] UNIQUE NONCLUSTERED ([DOIType] ASC, [Name] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_Name]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_DigitalObjectIdentifiers_Name]
+    ON [dbo].[DigitalObjectIdentifiers]([Name] ASC);
 
 
 GO

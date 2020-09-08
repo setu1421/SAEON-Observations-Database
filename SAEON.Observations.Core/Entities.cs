@@ -277,7 +277,7 @@ namespace SAEON.Observations.Core
     public class DigitalObjectIdentifier : IntIdEntity
     {
         [HiddenInput]
-        public int? ParentID { get; set; }
+        public int? ParentId { get; set; }
         [Required]
         [DisplayName("DOI Type")]
         public DOIType DOIType { get; set; }
@@ -287,9 +287,14 @@ namespace SAEON.Observations.Core
         [Display(Name = "DOI Url")]
         public string DOIUrl { get; set; }
         /// <summary>
+        /// Code of the DigitalObjectIdentifier
+        /// </summary>
+        [Required, StringLength(1000)]
+        public string Code { get; set; }
+        /// <summary>
         /// Name of the DigitalObjectIdentifier
         /// </summary>
-        [StringLength(1000)]
+        [Required, StringLength(1000)]
         public string Name { get; set; }
         /// <summary>
         /// MetadataJson of the DigitalObjectIdentifier
@@ -299,17 +304,26 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Sha256 of the MetadataJson of the DigitalObjectIdentifier
         /// </summary>
-        [MinLength(32), MaxLength(32)]
+        [Required, MinLength(32), MaxLength(32)]
         public byte[] MetadataJsonSha256 { get; set; }
+        /// <summary>
+        /// MetadataHtml of the DigitalObjectIdentifier
+        /// </summary>
+        [Required, StringLength(5000)]
+        public string MetadataHtml { get; set; }
         /// <summary>
         /// Url of the ODP metadata record of the DigitalObjectIdentifier
         /// </summary>
         [Required, StringLength(250)]
         public string MetadataUrl { get; set; }
         /// <summary>
+        /// Object Store Url of the DigitalObjectIdentifier
+        /// </summary>
+        [StringLength(250)]
+        public string ObjectStoreUrl { get; set; }
+        /// <summary>
         /// ODP Id for the download
         /// </summary>
-        [Required]
         public Guid OpenDataPlatformId { get; set; }
         /// <summary>
         /// UserId of user who added the UserDownload
@@ -1936,7 +1950,7 @@ namespace SAEON.Observations.Core
             modelBuilder.Entity<InventorySensor>().HasNoKey().ToView("vInventorySensors");
             modelBuilder.Entity<Dataset>().HasNoKey().ToView("vStationDatasets");
             modelBuilder.Entity<DigitalObjectIdentifier>().Property("DOIType").HasConversion<byte>();
-            modelBuilder.Entity<DigitalObjectIdentifier>().HasOne(i => i.Parent).WithMany(i => i.Children).HasForeignKey(i => i.ParentID);
+            modelBuilder.Entity<DigitalObjectIdentifier>().HasOne(i => i.Parent).WithMany(i => i.Children).HasForeignKey(i => i.ParentId);
             //> Remove once EFCore has many to many
             modelBuilder.Entity<InstrumentSensor>().HasKey(e => new { e.InstrumentId, e.SensorId });
             modelBuilder.Entity<InstrumentSensor>().HasOne(i => i.Instrument).WithMany(i => i.InstrumentSensors).HasForeignKey(pt => pt.InstrumentId);
