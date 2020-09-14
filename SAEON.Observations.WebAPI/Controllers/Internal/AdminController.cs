@@ -8,8 +8,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     //[Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
     public class AdminController : BaseController
     {
-        [HttpPost]
-        [Route("CreateDynamicDOIs")]
+        [HttpPost("CreateDynamicDOIs")]
         public async Task<IActionResult> CreateDynamicDOIs()
         {
             using (SAEONLogs.MethodCall(GetType()))
@@ -24,7 +23,24 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     throw;
                 }
             }
-
         }
+
+        //[HttpPost("ImportSetup")]
+        //public async Task<IActionResult> ImportSetup([FromForm] string fileName)
+        //{
+        //    using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "FileName", fileName } }))
+        //    {
+        //        try
+        //        {
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            SAEONLogs.Exception(ex);
+        //            throw;
+        //        }
+        //    }
+        //}
+
+
     }
 }

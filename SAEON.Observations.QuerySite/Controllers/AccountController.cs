@@ -136,7 +136,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    using (var client = await GetWebAPIClientWithAccessToken())
+                    using (var client = await GetWebAPIClientWithAccessTokenAsync())
                     {
                         SAEONLogs.Verbose("Calling WebAPI");
                         var response = await client.GetAsync("Claims/ClaimsWebAPIAccessToken");
@@ -166,7 +166,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    using (var client = await GetWebAPIClientWithIdToken())
+                    using (var client = await GetWebAPIClientWithIdTokenAsync())
                     {
                         var response = await client.GetAsync("Claims/ClaimsWebAPIIdToken");
                         if (!response.IsSuccessStatusCode)
@@ -194,7 +194,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    using (var client = await GetWebAPIClientWithAccessToken(false))
+                    using (var client = await GetWebAPIClientWithAccessTokenAsync(false))
                     {
                         //client.SetBearerToken("ag3JOPT14XGbSM9C4QUwkNTolO0PgHijZLiEfKbPPW0.Y9VI5WMTdh_oKV2Bj0PW4UYiyUqgCPBF4fEkaeQJRpw");
                         var response = await client.GetAsync("Claims/GetBearerToken");

@@ -289,17 +289,17 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Code of the DigitalObjectIdentifier
         /// </summary>
-        [Required, StringLength(1000)]
+        [Required, StringLength(200)]
         public string Code { get; set; }
         /// <summary>
         /// Name of the DigitalObjectIdentifier
         /// </summary>
-        [Required, StringLength(1000)]
+        [Required, StringLength(500)]
         public string Name { get; set; }
         /// <summary>
         /// MetadataJson of the DigitalObjectIdentifier
         /// </summary>
-        [Required, StringLength(5000)]
+        [Required]
         public string MetadataJson { get; set; }
         /// <summary>
         /// Sha256 of the MetadataJson of the DigitalObjectIdentifier
@@ -309,7 +309,7 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// MetadataHtml of the DigitalObjectIdentifier
         /// </summary>
-        [Required, StringLength(5000)]
+        [Required]
         public string MetadataHtml { get; set; }
         /// <summary>
         /// Url of the ODP metadata record of the DigitalObjectIdentifier
@@ -322,11 +322,16 @@ namespace SAEON.Observations.Core
         [StringLength(250)]
         public string ObjectStoreUrl { get; set; }
         /// <summary>
+        /// Query Url of the DigitalObjectIdentifier
+        /// </summary>
+        [StringLength(250)]
+        public string QueryUrl { get; set; }
+        /// <summary>
         /// ODP Id for the download
         /// </summary>
         public Guid OpenDataPlatformId { get; set; }
-        /// <summary>
-        /// UserId of user who added the UserDownload
+        /// <summary> 
+        /// UserId of user who added the UserDownload   
         /// </summary>
         [StringLength(128), ScaffoldColumn(false)]
         public string AddedBy { get; set; }
@@ -928,7 +933,7 @@ namespace SAEON.Observations.Core
         /// </summary>
         public double? Latitude { get; set; }
         /// <summary>
-        /// Logitude of the Station
+        /// Longitude of the Station
         /// </summary>
         public double? Longitude { get; set; }
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using Humanizer;
+﻿//#define Schema43
+using Humanizer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SAEON.Observations.Core;
@@ -7,17 +8,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SAEON.Observations.WebAPI.Controllers.Internal
+namespace SAEON.Observations.WebAPI
 {
     public class MetadataAffiliation
     {
         public string Name { get; set; }
+        public string Identifier { get; set; }
         public string Scheme { get; set; }
         public string SchemeUri { get; set; }
 
         public JObject AsJson()
         {
-            var jObj = new JObject(new JProperty("affiliationIdentifier", Name));
+#if Schema43
+            var jObj = new JObject(new JProperty("affiliation", Name));
+            if (!string.IsNullOrWhiteSpace(Identifier))
+            {
+                new JProperty("affiliationIdentifier", Identifier);
+            }
             if (!string.IsNullOrWhiteSpace(Scheme))
             {
                 jObj.Add(new JProperty("affiliationIdentifierScheme", Scheme));
@@ -27,6 +34,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 jObj.Add(new JProperty("schemeURI", SchemeUri));
             }
             return jObj;
+#else
+            return null;
+#endif
         }
     }
 
@@ -70,10 +80,17 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 jObj.Add(new JProperty("nameIdentifiers", new JArray(Identifiers.Select(i => i.AsJson()))));
             }
-            if (Affiliations?.Any() ?? false)
+#if Schema43
+            //if (Affiliations?.Any() ?? false)
+            //{
+            //    jObj.Add(new JProperty("affiliation", new JArray(Affiliations.Select(i => i.AsJson()))));
+            //}
+#else
+            foreach (var affiliation in Affiliations)
             {
-                jObj.Add(new JProperty("affiliation", new JArray(Affiliations.Select(i => i.AsJson()))));
+                jObj.Add(new JProperty("affiliation", affiliation.Name));
             }
+#endif
             return jObj;
         }
     }
@@ -90,10 +107,21 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
     }
 
-    public class MetadataRelationship
+    public class MetadataRelatedIdentifier
     {
         public string Name { get; set; }
-        public string DOI { get; set; }
+        public string Identifier { get; set; }
+        public string Type { get; set; }
+
+        public JObject AsJson()
+        {
+            var jObj = new JObject(
+                new JProperty("relationType", Name),
+                new JProperty("relatedIdentifier", Identifier),
+                new JProperty("relatedIdentifierType", Type)
+                );
+            return jObj;
+        }
     }
 
     public class MetadataResourceType
@@ -146,6 +174,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         public string Name { get; set; }
         public string Scheme { get; set; }
         public string SchemeUri { get; set; }
+        public string ValueUri { get; set; }
 
         public JObject AsJson()
         {
@@ -154,9 +183,13 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 jObj.Add(new JProperty("subjectScheme", Scheme));
             }
-            if (!string.IsNullOrWhiteSpace(Scheme))
+            if (!string.IsNullOrWhiteSpace(SchemeUri))
             {
                 jObj.Add(new JProperty("schemeURI", SchemeUri));
+            }
+            if (!string.IsNullOrWhiteSpace(ValueUri))
+            {
+                jObj.Add(new JProperty("valueURI", ValueUri));
             }
             return jObj;
         }
@@ -169,7 +202,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         public string Identifier { get; set; }
         public MetadataCreator Creator = new MetadataCreator
         {
-            Name = "South African Environmental Observation Network (SAEON)",
+            Name = "SAEON Observations Database",
             Type = "Organizational",
             Identifiers = new List<MetadataNameIdentifier> { new MetadataNameIdentifier {
                 Name = "https://ror.org/041j42q70", Scheme = "ROR", SchemeUri = "https://ror.org" } }
@@ -181,6 +214,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         public string Title { get; set; }
         public string Description { get; set; }
         public string DescriptionHtml { get; set; }
+        public string ItemDescription { get; set; }
+        public string ItemUrl { get; set; }
         public List<MetadataRights> Rights { get; } = new List<MetadataRights> {
             new MetadataRights {
                 Name = "Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)",
@@ -210,7 +245,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             new MetadataContributor
             {
                 Name = "South African Environmental Observation Network (SAEON), uLwazi node",
-                Type = "Organisational",
+                Type = "Organizational",
                 ContributorType = "DataCurator",
                 Affiliations = new List<MetadataAffiliation>
                 {
@@ -381,20 +416,20 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         //public double? Latitude => LatitudeNorth.HasValue && LatitudeSouth.HasValue ? (LatitudeNorth + LatitudeSouth) / 2 : null;
         //public double? Longitude => LongitudeWest.HasValue && LongitudeEast.HasValue ? (LongitudeWest + LongitudeEast) / 2 : null;
         // To Do
-        public MetadataRelationship IsPartOf;
+        public MetadataRelatedIdentifier IsPartOf;
 
-        public List<MetadataRelationship> HasParts { get; } = new List<MetadataRelationship>();
+        public List<MetadataRelatedIdentifier> RelatedIdentifiers { get; } = new List<MetadataRelatedIdentifier>();
 
         public void Generate(string title = "", string description = "")
         {
             if (DOI == null) throw new InvalidOperationException($"{nameof(DOI)} cannot be null");
             if (string.IsNullOrWhiteSpace(title))
             {
-                title = $"Observations for the {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {DOI.Name} in the SAEON Observations Database";
+                title = $"Observations from the {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {DOI.Name} in the SAEON Observations Database";
             }
             if (string.IsNullOrWhiteSpace(description))
             {
-                description = $"The observations for the {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {DOI.Name} in the SAEON Observations Database";
+                description = $"The observations from the {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {DOI.Name} in the SAEON Observations Database";
             }
             if (StartDate.HasValue && EndDate.HasValue)
             {
@@ -409,6 +444,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     description += $" from {startDate.Value:O} to {endDate.Value:O}";
                 }
             }
+            Title = title;
             if (LatitudeNorth.HasValue && LatitudeSouth.HasValue && LongitudeWest.HasValue && LongitudeEast.HasValue)
             {
                 if ((LatitudeNorth == LatitudeSouth) && (LongitudeWest == LongitudeEast))
@@ -433,12 +469,30 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
             var sbText = new StringBuilder();
             var sbHtml = new StringBuilder();
+            sbHtml.AppendHtmlH3(title);
             sbText.AppendLine(description);
             sbHtml.AppendHtmlP(description);
+            if (!string.IsNullOrWhiteSpace(ItemDescription))
+            {
+                var itemDescription = ItemDescription;
+                if (!string.IsNullOrWhiteSpace(ItemUrl))
+                {
+                    if (ItemUrl.StartsWith("http", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        itemDescription += $" <a href='{ItemUrl}'>{ItemUrl}</a>";
+                    }
+                    else
+                    {
+                        itemDescription += $" {ItemUrl}";
+                    }
+                }
+                sbHtml.AppendHtmlP(itemDescription);
+            }
             if (DOI.Parent != null)
             {
                 sbText.AppendLine($"This collection is part of the {(DOI.Parent.DOIType == DOIType.ObservationsDb ? "" : DOI.Parent.DOIType.Humanize(LetterCasing.LowerCase))} {DOI.Parent.Name} {DOI.Parent.DOI}");
                 sbHtml.AppendHtmlP($"This collection is part of the {(DOI.Parent.DOIType == DOIType.ObservationsDb ? "" : DOI.Parent.DOIType.Humanize(LetterCasing.LowerCase))} {DOI.Parent.Name} <a href='{DOI.Parent.DOIUrl}'>{DOI.Parent.DOI}</a>");
+                RelatedIdentifiers.Add(new MetadataRelatedIdentifier { Name = "IsPartOf", Identifier = DOI.Parent.DOI, Type = "DOI" });
             }
             var children = DOI.Children.OrderBy(i => i.Name).ToList();
             if (children.Count > 0)
@@ -447,10 +501,44 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     string.Join(", ", children.Select(i => i.Name)));
                 sbHtml.AppendHtmlP($"This collection includes observations from the following {((DOI.DOIType + 1).Humanize(LetterCasing.LowerCase).ToQuantity(children.Count, ShowQuantityAs.None))}:");
                 sbHtml.AppendHtmlUL(children.Select(i => $"{i.Name} <a href='{i.DOIUrl}'>{i.DOI}</a>"));
+                foreach (var child in children)
+                {
+                    RelatedIdentifiers.Add(new MetadataRelatedIdentifier { Name = "HasPart", Identifier = child.DOI, Type = "DOI" });
+                }
             }
-
-            Title = title;
-            Description = sbText.ToString();
+            sbHtml.AppendHtmlP($"{"Publisher:".HtmlB()} {Publisher} {PublicationYear}");
+            if (StartDate.HasValue || EndDate.HasValue)
+            {
+                var dates = "Dates: ".HtmlB();
+                if (StartDate.HasValue)
+                {
+                    dates += $" Created: {StartDate:yyyy-MM-dd}";
+                }
+                if (StartDate.HasValue && EndDate.HasValue)
+                {
+                    dates += $" Collected: {StartDate:O}/{EndDate:O}";
+                }
+                else if (StartDate.HasValue)
+                {
+                    dates += $" Collected:  {StartDate:O}";
+                }
+                sbHtml.AppendHtmlP(dates);
+            }
+            if (Rights.Any())
+            {
+                sbHtml.AppendHtmlP($"{"License:".HtmlB()} {Rights[0].Name}");
+            }
+            sbHtml.AppendHtmlP($"{"Keywords:".HtmlB()} {string.Join(", ", Subjects.Where(i => !i.Name.StartsWith("http")).Select(i => i.Name).OrderBy(i => i))}");
+            if (!string.IsNullOrWhiteSpace(DOI.MetadataUrl))
+            {
+                sbHtml.AppendHtmlP($"{"Metadata URL:".HtmlB()} <a href='{DOI.MetadataUrl}'>{DOI.MetadataUrl}</a>".Trim());
+            }
+            if (!string.IsNullOrWhiteSpace(DOI.QueryUrl))
+            {
+                sbHtml.AppendHtmlP($"{"Query URL:".HtmlB()} <a href='{DOI.QueryUrl}'>{DOI.QueryUrl}</a>".Trim());
+            }
+            sbHtml.AppendHtmlP($"{"Citation".HtmlB()} {Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). <a href='{DOI.DOIUrl}'>{DOI.DOIUrl}</a>");
+            Description = sbText.ToString()/*.Replace(Environment.NewLine,"<br>")*/;
             DescriptionHtml = sbHtml.ToString();
         }
 
@@ -463,6 +551,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     new JObject(
                         new JProperty("date", StartDate.Value.ToString("yyyy-MM-dd")),
                         new JProperty("dateType", "Created")));
+                jDates.Add(
+                    new JObject(
+                        new JProperty("date", StartDate.Value.ToString("yyyy-MM-dd")),
+                        new JProperty("dateType", "Issued")));
             }
             if (StartDate.HasValue && EndDate.HasValue)
             {
@@ -488,8 +580,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                             //new JProperty("geoLocationPlace", $"{splits[0]}, {splits[1]}"),
                             new JProperty("geoLocationPoint",
                                 new JObject(
-                                    new JProperty("pointLatitude", LatitudeNorth),
-                                    new JProperty("pointLongitude", LongitudeWest)
+                                    new JProperty("pointLatitude", LatitudeNorth.ToString()),
+                                    new JProperty("pointLongitude", LongitudeWest.ToString())
                                 )
                             )
                         ));
@@ -500,10 +592,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         new JObject(
                             new JProperty("geoLocationBox",
                                 new JObject(
-                                    new JProperty("westBoundLongitude", LongitudeWest),
-                                    new JProperty("eastBoundLongitude", LongitudeEast),
-                                    new JProperty("northBoundLatitude", LatitudeNorth),
-                                    new JProperty("southBoundLatitude", LatitudeSouth)
+                                    new JProperty("westBoundLongitude", LongitudeWest.ToString()),
+                                    new JProperty("eastBoundLongitude", LongitudeEast.ToString()),
+                                    new JProperty("northBoundLatitude", LatitudeNorth.ToString()),
+                                    new JProperty("southBoundLatitude", LatitudeSouth.ToString())
                                 )
                             )
                         )
@@ -521,7 +613,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     new JProperty("language", Language),
                     new JProperty("resourceType", ResourceType.AsJson()),
                     new JProperty("publisher", Publisher),
-                    new JProperty("publicationYear", PublicationYear),
+                    new JProperty("publicationYear", PublicationYear.ToString()),
                     new JProperty("creators", new JArray(Creator.AsJson())),
                     new JProperty("dates", jDates),
                     new JProperty("titles",
@@ -540,41 +632,17 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         )
                     ),
                     new JProperty("rightsList", new JArray(Rights.Select(i => i.AsJson()))),
+                    new JProperty("contributors", new JArray(Contributors.Select(i => i.AsJson()))),
                     new JProperty("subjects", new JArray(Subjects.Select(i => i.AsJson()))),
-                    new JProperty("geoLocations", jGeoLocations)
+                    new JProperty("geoLocations", jGeoLocations),
+                    new JProperty("relatedIdentifiers", new JArray(RelatedIdentifiers.Select(i => i.AsJson())))
                );
             return jObj.ToString(Formatting.Indented);
         }
 
         public string ToHtml()
         {
-            var sb = new StringBuilder();
-            sb.AppendHtmlH3(Title);
-            sb.AppendLine(DescriptionHtml);
-            sb.AppendHtmlP($"{"Publisher:".HtmlB()} {Publisher} {PublicationYear}");
-            if (StartDate.HasValue || EndDate.HasValue)
-            {
-                var dates = "Dates: ".HtmlB();
-                if (StartDate.HasValue)
-                {
-                    dates += $" Created: {StartDate:yyyy-MM-dd}";
-                }
-                if (StartDate.HasValue && EndDate.HasValue)
-                {
-                    dates += $" Collected: {StartDate:O}/{EndDate:O}";
-                }
-                else if (StartDate.HasValue)
-                {
-                    dates += $" Collected:  {StartDate:O}";
-                }
-                sb.AppendHtmlP(dates);
-            }
-            if (Rights.Any())
-            {
-                sb.AppendHtmlP($"{"License:".HtmlB()} {Rights[0].Name}");
-            }
-            sb.AppendHtmlP($"{"Keywords:".HtmlB()} {string.Join(", ", Subjects.Where(i => !i.Name.StartsWith("http")).Select(i => i.Name).OrderBy(i => i))}");
-            return sb.ToString();
+            return DescriptionHtml;
         }
     }
 }

@@ -42,7 +42,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        private async Task<string> GetAccessToken(bool useSession = true)
+        private async Task<string> GetAccessTokenAsync(bool useSession = true)
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -112,7 +112,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        private async Task<string> GetIdToken(bool useSession = true)
+        private async Task<string> GetIdTokenAsync(bool useSession = true)
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -164,14 +164,14 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        protected async Task<HttpClient> GetWebAPIClientWithAccessToken(bool useSession = true)
+        protected async Task<HttpClient> GetWebAPIClientWithAccessTokenAsync(bool useSession = true)
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
                     var client = GetWebAPIClient();
-                    client.SetBearerToken(GetBearerTokenFromAccessToken(await GetAccessToken(useSession)));
+                    client.SetBearerToken(GetBearerTokenFromAccessToken(await GetAccessTokenAsync(useSession)));
                     return client;
                 }
                 catch (Exception ex)
@@ -182,14 +182,14 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        protected async Task<HttpClient> GetWebAPIClientWithIdToken(bool useSession = true)
+        protected async Task<HttpClient> GetWebAPIClientWithIdTokenAsync(bool useSession = true)
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
                     var client = GetWebAPIClient();
-                    client.SetBearerToken(await GetIdToken(useSession));
+                    client.SetBearerToken(await GetIdTokenAsync(useSession));
                     return client;
                 }
                 catch (Exception ex)

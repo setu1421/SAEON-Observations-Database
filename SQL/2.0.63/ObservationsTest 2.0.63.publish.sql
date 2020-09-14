@@ -104,9 +104,9 @@ ALTER TABLE [dbo].[DigitalObjectIdentifiers]
         [DOIType]            TINYINT          NOT NULL,
         [DOI]                AS               '10.15493/obsdb.' + CONVERT (VARCHAR (20), CONVERT (VARBINARY (1), DOIType), 2) + '.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
         [DOIUrl]             AS               'https://doi.org/10.15493/obsdb.' + CONVERT (VARCHAR (20), CONVERT (VARBINARY (1), DOIType), 2) + '.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
-        [MetadataJson]       VARCHAR (5000)   NOT NULL,
+        [MetadataJson]       VARCHAR (8000)   NOT NULL,
         [MetadataJsonSha256] BINARY (32)      NOT NULL,
-        [MetadataHtml]       VARCHAR (5000)   NOT NULL,
+        [MetadataHtml]       VARCHAR (8000)   NOT NULL,
         [MetadataUrl]        VARCHAR (250)    NOT NULL,
         [ObjectStoreUrl]     VARCHAR (250)    NULL,
         [OpenDataPlatformID] UNIQUEIDENTIFIER NOT NULL;

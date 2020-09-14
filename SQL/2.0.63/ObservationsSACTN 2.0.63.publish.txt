@@ -30,6 +30,8 @@
          the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not
          work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable
          the generation of smart-defaults as a deployment option.
+       The type for column Name in table [dbo].[DigitalObjectIdentifiers] is currently  VARCHAR (1000) NULL but is being
+         changed to  VARCHAR (500) NOT NULL. Data loss could occur.
 
 ** User actions
      Alter
@@ -108,6 +110,7 @@ The column [dbo].[DigitalObjectIdentifiers].[MetadataJson] on table [dbo].[Digit
 The column [dbo].[DigitalObjectIdentifiers].[MetadataJsonSha256] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
 The column [dbo].[DigitalObjectIdentifiers].[MetadataUrl] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
 The column Name on table [dbo].[DigitalObjectIdentifiers] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The type for column Name in table [dbo].[DigitalObjectIdentifiers] is currently  VARCHAR (1000) NULL but is being changed to  VARCHAR (500) NOT NULL. Data loss could occur.
 If this deployment is executed, changes to [dbo].[Site] might introduce run-time errors in [dbo].[vDataQuery].
 If this deployment is executed, changes to [dbo].[Station] might introduce run-time errors in [dbo].[vDataQuery].
 If this deployment is executed, changes to [dbo].[vObservationExpansion] might introduce run-time errors in [dbo].[vSensorObservations].

@@ -1,12 +1,12 @@
 ﻿@using SAEON.Observations.Core
 @if (User.IsAdmin())
-    {
+{
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
-            <a class="dropdown-item" href="#">Import Setup</a>
-            <a class="dropdown-item" href="#">Generate Dynamic DOIs</a>
+            <a class="dropdown-item" asp-controller="Admin" asp-action="ImportSetup">Import Setup</a>
+            <a class="dropdown-item" asp-controller="Admin" asp-action="CreateDynamicDOIs">Create Dynamic DOIs</a>
         </div>
     </li>
-    }
+}
 

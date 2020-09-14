@@ -6,11 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SAEON.Observations.WebAPI.Controllers.Internal
+namespace SAEON.Observations.WebAPI
 {
     public static class DOIHelper
     {
@@ -19,6 +18,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var sb = new StringBuilder();
             await GenerateDOIs();
             await GenerateMetadata();
+            AddLine("Done");
             return sb.ToString();
 
             void AddLine(string line)
@@ -40,7 +40,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         Name = name ?? code,
                         MetadataJson = blankJson,
                         MetadataJsonSha256 = blankJson.Sha256(),
-                        MetadataUrl = "https://metadata.saeon.ac.za",
+                        MetadataUrl = "https://metadata.saeon.ac.za/whoknows/",
                         MetadataHtml = blankHtml,
                         OpenDataPlatformId = Guid.Empty,
                         AddedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString(),
@@ -53,7 +53,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.ObservationsDb);
                     if (doi == null)
                     {
-                        AddLine("Adding ObservationsDB DOI");
+                        AddLine("Adding ObservationsDB");
                         doi = BlankDOI(DOIType.ObservationsDb, "ObservationsDB", "Observations Database");
                         await dbContext.DigitalObjectIdentifiers.AddAsync(doi);
                         await dbContext.SaveChangesAsync();
@@ -66,7 +66,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Organisation && i.Code == organisation.Code);
                     if (doi == null)
                     {
-                        AddLine($"Adding organisation {organisation.Code} DOI");
+                        AddLine($"Adding organisation {organisation.Code}");
                         doi = BlankDOI(DOIType.Organisation, organisation.Code);
                         doi.Parent = doiObservations;
                         await dbContext.DigitalObjectIdentifiers.AddAsync(doi);
@@ -89,7 +89,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Programme && i.Code == programme.Code);
                     if (doi == null)
                     {
-                        AddLine($"Adding programme {programme.Code} DOI");
+                        AddLine($"Adding programme {programme.Code}");
                         doi = BlankDOI(DOIType.Programme, programme.Code);
                         doi.Parent = doiOrganisation;
                         dbContext.DigitalObjectIdentifiers.Add(doi);
@@ -104,7 +104,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Project && i.Code == project.Code);
                     if (doi == null)
                     {
-                        AddLine($"Adding project {project.Code} DOI");
+                        AddLine($"Adding project {project.Code}");
                         doi = BlankDOI(DOIType.Project, project.Code);
                         doi.Parent = doiProgramme;
                         dbContext.DigitalObjectIdentifiers.Add(doi);
@@ -119,7 +119,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Site && i.Code == site.Code);
                     if (doi == null)
                     {
-                        AddLine($"Adding site {site.Code} DOI");
+                        AddLine($"Adding site {site.Code}");
                         doi = BlankDOI(DOIType.Site, site.Code);
                         doi.Parent = doiProject;
                         dbContext.DigitalObjectIdentifiers.Add(doi);
@@ -134,7 +134,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Station && i.Code == station.Code);
                     if (doi == null)
                     {
-                        AddLine($"Adding station {station.Code} DOI");
+                        AddLine($"Adding station {station.Code}");
                         doi = BlankDOI(DOIType.Station, station.Code);
                         doi.Parent = doiSite;
                         dbContext.DigitalObjectIdentifiers.Add(doi);
@@ -151,7 +151,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code == code);
                     if (doi == null)
                     {
-                        AddLine($"Adding dataset {code} DOI");
+                        AddLine($"Adding dataset {code}");
                         doi = BlankDOI(DOIType.Dataset, code, name);
                         doi.Parent = doiStation;
                         dbContext.DigitalObjectIdentifiers.Add(doi);
@@ -212,18 +212,35 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         }
                     }
                 }
+                AddLine("Setting Urls");
+                foreach (var doi in await dbContext.DigitalObjectIdentifiers.Where(i =>
+                    i.DOIType == DOIType.Organisation ||
+                    i.DOIType == DOIType.Programme ||
+                    i.DOIType == DOIType.Project ||
+                    i.DOIType == DOIType.Site ||
+                    i.DOIType == DOIType.Station ||
+                    i.DOIType == DOIType.Dataset)
+                    .ToListAsync())
+                {
+                    AddLine($"{doi.DOIType} {doi.Name}");
+                    doi.MetadataUrl = $"https://metadata.saeon.ac.za/whoknows/{doi.DOI}";
+                    doi.QueryUrl = $"https://observations.saeon.ac.za/DOI/{doi.DOI}";
+                }
+                await dbContext.SaveChangesAsync();
             }
 
             async Task GenerateMetadata()
             {
-                Metadata MetadataForDOI(DigitalObjectIdentifier doi, Metadata parent)
+                Metadata MetadataForDOI(DigitalObjectIdentifier doi, Metadata parent, string itemDescription = null, string itemUrl = null)
                 {
                     AddLine($"{doi.DOIType} {doi.Name}");
                     var metadata = new Metadata
                     {
                         DOI = doi,
                         Identifier = doi.DOI,
-                        Parent = parent
+                        Parent = parent,
+                        ItemDescription = itemDescription,
+                        ItemUrl = itemUrl
                     };
                     return metadata;
                 }
@@ -238,7 +255,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     .Where(i => i.DOIType == DOIType.Organisation && i.Code == "SAEON")
                     .ToListAsync())
                 {
-                    var metaOrganisation = MetadataForDOI(doiOrganisation, metaObservations);
+                    var organisation = await dbContext.Organisations.SingleAsync(i => i.Code == doiOrganisation.Code);
+                    var metaOrganisation = MetadataForDOI(doiOrganisation, metaObservations, organisation.Description, organisation.Url);
                     foreach (var doiProgramme in await dbContext
                         .DigitalObjectIdentifiers
                         .Include(i => i.Parent)
@@ -246,7 +264,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         .Where(i => i.ParentId == doiOrganisation.Id)
                         .ToListAsync())
                     {
-                        var metaProgramme = MetadataForDOI(doiProgramme, metaOrganisation);
+                        var programme = await dbContext.Programmes.SingleAsync(i => i.Code == doiProgramme.Code);
+                        var metaProgramme = MetadataForDOI(doiProgramme, metaOrganisation, programme.Description, programme.Url);
                         foreach (var doiProject in await dbContext
                             .DigitalObjectIdentifiers
                             .Include(i => i.Parent)
@@ -254,7 +273,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                             .Where(i => i.ParentId == doiProgramme.Id)
                             .ToListAsync())
                         {
-                            var metaProject = MetadataForDOI(doiProject, metaProgramme);
+                            var project = await dbContext.Projects.SingleAsync(i => i.Code == doiProject.Code);
+                            var metaProject = MetadataForDOI(doiProject, metaProgramme, project.Description, project.Url);
                             foreach (var doiSite in await dbContext
                                 .DigitalObjectIdentifiers
                                 .Include(i => i.Parent)
@@ -262,7 +282,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                                 .Where(i => i.ParentId == doiProject.Id)
                                 .ToListAsync())
                             {
-                                var metaSite = MetadataForDOI(doiSite, metaProject);
+                                var site = await dbContext.Sites.SingleAsync(i => i.Code == doiSite.Code);
+                                var metaSite = MetadataForDOI(doiSite, metaProject, site.Description, site.Url);
                                 foreach (var doiStation in await dbContext
                                     .DigitalObjectIdentifiers
                                     .Include(i => i.Parent)
@@ -270,7 +291,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                                     .Where(i => i.ParentId == doiSite.Id)
                                     .ToListAsync())
                                 {
-                                    var metaStation = MetadataForDOI(doiStation, metaSite);
+                                    var station = await dbContext.Stations.SingleAsync(i => i.Code == doiStation.Code);
+                                    var metaStation = MetadataForDOI(doiStation, metaSite, station.Description, station.Url);
                                     foreach (var doiDataset in await dbContext
                                         .DigitalObjectIdentifiers
                                         .Include(i => i.Parent)
@@ -279,12 +301,14 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                                         .ToListAsync())
                                     {
                                         var splits = doiDataset.Code.Split('~', StringSplitOptions.RemoveEmptyEntries);
+                                        var phenomenon = await dbContext.Phenomena.SingleAsync(i => i.Code == splits[1]);
                                         var dataset = await dbContext.Datasets.Where(i =>
-                                            i.StationName == splits[0] &&
+                                            i.StationCode == splits[0] &&
                                             i.PhenomenonCode == splits[1] &&
                                             i.OfferingCode == splits[2] &&
-                                            i.UnitCode == splits[3]).SingleAsync();
-                                        var metaDataset = MetadataForDOI(doiDataset, metaStation);
+                                            i.UnitCode == splits[3])
+                                            .SingleAsync();
+                                        var metaDataset = MetadataForDOI(doiDataset, metaStation, phenomenon.Description, phenomenon.Url);
                                         metaDataset.StartDate = dataset.StartDate;
                                         metaDataset.EndDate = dataset.EndDate;
                                         metaDataset.LatitudeNorth = dataset.LatitudeNorth;
@@ -340,56 +364,5 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 await dbContext.SaveChangesAsync();
             }
         }
-    }
-
-    public static class StringExtensions
-    {
-        public static byte[] Sha256(this string value)
-        {
-            using (var sha256 = SHA256.Create())
-            {
-                return sha256.ComputeHash(Encoding.UTF8.GetBytes(value));
-            }
-        }
-
-        public static string HtmlB(this string value)
-        {
-            return $"<b>{value}</b>";
-        }
-    }
-
-    public static class StringBuilderExtensions
-    {
-        public static StringBuilder AppendHtmlH2(this StringBuilder builder, string text)
-        {
-            return builder.AppendLine($"<h2>{text}</h2>");
-        }
-
-        public static StringBuilder AppendHtmlH3(this StringBuilder builder, string text)
-        {
-            return builder.AppendLine($"<h3>{text}</h3>");
-        }
-
-        public static StringBuilder AppendHtmlP(this StringBuilder builder, string text)
-        {
-            return builder.AppendLine($"<p>{text}</p>");
-        }
-
-        public static StringBuilder AppendHtmlUL(this StringBuilder builder, List<string> items)
-        {
-            builder.AppendLine("<ul>");
-            foreach (var item in items)
-                builder.AppendLine($"<li>{item}</li>");
-            return builder.AppendLine("</ul>");
-        }
-
-        public static StringBuilder AppendHtmlUL(this StringBuilder builder, IEnumerable<string> items)
-        {
-            builder.AppendLine("<ul>");
-            foreach (var item in items)
-                builder.AppendLine($"<li>{item}</li>");
-            return builder.AppendLine("</ul>");
-        }
-
     }
 }

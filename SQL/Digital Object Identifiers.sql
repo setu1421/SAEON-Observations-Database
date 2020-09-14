@@ -12,8 +12,8 @@ Select
 	when 8 then 'AdHoc'
 	else null
   end ParentType, 
+  Parent.Code ParentCode,
   Parent.Name ParentName,
-  Child.ID ChildId, 
   case Child.DOIType 
     when 0 then 'ObservationsDB'
 	when 1 then 'Organisation'
@@ -26,7 +26,7 @@ Select
 	when 8 then 'AdHoc'
 	else null
   end ChildType, 
-  Child.Name ChildName
+  Child.*
 from
   DigitalObjectIdentifiers Child
   left join DigitalObjectIdentifiers Parent
