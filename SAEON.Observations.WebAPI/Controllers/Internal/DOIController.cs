@@ -10,7 +10,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     public class DOIController : BaseController
     {
-        [HttpPost("AsJson")]
+        [HttpPost("[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> AsJson([FromForm] string doi)
@@ -35,7 +35,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
-        [HttpPost("AsHtml")]
+        [HttpPost("[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> AsHtml([FromForm] string doi)

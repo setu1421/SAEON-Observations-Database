@@ -19,8 +19,8 @@ namespace SAEON.Observations.WebAPI
 
         public JObject AsJson()
         {
-#if Schema43
             var jObj = new JObject(new JProperty("affiliation", Name));
+#if Schema43
             if (!string.IsNullOrWhiteSpace(Identifier))
             {
                 new JProperty("affiliationIdentifier", Identifier);
@@ -33,10 +33,24 @@ namespace SAEON.Observations.WebAPI
             {
                 jObj.Add(new JProperty("schemeURI", SchemeUri));
             }
-            return jObj;
-#else
-            return null;
 #endif
+            return jObj;
+        }
+    }
+
+    public class MetadataAlternateIdentifier
+    {
+        public string Name { get; set; }
+        public string Type { get; set; }
+
+        public JObject AsJson()
+        {
+            var jObj = new JObject(new JProperty("alternateIdentifier", Name));
+            if (!string.IsNullOrWhiteSpace(Type))
+            {
+                jObj.Add(new JProperty("alternateIdentifierType", Type));
+            }
+            return jObj;
         }
     }
 
@@ -80,17 +94,10 @@ namespace SAEON.Observations.WebAPI
             {
                 jObj.Add(new JProperty("nameIdentifiers", new JArray(Identifiers.Select(i => i.AsJson()))));
             }
-#if Schema43
-            //if (Affiliations?.Any() ?? false)
-            //{
-            //    jObj.Add(new JProperty("affiliation", new JArray(Affiliations.Select(i => i.AsJson()))));
-            //}
-#else
-            foreach (var affiliation in Affiliations)
+            if (Affiliations?.Any() ?? false)
             {
-                jObj.Add(new JProperty("affiliation", affiliation.Name));
+                jObj.Add(new JProperty("affiliations", new JArray(Affiliations.Select(i => i.AsJson()))));
             }
-#endif
             return jObj;
         }
     }
@@ -200,6 +207,7 @@ namespace SAEON.Observations.WebAPI
         public Metadata Parent { get; set; }
         public DigitalObjectIdentifier DOI { get; set; }
         public string Identifier { get; set; }
+        public List<MetadataAlternateIdentifier> AlternateIdentifiers { get; } = new List<MetadataAlternateIdentifier>();
         public MetadataCreator Creator = new MetadataCreator
         {
             Name = "SAEON Observations Database",
@@ -436,12 +444,12 @@ namespace SAEON.Observations.WebAPI
                 if (StartDate.Value == EndDate.Value)
                 {
                     title += $" on {StartDate.Value:yyyy-MM-dd}";
-                    description += $" on {startDate.Value:O}";
+                    description += $" on {startDate.Value.ToJsonDate()}";
                 }
                 else
                 {
                     title += $" from {startDate.Value:yyyy-MM-dd} to {endDate.Value:yyyy-MM-dd}";
-                    description += $" from {startDate.Value:O} to {endDate.Value:O}";
+                    description += $" from {startDate.Value.ToJsonDate()} to {endDate.Value.ToJsonDate()}";
                 }
             }
             Title = title;
@@ -516,11 +524,11 @@ namespace SAEON.Observations.WebAPI
                 }
                 if (StartDate.HasValue && EndDate.HasValue)
                 {
-                    dates += $" Collected: {StartDate:O}/{EndDate:O}";
+                    dates += $" Collected: {StartDate.ToJsonDate()}/{EndDate.ToJsonDate()}";
                 }
                 else if (StartDate.HasValue)
                 {
-                    dates += $" Collected:  {StartDate:O}";
+                    dates += $" Collected:  {StartDate.ToJsonDate()}";
                 }
                 sbHtml.AppendHtmlP(dates);
             }
@@ -538,7 +546,7 @@ namespace SAEON.Observations.WebAPI
                 sbHtml.AppendHtmlP($"{"Query URL:".HtmlB()} <a href='{DOI.QueryUrl}'>{DOI.QueryUrl}</a>".Trim());
             }
             sbHtml.AppendHtmlP($"{"Citation".HtmlB()} {Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). <a href='{DOI.DOIUrl}'>{DOI.DOIUrl}</a>");
-            Description = sbText.ToString()/*.Replace(Environment.NewLine,"<br>")*/;
+            Description = sbText.ToString().Replace(Environment.NewLine, " "); //.Replace(Environment.NewLine,"<br>");
             DescriptionHtml = sbHtml.ToString();
         }
 
@@ -554,21 +562,25 @@ namespace SAEON.Observations.WebAPI
                 jDates.Add(
                     new JObject(
                         new JProperty("date", StartDate.Value.ToString("yyyy-MM-dd")),
-                        new JProperty("dateType", "Issued")));
+                        new JProperty("dateType", "Submitted")));
+                jDates.Add(
+                    new JObject(
+                        new JProperty("date", StartDate.Value.ToString("yyyy-MM-dd")),
+                        new JProperty("dateType", "Accepted")));
             }
             if (StartDate.HasValue && EndDate.HasValue)
             {
                 jDates.Add(
                     new JObject(
-                        new JProperty("date", $"{StartDate.Value:O}/{EndDate.Value:O}"),
-                        new JProperty("dateType", "Collected")));
+                        new JProperty("date", $"{StartDate.Value.ToJsonDate()}/{EndDate.Value.ToJsonDate()}"),
+                        new JProperty("dateType", "Valid")));
             }
             else if (StartDate.HasValue)
             {
                 jDates.Add(
                     new JObject(
-                        new JProperty("date", $"{StartDate.Value:O}"),
-                        new JProperty("dateType", "Collected")));
+                        new JProperty("date", $"{StartDate.Value.ToJsonDate()}"),
+                        new JProperty("dateType", "Valid")));
             }
             var jGeoLocations = new JArray();
             if (LatitudeNorth.HasValue && LatitudeSouth.HasValue && LongitudeWest.HasValue && LongitudeEast.HasValue)
@@ -635,7 +647,10 @@ namespace SAEON.Observations.WebAPI
                     new JProperty("contributors", new JArray(Contributors.Select(i => i.AsJson()))),
                     new JProperty("subjects", new JArray(Subjects.Select(i => i.AsJson()))),
                     new JProperty("geoLocations", jGeoLocations),
-                    new JProperty("relatedIdentifiers", new JArray(RelatedIdentifiers.Select(i => i.AsJson())))
+                    new JProperty("alternateIdentifiers", new JArray(AlternateIdentifiers.Select(i => i.AsJson()))),
+                    new JProperty("relatedIdentifiers", new JArray(RelatedIdentifiers.Select(i => i.AsJson()))),
+                    new JProperty("immutableResource", new JObject(
+                        new JProperty("resourceURL", DOI.QueryUrl)))
                );
             return jObj.ToString(Formatting.Indented);
         }

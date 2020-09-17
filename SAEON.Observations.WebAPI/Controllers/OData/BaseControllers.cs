@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SAEON.Logs;
+using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;

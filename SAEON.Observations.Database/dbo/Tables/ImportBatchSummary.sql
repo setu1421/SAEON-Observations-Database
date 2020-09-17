@@ -8,6 +8,7 @@
     [SiteID] UNIQUEIDENTIFIER NOT NULL, 
     [PhenomenonOfferingID] UNIQUEIDENTIFIER NOT NULL, 
     [PhenomenonUOMID] UNIQUEIDENTIFIER NOT NULL, 
+	[DigitalObjectIdentifierID] Int null,
     [Count] INT NOT NULL, 
     [Minimum] FLOAT NULL, 
     [Maximum] FLOAT NULL, 
@@ -30,6 +31,7 @@
     CONSTRAINT [FK_ImportBatchSummary_SiteID] FOREIGN KEY ([SiteID]) REFERENCES [Site]([ID]), 
     CONSTRAINT [FK_ImportBatchSummary_PhenomenonOfferingID] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [PhenomenonOffering]([ID]), 
     CONSTRAINT [FK_ImportBatchSummary_PhenomenonUOMID] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [PhenomenonUOM]([ID]),
+    Constraint [FK_ImportBatchSummary_DigitalObjectIdentifierID] Foreign Key ([DigitalObjectIdentifierID]) References [dbo].[DigitalObjectIdentifiers] ([ID]),
     CONSTRAINT [UX_ImportBatchSummary] UNIQUE (ImportBatchID,SensorID,PhenomenonOfferingID,PhenomenonUOMID),
 )
 
@@ -53,6 +55,9 @@ CREATE INDEX [IX_ImportBatchSummary_PhenomenonOfferingID] ON [dbo].[ImportBatchS
 
 GO
 CREATE INDEX [IX_ImportBatchSummary_PhenomenonUOMID] ON [dbo].[ImportBatchSummary] ([PhenomenonUOMID])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_DigitalObjectIdentifierID] ON [dbo].[ImportBatchSummary]([DigitalObjectIdentifierID])
 
 GO
 CREATE INDEX [IX_ImportBatchSummary_Count] ON [dbo].[ImportBatchSummary] ([Count])

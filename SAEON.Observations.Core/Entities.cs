@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SAEON.Logs;
+using SAEON.Observations.Auth;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -155,16 +156,7 @@ namespace SAEON.Observations.Core
         public Guid UserId { get; set; }
     }
 
-    public abstract class NamedEntity : IdedEntity
-    {
-        /// <summary>
-        /// Name of the Entity
-        /// </summary>
-        [Required, StringLength(150)]
-        public string Name { get; set; }
-    }
-
-    public abstract class CodedEntity : NamedEntity
+    public abstract class CodedEntity : IdedEntity
     {
         /// <summary>
         /// Code of the Entity
@@ -173,11 +165,20 @@ namespace SAEON.Observations.Core
         public string Code { get; set; }
     }
 
+    public abstract class NamedEntity : CodedEntity
+    {
+        /// <summary>
+        /// Name of the Entity
+        /// </summary>
+        [Required, StringLength(150)]
+        public string Name { get; set; }
+    }
+
     /// <summary>
     /// Data Schema entity
     /// </summary>
     [Table("DataSchema")]
-    public class DataSchema : CodedEntity
+    public class DataSchema : NamedEntity
     {
         /// <summary>
         /// DataSourceTypeId of the DataSchema
@@ -198,7 +199,7 @@ namespace SAEON.Observations.Core
     /// Data Source entity
     /// </summary>
     [Table("DataSource")]
-    public class DataSource : CodedEntity
+    public class DataSource : NamedEntity
     {
         public Guid DataSchemaId { get; set; }
         /// <summary>
@@ -235,30 +236,10 @@ namespace SAEON.Observations.Core
     }
 
     [Table("DataSourceType")]
-    public class DataSourceType : BaseEntity
+    public class DataSourceType : CodedEntity
     {
-        /// <summary>
-        /// Id of the Entity
-        /// </summary>
-        //[Required]
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [ScaffoldColumn(false)]
-        [HiddenInput]
-        public Guid Id { get; set; }
-        [Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false)]
-        [HiddenInput]
-
-        public byte[] RowVersion { get; set; }
-        public Guid? UserId { get; set; }
-
         //public EntityListItem AsEntityListItem => new EntityListItem { Id = Id, Code = Code };
 
-        /// <summary>
-        /// Code of the Entity
-        /// </summary>
-        [Required, StringLength(50)]
-        public string Code { get; set; }
         /// <summary>
         /// Description of the Instrument
         /// </summary>
@@ -278,6 +259,7 @@ namespace SAEON.Observations.Core
     {
         [HiddenInput]
         public int? ParentId { get; set; }
+        public Guid? AlternateId { get; set; }
         [Required]
         [DisplayName("DOI Type")]
         public DOIType DOIType { get; set; }
@@ -327,16 +309,24 @@ namespace SAEON.Observations.Core
         [StringLength(250)]
         public string QueryUrl { get; set; }
         /// <summary>
-        /// ODP Id for the download
+        /// ODP Id for the DigitalObjectIdentifier
         /// </summary>
-        public Guid OpenDataPlatformId { get; set; }
+        public Guid? ODPMetadataId { get; set; }
+        /// <summary>
+        /// ODP metadata needs update for DigitalObjectIdentifier
+        /// </summary>
+        public bool? ODPMetadataNeedsUpdate { get; set; }
+        /// <summary>
+        /// ODP metadata is valid for DigitalObjectIdentifier
+        /// </summary>
+        public bool? ODPMetadataIsValid { get; set; }
         /// <summary> 
-        /// UserId of user who added the UserDownload   
+        /// UserId of user who added the DigitalObjectIdentifier   
         /// </summary>
         [StringLength(128), ScaffoldColumn(false)]
         public string AddedBy { get; set; }
         /// <summary>
-        /// UserId of user who last updated the UserDownload 
+        /// UserId of user who last updated the DigitalObjectIdentifier 
         /// </summary>
         [StringLength(128), ScaffoldColumn(false)]
         public string UpdatedBy { get; set; }
@@ -352,14 +342,72 @@ namespace SAEON.Observations.Core
         public List<Project> Projects { get; set; }
         public List<Site> Sites { get; set; }
         public List<Station> Stations { get; set; }
+        public List<ImportBatch> ImportBatches { get; set; }
         public List<UserDownload> UserDownloads { get; set; }
+    }
+
+    public class ImportBatch : GuidIdEntity
+    {
+        public int Code { get; set; }
+        public Guid DataSourceId { get; set; }
+        public DateTime ImportDate { get; set; }
+        public int Status { get; set; }
+        [StringLength(250)]
+        public string FileName { get; set; }
+        [StringLength(8000)]
+        public string Comment { get; set; }
+        public Guid? StatusId { get; set; }
+        public Guid? StatusReasonId { get; set; }
+        [StringLength(1000)]
+        public string Issues { get; set; }
+        public int? DurationInSecs { get; set; }
+
+        // Navigation
+        public List<ImportBatchSummary> ImportBatchSummaries { get; set; }
+    }
+
+    public class ImportBatchSummary : GuidIdEntity
+    {
+        public Guid ImportBatchId { get; set; }
+        public Guid SensorId { get; set; }
+        public Guid InstrumentId { get; set; }
+        public Guid StationId { get; set; }
+        public Guid SiteId { get; set; }
+        public Guid PhenomenonOfferingId { get; set; }
+        [Column("PhenomenonUOMID")]
+        public Guid PhenomenonUnitId { get; set; }
+        public int DigitalObjectIdentiferId { get; set; }
+        public int Count { get; set; }
+        public double? Minimum { get; set; }
+        public double? Maximum { get; set; }
+        public double? Average { get; set; }
+        public double? StandardDeviation { get; set; }
+        public double? Variance { get; set; }
+        public double? LatitudeNorth { get; set; } // +N to -S
+        public double? LatitudeSouth { get; set; } // +N to -S
+        public double? LongitudeWest { get; set; } // -W to +E
+        public double? LongitudeEast { get; set; } // -W to +E
+        public double? ElevationMinimum { get; set; }
+        public double? ElevationMaximum { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+
+        // Navigation
+        public ImportBatch ImportBatch { get; set; }
+        public Sensor Sensor { get; set; }
+        public Instrument Instrument { get; set; }
+        public Station Station { get; set; }
+        public Site Site { get; set; }
+        public PhenomenonOffering PhenomenonOffering { get; set; }
+        public PhenomenonUnit PhenomenonUnit { get; set; }
+        public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
     }
 
     /// <summary>
     /// Instrument entity
     /// </summary>
     [Table("Instrument")]
-    public class Instrument : CodedEntity
+    public class Instrument : NamedEntity
     {
         /// <summary>
         /// Description of the Instrument
@@ -449,7 +497,7 @@ namespace SAEON.Observations.Core
     /// Offering entity
     /// </summary>
     [Table("Offering")]
-    public class Offering : CodedEntity
+    public class Offering : NamedEntity
     {
         /// Description of the Offering
         /// </summary>
@@ -486,7 +534,7 @@ namespace SAEON.Observations.Core
     /// Organisation entity
     /// </summary>
     [Table("Organisation")]
-    public class Organisation : CodedEntity
+    public class Organisation : NamedEntity
     {
         /// <summary>
         /// Description of the Organisation
@@ -562,7 +610,7 @@ namespace SAEON.Observations.Core
     /// <summary>
     /// OrganisationRole entity
     /// </summary>
-    public class OrganisationRole : CodedEntity
+    public class OrganisationRole : NamedEntity
     {
         // Navigation
         //public List<Organisation> Organisations { get; set; }
@@ -572,7 +620,7 @@ namespace SAEON.Observations.Core
     /// Phenomenon entity
     /// </summary>
     [Table("Phenomenon")]
-    public class Phenomenon : CodedEntity
+    public class Phenomenon : NamedEntity
     {
         /// <summary>
         /// Description of the Phenomenon
@@ -644,7 +692,7 @@ namespace SAEON.Observations.Core
     /// Programme entity
     /// </summary>
     [Table("Programme")]
-    public class Programme : CodedEntity
+    public class Programme : NamedEntity
     {
         /// <summary>
         /// Description of the Programme
@@ -695,7 +743,7 @@ namespace SAEON.Observations.Core
     /// Project entity
     /// </summary>
     [Table("Project")]
-    public class Project : CodedEntity
+    public class Project : NamedEntity
     {
         /// <summary>
         /// The Programme of the Project
@@ -759,7 +807,7 @@ namespace SAEON.Observations.Core
     /// Sensor entity
     /// </summary>
     [Table("Sensor")]
-    public class Sensor : CodedEntity
+    public class Sensor : NamedEntity
     {
         /// <summary>
         /// Description of the Sensor
@@ -843,7 +891,7 @@ namespace SAEON.Observations.Core
     /// Site entity
     /// </summary>
     [Table("Site")]
-    public class Site : CodedEntity
+    public class Site : NamedEntity
     {
         /// <summary>
         /// Description of the Site
@@ -903,7 +951,7 @@ namespace SAEON.Observations.Core
     /// Station entity
     /// </summary>
     [Table("Station")]
-    public class Station : CodedEntity
+    public class Station : NamedEntity
     {
         /// <summary>
         /// Description of the Station
@@ -999,7 +1047,7 @@ namespace SAEON.Observations.Core
     /// Unit Entity
     /// </summary>
     [Table("UnitOfMeasure")]
-    public class Unit : CodedEntity
+    public class Unit : NamedEntity
     {
         /// <summary>
         /// Symbol of the Unit
@@ -1228,8 +1276,8 @@ namespace SAEON.Observations.Core
         public DateTime? UpdatedAt { get; set; }
     }
 
-    [Table("vImportBatchSummary")]
-    public class ImportBatchSummary : GuidIdEntity
+    //[Table("vImportBatchSummary")]
+    public class VImportBatchSummary : GuidIdEntity
     {
         public Guid ImportBatchId { get; set; }
 
@@ -1373,7 +1421,7 @@ namespace SAEON.Observations.Core
     }
 
     //[Keyless]
-    public class Location : BaseEntity
+    public class VLocation : BaseEntity
     {
         public Guid OrganisationID { get; set; }
         public string OrganisationName { get; set; }
@@ -1393,7 +1441,7 @@ namespace SAEON.Observations.Core
     }
 
     //[Keyless]
-    public class Feature : BaseEntity
+    public class VFeature : BaseEntity
     {
         public Guid PhenomenonID { get; set; }
         public string PhenomenonName { get; set; }
@@ -1408,8 +1456,8 @@ namespace SAEON.Observations.Core
         public string UnitName { get; set; }
     }
 
-    [Table("vObservationExpansion")]
-    public class ObservationExpansion : IntIdEntity
+    //[Table("vObservationExpansion")]
+    public class VObservationExpansion : IntIdEntity
     {
         public Guid ImportBatchId { get; set; }
         public Guid SiteId { get; set; }
@@ -1816,13 +1864,10 @@ namespace SAEON.Observations.Core
         public DbSet<DataSource> DataSources { get; set; }
         public DbSet<DataSourceType> DataSourceTypes { get; set; }
         public DbSet<DigitalObjectIdentifier> DigitalObjectIdentifiers { get; set; }
-
+        public DbSet<ImportBatch> ImportBatch { get; set; }
         public DbSet<ImportBatchSummary> ImportBatchSummary { get; set; }
-        public DbSet<InventoryDataset> InventoryDatasets { get; set; }
-        public DbSet<InventorySensor> InventorySensors { get; set; }
         public DbSet<Instrument> Instruments { get; set; }
         public DbSet<Offering> Offerings { get; set; }
-        public DbSet<ObservationExpansion> ObservationExpansions { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<OrganisationRole> OrganisationRoles { get; set; }
         public DbSet<Phenomenon> Phenomena { get; set; }
@@ -1839,8 +1884,13 @@ namespace SAEON.Observations.Core
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }
 
-        public DbSet<Location> Locations { get; set; }
-        public DbSet<Feature> Features { get; set; }
+        // Views
+        public DbSet<VLocation> VLocations { get; set; }
+        public DbSet<VFeature> VFeatures { get; set; }
+        public DbSet<VImportBatchSummary> VImportBatchSummary { get; set; }
+        public DbSet<InventoryDataset> InventoryDatasets { get; set; }
+        public DbSet<InventorySensor> InventorySensors { get; set; }
+        public DbSet<VObservationExpansion> VObservationExpansions { get; set; }
 
         // SensorThings
         public DbSet<SensorThingsDatastream> SensorThingsDatastreams { get; set; }
@@ -1949,8 +1999,8 @@ namespace SAEON.Observations.Core
         {
             if (modelBuilder == null) throw new ArgumentNullException(nameof(modelBuilder));
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Feature>().HasNoKey().ToView("vFeatures");
-            modelBuilder.Entity<Location>().HasNoKey().ToView("vLocations");
+            modelBuilder.Entity<VFeature>().HasNoKey().ToView("vFeatures");
+            modelBuilder.Entity<VLocation>().HasNoKey().ToView("vLocations");
             modelBuilder.Entity<InventoryDataset>().HasNoKey().ToView("vInventoryDatasets");
             modelBuilder.Entity<InventorySensor>().HasNoKey().ToView("vInventorySensors");
             modelBuilder.Entity<Dataset>().HasNoKey().ToView("vStationDatasets");

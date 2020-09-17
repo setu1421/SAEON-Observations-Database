@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SAEON.Logs;
+using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
@@ -17,8 +19,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     [ApiExplorerSettings(IgnoreApi = true)]
     public abstract class BaseController : ControllerBase
     {
-        private ObservationsDbContext _dbContext;
-        protected ObservationsDbContext DbContext => _dbContext ??= HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
+        private IConfiguration config;
+        protected IConfiguration Config => config ??= HttpContext.RequestServices.GetRequiredService<IConfiguration>();
+        private ObservationsDbContext dbContext;
+        protected ObservationsDbContext DbContext => dbContext ??= HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
     }
 
     public abstract class BaseController<TEntity> : BaseController where TEntity : BaseEntity

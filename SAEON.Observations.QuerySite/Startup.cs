@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using SAEON.Core;
 using SAEON.Logs;
-using SAEON.Observations.Core;
+using SAEON.Observations.Auth;
 using System;
 
 namespace SAEON.Observations.QuerySite

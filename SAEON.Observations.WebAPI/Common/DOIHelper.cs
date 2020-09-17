@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SAEON.Logs;
+using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace SAEON.Observations.WebAPI
         {
             var sb = new StringBuilder();
             await GenerateDOIs();
-            await GenerateMetadata();
+            //await GenerateMetadata();
             AddLine("Done");
             return sb.ToString();
 
@@ -42,7 +43,9 @@ namespace SAEON.Observations.WebAPI
                         MetadataJsonSha256 = blankJson.Sha256(),
                         MetadataUrl = "https://metadata.saeon.ac.za/whoknows/",
                         MetadataHtml = blankHtml,
-                        OpenDataPlatformId = Guid.Empty,
+                        QueryUrl = "https://observations.saeon.ac.za",
+                        ODPMetadataId = Guid.Empty,
+                        ODPMetadataNeedsUpdate = true,
                         AddedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString(),
                         UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString()
                     };
@@ -66,7 +69,7 @@ namespace SAEON.Observations.WebAPI
                     var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Organisation && i.Code == organisation.Code);
                     if (doi == null)
                     {
-                        AddLine($"Adding organisation {organisation.Code}");
+                        AddLine($"Adding organisation {organisation.Code}, {organisation.Name}");
                         doi = BlankDOI(DOIType.Organisation, organisation.Code);
                         doi.Parent = doiObservations;
                         await dbContext.DigitalObjectIdentifiers.AddAsync(doi);
@@ -76,9 +79,9 @@ namespace SAEON.Observations.WebAPI
                     return doi;
                 }
 
-                IQueryable<ImportBatchSummary> GetImportBatches()
+                IQueryable<VImportBatchSummary> GetImportBatches()
                 {
-                    return dbContext.ImportBatchSummary.Where(i =>
+                    return dbContext.VImportBatchSummary.Where(i =>
                         i.LatitudeNorth.HasValue && i.LatitudeSouth.HasValue &&
                         i.LongitudeWest.HasValue && i.LongitudeEast.HasValue &&
                         i.Count > 0);
@@ -89,7 +92,7 @@ namespace SAEON.Observations.WebAPI
                     var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Programme && i.Code == programme.Code);
                     if (doi == null)
                     {
-                        AddLine($"Adding programme {programme.Code}");
+                        AddLine($"Adding programme {programme.Code}, {programme.Name}");
                         doi = BlankDOI(DOIType.Programme, programme.Code);
                         doi.Parent = doiOrganisation;
                         dbContext.DigitalObjectIdentifiers.Add(doi);
@@ -104,7 +107,7 @@ namespace SAEON.Observations.WebAPI
                     var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Project && i.Code == project.Code);
                     if (doi == null)
                     {
-                        AddLine($"Adding project {project.Code}");
+                        AddLine($"Adding project {project.Code}, {project.Name}");
                         doi = BlankDOI(DOIType.Project, project.Code);
                         doi.Parent = doiProgramme;
                         dbContext.DigitalObjectIdentifiers.Add(doi);
@@ -119,7 +122,7 @@ namespace SAEON.Observations.WebAPI
                     var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Site && i.Code == site.Code);
                     if (doi == null)
                     {
-                        AddLine($"Adding site {site.Code}");
+                        AddLine($"Adding site {site.Code}, {site.Name}");
                         doi = BlankDOI(DOIType.Site, site.Code);
                         doi.Parent = doiProject;
                         dbContext.DigitalObjectIdentifiers.Add(doi);
@@ -134,7 +137,7 @@ namespace SAEON.Observations.WebAPI
                     var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Station && i.Code == station.Code);
                     if (doi == null)
                     {
-                        AddLine($"Adding station {station.Code}");
+                        AddLine($"Adding station {station.Code}, {station.Name}");
                         doi = BlankDOI(DOIType.Station, station.Code);
                         doi.Parent = doiSite;
                         dbContext.DigitalObjectIdentifiers.Add(doi);
@@ -151,7 +154,7 @@ namespace SAEON.Observations.WebAPI
                     var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code == code);
                     if (doi == null)
                     {
-                        AddLine($"Adding dataset {code}");
+                        AddLine($"Adding dataset {name}");
                         doi = BlankDOI(DOIType.Dataset, code, name);
                         doi.Parent = doiStation;
                         dbContext.DigitalObjectIdentifiers.Add(doi);
@@ -170,7 +173,10 @@ namespace SAEON.Observations.WebAPI
                         .Where(i => i.OrganisationCode == organisation.Code)
                         .Select(i => i.ProgrammeCode)
                         .Distinct();
-                    foreach (var programme in await dbContext.Programmes.Where(i => programmeCodes.Contains(i.Code)).ToListAsync())
+                    foreach (var programme in await dbContext.Programmes
+                        .Where(i => i.Code == "SAEON" || i.Code == "SACTN")
+                        .Where(i => programmeCodes.Contains(i.Code))
+                        .ToListAsync())
                     {
                         var doiProgramme = await EnsureProgrammeDOI(doiOrganisation, programme);
                         var projectCodes = GetImportBatches()
@@ -189,7 +195,10 @@ namespace SAEON.Observations.WebAPI
                                     i.ProjectCode == project.Code)
                                 .Select(i => i.SiteCode)
                                 .Distinct();
-                            foreach (var site in await dbContext.Sites.Where(i => siteCodes.Contains(i.Code)).ToListAsync())
+                            foreach (var site in await dbContext.Sites
+                                .Where(i => i.Code == "HSB" || i.Code == "CNSP" || i.Code == "JNHK" || i.Code == "CDBG" || i.Code.StartsWith("SACTN"))
+                                .Where(i => siteCodes.Contains(i.Code))
+                                .ToListAsync())
                             {
                                 var doiSite = await EnsureSiteDOI(doiProject, site);
                                 var stationCodes = GetImportBatches()
@@ -213,14 +222,7 @@ namespace SAEON.Observations.WebAPI
                     }
                 }
                 AddLine("Setting Urls");
-                foreach (var doi in await dbContext.DigitalObjectIdentifiers.Where(i =>
-                    i.DOIType == DOIType.Organisation ||
-                    i.DOIType == DOIType.Programme ||
-                    i.DOIType == DOIType.Project ||
-                    i.DOIType == DOIType.Site ||
-                    i.DOIType == DOIType.Station ||
-                    i.DOIType == DOIType.Dataset)
-                    .ToListAsync())
+                foreach (var doi in await dbContext.DigitalObjectIdentifiers.ToListAsync())
                 {
                     AddLine($"{doi.DOIType} {doi.Name}");
                     doi.MetadataUrl = $"https://metadata.saeon.ac.za/whoknows/{doi.DOI}";
@@ -233,7 +235,7 @@ namespace SAEON.Observations.WebAPI
             {
                 Metadata MetadataForDOI(DigitalObjectIdentifier doi, Metadata parent, string itemDescription = null, string itemUrl = null)
                 {
-                    AddLine($"{doi.DOIType} {doi.Name}");
+                    AddLine($"{doi.DOIType} {doi.Code}, {doi.Name}");
                     var metadata = new Metadata
                     {
                         DOI = doi,
@@ -242,11 +244,12 @@ namespace SAEON.Observations.WebAPI
                         ItemDescription = itemDescription,
                         ItemUrl = itemUrl
                     };
+                    metadata.AlternateIdentifiers.Add(new MetadataAlternateIdentifier { Name = doi.AlternateId.ToString(), Type = "Internal unique identifier" });
                     return metadata;
                 }
 
                 AddLine("Generating metadata");
-                var doiObservations = dbContext.DigitalObjectIdentifiers.Include(i => i.Children).Single(i => i.DOIType == DOIType.ObservationsDb);
+                var doiObservations = await dbContext.DigitalObjectIdentifiers.Include(i => i.Children).SingleAsync(i => i.DOIType == DOIType.ObservationsDb);
                 var metaObservations = MetadataForDOI(doiObservations, null);
                 foreach (var doiOrganisation in await dbContext
                     .DigitalObjectIdentifiers

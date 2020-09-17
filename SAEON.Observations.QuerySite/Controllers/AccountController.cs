@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SAEON.Logs;
-using SAEON.Observations.Core;
+using SAEON.Observations.Auth;
 using System;
 using System.Threading.Tasks;
 

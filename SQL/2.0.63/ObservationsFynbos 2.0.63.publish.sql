@@ -100,6 +100,15 @@ DROP INDEX [IX_Observation_ValueYear]
 
 
 GO
+PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueDateDesc]...';
+
+
+GO
+DROP INDEX [IX_Observation_ValueDateDesc]
+    ON [dbo].[Observation];
+
+
+GO
 PRINT N'Altering [dbo].[DigitalObjectIdentifiers]...';
 
 
@@ -117,18 +126,21 @@ ALTER TABLE [dbo].[DigitalObjectIdentifiers] ALTER COLUMN [Name] VARCHAR (500) N
 
 GO
 ALTER TABLE [dbo].[DigitalObjectIdentifiers]
-    ADD [ParentID]           INT              NULL,
-        [DOIType]            TINYINT          NOT NULL,
-        [DOI]                AS               '10.15493/obsdb.' + CONVERT (VARCHAR (20), CONVERT (VARBINARY (1), DOIType), 2) + '.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
-        [DOIUrl]             AS               'https://doi.org/10.15493/obsdb.' + CONVERT (VARCHAR (20), CONVERT (VARBINARY (1), DOIType), 2) + '.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
-        [Code]               VARCHAR (200)    NOT NULL,
-        [MetadataJson]       VARCHAR (MAX)    NOT NULL,
-        [MetadataJsonSha256] BINARY (32)      NOT NULL,
-        [MetadataHtml]       VARCHAR (MAX)    NOT NULL,
-        [MetadataUrl]        VARCHAR (250)    NOT NULL,
-        [ObjectStoreUrl]     VARCHAR (250)    NULL,
-        [QueryUrl]           VARCHAR (250)    NULL,
-        [OpenDataPlatformID] UNIQUEIDENTIFIER NULL;
+    ADD [AlternateID]            UNIQUEIDENTIFIER DEFAULT NewId() NULL,
+        [ParentID]               INT              NULL,
+        [DOIType]                TINYINT          NOT NULL,
+        [DOI]                    AS               '10.15493/obsdb.' + CONVERT (VARCHAR (20), CONVERT (VARBINARY (1), DOIType), 2) + '.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
+        [DOIUrl]                 AS               'https://doi.org/10.15493/obsdb.' + CONVERT (VARCHAR (20), CONVERT (VARBINARY (1), DOIType), 2) + '.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
+        [Code]                   VARCHAR (200)    NOT NULL,
+        [MetadataJson]           VARCHAR (MAX)    NOT NULL,
+        [MetadataJsonSha256]     BINARY (32)      NOT NULL,
+        [MetadataHtml]           VARCHAR (MAX)    NOT NULL,
+        [MetadataUrl]            VARCHAR (250)    NOT NULL,
+        [ObjectStoreUrl]         VARCHAR (250)    NULL,
+        [QueryUrl]               VARCHAR (250)    NULL,
+        [ODPMetadataID]          UNIQUEIDENTIFIER NULL,
+        [ODPMetadataNeedsUpdate] BIT              NULL,
+        [ODPMetadataIsValid]     BIT              NULL;
 
 
 GO
@@ -169,6 +181,32 @@ PRINT N'Creating [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_P
 GO
 CREATE NONCLUSTERED INDEX [IX_DigitalObjectIdentifiers_ParentID]
     ON [dbo].[DigitalObjectIdentifiers]([ParentID] ASC);
+
+
+GO
+PRINT N'Altering [dbo].[ImportBatchSummary]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TABLE [dbo].[ImportBatchSummary]
+    ADD [DigitalObjectIdentifierID] INT NULL;
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_DigitalObjectIdentifierID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_DigitalObjectIdentifierID]
+    ON [dbo].[ImportBatchSummary]([DigitalObjectIdentifierID] ASC);
 
 
 GO
@@ -329,6 +367,15 @@ ALTER TABLE [dbo].[DigitalObjectIdentifiers] WITH NOCHECK
 
 
 GO
+PRINT N'Creating [dbo].[FK_ImportBatchSummary_DigitalObjectIdentifierID]...';
+
+
+GO
+ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
+    ADD CONSTRAINT [FK_ImportBatchSummary_DigitalObjectIdentifierID] FOREIGN KEY ([DigitalObjectIdentifierID]) REFERENCES [dbo].[DigitalObjectIdentifiers] ([ID]);
+
+
+GO
 PRINT N'Creating [dbo].[FK_Organisation_DigitalObjectIdentifierID]...';
 
 
@@ -383,6 +430,38 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 EXECUTE sp_refreshsqlmodule N'[dbo].[vUserDownloads]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing [dbo].[vFeatures]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vFeatures]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing [dbo].[vLocations]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vLocations]';
 
 
 GO
@@ -479,22 +558,6 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 EXECUTE sp_refreshsqlmodule N'[dbo].[vInstrumentOrganisation]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vLocations]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vLocations]';
 
 
 GO
@@ -622,6 +685,102 @@ EXECUTE sp_refreshsqlmodule N'[dbo].[vDataLog]';
 
 
 GO
+PRINT N'Refreshing [dbo].[vSensor]...';
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensor]';
+
+
+GO
+PRINT N'Refreshing [dbo].[vSensorDates]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorDates]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing [dbo].[vStation]...';
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vStation]';
+
+
+GO
+PRINT N'Refreshing [dbo].[vSensorLocation]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorLocation]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing [dbo].[vSensorThingsAPIInstrumentDates]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIInstrumentDates]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing [dbo].[vSensorThingsAPIStationDates]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIStationDates]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing [dbo].[vStationInstrument]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vStationInstrument]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
 PRINT N'Altering [dbo].[vImportBatchSummary]...';
 
 
@@ -709,38 +868,6 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensor]...';
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensor]';
-
-
-GO
-PRINT N'Refreshing [dbo].[vSensorDates]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorDates]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vStation]...';
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vStation]';
-
-
-GO
 PRINT N'Refreshing [dbo].[vInventoryDatasets]...';
 
 
@@ -781,6 +908,22 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
+PRINT N'Refreshing [dbo].[vSensorThingsAPILocations]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPILocations]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
 PRINT N'Refreshing [dbo].[vSensorThingsAPIObservedProperties]...';
 
 
@@ -813,7 +956,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensorLocation]...';
+PRINT N'Refreshing [dbo].[vSensorThingsAPIThings]...';
 
 
 GO
@@ -821,7 +964,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorLocation]';
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIThings]';
 
 
 GO
@@ -829,7 +972,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPIInstrumentDates]...';
+PRINT N'Refreshing [dbo].[vSensorThingsAPIFeaturesOfInterest]...';
 
 
 GO
@@ -837,7 +980,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIInstrumentDates]';
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIFeaturesOfInterest]';
 
 
 GO
@@ -845,7 +988,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPIStationDates]...';
+PRINT N'Refreshing [dbo].[vSensorThingsAPIHistoricalLocations]...';
 
 
 GO
@@ -853,23 +996,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIStationDates]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vStationInstrument]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vStationInstrument]';
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIHistoricalLocations]';
 
 
 GO
@@ -920,70 +1047,6 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPIThings]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIThings]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPILocations]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPILocations]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPIFeaturesOfInterest]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIFeaturesOfInterest]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPIHistoricalLocations]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIHistoricalLocations]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
 PRINT N'Checking existing data against newly created constraints';
 
 
@@ -993,6 +1056,8 @@ USE [$(DatabaseName)];
 
 GO
 ALTER TABLE [dbo].[DigitalObjectIdentifiers] WITH CHECK CHECK CONSTRAINT [FK_DigitalObjectIdentifiers_ParentID];
+
+ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_DigitalObjectIdentifierID];
 
 ALTER TABLE [dbo].[Organisation] WITH CHECK CHECK CONSTRAINT [FK_Organisation_DigitalObjectIdentifierID];
 

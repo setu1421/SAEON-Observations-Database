@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using SAEON.Logs;
-using SAEON.Observations.Core;
+using SAEON.Observations.Auth;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;

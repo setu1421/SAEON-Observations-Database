@@ -12,7 +12,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             FeatureNode phenomenon = null;
             FeatureNode offering = null;
             FeatureNode unit = null;
-            foreach (var feature in DbContext.Features.OrderBy(i => i.PhenomenonName).ThenBy(i => i.OfferingName).ThenBy(i => i.UnitName))
+            foreach (var feature in DbContext.VFeatures.OrderBy(i => i.PhenomenonName).ThenBy(i => i.OfferingName).ThenBy(i => i.UnitName))
             {
                 if (phenomenon?.Id != feature.PhenomenonID)
                 {

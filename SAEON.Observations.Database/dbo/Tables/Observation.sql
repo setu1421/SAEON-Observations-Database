@@ -61,9 +61,6 @@ GO
 CREATE INDEX [IX_Observation_ValueDate] ON [dbo].[Observation] ([ValueDate])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO
-CREATE INDEX [IX_Observation_ValueDateDesc] ON [dbo].[Observation] ([ValueDate] Desc)
-  WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
-GO
 CREATE INDEX [IX_Observation_ValueDay] ON [dbo].[Observation] ([ValueDay])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO
