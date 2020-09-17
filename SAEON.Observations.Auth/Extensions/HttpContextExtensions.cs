@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SAEON.Observations.Core
+namespace SAEON.Observations.Auth
 {
     public static class HttpContextExtensions
     {

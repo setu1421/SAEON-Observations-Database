@@ -2,7 +2,7 @@
 using System;
 using System.Net.Http.Headers;
 
-namespace SAEON.Observations.Core
+namespace SAEON.Observations.Auth
 {
     public static class HttpRequestExtensions
     {

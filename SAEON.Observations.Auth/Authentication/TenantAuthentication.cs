@@ -12,7 +12,7 @@ using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace SAEON.Observations.Core
+namespace SAEON.Observations.Auth
 {
     public static class TenantAuthenticationDefaults
     {

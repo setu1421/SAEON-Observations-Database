@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 
-namespace SAEON.Observations.Core
+namespace SAEON.Observations.Auth
 {
     public static class ClaimsExtensions
     {
