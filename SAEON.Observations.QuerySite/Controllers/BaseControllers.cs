@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
+using SAEON.Observations.QuerySite.Common;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -51,7 +52,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var token = useSession ? HttpContext.Session.GetString(ODPAuthenticationDefaults.SessionAccessToken) : null;
                     if (string.IsNullOrWhiteSpace(token))
                     {
-                        using (var client = new HttpClient())
+                        using (var client = new HttpClient() { BaseAddress = new Uri(Config["AuthenticationServerUrl"].AddTrailingSlash()) })
                         {
                             using (var formContent = new FormUrlEncodedContent(new[] {
                                 new KeyValuePair<string, string>("grant_type", "client_credentials"),
@@ -62,7 +63,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                             {
                                 //SAEONLogs.Information("scope: {scope} client_id: {client_id} client_secret: {client_secret}", ODPAuthenticationDefaults.WebAPIClientId, ODPAuthenticationDefaults.QuerySiteClientId), config["QuerySiteClientSecret"]);
                                 SAEONLogs.Verbose("Requesting access token");
-                                var response = await client.PostAsync(Config["AuthenticationServerUrl"] + "/oauth2/token", formContent);
+                                var response = await client.PostAsync("oauth2/token", formContent);
                                 if (!response.IsSuccessStatusCode)
                                 {
                                     SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
@@ -153,7 +154,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var client = new HttpClient();
                     client.DefaultRequestHeaders.Add(TenantAuthenticationDefaults.HeaderKeyTenant, Tenant);
-                    client.BaseAddress = new Uri(Config["WebAPIUrl"]);
+                    client.BaseAddress = new Uri(Config["WebAPIUrl"].AddTrailingSlash());
                     return client;
                 }
                 catch (Exception ex)

@@ -6,14 +6,14 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{39023EE1-BD0D-43AE-AFBE-8E1AFCA89433}"
 	ProjectSection(SolutionItems) = preProject
 		..\Digital Object Identifiers.sql = ..\Digital Object Identifiers.sql
+		Observations 2.0.63.publish.sql = Observations 2.0.63.publish.sql
+		Observations 2.0.63.publish.txt = Observations 2.0.63.publish.txt
 		ObservationsElwandle 2.0.63.publish.sql = ObservationsElwandle 2.0.63.publish.sql
 		ObservationsElwandle 2.0.63.publish.txt = ObservationsElwandle 2.0.63.publish.txt
 		ObservationsFynbos 2.0.63.publish.sql = ObservationsFynbos 2.0.63.publish.sql
 		ObservationsFynbos 2.0.63.publish.txt = ObservationsFynbos 2.0.63.publish.txt
 		ObservationsSACTN 2.0.63.publish.sql = ObservationsSACTN 2.0.63.publish.sql
 		ObservationsSACTN 2.0.63.publish.txt = ObservationsSACTN 2.0.63.publish.txt
-		ObservationsTest 2.0.63.publish.sql = ObservationsTest 2.0.63.publish.sql
-		ObservationsTest 2.0.63.publish.txt = ObservationsTest 2.0.63.publish.txt
 		Pre Process.sql = Pre Process.sql
 	EndProjectSection
 EndProject
@@ -22,7 +22,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4948FDE2-C959-433A-A084-B238CD7B841D}.Default|Default.ActiveCfg = Default
+		{1E77F133-F7EC-44B0-A579-50343C905DEB}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

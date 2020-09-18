@@ -259,6 +259,7 @@ namespace SAEON.Observations.Core
     {
         [HiddenInput]
         public int? ParentId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid? AlternateId { get; set; }
         [Required]
         [DisplayName("DOI Type")]
@@ -320,6 +321,7 @@ namespace SAEON.Observations.Core
         /// ODP metadata is valid for DigitalObjectIdentifier
         /// </summary>
         public bool? ODPMetadataIsValid { get; set; }
+        public string ODPMetadataErrors { get; set; }
         /// <summary> 
         /// UserId of user who added the DigitalObjectIdentifier   
         /// </summary>

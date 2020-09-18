@@ -17,6 +17,12 @@ namespace SAEON.Observations.WebAPI
         {
             return $"<b>{value}</b>";
         }
+        public static string AddTrailingSlash(this string aString)
+        {
+            if (aString.EndsWith("/"))
+                return aString;
+            else
+                return aString + "/";
+        }
     }
-
 }

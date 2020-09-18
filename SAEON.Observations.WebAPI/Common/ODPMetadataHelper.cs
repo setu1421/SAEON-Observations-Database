@@ -6,6 +6,7 @@ using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
@@ -21,6 +22,7 @@ namespace SAEON.Observations.WebAPI
             {
                 async Task GenerateODPMetadataForDOI(DigitalObjectIdentifier doi)
                 {
+                    if (!doi.ODPMetadataNeedsUpdate ?? true) return;
                     AddLine($"{doi.DOIType} {doi.Name}");
                     var jObj = new JObject(
                         new JProperty("collection_key", "observations-database-dynamic-collection"),
@@ -31,7 +33,7 @@ namespace SAEON.Observations.WebAPI
                         new JProperty("data_agreement_url", "https://observations.saeon.ac.za/DataUsage"),
                         new JProperty("capture_method", "harvester")
                         );
-                    var response = await client.PostAsync("metadata", new StringContent(jObj.ToString(), Encoding.UTF8, MediaTypeNames.Application.Json));
+                    var response = await client.PostAsync("metadata/", new StringContent(jObj.ToString(), Encoding.UTF8, MediaTypeNames.Application.Json));
                     if (!response.IsSuccessStatusCode)
                     {
                         SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
@@ -43,21 +45,32 @@ namespace SAEON.Observations.WebAPI
                     var jODP = JObject.Parse(jsonODP);
                     var odpId = jODP.Value<string>("id");
                     var validated = jODP.Value<bool>("validated");
-                    var errors = jODP["errors"];
                     doi.ODPMetadataId = new Guid(odpId);
-                    doi.ODPMetadataIsValid = validated && errors.HasValues;
+                    var errors = jODP["errors"];
+                    doi.ODPMetadataErrors = errors.ToString();
+                    doi.ODPMetadataNeedsUpdate = false;
+                    doi.ODPMetadataIsValid = validated && !errors.HasValues;
                     await dbContext.SaveChangesAsync();
                 }
 
                 AddLine("Generating metadata");
                 var doiObservations = await dbContext.DigitalObjectIdentifiers.Include(i => i.Children).SingleAsync(i => i.DOIType == DOIType.ObservationsDb);
                 await GenerateODPMetadataForDOI(doiObservations);
+                foreach (var doiOrganisation in await dbContext
+                   .DigitalObjectIdentifiers
+                   .Include(i => i.Parent)
+                   .Include(i => i.Children)
+                   .Where(i => i.DOIType == DOIType.Organisation && i.Code == "SAEON")
+                   .ToListAsync())
+                {
+                    await GenerateODPMetadataForDOI(doiOrganisation);
+                }
             }
 
             var sb = new StringBuilder();
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(config["ODPMetadataUrl"]);
+                client.BaseAddress = new Uri(config["ODPMetadataUrl"].AddTrailingSlash());
                 client.SetBearerToken(await GetTokenAsync());
                 await GenerateODPMetadata(client);
                 AddLine("Done");
@@ -76,7 +89,7 @@ namespace SAEON.Observations.WebAPI
                 {
                     try
                     {
-                        using (var client = new HttpClient())
+                        using (var client = new HttpClient() { BaseAddress = new Uri(config["AuthenticationServerUrl"].AddTrailingSlash()) })
                         {
                             using (var formContent = new FormUrlEncodedContent(new[] {
                                 new KeyValuePair<string, string>("grant_type", "client_credentials"),
@@ -87,7 +100,7 @@ namespace SAEON.Observations.WebAPI
                             {
                                 //SAEONLogs.Information("scope: {scope} client_id: {client_id} client_secret: {client_secret}", ODPAuthenticationDefaults.WebAPIClientId, ODPAuthenticationDefaults.QuerySiteClientId), config["QuerySiteClientSecret"]);
                                 SAEONLogs.Verbose("Requesting access token");
-                                var response = await client.PostAsync(config["AuthenticationServerUrl"] + "/oauth2/token", formContent);
+                                var response = await client.PostAsync("oauth2/token", formContent);
                                 if (!response.IsSuccessStatusCode)
                                 {
                                     SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);

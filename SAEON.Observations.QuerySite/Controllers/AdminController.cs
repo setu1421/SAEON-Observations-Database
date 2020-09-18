@@ -13,7 +13,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             return View();
         }
 
-        public async Task<IActionResult> CreateDynamicDOIs()
+        public async Task<IActionResult> CreateDOIs()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -22,7 +22,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     using (var client = GetWebAPIClient())
                     //using (var client = await GetWebAPIClientWithAccessTokenAsync())
                     {
-                        var response = await client.PostAsync(Config["WebAPIUrl"] + "/Internal/Admin/CreateDynamicDOIs", null);
+                        var response = await client.PostAsync("/Internal/Admin/CreateDOIs", null);
                         response.EnsureSuccessStatusCode();
                         ViewData["Results"] = (await response.Content.ReadAsStringAsync()).Replace(Environment.NewLine, "<br/>");
                     }
@@ -35,5 +35,52 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+
+        public async Task<IActionResult> CreateMetadata()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    using (var client = GetWebAPIClient())
+                    //using (var client = await GetWebAPIClientWithAccessTokenAsync())
+                    {
+                        var response = await client.PostAsync("/Internal/Admin/CreateMetadata", null);
+                        response.EnsureSuccessStatusCode();
+                        ViewData["Results"] = (await response.Content.ReadAsStringAsync()).Replace(Environment.NewLine, "<br/>");
+                    }
+                    return View();
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public async Task<IActionResult> CreateODPMetadata()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    using (var client = GetWebAPIClient())
+                    //using (var client = await GetWebAPIClientWithAccessTokenAsync())
+                    {
+                        var response = await client.PostAsync("/Internal/Admin/CreateODPMetadata", null);
+                        response.EnsureSuccessStatusCode();
+                        ViewData["Results"] = (await response.Content.ReadAsStringAsync()).Replace(Environment.NewLine, "<br/>");
+                    }
+                    return View();
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
     }
 }

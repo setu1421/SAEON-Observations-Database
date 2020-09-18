@@ -126,7 +126,7 @@ ALTER TABLE [dbo].[DigitalObjectIdentifiers] ALTER COLUMN [Name] VARCHAR (500) N
 
 GO
 ALTER TABLE [dbo].[DigitalObjectIdentifiers]
-    ADD [AlternateID]            UNIQUEIDENTIFIER DEFAULT NewId() NULL,
+    ADD [AlternateID]            UNIQUEIDENTIFIER CONSTRAINT [DF_DigitalObjectIdentifiers_AlternateID] DEFAULT NewId() NULL,
         [ParentID]               INT              NULL,
         [DOIType]                TINYINT          NOT NULL,
         [DOI]                    AS               '10.15493/obsdb.' + CONVERT (VARCHAR (20), CONVERT (VARBINARY (1), DOIType), 2) + '.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
@@ -140,7 +140,8 @@ ALTER TABLE [dbo].[DigitalObjectIdentifiers]
         [QueryUrl]               VARCHAR (250)    NULL,
         [ODPMetadataID]          UNIQUEIDENTIFIER NULL,
         [ODPMetadataNeedsUpdate] BIT              NULL,
-        [ODPMetadataIsValid]     BIT              NULL;
+        [ODPMetadataIsValid]     BIT              NULL,
+        [ODPMetadataErrors]      VARCHAR (MAX)    NULL;
 
 
 GO

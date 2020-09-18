@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[DigitalObjectIdentifiers]
 (
     [ID] Int Identity(1,1) not null,
-    [AlternateID] UniqueIdentifier default NewId(),
+    [AlternateID] UniqueIdentifier Constraint DF_DigitalObjectIdentifiers_AlternateID default NewId(),
     [ParentID] int null,
     [DOIType] tinyint not null,
     --[DOI] VarChar(100) not null,
@@ -20,6 +20,7 @@
 	[ODPMetadataID] UniqueIdentifier null,
     [ODPMetadataNeedsUpdate] Bit null,
     [ODPMetadataIsValid] Bit null,
+    [ODPMetadataErrors] VarChar(Max) null,
     [AddedAt] DateTime null Constraint [DF_DigitalObjectIdentifiers_AddedAt] DEFAULT (getdate()),
     [AddedBy] VarChar(128) not Null,
     [UpdatedAt] DateTime null Constraint [DF_DigitalObjectIdentifiers_UpdatedAt] DEFAULT (getdate()), 

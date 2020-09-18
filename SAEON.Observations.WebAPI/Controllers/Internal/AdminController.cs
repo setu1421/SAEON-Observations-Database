@@ -8,15 +8,31 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     //[Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
     public class AdminController : BaseController
     {
-        //[HttpPost("CreateDynamicDOIs")]
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateDynamicDOIs()
+        public async Task<IActionResult> CreateDOIs()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
                     return Content(await DOIHelper.CreateDOIs(DbContext, HttpContext));
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateMetadata()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    return Content(await MetadataHelper.CreateMetadata(DbContext, HttpContext));
                 }
                 catch (Exception ex)
                 {
