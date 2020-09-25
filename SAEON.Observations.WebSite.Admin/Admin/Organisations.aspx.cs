@@ -1,15 +1,17 @@
 ﻿using Ext.Net;
 using SAEON.Observations.Data;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+using System.Configuration;
 
 public partial class Admin_Organisations : System.Web.UI.Page
 {
     #region Organisations
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true" && Request.IsLocal;
+        btnValidate.Hidden = !showValidate;
+    }
+
     protected void OrganisationStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         OrganisationsGrid.GetStore().DataSource = OrganisationRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
@@ -23,7 +25,6 @@ public partial class Admin_Organisations : System.Web.UI.Page
         e.Success = true;
         tfCode.HasValue();
         tfName.HasValue();
-        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {

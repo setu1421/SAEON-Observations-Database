@@ -461,7 +461,7 @@
                             <ext:TextField ID="tfCode" AllowBlank="false" DataIndex="Code" IsRemoteValidation="true"
                                 MaxLength="50" runat="server" FieldLabel="Code" BlankText="Code is a required"
                                 MsgTarget="Side" AnchorHorizontal="96%" ClientIDMode="Static">
-                                <RemoteValidation OnValidation="ValidateField" />
+                                <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                             </ext:TextField>
                         </Items>
                     </ext:Container>
@@ -470,16 +470,15 @@
                             <ext:TextField ID="tfName" AllowBlank="false" DataIndex="Name" IsRemoteValidation="true"
                                 MaxLength="150" runat="server" FieldLabel="Name" AnchorHorizontal="96%" MsgTarget="Side"
                                 BlankText="Name is a required" ClientIDMode="Static">
-                                <RemoteValidation OnValidation="ValidateField" />
+                                <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                             </ext:TextField>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Panel4" runat="server" Layout="Form">
                         <Items>
-                            <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" IsRemoteValidation="true"
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" 
                                 AllowBlank="false" BlankText="Description is required" MsgTarget="Side" FieldLabel="Description"
                                 AnchorHorizontal="96%" ClientIDMode="Static">
-                                <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
                         </Items>
                     </ext:Container>
@@ -559,6 +558,11 @@
                     </ext:Container>
                 </Items>
                 <Buttons>
+                     <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
+                        <Listeners>
+                            <Click Handler="GetInvalidFields(#{DetailsFormPanel});" />
+                        </Listeners>
+                    </ext:Button>
                     <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true" ClientIDMode="Static">
                         <DirectEvents>
                             <Click OnEvent="Save" Method="POST">

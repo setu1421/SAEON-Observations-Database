@@ -2,6 +2,7 @@
 using SAEON.Logs;
 using SAEON.Observations.Data;
 using System;
+using System.Configuration;
 
 /// <summary>
 /// Summary description for Offering
@@ -9,6 +10,12 @@ using System;
 public partial class _Offerings : System.Web.UI.Page
 {
     #region Offering
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true" && Request.IsLocal;
+        btnValidate.Hidden = !showValidate;
+    }
+
     protected void OfferingStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         this.OfferingGrid.GetStore().DataSource = OfferingRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
@@ -22,7 +29,6 @@ public partial class _Offerings : System.Web.UI.Page
         e.Success = true;
         tfCode.HasValue();
         tfName.HasValue();
-        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {

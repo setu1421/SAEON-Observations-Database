@@ -3,11 +3,14 @@ using SAEON.Logs;
 using SAEON.Observations.Data;
 using SubSonic;
 using System;
+using System.Configuration;
 
 public partial class Admin_Programmes : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true" && Request.IsLocal;
+        btnValidate.Hidden = !showValidate;
         if (!X.IsAjaxRequest)
         {
             ProjectStore.DataSource = new ProjectCollection().OrderByAsc(Project.Columns.Name).Load();
@@ -30,7 +33,6 @@ public partial class Admin_Programmes : System.Web.UI.Page
         e.Success = true;
         tfCode.HasValue();
         tfName.HasValue();
-        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {

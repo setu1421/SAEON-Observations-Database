@@ -40,13 +40,13 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
+        //SAEONLogs.Information("ValidateField: {ID}", e.ID);
         DataSchemaCollection col = new DataSchemaCollection();
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
         tfCode.HasValue();
         tfName.HasValue();
-        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {

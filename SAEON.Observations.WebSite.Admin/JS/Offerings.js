@@ -5,11 +5,10 @@
 
     tfCode.rvConfig.remoteValidated = false;
     tfCode.rvConfig.remoteValid = false;
+    tfCode.markAsValid();
 
     tfName.rvConfig.remoteValidated = false;
     tfName.rvConfig.remoteValid = false;
-
-    tfCode.markAsValid();
     tfName.markAsValid();
 
     DetailWindow.show();
@@ -20,9 +19,11 @@ function New() {
     DetailsFormPanel.getForm().reset();
     tfCode.rvConfig.remoteValidated = false;
     tfCode.rvConfig.remoteValid = false;
+    tfCode.markAsValid();
 
     tfName.rvConfig.remoteValidated = false;
     tfName.rvConfig.remoteValid = false;
+    tfName.markAsValid();
 
     DetailWindow.show();
 }

@@ -451,7 +451,7 @@
                             <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50"
                                 runat="server" FieldLabel="Code" AnchorHorizontal="96%" ClientIDMode="Static"
                                 AllowBlank="false" BlankText="Code is a required" MsgTarget="Side">
-                                <RemoteValidation OnValidation="ValidateField">
+                                <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur">
                                     <ExtraParams>
                                         <ext:Parameter Name="id" Value="1" Mode="Raw" />
                                     </ExtraParams>
@@ -464,16 +464,15 @@
                             <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true"
                                 runat="server" FieldLabel="Name" AnchorHorizontal="96%" ClientIDMode="Static"
                                 AllowBlank="false" BlankText="Name is a required" MsgTarget="Side">
-                                <RemoteValidation OnValidation="ValidateField" />
+                                <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
                     <ext:Panel ID="Panel16" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
-                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="true"
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server"
                                 FieldLabel="Description" AnchorHorizontal="96%" ClientIDMode="Static"
                                 AllowBlank="false" BlankText="Description is a required" MsgTarget="Side">
-                                <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
                         </Items>
                     </ext:Panel>
@@ -537,6 +536,11 @@
                     </ext:Container>
                 </Items>
                 <Buttons>
+                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
+                        <Listeners>
+                            <Click Handler="GetInvalidFields(#{DetailsFormPanel});" />
+                        </Listeners>
+                    </ext:Button>
                     <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true" ClientIDMode="Static">
                         <DirectEvents>
                             <Click OnEvent="Save" Method="POST">

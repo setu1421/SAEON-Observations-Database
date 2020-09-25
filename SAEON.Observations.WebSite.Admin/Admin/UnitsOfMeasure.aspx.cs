@@ -2,11 +2,18 @@
 using SAEON.Logs;
 using SAEON.Observations.Data;
 using System;
+using System.Configuration;
 
 public partial class _UnitsOfMeasure : System.Web.UI.Page
 {
 
     #region UnitOfMeasure
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true" && Request.IsLocal;
+        btnValidate.Hidden = !showValidate;
+    }
+
     protected void UnitOfMeasureStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         this.UnitOfMeasureGrid.GetStore().DataSource = UnitOfMeasureRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
@@ -20,7 +27,6 @@ public partial class _UnitsOfMeasure : System.Web.UI.Page
         e.Success = true;
         tfCode.HasValue();
         tfUnit.HasValue();
-        tfSymbol.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {

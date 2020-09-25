@@ -305,7 +305,7 @@
                             <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50" AnchorHorizontal="96%"
                                 runat="server" FieldLabel="Code" AllowBlank="false" BlankText="Code is a required"
                                 MsgTarget="Side" ClientIDMode="Static">
-                                <RemoteValidation OnValidation="ValidateField" />
+                                <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
@@ -314,15 +314,14 @@
                             <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true" AnchorHorizontal="96%"
                                 AllowBlank="false" BlankText="Name is a required" MsgTarget="Side" runat="server"
                                 FieldLabel="Name" ClientIDMode="Static">
-                                <RemoteValidation OnValidation="ValidateField" />
+                                <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
                     <ext:Container ID="Container4" runat="server" Layout="Form">
                         <Items>
                             <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" AllowBlank="false" AnchorHorizontal="96%" ClientIDMode="Static"
-                                BlankText="Description is required" MsgTarget="Side" FieldLabel="Description" IsRemoteValidation="true">
-                                <RemoteValidation OnValidation="ValidateField" />
+                                BlankText="Description is required" MsgTarget="Side" FieldLabel="Description">
                             </ext:TextArea>
                         </Items>
                     </ext:Container>

@@ -3,6 +3,7 @@ using SAEON.Logs;
 using SAEON.Observations.Data;
 using SubSonic;
 using System;
+using System.Configuration;
 using System.Linq;
 
 /// <summary>
@@ -13,7 +14,8 @@ public partial class _Phenomena : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true" && Request.IsLocal;
+        btnValidate.Hidden = !showValidate;
     }
 
     protected void PhenomenaGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
@@ -29,7 +31,6 @@ public partial class _Phenomena : System.Web.UI.Page
         e.Success = true;
         tfCode.HasValue();
         tfName.HasValue();
-        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {

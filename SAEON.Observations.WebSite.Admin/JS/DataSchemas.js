@@ -36,10 +36,6 @@ function New() {
     tfName.rvConfig.remoteValid = false;
     tfName.markAsValid();
 
-    tfDescription.rvConfig.remoteValidated = false;
-    tfDescription.rvConfig.remoteValid = false;
-    tfDescription.markAsValid();
-
     DetailWindow.show();
 }
 
@@ -94,26 +90,4 @@ function OnDataSourceCommand(e, record) {
         DirectCall.ConfirmDeleteDataSource(record.get('Id'), { eventMask: { showMask: true } });
     }
 }
-
-function GetInvalidFields(formPanel) {
-    var s = 'Invalid: ';
-    var form = formPanel.getForm();
-    var fields = form.items;
-    var i = 0;
-    for (i = 0; i < fields.length; i += 1) {
-        var field = fields.items[i];
-        var input = form.findField(field.id);
-        if (input) {
-            input.validate();
-            if (!input.isValid()) {
-                s = s + " " + input.id;
-            }
-        }
-    }
-    if (s === 'Invalid: ') {
-        s = 'Valid';
-    }
-    alert(s);
-}
-
 

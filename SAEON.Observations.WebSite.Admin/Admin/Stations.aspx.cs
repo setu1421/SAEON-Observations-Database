@@ -2,12 +2,15 @@
 using SAEON.Logs;
 using SAEON.Observations.Data;
 using System;
+using System.Configuration;
 using System.Linq;
 
 public partial class Admin_Stations : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true" && Request.IsLocal;
+        btnValidate.Hidden = !showValidate;
         if (!X.IsAjaxRequest)
         {
             SiteStore.DataSource = new SiteCollection().OrderByAsc(SAEON.Observations.Data.Site.Columns.Name).Load();
@@ -37,7 +40,7 @@ public partial class Admin_Stations : System.Web.UI.Page
         e.Success = true;
         tfCode.HasValue();
         tfName.HasValue();
-        tfDescription.HasValue();
+
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
             if (e.ID == "tfCode")
