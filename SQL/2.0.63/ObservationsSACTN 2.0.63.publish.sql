@@ -149,21 +149,21 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
+PRINT N'Creating [dbo].[UX_DigitalObjectIdentifiers_DOIType_Code]...';
+
+
+GO
+ALTER TABLE [dbo].[DigitalObjectIdentifiers]
+    ADD CONSTRAINT [UX_DigitalObjectIdentifiers_DOIType_Code] UNIQUE NONCLUSTERED ([DOIType] ASC, [Code] ASC);
+
+
+GO
 PRINT N'Creating [dbo].[UX_DigitalObjectIdentifiers_DOIType_Name]...';
 
 
 GO
 ALTER TABLE [dbo].[DigitalObjectIdentifiers]
     ADD CONSTRAINT [UX_DigitalObjectIdentifiers_DOIType_Name] UNIQUE NONCLUSTERED ([DOIType] ASC, [Name] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_Name]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_DigitalObjectIdentifiers_Name]
-    ON [dbo].[DigitalObjectIdentifiers]([Name] ASC);
 
 
 GO
@@ -356,6 +356,15 @@ PRINT N'Creating [dbo].[Station].[IX_Station_DigitalObjectIdentifierID]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Station_DigitalObjectIdentifierID]
     ON [dbo].[Station]([DigitalObjectIdentifierID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[UX_Sensor_Name]...';
+
+
+GO
+ALTER TABLE [dbo].[Sensor]
+    ADD CONSTRAINT [UX_Sensor_Name] UNIQUE NONCLUSTERED ([Name] ASC);
 
 
 GO

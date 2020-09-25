@@ -428,16 +428,21 @@ namespace SAEON.Observations.WebAPI
 
         public List<MetadataRelatedIdentifier> RelatedIdentifiers { get; } = new List<MetadataRelatedIdentifier>();
 
+        public string GenerateTitle() => GenerateTitle(DOI.Name);
+        public string GenerateTitle(string name) => $"Observations in the SAEON Observations Database for {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {name}";
+        public string GenerateDescription() => GenerateDescription(DOI.Name);
+        public string GenerateDescription(string name) => $"The observations in the SAEON Observations Database for {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {name}";
+
         public void Generate(string title = "", string description = "")
         {
             if (DOI == null) throw new InvalidOperationException($"{nameof(DOI)} cannot be null");
             if (string.IsNullOrWhiteSpace(title))
             {
-                title = $"Observations from the {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {DOI.Name} in the SAEON Observations Database";
+                title = GenerateTitle();
             }
             if (string.IsNullOrWhiteSpace(description))
             {
-                description = $"The observations from the {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {DOI.Name} in the SAEON Observations Database";
+                description = GenerateDescription();
             }
             if (StartDate.HasValue && EndDate.HasValue)
             {
@@ -457,11 +462,11 @@ namespace SAEON.Observations.WebAPI
             {
                 if ((LatitudeNorth == LatitudeSouth) && (LongitudeWest == LongitudeEast))
                 {
-                    description += $" at {LatitudeNorth:f5} (N+/S-), {LongitudeWest:f5} (E-/W+)";
+                    description += $" at {LatitudeNorth:f5},{LongitudeWest:f5} (+N-S,-W+E)";
                 }
                 else
                 {
-                    description += $" in area {LatitudeNorth:f5},{LongitudeWest:f5} (N,W) {LatitudeSouth:f5},{LongitudeEast:f5} (S,E) (N+/S-,E-/W+)";
+                    description += $" in area {LatitudeNorth:f5},{LongitudeWest:f5} (N,W) {LatitudeSouth:f5},{LongitudeEast:f5} (S,E) (+N-S,-W+E)";
                 }
             }
             if (ElevationMinimum.HasValue && ElevationMaximum.HasValue)
@@ -498,22 +503,25 @@ namespace SAEON.Observations.WebAPI
             }
             if (DOI.Parent != null)
             {
-                sbText.AppendLine($"This collection is part of the {(DOI.Parent.DOIType == DOIType.ObservationsDb ? "" : DOI.Parent.DOIType.Humanize(LetterCasing.LowerCase))} {DOI.Parent.Name} {DOI.Parent.DOI}");
+                sbText.AppendLine($"This collection is part of the {(DOI.Parent.DOIType == DOIType.ObservationsDb ? "" : DOI.Parent.DOIType.Humanize(LetterCasing.LowerCase))} {DOI.Parent.Name} doi:{DOI.Parent.DOI}");
                 sbHtml.AppendHtmlP($"This collection is part of the {(DOI.Parent.DOIType == DOIType.ObservationsDb ? "" : DOI.Parent.DOIType.Humanize(LetterCasing.LowerCase))} {DOI.Parent.Name} <a href='{DOI.Parent.DOIUrl}'>{DOI.Parent.DOI}</a>");
                 RelatedIdentifiers.Add(new MetadataRelatedIdentifier { Name = "IsPartOf", Identifier = DOI.Parent.DOI, Type = "DOI" });
             }
-            var children = DOI.Children.OrderBy(i => i.Name).ToList();
-            if (children.Count > 0)
+            // Dynamic children
+            var dynamicChildren = DOI.Children.Where(i => MetadataHelper.DynamicDOITypes.Contains(i.DOIType)).OrderBy(i => i.Name).ToList();
+            if (dynamicChildren.Count > 0)
             {
-                sbText.AppendLine($"This collection includes observations from the following {((DOI.DOIType + 1).Humanize(LetterCasing.LowerCase).ToQuantity(children.Count, ShowQuantityAs.None))}: " +
-                    string.Join(", ", children.Select(i => i.Name)));
-                sbHtml.AppendHtmlP($"This collection includes observations from the following {((DOI.DOIType + 1).Humanize(LetterCasing.LowerCase).ToQuantity(children.Count, ShowQuantityAs.None))}:");
-                sbHtml.AppendHtmlUL(children.Select(i => $"{i.Name} <a href='{i.DOIUrl}'>{i.DOI}</a>"));
-                foreach (var child in children)
+                sbText.AppendLine($"This collection includes observations from the following {((DOI.DOIType + 1).Humanize(LetterCasing.LowerCase).ToQuantity(dynamicChildren.Count, ShowQuantityAs.None))}: " +
+                    string.Join(", ", dynamicChildren.Select(i => $"{i.Name} doi:{i.DOI}")));
+                sbHtml.AppendHtmlP($"This collection includes observations from the following {((DOI.DOIType + 1).Humanize(LetterCasing.LowerCase).ToQuantity(dynamicChildren.Count, ShowQuantityAs.None))}:");
+                sbHtml.AppendHtmlUL(dynamicChildren.Select(i => $"{i.Name} <a href='{i.DOIUrl}'>{i.DOI}</a>"));
+                foreach (var child in dynamicChildren)
                 {
                     RelatedIdentifiers.Add(new MetadataRelatedIdentifier { Name = "HasPart", Identifier = child.DOI, Type = "DOI" });
                 }
             }
+            // Periodic children
+            // Ad-Hoc children
             sbHtml.AppendHtmlP($"{"Publisher:".HtmlB()} {Publisher} {PublicationYear}");
             if (StartDate.HasValue || EndDate.HasValue)
             {
@@ -546,7 +554,7 @@ namespace SAEON.Observations.WebAPI
                 sbHtml.AppendHtmlP($"{"Query URL:".HtmlB()} <a href='{DOI.QueryUrl}'>{DOI.QueryUrl}</a>".Trim());
             }
             sbHtml.AppendHtmlP($"{"Citation".HtmlB()} {Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). <a href='{DOI.DOIUrl}'>{DOI.DOIUrl}</a>");
-            Description = sbText.ToString().Replace(Environment.NewLine, " "); //.Replace(Environment.NewLine,"<br>");
+            Description = sbText.ToString().Replace(Environment.NewLine, " ").Replace("  ", " ").Trim(); //.Replace(Environment.NewLine,"<br>");
             DescriptionHtml = sbHtml.ToString();
         }
 

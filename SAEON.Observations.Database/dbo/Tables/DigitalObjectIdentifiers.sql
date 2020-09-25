@@ -27,6 +27,7 @@
     [UpdatedBy] VarChar(128) not Null,
     [RowVersion] RowVersion not null,
 	Constraint PK_DigitalObjectIdentifiers Primary Key Clustered (ID),
+    Constraint UX_DigitalObjectIdentifiers_DOIType_Code UNIQUE (DOIType, Code),
     Constraint UX_DigitalObjectIdentifiers_DOIType_Name UNIQUE (DOIType, Name),
     Constraint FK_DigitalObjectIdentifiers_ParentID Foreign Key (ParentID) References DigitalObjectIdentifiers(ID)
 );
@@ -34,8 +35,6 @@ GO
 CREATE INDEX [IX_DigitalObjectIdentifiers_ParentID] ON [dbo].[DigitalObjectIdentifiers] ([ParentID])
 GO
 CREATE INDEX [IX_DigitalObjectIdentifiers_DOIType] ON [dbo].[DigitalObjectIdentifiers] ([DOIType])
-GO
-CREATE INDEX [IX_DigitalObjectIdentifiers_Name] ON [dbo].[DigitalObjectIdentifiers] ([Name])
 GO
 CREATE TRIGGER [dbo].[TR_DigitalObjectIdentifiers_Insert] ON [dbo].[DigitalObjectIdentifiers]
 FOR INSERT

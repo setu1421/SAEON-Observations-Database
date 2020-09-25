@@ -32,7 +32,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await MetadataHelper.CreateMetadata(DbContext, HttpContext));
+                    return Content(await MetadataHelper.CreateMetadata(DbContext));
                 }
                 catch (Exception ex)
                 {

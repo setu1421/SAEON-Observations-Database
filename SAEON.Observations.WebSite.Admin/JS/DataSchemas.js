@@ -36,6 +36,10 @@ function New() {
     tfName.rvConfig.remoteValid = false;
     tfName.markAsValid();
 
+    tfDescription.rvConfig.remoteValidated = false;
+    tfDescription.rvConfig.remoteValid = false;
+    tfDescription.markAsValid();
+
     DetailWindow.show();
 }
 

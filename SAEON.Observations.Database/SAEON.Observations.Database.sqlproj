@@ -537,7 +537,6 @@
     <None Include="ObservationDB_Imp.publish.xml" />
     <None Include="ObservationDB.publish.xml" />
     <None Include="Observations.publish.xml" />
-    <None Include="ObservationsTest.publish.xml" />
     <None Include="ObservationsSACTN.publish.xml" />
     <None Include="ObservationsFynbos.publish.xml" />
     <None Include="ObservationsElwandle.publish.xml" />

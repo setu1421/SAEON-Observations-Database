@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using System;
@@ -11,7 +10,9 @@ namespace SAEON.Observations.WebAPI
 {
     public static class MetadataHelper
     {
-        public static async Task<string> CreateMetadata(ObservationsDbContext dbContext, HttpContext httpContext)
+        public static DOIType[] DynamicDOITypes = { DOIType.ObservationsDb, DOIType.Organisation, DOIType.Programme, DOIType.Project, DOIType.Site, DOIType.Station, DOIType.Dataset };
+
+        public static async Task<string> CreateMetadata(ObservationsDbContext dbContext)
         {
             var sb = new StringBuilder();
             await GenerateMetadata();
@@ -98,14 +99,13 @@ namespace SAEON.Observations.WebAPI
                                         .ToListAsync())
                                     {
                                         var splits = doiDataset.Code.Split('~', StringSplitOptions.RemoveEmptyEntries);
-                                        var phenomenon = await dbContext.Phenomena.SingleAsync(i => i.Code == splits[1]);
                                         var dataset = await dbContext.Datasets.Where(i =>
                                             i.StationCode == splits[0] &&
                                             i.PhenomenonCode == splits[1] &&
                                             i.OfferingCode == splits[2] &&
                                             i.UnitCode == splits[3])
                                             .SingleAsync();
-                                        var metaDataset = MetadataForDOI(doiDataset, metaStation, phenomenon.Description, phenomenon.Url);
+                                        var metaDataset = MetadataForDOI(doiDataset, metaStation);
                                         metaDataset.StartDate = dataset.StartDate;
                                         metaDataset.EndDate = dataset.EndDate;
                                         metaDataset.LatitudeNorth = dataset.LatitudeNorth;
@@ -117,13 +117,47 @@ namespace SAEON.Observations.WebAPI
                                         metaDataset.Subjects.Add(new MetadataSubject { Name = dataset.StationName });
                                         metaDataset.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}" });
                                         metaDataset.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName} {dataset.OfferingName} {dataset.UnitName}" });
-                                        metaDataset.Generate($"Station {dataset.StationName} observations of {dataset.PhenomenonName}, {dataset.OfferingName} in {dataset.UnitName}",
-                                            $"The observations at station {dataset.StationName} of {dataset.PhenomenonName}, {dataset.OfferingName} in {dataset.UnitName}");
+                                        foreach (var doiPeriodic in await dbContext
+                                             .DigitalObjectIdentifiers
+                                             .Include(i => i.Parent)
+                                             .Include(i => i.Children)
+                                             .Where(i => i.ParentId == doiDataset.Id)
+                                             .ToListAsync())
+                                        {
+                                            var metaPeriodic = MetadataForDOI(doiPeriodic, metaDataset);
+                                            splits = doiPeriodic.Code.Split('~', StringSplitOptions.RemoveEmptyEntries);
+                                            var importBatchSummary = await dbContext.ImportBatchSummary.Include(i => i.ImportBatch).Where(i => i.Id == new Guid(splits[4])).SingleAsync();
+                                            var instrument = await dbContext.Instruments.SingleAsync(i => i.Id == importBatchSummary.InstrumentId);
+                                            var sensor = await dbContext.Sensors.SingleAsync(i => i.Id == importBatchSummary.SensorId);
+                                            metaPeriodic.StartDate = importBatchSummary.StartDate;
+                                            metaPeriodic.EndDate = importBatchSummary.EndDate;
+                                            metaPeriodic.LatitudeNorth = importBatchSummary.LatitudeNorth;
+                                            metaPeriodic.LatitudeSouth = importBatchSummary.LatitudeSouth;
+                                            metaPeriodic.LongitudeWest = importBatchSummary.LongitudeWest;
+                                            metaPeriodic.LongitudeEast = importBatchSummary.LongitudeEast;
+                                            metaPeriodic.ElevationMinimum = importBatchSummary.ElevationMinimum;
+                                            metaPeriodic.ElevationMaximum = importBatchSummary.ElevationMaximum;
+                                            metaPeriodic.Subjects.Add(new MetadataSubject { Name = dataset.StationName });
+                                            metaPeriodic.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}" });
+                                            metaPeriodic.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName} {dataset.OfferingName} {dataset.UnitName}" });
+                                            var periodicName = metaPeriodic.GenerateTitle($"{dataset.StationName}, instrument {instrument.Name}, sensor {sensor.Name} " +
+                                                    $"of {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName} for import batch {importBatchSummary.ImportBatch.Code}");
+                                            metaPeriodic.Generate(periodicName, periodicName);
+                                            doiPeriodic.MetadataJson = metaPeriodic.ToJson();
+                                            oldSha256 = doiPeriodic.MetadataJsonSha256;
+                                            doiPeriodic.MetadataJsonSha256 = doiPeriodic.MetadataJson.Sha256();
+                                            doiPeriodic.ODPMetadataNeedsUpdate = oldSha256 != doiPeriodic.MetadataJsonSha256;
+                                            doiPeriodic.MetadataHtml = metaPeriodic.ToHtml();
+                                            await dbContext.SaveChangesAsync();
+                                        }
+                                        var datasetName = metaDataset.GenerateTitle($"{dataset.StationName} of {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName}");
+                                        metaDataset.Generate(datasetName, datasetName);
                                         doiDataset.MetadataJson = metaDataset.ToJson();
                                         oldSha256 = doiDataset.MetadataJsonSha256;
                                         doiDataset.MetadataJsonSha256 = doiDataset.MetadataJson.Sha256();
                                         doiDataset.ODPMetadataNeedsUpdate = oldSha256 != doiDataset.MetadataJsonSha256;
                                         doiDataset.MetadataHtml = metaDataset.ToHtml();
+                                        await dbContext.SaveChangesAsync();
                                     }
                                     metaStation.Generate();
                                     doiStation.MetadataJson = metaStation.ToJson();

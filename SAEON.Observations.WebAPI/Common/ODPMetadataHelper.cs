@@ -20,12 +20,12 @@ namespace SAEON.Observations.WebAPI
         {
             async Task GenerateODPMetadata(HttpClient client)
             {
-                async Task GenerateODPMetadataForDOI(DigitalObjectIdentifier doi)
+                async Task GenerateODPMetadataForDOI(DigitalObjectIdentifier doi, string collection)
                 {
                     if (!doi.ODPMetadataNeedsUpdate ?? true) return;
-                    AddLine($"{doi.DOIType} {doi.Name}");
+                    AddLine($"{doi.DOIType} {doi.Code}, {doi.Name}");
                     var jObj = new JObject(
-                        new JProperty("collection_key", "observations-database-dynamic-collection"),
+                        new JProperty("collection_key", collection),
                         new JProperty("schema_key", "saeon-odp-4-2"),
                         new JProperty("metadata", JObject.Parse(doi.MetadataJson)),
                         new JProperty("terms_conditions_accepted", true),
@@ -53,17 +53,64 @@ namespace SAEON.Observations.WebAPI
                     await dbContext.SaveChangesAsync();
                 }
 
+                async Task GenerateODPMetadataForDynamicDOI(DigitalObjectIdentifier doi)
+                {
+                    if (!MetadataHelper.DynamicDOITypes.Contains(doi.DOIType))
+                        throw new InvalidOperationException("Invalid DOI type");
+                    await GenerateODPMetadataForDOI(doi, "observations-database-dynamic-collection");
+                }
+
+                //async Task GenerateODPMetadataForPeriodicDOI(DigitalObjectIdentifier doi)
+                //{
+                //    if (doi.DOIType != DOIType.Periodic)
+                //        throw new InvalidOperationException("Invalid DOI type");
+                //    await GenerateODPMetadataForDOI(doi, "observations-database-periodic-collection");
+                //}
+
                 AddLine("Generating metadata");
-                var doiObservations = await dbContext.DigitalObjectIdentifiers.Include(i => i.Children).SingleAsync(i => i.DOIType == DOIType.ObservationsDb);
-                await GenerateODPMetadataForDOI(doiObservations);
+                var doiObservations = await dbContext.DigitalObjectIdentifiers.SingleAsync(i => i.DOIType == DOIType.ObservationsDb);
+                await GenerateODPMetadataForDynamicDOI(doiObservations);
                 foreach (var doiOrganisation in await dbContext
                    .DigitalObjectIdentifiers
-                   .Include(i => i.Parent)
-                   .Include(i => i.Children)
                    .Where(i => i.DOIType == DOIType.Organisation && i.Code == "SAEON")
                    .ToListAsync())
                 {
-                    await GenerateODPMetadataForDOI(doiOrganisation);
+                    await GenerateODPMetadataForDynamicDOI(doiOrganisation);
+                    foreach (var doiProgramme in await dbContext
+                        .DigitalObjectIdentifiers
+                        .Where(i => i.ParentId == doiOrganisation.Id)
+                        .ToListAsync())
+                    {
+                        await GenerateODPMetadataForDynamicDOI(doiProgramme);
+                        foreach (var doiProject in await dbContext
+                            .DigitalObjectIdentifiers
+                            .Where(i => i.ParentId == doiProgramme.Id)
+                            .ToListAsync())
+                        {
+                            await GenerateODPMetadataForDynamicDOI(doiProject);
+                            foreach (var doiSite in await dbContext
+                                .DigitalObjectIdentifiers
+                                .Where(i => i.ParentId == doiProject.Id)
+                                .ToListAsync())
+                            {
+                                await GenerateODPMetadataForDynamicDOI(doiSite);
+                                foreach (var doiStation in await dbContext
+                                    .DigitalObjectIdentifiers
+                                    .Where(i => i.ParentId == doiSite.Id)
+                                    .ToListAsync())
+                                {
+                                    await GenerateODPMetadataForDynamicDOI(doiStation);
+                                    foreach (var doiDataset in await dbContext
+                                        .DigitalObjectIdentifiers
+                                        .Where(i => i.ParentId == doiStation.Id)
+                                        .ToListAsync())
+                                    {
+                                        await GenerateODPMetadataForDynamicDOI(doiDataset);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
