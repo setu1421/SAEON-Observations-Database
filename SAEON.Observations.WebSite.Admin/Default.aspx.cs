@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using Ext.Net;
-using System.Web.Security;
+﻿using Ext.Net;
+using SAEON.Logs;
 using SAEON.Observations.Data;
 using SubSonic;
+using System;
+using System.Collections.Generic;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        SAEONLogs.Information("User: {User} Authenticated: {Authenticated}", Page.User.Identity.Name, Page.User.Identity.IsAuthenticated);
         if (!Page.User.Identity.IsAuthenticated)
             FormsAuthentication.RedirectToLoginPage();
 
@@ -26,7 +26,7 @@ public partial class _Default : System.Web.UI.Page
     protected void Logout(object sender, DirectEventArgs e)
     {
         FormsAuthentication.SignOut();
-        Response.Redirect("~/Login.aspx");
+        Response.Redirect("~/");
     }
 
 
@@ -42,7 +42,7 @@ public partial class _Default : System.Web.UI.Page
             AspnetRole aspRole = new AspnetRole("RoleName", item.ToString());
 
             SqlQuery q = new Select().From(RoleModule.Schema)
-                                     .InnerJoin(ModuleX.IdColumn,RoleModule.ModuleIDColumn)
+                                     .InnerJoin(ModuleX.IdColumn, RoleModule.ModuleIDColumn)
                                      .Where(RoleModule.Columns.Id).IsNotNull().And(RoleModule.Columns.RoleId).IsEqualTo(aspRole.RoleId)
                                      .OrderAsc(ModuleX.IOrderColumn.QualifiedName);
             RoleModuleCollection roleModuleCol = q.ExecuteAsCollection<RoleModuleCollection>();

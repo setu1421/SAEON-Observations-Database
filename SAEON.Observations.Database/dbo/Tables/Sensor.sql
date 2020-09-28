@@ -20,7 +20,10 @@
     CONSTRAINT [FK_Sensor_DataSchema] FOREIGN KEY ([DataSchemaID]) REFERENCES [dbo].[DataSchema] ([ID]),
     CONSTRAINT [FK_Sensor_Phenomenon] FOREIGN KEY ([PhenomenonID]) REFERENCES [dbo].[Phenomenon] ([ID]),
     CONSTRAINT [UX_Sensor_Code] UNIQUE ([Code]),
+    CONSTRAINT [UX_Sensor_Name] UNIQUE ([Name])
 );
+GO
+CREATE INDEX [IX_Sensor_CodeName] ON [dbo].[Sensor] ([Code],[Name])
 GO
 CREATE INDEX [IX_Sensor_PhenomenonID] ON [dbo].[Sensor] ([PhenomenonID])
 GO

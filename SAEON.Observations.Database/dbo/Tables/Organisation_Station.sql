@@ -28,6 +28,8 @@ CREATE INDEX [IX_Organisation_Station_StartDate] ON [dbo].[Organisation_Station]
 GO
 CREATE INDEX [IX_Organisation_Station_EndDate] ON [dbo].[Organisation_Station] ([EndDate])
 GO
+CREATE INDEX [IX_Organisation_Station_StartDateEndDate] ON [dbo].[Organisation_Station] ([StartDate],[EndDate])
+GO
 CREATE INDEX [IX_Organisation_Station_UserId] ON [dbo].[Organisation_Station] ([UserId])
 GO
 CREATE TRIGGER [dbo].[TR_Organisation_Station_Insert] ON [dbo].[Organisation_Station]

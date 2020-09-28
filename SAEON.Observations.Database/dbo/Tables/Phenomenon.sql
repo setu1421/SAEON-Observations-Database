@@ -14,6 +14,8 @@
     CONSTRAINT [UX_Phenomenon_Name] UNIQUE ([Name])
 );
 GO
+CREATE INDEX [IX_Phenomenon_CodeName] ON [dbo].[Phenomenon] ([Code],[Name])
+GO
 CREATE INDEX [IX_Phenomenon_UserId] ON [dbo].[Phenomenon] ([UserId])
 GO
 CREATE TRIGGER [dbo].[TR_Phenomenon_Insert] ON [dbo].[Phenomenon]

@@ -35,7 +35,7 @@ public partial class Admin_Sites : System.Web.UI.Page
         e.Success = true;
         tfCode.HasValue();
         tfName.HasValue();
-        tfDescription.HasValue();
+
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
             if (e.ID == "tfCode")
@@ -65,7 +65,7 @@ public partial class Admin_Sites : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -103,7 +103,7 @@ public partial class Admin_Sites : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to save site");
             }
         }
@@ -169,7 +169,7 @@ public partial class Admin_Sites : System.Web.UI.Page
 
     protected void OrganisationLinkSave(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -211,7 +211,7 @@ public partial class Admin_Sites : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to link organisation");
             }
         }
@@ -229,7 +229,7 @@ public partial class Admin_Sites : System.Web.UI.Page
     [DirectMethod]
     public void DeleteOrganisationLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
@@ -239,7 +239,7 @@ public partial class Admin_Sites : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to delete organisation link");
             }
         }
@@ -293,7 +293,7 @@ public partial class Admin_Sites : System.Web.UI.Page
 
     protected void StationLinksSave(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             RowSelectionModel sm = AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
             RowSelectionModel siteRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
@@ -319,7 +319,7 @@ public partial class Admin_Sites : System.Web.UI.Page
                         }
                         catch (Exception ex)
                         {
-                            Logging.Exception(ex);
+                            SAEONLogs.Exception(ex);
                             MessageBoxes.Error(ex, "Error", "Unable to link station");
                         }
                 }

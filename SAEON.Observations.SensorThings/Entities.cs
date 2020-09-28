@@ -26,35 +26,35 @@ namespace SAEON.Observations.SensorThings
     public class TimeString
     {
         [Required, NotMapped]
-        private DateTime time { get; set; }
+        private DateTime Time { get; set; }
 
         public TimeString(DateTime time)
         {
-            this.time = time;
+            this.Time = time;
         }
 
         public TimeString(DateTime? time) : this(time ?? DateTime.Now) { }
 
         public override string ToString()
         {
-            return time.ToString("o");
+            return Time.ToString("o");
         }
     }
 
     public class TimeInterval
     {
-        public DateTime _start { get; set; }
-        public DateTime _end { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
 
         public TimeInterval(DateTime start, DateTime end)
         {
-            _start = start;
-            _end = end;
+            Start = start;
+            End = end;
         }
 
         public override string ToString()
         {
-            return $"{_start:o}/{_end:o}";
+            return $"{Start:o}/{End:o}";
         }
     }
 

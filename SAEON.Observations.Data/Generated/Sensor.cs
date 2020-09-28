@@ -497,46 +497,54 @@ namespace SAEON.Observations.Data
 		
 		#region ForeignKey Properties
 		
+        private SAEON.Observations.Data.AspnetUser _AspnetUser = null;
 		/// <summary>
 		/// Returns a AspnetUser ActiveRecord object related to this Sensor
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetUser AspnetUser
 		{
-			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }
+//			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }  
+			get { return _AspnetUser ?? (_AspnetUser = SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId)); }
 			set { SetColumnValue("UserId", value.UserId); }
 		}
 		
 		
+        private SAEON.Observations.Data.DataSchema _DataSchema = null;
 		/// <summary>
 		/// Returns a DataSchema ActiveRecord object related to this Sensor
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.DataSchema DataSchema
 		{
-			get { return SAEON.Observations.Data.DataSchema.FetchByID(this.DataSchemaID); }
+//			get { return SAEON.Observations.Data.DataSchema.FetchByID(this.DataSchemaID); }  
+			get { return _DataSchema ?? (_DataSchema = SAEON.Observations.Data.DataSchema.FetchByID(this.DataSchemaID)); }
 			set { SetColumnValue("DataSchemaID", value.Id); }
 		}
 		
 		
+        private SAEON.Observations.Data.DataSource _DataSource = null;
 		/// <summary>
 		/// Returns a DataSource ActiveRecord object related to this Sensor
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.DataSource DataSource
 		{
-			get { return SAEON.Observations.Data.DataSource.FetchByID(this.DataSourceID); }
+//			get { return SAEON.Observations.Data.DataSource.FetchByID(this.DataSourceID); }  
+			get { return _DataSource ?? (_DataSource = SAEON.Observations.Data.DataSource.FetchByID(this.DataSourceID)); }
 			set { SetColumnValue("DataSourceID", value.Id); }
 		}
 		
 		
+        private SAEON.Observations.Data.Phenomenon _Phenomenon = null;
 		/// <summary>
 		/// Returns a Phenomenon ActiveRecord object related to this Sensor
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Phenomenon Phenomenon
 		{
-			get { return SAEON.Observations.Data.Phenomenon.FetchByID(this.PhenomenonID); }
+//			get { return SAEON.Observations.Data.Phenomenon.FetchByID(this.PhenomenonID); }  
+			get { return _Phenomenon ?? (_Phenomenon = SAEON.Observations.Data.Phenomenon.FetchByID(this.PhenomenonID)); }
 			set { SetColumnValue("PhenomenonID", value.Id); }
 		}
 		

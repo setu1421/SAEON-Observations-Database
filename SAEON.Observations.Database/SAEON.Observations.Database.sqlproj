@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{ac68eb6a-31bd-407e-9b65-558e900aef61}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql140DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -501,7 +501,6 @@
     <Build Include="dbo\Tables\SchemaColumn.sql" />
     <Build Include="dbo\Tables\SchemaColumnType.sql" />
     <Build Include="dbo\Views\vSchemaColumn.sql" />
-    <Build Include="Scripts\AuthenticationFileGroup.sql" />
     <Build Include="Scripts\ObservationsFileGroup.sql" />
     <Build Include="Scripts\PrimaryFileGroup.sql" />
     <Build Include="dbo\Tables\UserQueries.sql" />
@@ -529,18 +528,18 @@
     <Build Include="dbo\Views\vSensorThingsAPIHistoricalLocations.sql" />
     <Build Include="dbo\Views\vSensorThingsAPIFeaturesOfInterest.sql" />
     <Build Include="dbo\Views\vSensorThingsAPIObservations.sql" />
-    <Build Include="dbo\Views\vStationDataStreams.sql" />
+    <Build Include="dbo\Views\vStationDatasets.sql" />
     <Build Include="dbo\Views\vStationObservations.sql" />
-    <Build Include="dbo\Views\vInventoryDataStreams.sql" />
+    <Build Include="dbo\Views\vInventoryDatasets.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />
     <None Include="ObservationDB_Imp.publish.xml" />
     <None Include="ObservationDB.publish.xml" />
     <None Include="Observations.publish.xml" />
-    <None Include="ObservationsTest.publish.xml" />
     <None Include="ObservationsSACTN.publish.xml" />
     <None Include="ObservationsFynbos.publish.xml" />
+    <None Include="ObservationsElwandle.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\120\SqlSchemas\master.dacpac">

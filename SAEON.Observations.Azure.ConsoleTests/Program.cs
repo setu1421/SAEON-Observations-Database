@@ -9,20 +9,20 @@ namespace SAEON.Observations.Azure.ConsoleTests
     {
         private static void Main(string[] args)
         {
-            Logging
+            SAEONLogs
                 .CreateConfiguration(@"Logs\SAEON.Observations.Azure.ConsoleTests {Date}.txt")
-                .Create();
+                .Initialize();
             try
             {
-                using (Logging.MethodCall(typeof(Program)))
+                using (SAEONLogs.MethodCall(typeof(Program)))
                 {
                     try
                     {
-                        Logging.Information("Initializing");
+                        SAEONLogs.Information("Initializing");
                         var azure = new ObservationsAzure();
                         azure.DeleteImportBatch(new Guid("aea07399-300f-442a-8a46-7cf8a878417f"));
                         var importBatchId = new Guid("426170df-73fa-4c25-81c0-ea00264d60c8");
-                        Logging.Information("Adding items");
+                        SAEONLogs.Information("Adding items");
                         var item = new ObservationItem
                         {
                             Id = "123",
@@ -35,29 +35,29 @@ namespace SAEON.Observations.Azure.ConsoleTests
                             RawValue = 1.2,
                             DataValue = 1.2
                         };
-                        Logging.Information("Add: {Cost}", azure.AddObservation(item));
+                        SAEONLogs.Information("Add: {Cost}", azure.AddObservation(item));
                         item.Comment = "12345";
-                        Logging.Information("Upsert: {Cost}", azure.UpsertObservation(item));
+                        SAEONLogs.Information("Upsert: {Cost}", azure.UpsertObservation(item));
                         item.Comment = "abc";
-                        Logging.Information("Replace: {Cost}", azure.ReplaceObservation(item));
+                        SAEONLogs.Information("Replace: {Cost}", azure.ReplaceObservation(item));
                         var getResponse = azure.GetObservationWithCost(item);
-                        Logging.Information("Item: {@Item} Cost: {cost}", getResponse.item, getResponse.cost);
+                        SAEONLogs.Information("Item: {@Item} Cost: {cost}", getResponse.item, getResponse.cost);
                         var (items, cost) = azure.GetObservationsWithCost(i => i.ImportBatchId == importBatchId);
-                        Logging.Information("Count: {Count} Cost: {cost}", items.Count(), cost);
-                        Logging.Information("Delete: {Cost}", azure.DeleteObservation(item));
-                        Logging.Information("DeleteBatch: {Cost}", azure.DeleteImportBatch(importBatchId));
-                        Logging.Information("Done");
+                        SAEONLogs.Information("Count: {Count} Cost: {cost}", items.Count(), cost);
+                        SAEONLogs.Information("Delete: {Cost}", azure.DeleteObservation(item));
+                        SAEONLogs.Information("DeleteBatch: {Cost}", azure.DeleteImportBatch(importBatchId));
+                        SAEONLogs.Information("Done");
                     }
                     catch (Exception ex)
                     {
-                        Logging.Exception(ex);
+                        SAEONLogs.Exception(ex);
                         throw;
                     }
                 }
             }
             finally
             {
-                Logging.ShutDown();
+                SAEONLogs.ShutDown();
             }
         }
     }

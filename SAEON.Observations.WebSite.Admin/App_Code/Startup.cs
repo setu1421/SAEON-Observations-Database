@@ -1,5 +1,8 @@
-﻿using SAEON.Logs;
+﻿//#define UseCosmosDb
+using SAEON.Logs;
+#if UseCosmosDb
 using SAEON.Observations.Azure;
+#endif
 using System.Configuration;
 using System.IO;
 using System.Web.Hosting;
@@ -11,9 +14,9 @@ public static class Startup
 {
     public static void Run()
     {
-        Logging
+        SAEONLogs
             .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebSite.Admin {Date}.txt"))
-            .Create();
+            .Initialize();
         string docPath = ConfigurationManager.AppSettings["DocumentsPath"];
         if (!string.IsNullOrEmpty(docPath))
         {
@@ -24,6 +27,8 @@ public static class Startup
                 //Directory.CreateDirectory(Path.Combine(path, "Downloads"));
             }
         }
+#if UseCosmosDb
         new ObservationsAzure().Initialize();
+#endif
     }
 }

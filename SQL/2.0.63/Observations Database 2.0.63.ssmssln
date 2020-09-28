@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Solution File, Format Version 18.00
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{39023EE1-BD0D-43AE-AFBE-8E1AFCA89433}"
+	ProjectSection(SolutionItems) = preProject
+		..\Digital Object Identifiers.sql = ..\Digital Object Identifiers.sql
+		Fix Sensor Duplicate Names.sql = Fix Sensor Duplicate Names.sql
+		Observations 2.0.63.publish.sql = Observations 2.0.63.publish.sql
+		Observations 2.0.63.publish.txt = Observations 2.0.63.publish.txt
+		ObservationsElwandle 2.0.63.publish.sql = ObservationsElwandle 2.0.63.publish.sql
+		ObservationsElwandle 2.0.63.publish.txt = ObservationsElwandle 2.0.63.publish.txt
+		ObservationsFynbos 2.0.63.publish.sql = ObservationsFynbos 2.0.63.publish.sql
+		ObservationsFynbos 2.0.63.publish.txt = ObservationsFynbos 2.0.63.publish.txt
+		ObservationsSACTN 2.0.63.publish.sql = ObservationsSACTN 2.0.63.publish.sql
+		ObservationsSACTN 2.0.63.publish.txt = ObservationsSACTN 2.0.63.publish.txt
+		Pre Process.sql = Pre Process.sql
+		Sensor Duplicate Names.sql = Sensor Duplicate Names.sql
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F4F08E8-6A32-414A-A0B9-8F1A67D36210}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {15F9D008-FA54-4EDD-9A51-62285FD8CDF8}
+	EndGlobalSection
+EndGlobal

@@ -15,7 +15,7 @@
 
     {
         //  Code that runs on application shutdown
-        Logging.ShutDown();
+        SAEONLogs.ShutDown();
     }
 
     void Application_Error(object sender, EventArgs e)

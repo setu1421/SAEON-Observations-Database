@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Ext.Net;
+﻿using Ext.Net;
+using SAEON.Logs;
 using SAEON.Observations.Data;
 using SubSonic;
-using System.Xml;
-using System.Xml.Xsl;
-using SAEON.Logs;
+using System;
+using System.Configuration;
+using System.Linq;
 
 /// <summary>
 /// Summary description for _Phenomenon
@@ -17,7 +14,8 @@ public partial class _Phenomena : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true" && Request.IsLocal;
+        btnValidate.Hidden = !showValidate;
     }
 
     protected void PhenomenaGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
@@ -33,7 +31,6 @@ public partial class _Phenomena : System.Web.UI.Page
         e.Success = true;
         tfCode.HasValue();
         tfName.HasValue();
-        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -126,7 +123,7 @@ public partial class _Phenomena : System.Web.UI.Page
                     .From(PhenomenonUOM.Schema)
                     .Where(PhenomenonUOM.PhenomenonIDColumn).IsEqualTo(Id))
                     .OrderAsc(UnitOfMeasure.Columns.Unit);
-            Logging.Verbose("ID: {id} SQL: {sql}", Id, q.BuildSqlStatement());
+            SAEONLogs.Verbose("ID: {id} SQL: {sql}", Id, q.BuildSqlStatement());
             UnitOfMeasureCollection uomavailCol = new Select()
                 .From(UnitOfMeasure.Schema)
                 .Where(UnitOfMeasure.IdColumn).NotIn(new Select(new String[] { PhenomenonUOM.Columns.UnitOfMeasureID })
@@ -172,7 +169,7 @@ public partial class _Phenomena : System.Web.UI.Page
                     .From(PhenomenonOffering.Schema)
                     .Where(PhenomenonOffering.PhenomenonIDColumn).IsEqualTo(Id))
                     .OrderAsc(Offering.Columns.Name);
-            Logging.Verbose("ID: {id} SQL: {sql}", Id, q.BuildSqlStatement());
+            SAEONLogs.Verbose("ID: {id} SQL: {sql}", Id, q.BuildSqlStatement());
 
             OfferingCollection offavailCol = new Select()
                 .From(Offering.Schema)

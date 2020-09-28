@@ -1,31 +1,98 @@
-﻿using SAEON.AspNet.WebApi;
-using SAEON.Observations.Core;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Web.Http;
-using System.Web.Http.Description;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using SAEON.Logs;
+using SAEON.Observations.Auth;
+using System;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
-    [RoutePrefix("Claims")]
+    //[Route("[controller]")]
+    [Route("[controller]/[action]")]
+    [ApiController]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Authorize]
-    //[ClientAuthorization("SAEON.Observations.QuerySite")]
-    public class ClaimsController : ApiController
+    public class ClaimsController : ControllerBase
     {
+
         [HttpGet]
-        [Route]
-        public IQueryable<string> GetAll()
+        public IActionResult ClaimsWebAPI()
         {
-            var result = new List<string>
+            using (SAEONLogs.MethodCall(GetType()))
             {
-                $"UserId: {User.GetUserId()}",
-                $"UserName: {User.GetUserName()}"
-            };
-            var cp = (ClaimsPrincipal)User;
-            result.AddRange(cp.Claims.Select(i => $"{i.Type} = {i.Value}").AsQueryable());
-            return result.AsQueryable();
+                try
+                {
+                    var result = HttpContext.UserInfo();
+                    SAEONLogs.Information("UserInfo: {@UserInfo}", result);
+                    return new JsonResult(result);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
+        [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+        public IActionResult ClaimsWebAPIAccessToken()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    //SAEONLogs.Information("Token: {Token}", HttpContext.Request.GetBearerToken());
+                    var result = HttpContext.UserInfo();
+                    SAEONLogs.Information("UserInfo: {@UserInfo}", result);
+                    return new JsonResult(result);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
+        [Authorize(Policy = ODPAuthenticationDefaults.IdTokenPolicy)]
+        public IActionResult ClaimsWebAPIIdToken()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    //SAEONLogs.Information("Token: {Token}", HttpContext.Request.GetBearerToken());
+                    var result = HttpContext.UserInfo();
+                    SAEONLogs.Information("UserInfo: {@UserInfo}", result);
+                    return new JsonResult(result);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public IActionResult GetBearerToken()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    var token = HttpContext.Request.GetBearerToken();
+                    SAEONLogs.Information("Token: {Token}", token);
+                    return new JsonResult(token);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
         }
     }
 }

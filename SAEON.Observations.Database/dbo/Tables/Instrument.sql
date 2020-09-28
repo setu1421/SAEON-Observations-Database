@@ -20,9 +20,13 @@
     CONSTRAINT [UX_Instrument_Name] UNIQUE ([Name])
 )
 GO
+CREATE INDEX [IX_Instrument_CodeName] ON [dbo].[Instrument] ([Code],[Name])
+GO
 CREATE INDEX [IX_Instrument_StartDate] ON [dbo].[Instrument] ([StartDate])
 GO
 CREATE INDEX [IX_Instrument_EndDate] ON [dbo].[Instrument] ([EndDate])
+GO
+CREATE INDEX [IX_Instrument_StartDateEndDate] ON [dbo].[Instrument] ([StartDate],[EndDate])
 GO
 CREATE INDEX [IX_Instrument_UserId] ON [dbo].[Instrument] ([UserId])
 GO

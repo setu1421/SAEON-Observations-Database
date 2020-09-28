@@ -1,10 +1,8 @@
-﻿#if NETCOREAPP3_0 || NETCOREAPP3_1
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
 using SAEON.Logs;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Linq;
-using System.Reflection;
 
 namespace SAEON.Observations.Core
 {
@@ -26,18 +24,19 @@ namespace SAEON.Observations.Core
     {
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)
         {
-            Logging.Information("Schema: {Schema}", schema.Title);
-            //if (!(context.ApiModel is ApiObject model)) return;
-            //if (schema?.Properties == null || model?.ApiProperties == null) return;
-            //var excludedProperties = context.ApiModel.Type?.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SwaggerIgnoreAttribute)));
-            //Logging.Information("Excluded: {Names}", string.Join("; ", excludedProperties.Select(p => p.Name)).OrderBy(p => p));
-            //var excludedSchemaProperties = model.ApiProperties.Where(ap => excludedProperties.Any(pi => pi.Name.ToCamelCase() == ap.MemberInfo.Name.ToCamelCase()));
-
-            //foreach (var propertyToExclude in excludedSchemaProperties)
-            //{
-            //    schema.Properties.Remove(propertyToExclude.ApiName);
-            //}
+            if (schema == null) throw new ArgumentNullException(nameof(schema));
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            SAEONLogs.Verbose("Schema: {Schema}", schema.Title);
+            if (schema?.Properties.Count == 0) return;
+            var excludedProperties = context.Type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SwaggerIgnoreAttribute)));
+            SAEONLogs.Information("Excluded: {Names}", string.Join("; ", excludedProperties.Select(p => p.Name)).OrderBy(p => p));
+            foreach (var excludedProperty in excludedProperties)
+            {
+                if (schema.Properties.ContainsKey(excludedProperty.Name.ToCamelCase()))
+                {
+                    schema.Properties.Remove(excludedProperty.Name.ToCamelCase());
+                }
+            }
         }
     }
 }
-#endif

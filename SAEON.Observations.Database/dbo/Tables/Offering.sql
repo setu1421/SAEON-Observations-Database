@@ -13,6 +13,8 @@
     CONSTRAINT [UX_Offering_Code] UNIQUE ([Code])
 );
 GO
+CREATE INDEX [IX_Offering_CodeName] ON [dbo].[Offering] ([Code],[Name])
+GO
 CREATE INDEX [IX_Offering_UserId] ON [dbo].[Offering] ([UserId])
 GO
 CREATE TRIGGER [dbo].[TR_Offering_Insert] ON [dbo].[Offering]

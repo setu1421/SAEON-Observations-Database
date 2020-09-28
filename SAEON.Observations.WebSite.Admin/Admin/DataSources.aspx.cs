@@ -46,13 +46,13 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
+        //SAEONLogs.Information("ValidateField: {ID}", e.ID);
         DataSourceCollection col = new DataSourceCollection();
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
         tfCode.HasValue();
         tfName.HasValue();
-        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -161,7 +161,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -204,7 +204,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
                     }
                     else
                     {
-                        //Logging.Verbose($"DirectCall.DeleteSensorSchemas(\"{ds.Id.ToString()}\",{{ eventMask: {{ showMask: true}}}});");
+                        //SAEONLogs.Verbose($"DirectCall.DeleteSensorSchemas(\"{ds.Id.ToString()}\",{{ eventMask: {{ showMask: true}}}});");
                         MessageBoxes.Confirm("Confirm",
                             $"DirectCall.DeleteSensorSchemas(\"{ds.Id.ToString()}\",{{ eventMask: {{ showMask: true}}}});",
                             $"This data source can't have a data schema because sensor{(col.Count > 1 ? "s" : "")} {string.Join(", ", col)} are already linked to a data schema. Clear the schema from these sensor{(col.Count > 1 ? "s" : "")}?");
@@ -242,7 +242,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 throw;
             }
         }
@@ -252,7 +252,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSensorSchemas(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -268,7 +268,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 throw;
             }
         }
@@ -292,7 +292,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
     #region Data Source Transformations
     protected void TransformationsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             if (e.Parameters["DataSourceID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
             {
@@ -312,7 +312,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -321,7 +321,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
     protected void SaveTransformation(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -478,7 +478,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to save transformation");
                 throw;
             }
@@ -497,7 +497,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
     [DirectMethod]
     public void DeleteTransformation(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -507,7 +507,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to delete transformation");
             }
         }
@@ -545,7 +545,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
             expr.Parameters["value"] = aValue;
             if (expr.HasErrors())
             {
-                Logging.Error("Error in expression with value {Value} -> {Error}", aValue, expr.Error);
+                SAEONLogs.Error("Error in expression with value {Value} -> {Error}", aValue, expr.Error);
                 message = $"Error in expression with value {aValue} -> {expr.Error}";
             }
             else
@@ -553,21 +553,21 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 try
                 {
                     var valueStr = expr.Evaluate();
-                    Logging.Verbose("ValueStr: {value}", valueStr);
+                    SAEONLogs.Verbose("ValueStr: {value}", valueStr);
                     var value = double.Parse(valueStr.ToString());
-                    Logging.Verbose("Value: {value}", value);
+                    SAEONLogs.Verbose("Value: {value}", value);
                     result = true;
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex, "Error evaluating expression with value {Value} -> {Exception}", aValue, ex.Message);
+                    SAEONLogs.Exception(ex, "Error evaluating expression with value {Value} -> {Exception}", aValue, ex.Message);
                     message = $"Error evaluating expression with value {aValue} - {ex.Message}";
                 }
             }
             return result;
         }
 
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -753,7 +753,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
     [DirectMethod]
     public void LoadCombos(string transformationTypeID, string phenomenonID, string offeringID, string unitOfMeasureID, string newPhenomenonID, string newOfferingID, string newUnitOfMeasureID)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "TransformationTypeID", transformationTypeID },
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "TransformationTypeID", transformationTypeID },
             { "PhenomenonID", phenomenonID }, { "OfferingID", offeringID }, {"UnitOfMeasureID", unitOfMeasureID },
             { "NewPhenomenonID", newPhenomenonID }, { "NewOfferingID", newOfferingID }, { "NewUnitOfMeasureID", newUnitOfMeasureID } }))
         {
@@ -772,7 +772,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 throw;
             }
         }
@@ -788,7 +788,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
             field.MarkAsValid();
         }
 
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             SetField(tfParamA);
             SetField(tfParamB);
@@ -844,7 +844,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
     public void cbTransformTypeSelect(object sender, DirectEventArgs e)
 #pragma warning restore IDE1006 // Naming Styles
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -879,7 +879,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 throw;
             }
         }

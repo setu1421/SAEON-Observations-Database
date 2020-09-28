@@ -1,12 +1,11 @@
 ﻿using SAEON.Observations.Core;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
-    [RoutePrefix("Internal/Locations")]
-    public class LocationsController : BaseListController<LocationNode>
+
+    public class LocationsController : BaseController<LocationNode>
     {
         protected override List<LocationNode> GetList()
         {
@@ -14,7 +13,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             LocationNode organisation = null;
             LocationNode site = null;
             LocationNode station = null;
-            foreach (var location in DbContext.Locations.Where(i => (i.Latitude != null) && (i.Longitude != null)).OrderBy(i => i.OrganisationName).ThenBy(i => i.SiteName).ThenBy(i => i.StationName))
+            foreach (var location in DbContext.VLocations.Where(i => (i.Latitude != null) && (i.Longitude != null)).OrderBy(i => i.OrganisationName).ThenBy(i => i.SiteName).ThenBy(i => i.StationName))
             {
                 if (organisation?.Id != location.OrganisationID)
                 {

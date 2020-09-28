@@ -10,7 +10,7 @@ public static class Auditing
 {
     public static void Log(Type type, MethodCallParameters parameters = null, [CallerMemberName] string methodName = "")
     {
-        using (Logging.MethodCall(typeof(Auditing), new MethodCallParameters { { "methodName", methodName }, { "parameters", parameters } }))
+        using (SAEONLogs.MethodCall(typeof(Auditing), new MethodCallParameters { { "methodName", methodName }, { "parameters", parameters } }))
         {
             try
             {
@@ -27,11 +27,11 @@ public static class Auditing
             {
                 try
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                 }
                 catch (Exception)
                 {
-                    Logging.Exception(ex, "Log({methodName})", methodName);
+                    SAEONLogs.Exception(ex, "Log({methodName})", methodName);
                 }
             }
         }

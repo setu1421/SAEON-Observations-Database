@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-    <LangVersion>8.0</LangVersion>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <ApplicationIcon>SAEON.ico</ApplicationIcon>
     <Authors>Tim Parker-Nance</Authors>
     <Company>South African Environmental Observation Network (SAEON)</Company>
@@ -10,7 +9,7 @@
     <Description>SAEON Observations Sensor Things</Description>
     <Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.145</Version>
+    <Version>1.0.147</Version>
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
@@ -18,10 +17,8 @@
   </Target>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNet.OData" Version="7.4.1" />
-    <PackageReference Include="SAEON.AspNet.WebApi" Version="1.0.80" />
-    <PackageReference Include="SAEON.Observations.Core" Version="1.0.278" />
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <PackageReference Include="SAEON.Observations.Core" Version="1.0.350" />
   </ItemGroup>
 
 </Project>

@@ -18,18 +18,18 @@ namespace SAEON.Observations.Azure
         //private const string CosmosDBPartitionKey = "/importBatch/id";
         private const string CosmosDBPartitionKey = "/importBatchId";
 
-        public static bool Enabled { get; private set; } = false;
-        public static bool StorageEnabled { get; private set; } = false;
-        public static bool CosmosDBEnabled { get; private set; } = false;
-        public static bool CosmosDBBulkEnabled { get; private set; } = false;
-        public int BatchSize { get { return int.Parse(ConfigurationManager.AppSettings["AzureCosmosDBBatchSize"] ?? AzureCosmosDB<ObservationItem>.DefaultBatchSize.ToString()); } }
+        public static bool Enabled { get; private set; }
+        public static bool StorageEnabled { get; private set; }
+        public static bool CosmosDBEnabled { get; private set; }
+        public static bool CosmosDBBulkEnabled { get; private set; }
+        public int BatchSize => int.Parse(ConfigurationManager.AppSettings["AzureCosmosDBBatchSize"] ?? AzureCosmosDB<ObservationItem>.DefaultBatchSize.ToString());
 
-        private AzureStorage Storage = null;
-        private AzureCosmosDB<ObservationItem> CosmosDB = null;
+        private AzureStorage Storage;
+        private AzureCosmosDB<ObservationItem> CosmosDB;
 
         static ObservationsAzure()
         {
-            using (Logging.MethodCall(typeof(ObservationsAzure)))
+            using (SAEONLogs.MethodCall(typeof(ObservationsAzure)))
             {
                 try
                 {
@@ -40,11 +40,11 @@ namespace SAEON.Observations.Azure
                         CosmosDBEnabled = bool.Parse(ConfigurationManager.AppSettings["AzureCosmosDBEnabled"] ?? "false");
                         CosmosDBBulkEnabled = bool.Parse(ConfigurationManager.AppSettings["AzureCosmosDBBulkEnabled"] ?? "false");
                     }
-                    Logging.Information("Azure: {Enabled} Storage: {StorageEnabled} CosmosDB: {CosmosDBEnabled} CosmosDBBulk: {CosmosDBBulkEnabled}", Enabled, StorageEnabled, CosmosDBEnabled, CosmosDBBulkEnabled);
+                    SAEONLogs.Information("Azure: {Enabled} Storage: {StorageEnabled} CosmosDB: {CosmosDBEnabled} CosmosDBBulk: {CosmosDBBulkEnabled}", Enabled, StorageEnabled, CosmosDBEnabled, CosmosDBBulkEnabled);
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -52,7 +52,7 @@ namespace SAEON.Observations.Azure
 
         public ObservationsAzure()
         {
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -76,7 +76,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -91,24 +91,24 @@ namespace SAEON.Observations.Azure
         public async Task InitializeAsync()
         {
             if (!ObservationsAzure.Enabled) return;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
                     if (StorageEnabled)
                     {
-                        Logging.Verbose("Ensuring Storage Container exists");
-                        await Storage.EnsureContainerAsync(ObservationsAzure.BlobStorageContainer);
+                        SAEONLogs.Verbose("Ensuring Storage Container exists");
+                        await Storage.EnsureContainerAsync(BlobStorageContainer).ConfigureAwait(false);
                     }
                     if (CosmosDBEnabled)
                     {
-                        Logging.Verbose("Ensuring CosmosDB Container exists");
-                        await CosmosDB.EnsureContainerAsync();
+                        SAEONLogs.Verbose("Ensuring CosmosDB Container exists");
+                        await CosmosDB.EnsureContainerAsync().ConfigureAwait(false);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -118,7 +118,7 @@ namespace SAEON.Observations.Azure
         public void Initialize()
         {
             if (!ObservationsAzure.Enabled) return;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -126,7 +126,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -136,17 +136,17 @@ namespace SAEON.Observations.Azure
         public async Task UploadAsync(string folder, string fileName, string fileContents)
         {
             if (!Enabled || !StorageEnabled) return;
-            using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Folder", folder }, { "FileName", fileName } }))
+            using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Folder", folder }, { "FileName", fileName } }))
             {
                 try
                 {
                     var date = DateTime.Now;
                     var blobContainerClient = Storage.GetBlobContainerClient(BlobStorageContainer);
-                    await blobContainerClient.UploadBlobAsync($"{folder}/{fileName}", fileContents);
+                    await blobContainerClient.UploadBlobAsync($"{folder}/{fileName}", fileContents).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -155,7 +155,7 @@ namespace SAEON.Observations.Azure
         public void Upload(string folder, string fileName, string fileContents)
         {
             if (!Enabled || !StorageEnabled) return;
-            using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Folder", folder }, { "FileName", fileName } }))
+            using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Folder", folder }, { "FileName", fileName } }))
             {
                 try
                 {
@@ -163,7 +163,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -174,15 +174,15 @@ namespace SAEON.Observations.Azure
         public async Task<ObservationItem> GetObservationAsync(ObservationItem item)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    return await CosmosDB.GetItemAsync(item, i => i.ImportBatchId);
+                    return await CosmosDB.GetItemAsync(item, i => i.ImportBatchId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -196,15 +196,15 @@ namespace SAEON.Observations.Azure
         public async Task<(ObservationItem item, CosmosDBCost<ObservationItem> cost)> GetObservationWithCostAsync(ObservationItem item)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    return await CosmosDB.GetItemWithCostAsync(item, i => i.ImportBatchId);
+                    return await CosmosDB.GetItemWithCostAsync(item, i => i.ImportBatchId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -219,15 +219,15 @@ namespace SAEON.Observations.Azure
         public async Task<IEnumerable<ObservationItem>> GetObservationsAsync(Expression<Func<ObservationItem, bool>> predicate)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    return await CosmosDB.GetItemsAsync(predicate);
+                    return await CosmosDB.GetItemsAsync(predicate).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -241,15 +241,15 @@ namespace SAEON.Observations.Azure
         public async Task<(IEnumerable<ObservationItem> items, CosmosDBCost<ObservationItem> cost)> GetObservationsWithCostAsync(Expression<Func<ObservationItem, bool>> predicate)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    return await CosmosDB.GetItemsWithCostAsync(predicate);
+                    return await CosmosDB.GetItemsWithCostAsync(predicate).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -263,15 +263,15 @@ namespace SAEON.Observations.Azure
         public async Task<CosmosDBCost<ObservationItem>> AddObservationAsync(ObservationItem item)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    return (await CosmosDB.CreateItemWithCostAsync(item, i => i.ImportBatchId)).cost;
+                    return (await CosmosDB.CreateItemWithCostAsync(item, i => i.ImportBatchId).ConfigureAwait(false)).cost;
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -285,15 +285,15 @@ namespace SAEON.Observations.Azure
         public async Task<CosmosDBCost<ObservationItem>> ReplaceObservationAsync(ObservationItem item)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    return (await CosmosDB.ReplaceItemWithCostAsync(item, i => i.ImportBatchId)).cost;
+                    return (await CosmosDB.ReplaceItemWithCostAsync(item, i => i.ImportBatchId).ConfigureAwait(false)).cost;
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -307,15 +307,15 @@ namespace SAEON.Observations.Azure
         public async Task<CosmosDBCost<ObservationItem>> UpsertObservationAsync(ObservationItem item)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    return (await CosmosDB.UpsertItemWithCostAsync(item, i => i.ImportBatchId)).cost;
+                    return (await CosmosDB.UpsertItemWithCostAsync(item, i => i.ImportBatchId).ConfigureAwait(false)).cost;
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -329,15 +329,15 @@ namespace SAEON.Observations.Azure
         public async Task<CosmosDBCost<ObservationItem>> UpsertObservationsAsync(List<ObservationItem> items)
         {
             if (!Enabled || !CosmosDBEnabled) return new CosmosDBCost<ObservationItem>();
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    return await CosmosDB.UpsertItemsAsync(items, i => i.ImportBatchId);
+                    return await CosmosDB.UpsertItemsAsync(items, i => i.ImportBatchId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -351,15 +351,15 @@ namespace SAEON.Observations.Azure
         public async Task<CosmosDBCost<ObservationItem>> DeleteObservationAsync(ObservationItem item)
         {
             if (!Enabled || !CosmosDBEnabled) return new CosmosDBCost<ObservationItem>();
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    return (await CosmosDB.DeleteItemWithCostAsync(item, i => i.ImportBatchId)).cost;
+                    return (await CosmosDB.DeleteItemWithCostAsync(item, i => i.ImportBatchId).ConfigureAwait(false)).cost;
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -373,15 +373,15 @@ namespace SAEON.Observations.Azure
         public async Task<(CosmosDBCost<ObservationItem> totalCost, CosmosDBCost<ObservationItem> readCost, CosmosDBCost<ObservationItem> deleteCost)> DeleteImportBatchAsync(Guid importBatchId)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    return await CosmosDB.DeleteItemsAsync(i => i.ImportBatch.Id == importBatchId, i => i.ImportBatchId);
+                    return await CosmosDB.DeleteItemsAsync(i => i.ImportBatch.Id == importBatchId, i => i.ImportBatchId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }

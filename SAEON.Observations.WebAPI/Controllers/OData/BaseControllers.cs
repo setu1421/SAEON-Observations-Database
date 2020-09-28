@@ -1,20 +1,21 @@
-﻿using Microsoft.AspNet.OData;
-using SAEON.AspNet.WebApi;
+﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Microsoft.AspNet.OData;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using SAEON.Logs;
-using SAEON.Observations.Core.Entities;
+using SAEON.Observations.Auth;
+using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Web.Http;
-using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
-    [ApiExplorerSettings(IgnoreApi = true)]
-    [ODataRouteName("OData")]
-    [TenantAuthorization]
+    [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
+    //[Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+    //[Route("OData/[controller]")]
     public abstract class BaseController<TEntity> : ODataController where TEntity : BaseEntity
     {
         public static string BaseUrl { get; set; }
@@ -22,8 +23,8 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         protected const int MaxTop = 500;
         protected const int MaxAll = 10000;
 
-        private ObservationsDbContext dbContext = null;
-        protected ObservationsDbContext DbContext => dbContext ?? (dbContext = new ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request)));
+        private ObservationsDbContext _dbContext;
+        protected ObservationsDbContext DbContext => _dbContext ??= HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
 
         /// <summary>
         /// Overwrite to order of entities
@@ -52,9 +53,9 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return query;
         }
 
-        protected void UpdateRequest(bool isMany)
+        protected void UpdateRequest()
         {
-            BaseUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/OData";
+            BaseUrl = Request.GetUri().GetLeftPart(UriPartial.Authority) + "/OData";
             //if (isMany)
             //{
             //    var uri = Request.RequestUri.ToString();
@@ -68,179 +69,28 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             //        Request.RequestUri = new Uri(uri);
             //    }
             //}
-            Request.Headers.TryAddWithoutValidation("Prefer", "odata.include-annotations=*");
+            Request.Headers.TryAdd("Prefer", "odata.include-annotations=*");
         }
-
 
         /// <summary>
         /// Get all entities
         /// </summary>
         /// <returns>ListOf(TEntity)</returns>
-        // GET: odata/TEntity
-        //[ODataRoute] required on derived class
+        // GET: OData/TEntity
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
-        public virtual IQueryable<TEntity> GetAll()
+        public virtual IQueryable<TEntity> Get()
         {
-            using (Logging.MethodCall<TEntity>(GetType()))
+            using (SAEONLogs.MethodCall<TEntity>(GetType()))
             {
                 try
                 {
-                    UpdateRequest(true);
-                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    UpdateRequest();
+                    SAEONLogs.Verbose("uri: {uri}", Request.GetUri());
                     return GetQuery().Take(MaxAll);
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex, "Unable to get all");
-                    throw;
-                }
-            }
-        }
-
-    }
-
-    public abstract class NamedController<TEntity> : BaseController<TEntity> where TEntity : NamedEntity
-    {
-        protected override List<Expression<Func<TEntity, object>>> GetOrderBys()
-        {
-            var result = base.GetOrderBys();
-            result.Add(i => i.Name);
-            return result;
-        }
-
-        /// <summary>
-        /// Get TEntity by Id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>TEntity</returns>
-        // GET: odata/TEntity(5)
-        //[ODataRoute("({id})")] required on derived class
-        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
-        public virtual SingleResult<TEntity> GetById([FromODataUri] Guid id)
-        {
-            using (Logging.MethodCall<SingleResult<TEntity>>(GetType(), new MethodCallParameters { { "Id", id } }))
-            {
-                try
-                {
-                    UpdateRequest(false);
-                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
-                    return SingleResult.Create(GetQuery(i => (i.Id == id)));
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex, "Unable to get {id}", id);
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Related Entity TEntity.TRelated
-        /// </summary>
-        /// <typeparam name="TRelated"></typeparam>
-        /// <param name="id">Id of TEntity</param>
-        /// <param name="select">Lambda to select TRelated</param>
-        /// <returns>TRelated</returns>
-        // GET: odata/TEntity(5)/TRelated
-        //[ODataRoute("({id})/TRelated")] required on calling class
-        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop)] required on calling class
-        protected TRelated GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
-        {
-            using (Logging.MethodCall<SingleResult<TRelated>>(GetType()))
-            {
-                try
-                {
-                    UpdateRequest(false);
-                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
-                    return GetQuery(i => i.Id == id).Select(select).FirstOrDefault();
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex, "Unable to get {id}", id);
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Get IQueryableOf(TRelated)
-        /// </summary>
-        /// <typeparam name="TRelated"></typeparam>
-        /// <param name="id">Id of TEntity</param>
-        /// <param name="select">Lambda to select ListOf(TRelated)</param>
-        /// <returns>IQueryableOf(TRelated)</returns>
-        // GET: odata/TEntity(5)/TRelated
-        //[ODataRoute("({id})/TRelated")] required on calling class
-        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop)] required on calling class
-        protected IQueryable<TRelated> GetManyWithGuidId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : GuidIdEntity
-        {
-            using (Logging.MethodCall<TRelated>(GetType()))
-            {
-                try
-                {
-                    UpdateRequest(true);
-                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
-                    return GetQuery(i => i.Id == id).SelectMany(select).Take(MaxAll);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex, "Unable to get {id}", id);
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Get IQueryableOf(TRelated)
-        /// </summary>
-        /// <typeparam name="TRelated"></typeparam>
-        /// <param name="id">Id of TEntity</param>
-        /// <param name="select">Lambda to select ListOf(TRelated)</param>
-        /// <returns>IQueryableOf(TRelated)</returns>
-        // GET: odata/TEntity(5)/TRelated
-        //[ODataRoute("({id})/TRelated")] required on calling class
-        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop)] required on calling class
-        protected IQueryable<TRelated> GetManyWithIntId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : IntIdEntity
-        {
-            using (Logging.MethodCall<TRelated>(GetType()))
-            {
-                try
-                {
-                    UpdateRequest(true);
-                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
-                    return GetQuery(i => i.Id == id).SelectMany(select).Take(MaxAll);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex, "Unable to get {id}", id);
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Get IQueryableOf(TRelated)
-        /// </summary>
-        /// <typeparam name="TRelated"></typeparam>
-        /// <param name="id">Id of TEntity</param>
-        /// <param name="select">Lambda to select ListOf(TRelated)</param>
-        /// <returns>IQueryableOf(TRelated)</returns>
-        // GET: odata/TEntity(5)/TRelated
-        //[ODataRoute("({id})/TRelated")] required on calling class
-        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop)] required on calling class
-        protected IQueryable<TRelated> GetManyWithLongId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : LongIdEntity
-        {
-            using (Logging.MethodCall<TRelated>(GetType()))
-            {
-                try
-                {
-                    UpdateRequest(true);
-                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
-                    return GetQuery(i => i.Id == id).SelectMany(select).Take(MaxAll);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex, "Unable to get {id}", id);
+                    SAEONLogs.Exception(ex, "Unable to get all");
                     throw;
                 }
             }

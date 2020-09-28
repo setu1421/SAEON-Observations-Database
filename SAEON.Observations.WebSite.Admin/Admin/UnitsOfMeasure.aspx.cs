@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using SAEON.Observations.Data;
-using Ext.Net;
-using FileHelpers.Dynamic;
-using FileHelpers;
-using SubSonic;
-using System.Xml;
-using System.Xml.Xsl;
+﻿using Ext.Net;
 using SAEON.Logs;
+using SAEON.Observations.Data;
+using System;
+using System.Configuration;
 
 public partial class _UnitsOfMeasure : System.Web.UI.Page
 {
 
     #region UnitOfMeasure
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true" && Request.IsLocal;
+        btnValidate.Hidden = !showValidate;
+    }
+
     protected void UnitOfMeasureStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         this.UnitOfMeasureGrid.GetStore().DataSource = UnitOfMeasureRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
@@ -30,7 +27,6 @@ public partial class _UnitsOfMeasure : System.Web.UI.Page
         e.Success = true;
         tfCode.HasValue();
         tfUnit.HasValue();
-        tfSymbol.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -102,7 +98,7 @@ public partial class _UnitsOfMeasure : System.Web.UI.Page
     #region Phenomena
     protected void UnitOfMeasurePhenomenaGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             if (e.Parameters["UnitOfMeasureID"] != null && e.Parameters["UnitOfMeasureID"].ToString() != "-1")
             {
@@ -118,7 +114,7 @@ public partial class _UnitsOfMeasure : System.Web.UI.Page
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     MessageBoxes.Error(ex, "Error", "Unable to refresh phenomena grid");
                 }
             }

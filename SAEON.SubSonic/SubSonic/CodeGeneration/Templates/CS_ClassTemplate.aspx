@@ -452,18 +452,22 @@ namespace <%=provider.GeneratedNamespace%>
                             fkMethod += "Record";
                         }
 %>
+
+        private <%=fkClassQualified%> _<%=fkMethod%> = null;
+
 		/// <summary>
 		/// Returns a <%=fkClass%> ActiveRecord object related to this <%=className%>
 		/// 
 		/// </summary>
 		public <%=fkClassQualified%> <%=fkMethod%>
 		{
-			get { return <%=fkClassQualified%>.FetchByID(this.<%=fkID%>); }
+//			get { return <%=fkClassQualified%>.FetchByID(this.<%=fkID%>); }  
+			get { return _<%=fkMethod%> ?? (_<%=fkMethod%> = <%=fkClassQualified%>.FetchByID(this.<%=fkID%>)); }
 			set { SetColumnValue("<%=fkColumnID%>", value.<%=fkTbl.PrimaryKey.PropertyName%>); }
 		}
 		
 		<%
-                        usedPropertyNames.Add(fk.ClassName);
+                        usedPropertyNames.Add(fk.ClassName); 
                     }
                 }
             }

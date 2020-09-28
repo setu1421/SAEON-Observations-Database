@@ -2,12 +2,15 @@
 using SAEON.Logs;
 using SAEON.Observations.Data;
 using System;
+using System.Configuration;
 using System.Linq;
 
 public partial class Admin_Projects : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true" && Request.IsLocal;
+        btnValidate.Hidden = !showValidate;
         if (!X.IsAjaxRequest)
         {
             ProgrammeStore.DataSource = new ProgrammeCollection().OrderByAsc(Programme.Columns.Name).Load();
@@ -32,7 +35,6 @@ public partial class Admin_Projects : System.Web.UI.Page
         e.Success = true;
         tfCode.HasValue();
         tfName.HasValue();
-        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -64,7 +66,7 @@ public partial class Admin_Projects : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -103,7 +105,7 @@ public partial class Admin_Projects : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to save project");
             }
         }
@@ -161,7 +163,7 @@ public partial class Admin_Projects : System.Web.UI.Page
 
     protected void StationLinkSave(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -194,7 +196,7 @@ public partial class Admin_Projects : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to link station");
             }
         }
@@ -212,7 +214,7 @@ public partial class Admin_Projects : System.Web.UI.Page
     [DirectMethod]
     public void DeleteStationLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
@@ -222,7 +224,7 @@ public partial class Admin_Projects : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to delete station link");
             }
         }

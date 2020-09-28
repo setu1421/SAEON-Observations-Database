@@ -22,6 +22,8 @@
     CONSTRAINT [UX_DataSource_Name] Unique ([Name])
 );
 GO
+CREATE INDEX [IX_DataSource_CodeName] ON [dbo].[DataSource] ([Code],[Name])
+GO
 CREATE INDEX [IX_DataSource_DataSchemaID] ON [dbo].[DataSource] ([DataSchemaID])
 GO
 CREATE INDEX [IX_DataSource_UserId] ON [dbo].[DataSource] ([UserId])
@@ -29,6 +31,8 @@ GO
 CREATE INDEX [IX_DataSource_StartDate] ON [dbo].DataSource ([StartDate])
 GO
 CREATE INDEX [IX_DataSource_EndDate] ON [dbo].DataSource ([EndDate])
+GO
+CREATE INDEX [IX_DataSource_StartDateEndDate] ON [dbo].[DataSource] ([StartDate],[EndDate])
 GO
 CREATE TRIGGER [dbo].[TR_DataSource_Insert] ON [dbo].[DataSource]
 FOR INSERT

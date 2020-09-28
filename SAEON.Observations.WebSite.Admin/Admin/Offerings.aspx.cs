@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using SAEON.Observations.Data;
-using Ext.Net;
-using SubSonic;
-using System.Xml;
-using System.Xml.Xsl;
+﻿using Ext.Net;
 using SAEON.Logs;
+using SAEON.Observations.Data;
+using System;
+using System.Configuration;
 
 /// <summary>
 /// Summary description for Offering
@@ -15,6 +10,12 @@ using SAEON.Logs;
 public partial class _Offerings : System.Web.UI.Page
 {
     #region Offering
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true" && Request.IsLocal;
+        btnValidate.Hidden = !showValidate;
+    }
+
     protected void OfferingStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         this.OfferingGrid.GetStore().DataSource = OfferingRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
@@ -28,7 +29,6 @@ public partial class _Offerings : System.Web.UI.Page
         e.Success = true;
         tfCode.HasValue();
         tfName.HasValue();
-        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -100,7 +100,7 @@ public partial class _Offerings : System.Web.UI.Page
     #region Phenomena
     protected void OfferingPhenomenaGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             if (e.Parameters["OfferingID"] != null && e.Parameters["OfferingID"].ToString() != "-1")
             {
@@ -116,7 +116,7 @@ public partial class _Offerings : System.Web.UI.Page
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     MessageBoxes.Error(ex, "Error", "Unable to refresh phenomena grid");
                 }
             }

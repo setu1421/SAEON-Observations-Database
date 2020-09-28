@@ -1,6 +1,4 @@
-﻿#if NETCOREAPP3_0
-using AutoMapper;
-using SAEON.Observations.Core.Entities;
+﻿using AutoMapper;
 
 namespace SAEON.Observations.Core
 {
@@ -19,4 +17,3 @@ namespace SAEON.Observations.Core
         }
     }
 }
-#endif

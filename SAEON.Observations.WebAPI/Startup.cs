@@ -1,78 +1,189 @@
-﻿using IdentityServer3.AccessTokenValidation;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.Owin;
-using Microsoft.Owin.Security.Cookies;
-using Owin;
-using SAEON.AspNet.Common;
+using AutoMapper;
+using HealthChecks.UI.Client;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNet.OData.Formatter;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
+using Microsoft.OData.Edm;
+using Microsoft.OpenApi.Models;
+using SAEON.Core;
 using SAEON.Logs;
+using SAEON.Observations.Auth;
+using SAEON.Observations.Core;
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Web.Helpers;
-using System.Web.Http;
-
-[assembly: OwinStartup(typeof(SAEON.Observations.WebAPI.Startup))]
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAEON.Observations.WebAPI
 {
     public class Startup
     {
-        public void Configuration(IAppBuilder app)
+        public Startup(IConfiguration configuration)
         {
-            using (Logging.MethodCall(GetType()))
+            Configuration = configuration;
+            try
+            {
+                SAEONLogs.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName, SAEONLogs.Level);
+                SAEONLogs.Debug("AuthenticationServerUrl: {AuthenticationServerUrl} AuthenticationServerIntrospectionUrl: {AuthenticationServerIntrospectionUrl}",
+                    Configuration["AuthenticationServerUrl"], Configuration["AuthenticationServerIntrospectionUrl"]);
+            }
+            catch (Exception ex)
+            {
+                SAEONLogs.Exception(ex, "Unable to start application");
+                throw;
+            }
+        }
+
+        protected IConfiguration Configuration { get; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
-                    AntiForgeryConfig.UniqueClaimTypeIdentifier = AspNetConstants.ClaimSubject;
-                    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-                    var identityServerUri = new Uri(Properties.Settings.Default.IdentityServerUrl);
-                    IdentityModelEventSource.ShowPII = identityServerUri.Scheme.ToLowerInvariant() == "https";
+                    //services.AddCors();
+                    services.AddAutoMapper(typeof(Startup));
+                    services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
+                    services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                        .AddCookie();
+                    services
+                        .AddAuthentication()
+                        .AddODP(options =>
+                        {
+                            options.IntrospectionUrl = Configuration[ODPAuthenticationDefaults.ConfigKeyIntrospectionUrl];
+                        })
+                        .AddTenant(options =>
+                        {
+                            options.Tenants = Configuration[TenantAuthenticationDefaults.ConfigKeyTenants];
+                            options.DefaultTenant = Configuration[TenantAuthenticationDefaults.ConfigKeyDefaultTenant];
+                        });
+                    services
+                         .AddAuthorization(options =>
+                         {
+                             options.AddODPPolicies();
+                             options.AddTenantPolicy();
+                         });
 
-                    //var corsPolicy = new CorsPolicy
-                    //{
-                    //    AllowAnyMethod = true,
-                    //    AllowAnyHeader = true,
-                    //    SupportsCredentials = true
-                    //};
-                    //Logging.Verbose("CORS Origin: {cors}", Properties.Settings.Default.QuerySiteUrl);
-                    //corsPolicy.Origins.Add(Properties.Settings.Default.QuerySiteUrl);
-                    //var corsOptions = new CorsOptions
-                    //{
-                    //    PolicyProvider = new CorsPolicyProvider
-                    //    {
-                    //        PolicyResolver = context => Task.FromResult(corsPolicy)
-                    //    }
-                    //};
-                    //app.UseCors(corsOptions);
-                    //app.UseCors(CorsOptions.AllowAll);
+                    services.AddHttpContextAccessor();
 
-                    app.UseCookieAuthentication(new CookieAuthenticationOptions
+                    services.AddHealthChecks()
+                        .AddUrlGroup(new Uri(Configuration["AuthenticationServerHealthCheckUrl"]), "Authentication Server")
+                        .AddUrlGroup(new Uri(Configuration["AuthenticationServerIntrospectionHealthCheckUrl"]), "Authentication Server Introspection")
+                        .AddDbContextCheck<ObservationsDbContext>("ObservationsDatabase");
+
+                    services.AddDbContext<ObservationsDbContext>();
+                    services.AddOData();
+
+                    services.AddSwaggerGen(options =>
                     {
-                        AuthenticationType = "Cookies",
-                        CookieName = "SAEON.Observtions.WebAPI",
-                        ExpireTimeSpan = TimeSpan.FromDays(7),
-                        SlidingExpiration = true
-                    });
-                    app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
-                    {
-                        Authority = Properties.Settings.Default.IdentityServerUrl,
-                        RequiredScopes = new[] { "SAEON.Observations.WebAPI" },
-                        RequireHttps = identityServerUri.Scheme.ToLowerInvariant() == "https"
-                    });
+                        options.SwaggerDoc("v1", new OpenApiInfo
+                        {
+                            Title = "SAEON.Observations.WebAPI",
+                            Version = "v1",
+                            Description = "SAEON Observations Database WebAPI",
+                            Contact = new OpenApiContact { Name = "Tim Parker-Nance", Email = "timpn@saeon.ac.za", Url = new Uri("http://www.saeon.ac.za") },
+                            License = new OpenApiLicense { Name = "Creative Commons Attribution-ShareAlike 4.0 International License", Url = new Uri("https://creativecommons.org/licenses/by-sa/4.0/") }
 
-                    // web api configuration
-                    var config = new HttpConfiguration();
-                    config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
-                    WebApiConfig.Register(config);
-                    app.UseWebApi(config);
+                        });
+                        options.IncludeXmlComments("SAEON.Observations.WebAPI.xml");
+                        options.SchemaFilter<SwaggerIgnoreFilter>();
+                    });
+                    SetOutputFormatters(services);
 
+                    services.AddControllersWithViews();
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex, "Unable to configure application");
+                    SAEONLogs.Exception(ex, "Unable to configure services");
                     throw;
                 }
             }
         }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    if (env.IsDevelopment())
+                    {
+                        app.UseDeveloperExceptionPage();
+                    }
+                    else
+                    {
+                        app.UseExceptionHandler("/Home/Error");
+                        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                        app.UseHsts();
+                    }
+                    app.UseHttpsRedirection();
+                    app.UseStaticFiles();
+
+                    app.UseRouting();
+                    //app.UseCors();
+                    app.UseAuthentication();
+                    app.UseAuthorization();
+                    app.UseSwagger();
+                    app.UseSwaggerUI(options =>
+                    {
+                        options.SwaggerEndpoint("/swagger/v1/swagger.json", "SAEON.Observations.WebAPI");
+                    });
+
+                    app.UseEndpoints(endpoints =>
+                    {
+                        endpoints.MapHealthChecks("/health", new HealthCheckOptions()
+                        {
+                            Predicate = _ => true,
+                            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                        });
+                        endpoints.MapControllerRoute(
+                            name: "default",
+                            pattern: "{controller=Home}/{action=Index}/{id?}");
+                        endpoints.MapControllers();
+                        endpoints.Select().Filter().OrderBy().Count().Expand().MaxTop(100);
+                        endpoints.MapODataRoute("OData", "OData", GetEdmModel());
+                    });
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex, "Unable to configure application");
+                    throw;
+                }
+            }
+
+            IEdmModel GetEdmModel()
+            {
+                var builder = new ODataConventionModelBuilder();
+                builder.EntitySet<InventoryDataset>("InventoryDatasets");
+                return builder.GetEdmModel();
+            }
+        }
+
+        private static void SetOutputFormatters(IServiceCollection services)
+        {
+            services.AddMvcCore(options =>
+            {
+                IEnumerable<ODataOutputFormatter> outputFormatters =
+                    options.OutputFormatters.OfType<ODataOutputFormatter>()
+                        .Where(foramtter => foramtter.SupportedMediaTypes.Count == 0);
+
+                foreach (var outputFormatter in outputFormatters)
+                {
+                    outputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/odata"));
+                }
+            });
+        }
+
     }
 }
+

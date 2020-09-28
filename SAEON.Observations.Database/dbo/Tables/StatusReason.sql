@@ -14,6 +14,8 @@
     CONSTRAINT [FK_StatusReason_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
 )
 GO
+CREATE INDEX [IX_StatusReason_CodeName] ON [dbo].[StatusReason] ([Code],[Name])
+GO
 CREATE INDEX [IX_StatusReason_UserId] ON [dbo].[StatusReason] ([UserId])
 GO
 CREATE TRIGGER [dbo].[TR_StatusReason_Insert] ON [dbo].[StatusReason]

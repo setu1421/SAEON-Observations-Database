@@ -1,143 +1,144 @@
-﻿using IdentityModel;
-using IdentityModel.Client;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.OpenIdConnect;
-using Owin;
-using SAEON.AspNet.Common;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using SAEON.Core;
 using SAEON.Logs;
-using Syncfusion.Licensing;
+using SAEON.Observations.Auth;
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Helpers;
-
-[assembly: OwinStartupAttribute(typeof(SAEON.Observations.QuerySite.Startup))]
 
 namespace SAEON.Observations.QuerySite
 {
     public class Startup
     {
-        public void Configuration(IAppBuilder app)
+        public Startup(IConfiguration configuration)
         {
-            using (Logging.MethodCall(GetType()))
+            Configuration = configuration;
+            try
+            {
+                SAEONLogs.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName, SAEONLogs.Level);
+                SAEONLogs.Debug("AuthenticationServerUrl: {AuthenticationServerUrl}", Configuration["AuthenticationServerUrl"]);
+            }
+            catch (Exception ex)
+            {
+                SAEONLogs.Exception(ex, "Unable to start application");
+                throw;
+            }
+        }
+
+        public IConfiguration Configuration { get; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    Logging.Verbose("IdentityServer: {name} RequireHttps: {RequireHTTPS}", Properties.Settings.Default.IdentityServerUrl, Properties.Settings.Default.RequireHTTPS);
-                    AntiForgeryConfig.UniqueClaimTypeIdentifier = AspNetConstants.ClaimSubject;
-                    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-                    SyncfusionLicenseProvider.RegisterLicense("MjQxNTUzQDMxMzgyZTMxMmUzMGlBNEsrd0E0ZnVNdVM2T0lFQ1hiSTAxWUM0cUhDUWJEams2SDFIUStEK2M9;MjQxNTU0QDMxMzgyZTMxMmUzMGQ1cFVHTWFTR21wVDd3blBsUG5FUkdWdWJSMU9hcE1IMDM3TDZERWI2WFE9");
+                    IdentityModelEventSource.ShowPII = true;
 
-                    //app.UseResourceAuthorization(new AuthorizationManager());
-                    app.UseCookieAuthentication(new CookieAuthenticationOptions
+                    //services.AddCors();
+                    services.Configure<CookiePolicyOptions>(options =>
                     {
-                        AuthenticationType = "Cookies",
-                        CookieName = "SAEON.Observations.QuerySite",
-                        ExpireTimeSpan = TimeSpan.FromDays(7),
-                        SlidingExpiration = true
+                        // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                        options.CheckConsentNeeded = context => true;
+                        options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
-                    app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
+                    services.AddDistributedMemoryCache();
+                    services.AddSession(options =>
                     {
-                        Authority = Properties.Settings.Default.IdentityServerUrl,
-                        ClientId = "SAEON.Observations.QuerySite",
-                        Scope = "openid profile email roles SAEON.Observations.WebAPI offline_access",
-                        ResponseType = "id_token code token",
-                        RedirectUri = Properties.Settings.Default.QuerySiteUrl + "/signin-oidc",
-                        PostLogoutRedirectUri = Properties.Settings.Default.QuerySiteUrl + "/signout-callback-oidc",
-                        TokenValidationParameters = new TokenValidationParameters
-                        {
-                            NameClaimType = JwtClaimTypes.Name,
-                            RoleClaimType = JwtClaimTypes.Role
-                        },
-                        SignInAsAuthenticationType = "Cookies",
-                        UseTokenLifetime = false,
-                        RequireHttpsMetadata = Properties.Settings.Default.RequireHTTPS && !HttpContext.Current.Request.IsLocal,
-                        Notifications = new OpenIdConnectAuthenticationNotifications
-                        {
-                            AuthorizationCodeReceived = async n =>
-                            {
-                                Logging.Verbose("AuthorizationCodeReceived notification");
-                                var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType);
-                                Logging.Verbose("IsAuthenticated: {IsAuthenticated} ", identity.IsAuthenticated);
-
-                                var discoClient = new HttpClient();
-                                var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
-                                {
-                                    Address = Properties.Settings.Default.IdentityServerUrl,
-                                    Policy = { RequireHttps = Properties.Settings.Default.RequireHTTPS && !HttpContext.Current.Request.IsLocal }
-                                });
-                                if (disco.IsError)
-                                {
-                                    Logging.Error("Disco Error: {error}", disco.Error);
-                                    throw new HttpException(disco.Error);
-                                }
-
-                                var userInfoClient = new HttpClient();
-                                var userInfoResponse = await userInfoClient.GetUserInfoAsync(new UserInfoRequest
-                                {
-                                    Address = disco.UserInfoEndpoint,
-                                    Token = n.ProtocolMessage.AccessToken
-                                });
-                                if (userInfoResponse.IsError)
-                                {
-                                    Logging.Error("UserInfo Error: {error}", userInfoResponse.Error);
-                                    throw new HttpException(userInfoResponse.Error);
-
-                                }
-                                identity.AddClaims(userInfoResponse.Claims);
-
-                                Logging.Verbose("Code: {Code} RedirectURI: {RedirectURI}", n.Code, n.RedirectUri);
-                                var tokenClient = new HttpClient();
-                                var tokenResponse = await tokenClient.RequestAuthorizationCodeTokenAsync(new AuthorizationCodeTokenRequest
-                                {
-                                    Address = disco.TokenEndpoint,
-                                    ClientId = "SAEON.Observations.QuerySite",
-                                    ClientSecret = "It6fWPU5J708",
-                                    Code = n.Code,
-                                    RedirectUri = n.RedirectUri
-                                });
-                                if (tokenResponse.IsError)
-                                {
-                                    Logging.Error("Token Error: {error}", tokenResponse.Error);
-                                    throw new HttpException(tokenResponse.Error);
-                                }
-
-                                identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
-                                identity.AddClaim(new Claim("access_token", n.ProtocolMessage.AccessToken));
-                                identity.AddClaim(new Claim("refresh_token", tokenResponse.RefreshToken));
-                                identity.AddClaim(new Claim("expires_at", DateTimeOffset.Now.AddSeconds(int.Parse(n.ProtocolMessage.ExpiresIn)).ToString("o")));
-
-                                n.AuthenticationTicket = new AuthenticationTicket(identity, n.AuthenticationTicket.Properties);
-                            },
-                            RedirectToIdentityProvider = n =>
-                                {
-                                    Logging.Verbose("RedirectToIdentityProvider notification");
-                                    if (n.ProtocolMessage.RequestType == Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectRequestType.Logout)
-                                    {
-                                        var idTokenHint = n.OwinContext.Authentication.User.FindFirst("id_token");
-                                        if (idTokenHint != null)
-                                        {
-                                            n.ProtocolMessage.IdTokenHint = idTokenHint.Value;
-                                        }
-                                    }
-                                    return Task.FromResult(0);
-                                }
-                        },
+                        options.Cookie.HttpOnly = false;
+                        options.Cookie.IsEssential = true;
                     });
-                    // Make sure WebAPI is available
+                    services
+                        .AddAuthentication(options =>
+                        {
+                            options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                            options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                            options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                        })
+                        .AddCookie()
+                        .AddOpenIdConnect(options =>
+                        {
+                            options.Authority = Configuration["AuthenticationServerUrl"];
+                            options.ClientId = ODPAuthenticationDefaults.QuerySiteClientId;
+                            options.ClientSecret = Configuration["QuerySiteClientSecret"];
+                            options.Scope.Clear();
+                            options.Scope.Add(OpenIdConnectScope.OpenId);
+                            //options.Scope.Add(OpenIdConnectScope.OfflineAccess);
+                            options.Scope.Add(ODPAuthenticationDefaults.WebAPIClientId);
+                            options.ResponseType = OpenIdConnectResponseType.Code;
+                            options.SaveTokens = true;
+                            options.GetClaimsFromUserInfoEndpoint = true;
+                            SAEONLogs.Information("Options: {@Options}", options);
+                            //options.Validate();
+                        });
+                    services.AddHttpContextAccessor();
+                    services.AddHealthChecks()
+                       .AddUrlGroup(new Uri(Configuration["AuthenticationServerHealthCheckUrl"]), "Authentication Server")
+                       .AddUrlGroup(new Uri(Configuration["WebAPIHealthCheckUrl"]), "WebAPI");
+                    services.AddControllersWithViews();
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex, "Unable to configure application");
+                    SAEONLogs.Exception(ex, "Unable to configure services");
+                    throw;
+                }
+            }
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    if (env.IsDevelopment())
+                    {
+                        app.UseDeveloperExceptionPage();
+                    }
+                    else
+                    {
+                        app.UseExceptionHandler("/Home/Error");
+                        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                        app.UseHsts();
+                    }
+                    app.UseHttpsRedirection();
+                    app.UseStaticFiles();
+
+                    app.UseCookiePolicy();
+                    app.UseRouting();
+                    //app.UseCors();
+                    app.UseAuthentication();
+                    app.UseAuthorization();
+                    app.UseSession();
+
+                    app.UseEndpoints(endpoints =>
+                    {
+                        endpoints.MapHealthChecks("/health", new HealthCheckOptions()
+                        {
+                            Predicate = _ => true,
+                            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                        });
+                        endpoints.MapDefaultControllerRoute();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex, "Unable to configure application");
                     throw;
                 }
             }
         }
     }
 }
+

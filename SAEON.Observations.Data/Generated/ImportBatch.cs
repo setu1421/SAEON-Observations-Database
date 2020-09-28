@@ -511,46 +511,54 @@ namespace SAEON.Observations.Data
 		
 		#region ForeignKey Properties
 		
+        private SAEON.Observations.Data.AspnetUser _AspnetUser = null;
 		/// <summary>
 		/// Returns a AspnetUser ActiveRecord object related to this ImportBatch
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetUser AspnetUser
 		{
-			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }
+//			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }  
+			get { return _AspnetUser ?? (_AspnetUser = SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId)); }
 			set { SetColumnValue("UserId", value.UserId); }
 		}
 		
 		
+        private SAEON.Observations.Data.DataSource _DataSource = null;
 		/// <summary>
 		/// Returns a DataSource ActiveRecord object related to this ImportBatch
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.DataSource DataSource
 		{
-			get { return SAEON.Observations.Data.DataSource.FetchByID(this.DataSourceID); }
+//			get { return SAEON.Observations.Data.DataSource.FetchByID(this.DataSourceID); }  
+			get { return _DataSource ?? (_DataSource = SAEON.Observations.Data.DataSource.FetchByID(this.DataSourceID)); }
 			set { SetColumnValue("DataSourceID", value.Id); }
 		}
 		
 		
+        private SAEON.Observations.Data.Status _StatusRecord = null;
 		/// <summary>
 		/// Returns a Status ActiveRecord object related to this ImportBatch
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Status StatusRecord
 		{
-			get { return SAEON.Observations.Data.Status.FetchByID(this.StatusID); }
+//			get { return SAEON.Observations.Data.Status.FetchByID(this.StatusID); }  
+			get { return _StatusRecord ?? (_StatusRecord = SAEON.Observations.Data.Status.FetchByID(this.StatusID)); }
 			set { SetColumnValue("StatusID", value.Id); }
 		}
 		
 		
+        private SAEON.Observations.Data.StatusReason _StatusReason = null;
 		/// <summary>
 		/// Returns a StatusReason ActiveRecord object related to this ImportBatch
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.StatusReason StatusReason
 		{
-			get { return SAEON.Observations.Data.StatusReason.FetchByID(this.StatusReasonID); }
+//			get { return SAEON.Observations.Data.StatusReason.FetchByID(this.StatusReasonID); }  
+			get { return _StatusReason ?? (_StatusReason = SAEON.Observations.Data.StatusReason.FetchByID(this.StatusReasonID)); }
 			set { SetColumnValue("StatusReasonID", value.Id); }
 		}
 		

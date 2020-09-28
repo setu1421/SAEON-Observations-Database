@@ -13,6 +13,8 @@
     CONSTRAINT [UX_UnitOfMeasure_Unit] UNIQUE ([Unit])
 );
 GO
+CREATE INDEX [IX_UnitOfMeasure_CodeName] ON [dbo].[UnitOfMeasure] ([Code],[Unit])
+GO
 CREATE INDEX [IX_UnitOfMeasure_UserId] ON [dbo].[UnitOfMeasure] ([UserId])
 GO
 CREATE TRIGGER [dbo].[TR_UnitOfMeasure_Insert] ON [dbo].[UnitOfMeasure]

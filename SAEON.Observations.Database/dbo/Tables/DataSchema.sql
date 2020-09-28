@@ -23,6 +23,8 @@
     CONSTRAINT [UX_DataSchema_Name] Unique ([Name])
 );
 GO
+CREATE INDEX [IX_DataSchema_CodeName] ON [dbo].[DataSchema] ([Code],[Name])
+GO
 CREATE INDEX [IX_DataSchema_DataSourceTypeID] ON [dbo].[DataSchema] ([DataSourceTypeID])
 GO
 CREATE INDEX [IX_DataSchema_UserId] ON [dbo].[DataSchema] ([UserId])

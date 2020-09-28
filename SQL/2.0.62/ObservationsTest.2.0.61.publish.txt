@@ -1,0 +1,88 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[aspnet_PersonalizationAllUsers].[Test] is being dropped, data loss could occur.
+       The column [dbo].[aspnet_Profile].[Test] is being dropped, data loss could occur.
+       The column [dbo].[aspnet_WebEvent_Events].[Test] is being dropped, data loss could occur.
+
+** User actions
+     Drop
+       [dbo].[DataLog].[IX_DataLog_ValueDay] (Index)
+     Alter
+       [dbo].[aspnet_PersonalizationAllUsers] (Table)
+       [dbo].[aspnet_Profile] (Table)
+       [dbo].[aspnet_WebEvent_Events] (Table)
+       [dbo].[Observation] (Table)
+     Create
+       [dbo].[DataSchema].[IX_DataSchema_CodeName] (Index)
+       [dbo].[DataSource].[IX_DataSource_CodeName] (Index)
+       [dbo].[DataSource].[IX_DataSource_StartDateEndDate] (Index)
+       [dbo].[DataSourceTransformation].[IX_DataSourceTransformation_StartDateEndDate] (Index)
+       [dbo].[Instrument].[IX_Instrument_CodeName] (Index)
+       [dbo].[Instrument].[IX_Instrument_StartDateEndDate] (Index)
+       [dbo].[Instrument_Sensor].[IX_Instrument_Sensor_StartDateEndDate] (Index)
+       [dbo].[Offering].[IX_Offering_CodeName] (Index)
+       [dbo].[Organisation].[IX_Organisation_CodeName] (Index)
+       [dbo].[Organisation_Instrument].[IX_Organisation_Instrument_StartDateEndDate] (Index)
+       [dbo].[Organisation_Site].[IX_Organisation_Site_StartDateEndDate] (Index)
+       [dbo].[Organisation_Station].[IX_Organisation_Station_StartDateEndDate] (Index)
+       [dbo].[OrganisationRole].[IX_OrganisationRole_CodeName] (Index)
+       [dbo].[Phenomenon].[IX_Phenomenon_CodeName] (Index)
+       [dbo].[Programme].[IX_Programme_CodeName] (Index)
+       [dbo].[Programme].[IX_Programme_StartDateEndDate] (Index)
+       [dbo].[Project].[IX_Project_CodeName] (Index)
+       [dbo].[Project].[IX_Project_StartDateEndDate] (Index)
+       [dbo].[Project_Station].[IX_Project_Station_StartDateEndDate] (Index)
+       [dbo].[Sensor].[IX_Sensor_CodeName] (Index)
+       [dbo].[Site].[IX_Site_CodeName] (Index)
+       [dbo].[Site].[IX_Site_StartDateEndDate] (Index)
+       [dbo].[Station].[IX_Station_CodeName] (Index)
+       [dbo].[Station].[IX_Station_StartDateEndDate] (Index)
+       [dbo].[Station_Instrument].[IX_Station_Instrument_StartDateEndDate] (Index)
+       [dbo].[Status].[IX_Status_CodeName] (Index)
+       [dbo].[StatusReason].[IX_StatusReason_CodeName] (Index)
+       [dbo].[TransformationType].[IX_TransformationType_CodeName] (Index)
+       [dbo].[UnitOfMeasure].[IX_UnitOfMeasure_CodeName] (Index)
+
+** Supporting actions
+     Drop
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Create
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Refresh
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vSensorThingsAPIObservations] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationJSON] (View)
+       [dbo].[vStationObservations] (View)
+       [dbo].[aspnet_PersonalizationAdministration_DeleteAllState] (Procedure)
+       [dbo].[aspnet_PersonalizationAdministration_FindState] (Procedure)
+       [dbo].[aspnet_PersonalizationAdministration_GetCountOfState] (Procedure)
+       [dbo].[aspnet_PersonalizationAdministration_ResetSharedState] (Procedure)
+       [dbo].[aspnet_PersonalizationAllUsers_GetPageSettings] (Procedure)
+       [dbo].[aspnet_PersonalizationAllUsers_ResetPageSettings] (Procedure)
+       [dbo].[aspnet_PersonalizationAllUsers_SetPageSettings] (Procedure)
+       [dbo].[aspnet_AnyDataInTables] (Procedure)
+       [dbo].[aspnet_Profile_DeleteInactiveProfiles] (Procedure)
+       [dbo].[aspnet_Profile_GetNumberOfInactiveProfiles] (Procedure)
+       [dbo].[aspnet_Profile_GetProfiles] (Procedure)
+       [dbo].[aspnet_Profile_GetProperties] (Procedure)
+       [dbo].[aspnet_Profile_SetProperties] (Procedure)
+       [dbo].[aspnet_Users_DeleteUser] (Procedure)
+       [dbo].[aspnet_Profile_DeleteProfiles] (Procedure)
+       [dbo].[aspnet_WebEvent_LogEvent] (Procedure)
+
+The source's object [Observations] is different than the target's version of the object but the target object will not be updated.
+The object [Observations] already exists in database with a different definition and will not be altered.
+The column [dbo].[aspnet_PersonalizationAllUsers].[Test] is being dropped, data loss could occur.
+The column [dbo].[aspnet_Profile].[Test] is being dropped, data loss could occur.
+The column [dbo].[aspnet_WebEvent_Events].[Test] is being dropped, data loss could occur.
+If this deployment is executed, changes to [dbo].[vObservationExpansion] might introduce run-time errors in [dbo].[vSensorObservations].
+

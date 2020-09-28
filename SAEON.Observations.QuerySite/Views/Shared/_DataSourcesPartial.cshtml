@@ -1,11 +1,19 @@
-﻿@using System.Configuration
+﻿@using Microsoft.AspNetCore.Http
+@using Microsoft.Extensions.Configuration
+@using SAEON.Observations.Auth
+@inject IConfiguration Configuration
 @{
     List<(string id, string name)> tenants = new List<(string id, string name)>();
-    var tenantList = ConfigurationManager.AppSettings[AspNetConstants.TenantTenants].Split(new char[] { ';' });
+    var tenantList = Configuration[TenantAuthenticationDefaults.ConfigKeyTenants].Split(new char[] { ';' });
     foreach (var tenantItem in tenantList)
     {
         var split = tenantItem.Split(new char[] { ',' });
         tenants.Add((split[0], split[1]));
+    }
+    var sessionTenant = Context.Session.GetString(TenantAuthenticationDefaults.HeaderKeyTenant);
+    if (string.IsNullOrEmpty(sessionTenant))
+    {
+        sessionTenant = Configuration[TenantAuthenticationDefaults.ConfigKeyDefaultTenant];
     }
 }
 @if (tenants.Count > 1)
@@ -13,9 +21,12 @@
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDataSource" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Data Source</a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownDataSource">
+            @{
+                SAEON.Logs.SAEONLogs.Information("Session: {Tenant}", Context.Session.GetString(TenantAuthenticationDefaults.HeaderKeyTenant));
+            }
             @foreach (var tenant in tenants)
             {
-                @Html.ActionLink(tenant.name, "SetTenant", "Home", new { Name = tenant.id }, new { @class = (string)Session[AspNetConstants.TenantSession] == tenant.id ? "dropdown-item active" : "dropdown-item" })
+                <a class="dropdown-item @(sessionTenant == tenant.id ? "active" : "")" asp-area="" asp-controller="Home" asp-action="SetTenant" asp-route-Tenant="@tenant.id">@tenant.name</a>
             }
         </div>
     </li>

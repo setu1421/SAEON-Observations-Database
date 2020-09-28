@@ -38,38 +38,21 @@ namespace SAEON.Observations.SensorThings
 
         private T ConvertDbEntityGuidId<T, TDb>(TDb dbEntity) where T : SensorThingsGuidIdEntity where TDb : db.GuidIdEntity
         {
-            using (Logging.MethodCall<T, TDb>(GetType()))
+            using (SAEONLogs.MethodCall<T, TDb>(GetType()))
             {
                 object result = default(T);
-                switch (dbEntity)
+                result = dbEntity switch
                 {
-                    case db.SensorThingsDatastream dbDatastream:
-                        result = ConvertDatastream(dbDatastream);
-                        break;
-                    case db.SensorThingsFeatureOfInterest dbFeatureOfInterest:
-                        result = ConvertFeatureOfInterest(dbFeatureOfInterest);
-                        break;
-                    case db.SensorThingsHistoricalLocation dbHistoricalLocation:
-                        result = ConvertHistoricalLocation(dbHistoricalLocation);
-                        break;
-                    case db.SensorThingsLocation dbLocation:
-                        result = ConvertLocation(dbLocation);
-                        break;
-                    case db.SensorThingsObservation dbObservation:
-                        result = ConvertObservation(dbObservation);
-                        break;
-                    case db.SensorThingsObservedProperty dbObservedProperty:
-                        result = ConvertObservedProperty(dbObservedProperty);
-                        break;
-                    case db.SensorThingsSensor dbSensor:
-                        result = ConvertSensor(dbSensor);
-                        break;
-                    case db.SensorThingsThing dbThing:
-                        result = ConvertThing(dbThing);
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
+                    db.SensorThingsDatastream dbDatastream => ConvertDatastream(dbDatastream),
+                    db.SensorThingsFeatureOfInterest dbFeatureOfInterest => ConvertFeatureOfInterest(dbFeatureOfInterest),
+                    db.SensorThingsHistoricalLocation dbHistoricalLocation => ConvertHistoricalLocation(dbHistoricalLocation),
+                    db.SensorThingsLocation dbLocation => ConvertLocation(dbLocation),
+                    db.SensorThingsObservation dbObservation => ConvertObservation(dbObservation),
+                    db.SensorThingsObservedProperty dbObservedProperty => ConvertObservedProperty(dbObservedProperty),
+                    db.SensorThingsSensor dbSensor => ConvertSensor(dbSensor),
+                    db.SensorThingsThing dbThing => ConvertThing(dbThing),
+                    _ => throw new NotImplementedException(),
+                };
                 return (T)result;
             }
 
@@ -80,7 +63,7 @@ namespace SAEON.Observations.SensorThings
                     return GeographyFactory.Polygon().Ring(left, top).LineTo(left, top).LineTo(right, top).LineTo(right, bottom).LineTo(left, bottom).LineTo(left, top).Build();
                 }
 
-                using (Logging.MethodCall(GetType()))
+                using (SAEONLogs.MethodCall(GetType()))
                 {
                     var result = Mapper.Map<Datastream>(dbDatastream);
                     result.UnitOfMeasurement = new UnitOfMeasurement
@@ -100,37 +83,37 @@ namespace SAEON.Observations.SensorThings
                         result.PhenomenonTimeInterval = new TimeInterval(dbDatastream.StartDate.Value, dbDatastream.EndDate.Value);
                         result.ResultTimeInterval = new TimeInterval(dbDatastream.StartDate.Value, dbDatastream.EndDate.Value);
                     }
-                    //Logging.Verbose("Result: {@Result}", result);
+                    //SAEONLogs.Verbose("Result: {@Result}", result);
                     return result;
                 }
             }
 
             FeatureOfInterest ConvertFeatureOfInterest(db.SensorThingsFeatureOfInterest dbFeatureOfInterest)
             {
-                using (Logging.MethodCall(GetType()))
+                using (SAEONLogs.MethodCall(GetType()))
                 {
                     var result = Mapper.Map<FeatureOfInterest>(dbFeatureOfInterest);
                     var dbLocation = DbContext.SensorThingsLocations.AsNoTracking().First(i => i.Id == dbFeatureOfInterest.Id);
                     result.Feature = new GeoJSONPoint(GeographyPoint.Create(dbLocation.Latitude, dbLocation.Longitude, dbLocation.Elevation));
-                    //Logging.Verbose("Result: {@Result}", result);
+                    //SAEONLogs.Verbose("Result: {@Result}", result);
                     return result;
                 }
             }
 
             HistoricalLocation ConvertHistoricalLocation(db.SensorThingsHistoricalLocation dbHistoricalLocation)
             {
-                using (Logging.MethodCall(GetType()))
+                using (SAEONLogs.MethodCall(GetType()))
                 {
                     var result = Mapper.Map<HistoricalLocation>(dbHistoricalLocation);
                     result.TimeString = new TimeString(dbHistoricalLocation.StartDate ?? dbHistoricalLocation.EndDate);
-                    //Logging.Verbose("Result: {@Result}", result);
+                    //SAEONLogs.Verbose("Result: {@Result}", result);
                     return result;
                 }
             }
 
             Location ConvertLocation(db.SensorThingsLocation dbLocation)
             {
-                using (Logging.MethodCall(GetType()))
+                using (SAEONLogs.MethodCall(GetType()))
                 {
                     var result = Mapper.Map<Location>(dbLocation);
                     result.location = new GeoJSONPoint(GeographyPoint.Create(dbLocation.Latitude, dbLocation.Longitude, dbLocation.Elevation));
@@ -140,13 +123,13 @@ namespace SAEON.Observations.SensorThings
 
             Observation ConvertObservation(db.SensorThingsObservation dbObservation)
             {
-                using (Logging.MethodCall(GetType()))
+                using (SAEONLogs.MethodCall(GetType()))
                 {
                     var result = Mapper.Map<Observation>(dbObservation);
                     result.PhenomenonTimeString = new TimeString(dbObservation.Date);
                     result.ResultTimeString = new TimeString(dbObservation.Date);
                     result.Result = dbObservation.Value;
-                    //Logging.Verbose("Result: {@Result}", result);
+                    //SAEONLogs.Verbose("Result: {@Result}", result);
                     return result;
 
                 }
@@ -154,39 +137,39 @@ namespace SAEON.Observations.SensorThings
 
             ObservedProperty ConvertObservedProperty(db.SensorThingsObservedProperty dbObservedProperty)
             {
-                using (Logging.MethodCall(GetType()))
+                using (SAEONLogs.MethodCall(GetType()))
                 {
                     var result = Mapper.Map<ObservedProperty>(dbObservedProperty);
                     result.Code = $"{dbObservedProperty.PhenomenonCode} {dbObservedProperty.OfferingCode}";
                     result.Name = $"{dbObservedProperty.PhenomenonName} {dbObservedProperty.OfferingName}";
                     result.Definition = dbObservedProperty.PhenomenonUrl;
                     result.Description = $"{dbObservedProperty.PhenomenonName}, {dbObservedProperty.OfferingName}";
-                    //Logging.Verbose("Result: {@Result}", result);
+                    //SAEONLogs.Verbose("Result: {@Result}", result);
                     return result;
                 }
             }
 
             Sensor ConvertSensor(db.SensorThingsSensor dbSensor)
             {
-                using (Logging.MethodCall(GetType()))
+                using (SAEONLogs.MethodCall(GetType()))
                 {
                     var result = Mapper.Map<Sensor>(dbSensor);
                     result.Metdadata = dbSensor.Url;
-                    //Logging.Verbose("Result: {@Result}", result);
+                    //SAEONLogs.Verbose("Result: {@Result}", result);
                     return result;
                 }
             }
 
             Thing ConvertThing(db.SensorThingsThing dbThing)
             {
-                using (Logging.MethodCall(GetType()))
+                using (SAEONLogs.MethodCall(GetType()))
                 {
                     var result = Mapper.Map<Thing>(dbThing);
                     result.Properties.Add("kind", dbThing.Kind);
                     if (!string.IsNullOrWhiteSpace(dbThing.Url)) result.Properties.Add("url", dbThing.Url);
                     if (dbThing.StartDate.HasValue) result.Properties.Add("startDate", dbThing.StartDate.Value.ToString("o"));
                     if (dbThing.EndDate.HasValue) result.Properties.Add("endDate", dbThing.EndDate.Value.ToString("o"));
-                    //Logging.Verbose("Result: {@Result}", result);
+                    //SAEONLogs.Verbose("Result: {@Result}", result);
                     return result;
                 }
             }
@@ -200,29 +183,26 @@ namespace SAEON.Observations.SensorThings
 
         private T ConvertDbEntityIntId<T, TDb>(TDb dbEntity) where T : SensorThingsIntIdEntity where TDb : db.IntIdEntity
         {
-            using (Logging.MethodCall<T, TDb>(GetType()))
+            using (SAEONLogs.MethodCall<T, TDb>(GetType()))
             {
                 object result = default(T);
-                switch (dbEntity)
+                result = dbEntity switch
                 {
-                    case db.SensorThingsObservation dbObservation:
-                        result = ConvertObservation(dbObservation);
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
+                    db.SensorThingsObservation dbObservation => ConvertObservation(dbObservation),
+                    _ => throw new NotImplementedException(),
+                };
                 return (T)result;
             }
 
             Observation ConvertObservation(db.SensorThingsObservation dbObservation)
             {
-                using (Logging.MethodCall(GetType()))
+                using (SAEONLogs.MethodCall(GetType()))
                 {
                     var result = Mapper.Map<Observation>(dbObservation);
                     result.PhenomenonTimeString = new TimeString(dbObservation.Date);
                     result.ResultTimeString = new TimeString(dbObservation.Date);
                     result.Result = dbObservation.Value;
-                    //Logging.Verbose("Result: {@Result}", result);
+                    //SAEONLogs.Verbose("Result: {@Result}", result);
                     return result;
                 }
             }
@@ -256,12 +236,12 @@ namespace SAEON.Observations.SensorThings
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public virtual IQueryable<TEntity> GetAll()
         {
-            using (Logging.MethodCall<TDbEntity>(GetType()))
+            using (SAEONLogs.MethodCall<TDbEntity>(GetType()))
             {
                 try
                 {
                     UpdateRequest(true);
-                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    SAEONLogs.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TEntity>();
                     foreach (var dbEntity in DbContext.Set<TDbEntity>().AsNoTracking().Take(MaxAll))
                     {
@@ -271,7 +251,7 @@ namespace SAEON.Observations.SensorThings
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex, "Unable to get all");
+                    SAEONLogs.Exception(ex, "Unable to get all");
                     throw;
                 }
             }
@@ -281,12 +261,12 @@ namespace SAEON.Observations.SensorThings
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public virtual SingleResult<TEntity> GetById([FromODataUri] Guid id)
         {
-            using (Logging.MethodCall<SingleResult<TDbEntity>>(GetType(), new MethodCallParameters { { "Id", id } }))
+            using (SAEONLogs.MethodCall<SingleResult<TDbEntity>>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
                     UpdateRequest(false);
-                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    SAEONLogs.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TEntity>();
                     var dbEntity = DbContext.Set<TDbEntity>().AsNoTracking().FirstOrDefault(i => i.Id == id);
                     if (dbEntity != null)
@@ -297,7 +277,7 @@ namespace SAEON.Observations.SensorThings
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex, "Unable to get {id}", id);
+                    SAEONLogs.Exception(ex, "Unable to get {id}", id);
                     throw;
                 }
             }
@@ -305,7 +285,7 @@ namespace SAEON.Observations.SensorThings
 
         private TDbRelatedEntity LoadRelatedSingle<TDbRelatedEntity>(Guid id) where TDbRelatedEntity : db.GuidIdEntity
         {
-            using (Logging.MethodCall<TDbEntity, TDbRelatedEntity>(GetType()))
+            using (SAEONLogs.MethodCall<TDbEntity, TDbRelatedEntity>(GetType()))
             {
                 try
                 {
@@ -314,7 +294,7 @@ namespace SAEON.Observations.SensorThings
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -322,7 +302,7 @@ namespace SAEON.Observations.SensorThings
 
         private IQueryable<TDbRelatedEntity> LoadRelatedMany<TDbRelatedEntity>(Guid id) where TDbRelatedEntity : db.GuidIdEntity
         {
-            using (Logging.MethodCall<TDbEntity, TDbRelatedEntity>(GetType()))
+            using (SAEONLogs.MethodCall<TDbEntity, TDbRelatedEntity>(GetType()))
             {
                 try
                 {
@@ -397,7 +377,7 @@ namespace SAEON.Observations.SensorThings
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -405,7 +385,7 @@ namespace SAEON.Observations.SensorThings
 
         private IQueryable<TDbRelatedEntity> LoadRelatedManyIntId<TDbRelatedEntity>(Guid id) where TDbRelatedEntity : db.IntIdEntity
         {
-            using (Logging.MethodCall<TDbEntity, TDbRelatedEntity>(GetType()))
+            using (SAEONLogs.MethodCall<TDbEntity, TDbRelatedEntity>(GetType()))
             {
                 try
                 {
@@ -432,7 +412,7 @@ namespace SAEON.Observations.SensorThings
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -443,12 +423,12 @@ namespace SAEON.Observations.SensorThings
 
         protected SingleResult<TRelatedEntity> GetRelatedSingle<TRelatedEntity, TDbRelatedEntity>(Guid id) where TRelatedEntity : SensorThingsGuidIdEntity where TDbRelatedEntity : db.GuidIdEntity
         {
-            using (Logging.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
+            using (SAEONLogs.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
             {
                 try
                 {
                     UpdateRequest(false);
-                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    SAEONLogs.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TRelatedEntity>();
                     var dbRelatedEntity = LoadRelatedSingle<TDbRelatedEntity>(id);
                     if (dbRelatedEntity != null)
@@ -459,7 +439,7 @@ namespace SAEON.Observations.SensorThings
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -469,12 +449,12 @@ namespace SAEON.Observations.SensorThings
         //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop) required on calling class
         protected IQueryable<TRelatedEntity> GetRelatedMany<TRelatedEntity, TDbRelatedEntity>(Guid id) where TDbRelatedEntity : db.GuidIdEntity where TRelatedEntity : SensorThingsGuidIdEntity
         {
-            using (Logging.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
+            using (SAEONLogs.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
             {
                 try
                 {
                     UpdateRequest(true);
-                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    SAEONLogs.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TRelatedEntity>();
                     foreach (var dbRelatedEntity in LoadRelatedMany<TDbRelatedEntity>(id))
                     {
@@ -484,7 +464,7 @@ namespace SAEON.Observations.SensorThings
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -494,12 +474,12 @@ namespace SAEON.Observations.SensorThings
         //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop) required on calling class
         protected IQueryable<TRelatedEntity> GetRelatedManyIntId<TRelatedEntity, TDbRelatedEntity>(Guid id) where TDbRelatedEntity : db.IntIdEntity where TRelatedEntity : SensorThingsIntIdEntity
         {
-            using (Logging.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
+            using (SAEONLogs.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
             {
                 try
                 {
                     UpdateRequest(true);
-                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    SAEONLogs.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TRelatedEntity>();
                     foreach (var dbRelatedEntity in LoadRelatedManyIntId<TDbRelatedEntity>(id))
                     {
@@ -509,7 +489,7 @@ namespace SAEON.Observations.SensorThings
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -537,29 +517,26 @@ namespace SAEON.Observations.SensorThings
 
         private T ConvertDbEntityIntId<T, TDb>(TDb dbEntity) where T : SensorThingsIntIdEntity where TDb : db.IntIdEntity
         {
-            using (Logging.MethodCall<T, TDb>(GetType()))
+            using (SAEONLogs.MethodCall<T, TDb>(GetType()))
             {
                 object result = default(T);
-                switch (dbEntity)
+                result = dbEntity switch
                 {
-                    case db.SensorThingsObservation dbObservation:
-                        result = ConvertObservation(dbObservation);
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
+                    db.SensorThingsObservation dbObservation => ConvertObservation(dbObservation),
+                    _ => throw new NotImplementedException(),
+                };
                 return (T)result;
             }
 
             Observation ConvertObservation(db.SensorThingsObservation dbObservation)
             {
-                using (Logging.MethodCall(GetType()))
+                using (SAEONLogs.MethodCall(GetType()))
                 {
                     var result = Mapper.Map<Observation>(dbObservation);
                     result.PhenomenonTimeString = new TimeString(dbObservation.Date);
                     result.ResultTimeString = new TimeString(dbObservation.Date);
                     result.Result = dbObservation.Value;
-                    //Logging.Verbose("Result: {@Result}", result);
+                    //SAEONLogs.Verbose("Result: {@Result}", result);
                     return result;
 
                 }
@@ -573,20 +550,15 @@ namespace SAEON.Observations.SensorThings
 
         private T ConvertDbEntityGuidId<T, TDb>(TDb dbEntity) where T : SensorThingsGuidIdEntity where TDb : db.GuidIdEntity
         {
-            using (Logging.MethodCall<T, TDb>(GetType()))
+            using (SAEONLogs.MethodCall<T, TDb>(GetType()))
             {
                 object result = default(T);
-                switch (dbEntity)
+                result = dbEntity switch
                 {
-                    case db.SensorThingsDatastream dbDatastream:
-                        result = ConvertDatastream(dbDatastream);
-                        break;
-                    case db.SensorThingsFeatureOfInterest dbFeatureOfInterest:
-                        result = ConvertFeatureOfInterest(dbFeatureOfInterest);
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
+                    db.SensorThingsDatastream dbDatastream => ConvertDatastream(dbDatastream),
+                    db.SensorThingsFeatureOfInterest dbFeatureOfInterest => ConvertFeatureOfInterest(dbFeatureOfInterest),
+                    _ => throw new NotImplementedException(),
+                };
                 return (T)result;
             }
 
@@ -597,7 +569,7 @@ namespace SAEON.Observations.SensorThings
                     return GeographyFactory.Polygon().Ring(left, top).LineTo(left, top).LineTo(right, top).LineTo(right, bottom).LineTo(left, bottom).LineTo(left, top).Build();
                 }
 
-                using (Logging.MethodCall(GetType()))
+                using (SAEONLogs.MethodCall(GetType()))
                 {
                     var result = Mapper.Map<Datastream>(dbDatastream);
                     result.UnitOfMeasurement = new UnitOfMeasurement
@@ -617,19 +589,19 @@ namespace SAEON.Observations.SensorThings
                         result.PhenomenonTimeInterval = new TimeInterval(dbDatastream.StartDate.Value, dbDatastream.EndDate.Value);
                         result.ResultTimeInterval = new TimeInterval(dbDatastream.StartDate.Value, dbDatastream.EndDate.Value);
                     }
-                    //Logging.Verbose("Result: {@Result}", result);
+                    //SAEONLogs.Verbose("Result: {@Result}", result);
                     return result;
                 }
             }
 
             FeatureOfInterest ConvertFeatureOfInterest(db.SensorThingsFeatureOfInterest dbFeatureOfInterest)
             {
-                using (Logging.MethodCall(GetType()))
+                using (SAEONLogs.MethodCall(GetType()))
                 {
                     var result = Mapper.Map<FeatureOfInterest>(dbFeatureOfInterest);
                     var dbLocation = DbContext.SensorThingsLocations.AsNoTracking().First(i => i.Id == dbFeatureOfInterest.Id);
                     result.Feature = new GeoJSONPoint(GeographyPoint.Create(dbLocation.Latitude, dbLocation.Longitude, dbLocation.Elevation));
-                    //Logging.Verbose("Result: {@Result}", result);
+                    //SAEONLogs.Verbose("Result: {@Result}", result);
                     return result;
                 }
             }
@@ -663,12 +635,12 @@ namespace SAEON.Observations.SensorThings
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public virtual IQueryable<TEntity> GetAll()
         {
-            using (Logging.MethodCall<TDbEntity>(GetType()))
+            using (SAEONLogs.MethodCall<TDbEntity>(GetType()))
             {
                 try
                 {
                     UpdateRequest(true);
-                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    SAEONLogs.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TEntity>();
                     foreach (var dbEntity in DbContext.Set<TDbEntity>().AsNoTracking().Take(MaxAll))
                     {
@@ -678,7 +650,7 @@ namespace SAEON.Observations.SensorThings
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex, "Unable to get all");
+                    SAEONLogs.Exception(ex, "Unable to get all");
                     throw;
                 }
             }
@@ -688,12 +660,12 @@ namespace SAEON.Observations.SensorThings
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public virtual SingleResult<TEntity> GetById([FromODataUri] int id)
         {
-            using (Logging.MethodCall<SingleResult<TDbEntity>>(GetType(), new MethodCallParameters { { "Id", id } }))
+            using (SAEONLogs.MethodCall<SingleResult<TDbEntity>>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
                     UpdateRequest(false);
-                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    SAEONLogs.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TEntity>();
                     var dbEntity = DbContext.Set<TDbEntity>().AsNoTracking().FirstOrDefault(i => i.Id == id);
                     if (dbEntity != null)
@@ -704,7 +676,7 @@ namespace SAEON.Observations.SensorThings
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex, "Unable to get {id}", id);
+                    SAEONLogs.Exception(ex, "Unable to get {id}", id);
                     throw;
                 }
             }
@@ -712,7 +684,7 @@ namespace SAEON.Observations.SensorThings
 
         private TDbRelatedEntity LoadRelatedSingle<TDbRelatedEntity>(int id) where TDbRelatedEntity : db.GuidIdEntity
         {
-            using (Logging.MethodCall<TDbEntity, TDbRelatedEntity>(GetType()))
+            using (SAEONLogs.MethodCall<TDbEntity, TDbRelatedEntity>(GetType()))
             {
                 try
                 {
@@ -721,7 +693,7 @@ namespace SAEON.Observations.SensorThings
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -729,7 +701,7 @@ namespace SAEON.Observations.SensorThings
 
         private IQueryable<TDbRelatedEntity> LoadRelatedMany<TDbRelatedEntity>(int id) where TDbRelatedEntity : db.GuidIdEntity
         {
-            using (Logging.MethodCall<TDbEntity, TDbRelatedEntity>(GetType()))
+            using (SAEONLogs.MethodCall<TDbEntity, TDbRelatedEntity>(GetType()))
             {
                 try
                 {
@@ -754,7 +726,7 @@ namespace SAEON.Observations.SensorThings
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -765,12 +737,12 @@ namespace SAEON.Observations.SensorThings
 
         protected SingleResult<TRelatedEntity> GetRelatedSingle<TRelatedEntity, TDbRelatedEntity>(int id) where TRelatedEntity : SensorThingsGuidIdEntity where TDbRelatedEntity : db.GuidIdEntity
         {
-            using (Logging.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
+            using (SAEONLogs.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
             {
                 try
                 {
                     UpdateRequest(false);
-                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    SAEONLogs.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TRelatedEntity>();
                     var dbRelatedEntity = LoadRelatedSingle<TDbRelatedEntity>(id);
                     if (dbRelatedEntity != null)
@@ -781,7 +753,7 @@ namespace SAEON.Observations.SensorThings
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }

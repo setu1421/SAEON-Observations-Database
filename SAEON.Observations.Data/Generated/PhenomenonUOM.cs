@@ -354,35 +354,41 @@ namespace SAEON.Observations.Data
 		
 		#region ForeignKey Properties
 		
+        private SAEON.Observations.Data.AspnetUser _AspnetUser = null;
 		/// <summary>
 		/// Returns a AspnetUser ActiveRecord object related to this PhenomenonUOM
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetUser AspnetUser
 		{
-			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }
+//			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }  
+			get { return _AspnetUser ?? (_AspnetUser = SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId)); }
 			set { SetColumnValue("UserId", value.UserId); }
 		}
 		
 		
+        private SAEON.Observations.Data.Phenomenon _Phenomenon = null;
 		/// <summary>
 		/// Returns a Phenomenon ActiveRecord object related to this PhenomenonUOM
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Phenomenon Phenomenon
 		{
-			get { return SAEON.Observations.Data.Phenomenon.FetchByID(this.PhenomenonID); }
+//			get { return SAEON.Observations.Data.Phenomenon.FetchByID(this.PhenomenonID); }  
+			get { return _Phenomenon ?? (_Phenomenon = SAEON.Observations.Data.Phenomenon.FetchByID(this.PhenomenonID)); }
 			set { SetColumnValue("PhenomenonID", value.Id); }
 		}
 		
 		
+        private SAEON.Observations.Data.UnitOfMeasure _UnitOfMeasure = null;
 		/// <summary>
 		/// Returns a UnitOfMeasure ActiveRecord object related to this PhenomenonUOM
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.UnitOfMeasure UnitOfMeasure
 		{
-			get { return SAEON.Observations.Data.UnitOfMeasure.FetchByID(this.UnitOfMeasureID); }
+//			get { return SAEON.Observations.Data.UnitOfMeasure.FetchByID(this.UnitOfMeasureID); }  
+			get { return _UnitOfMeasure ?? (_UnitOfMeasure = SAEON.Observations.Data.UnitOfMeasure.FetchByID(this.UnitOfMeasureID)); }
 			set { SetColumnValue("UnitOfMeasureID", value.Id); }
 		}
 		

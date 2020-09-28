@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		4 Drop Indexes.sql = 4 Drop Indexes.sql
 		5 Remove FileGroup.sql = 5 Remove FileGroup.sql
 		FileGroups LOB_Data.sql = FileGroups LOB_Data.sql
+		..\Index file groups.sql = ..\Index file groups.sql
 		Observations.2.0.61.publish.sql = Observations.2.0.61.publish.sql
 		Observations.2.0.61.publish.txt = Observations.2.0.61.publish.txt
 		ObservationsFynbos.2.0.61.publish.sql = ObservationsFynbos.2.0.61.publish.sql
@@ -26,7 +27,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FFFECBD3-10AB-4DCB-85A0-74213A4743CC}.Default|Default.ActiveCfg = Default
+		{52CF73B3-4107-4463-82B1-B0E97BC488A7}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

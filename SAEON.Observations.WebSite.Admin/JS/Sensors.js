@@ -5,16 +5,15 @@
 
     tfCode.rvConfig.remoteValidated = false;
     tfCode.rvConfig.remoteValid = false;
+    tfCode.markAsValid();
 
     tfName.rvConfig.remoteValidated = false;
     tfName.rvConfig.remoteValid = false;
-
-    tfDescription.rvConfig.remoteValidated = false;
-    tfDescription.rvConfig.remoteValid = false;
-
-    tfCode.markAsValid();
     tfName.markAsValid();
-    tfDescription.markAsValid();
+
+    //tfDescription.rvConfig.remoteValidated = false;
+    //tfDescription.rvConfig.remoteValid = false;
+    //tfDescription.markAsValid();
 
     var rd = cbDataSource.findRecord(cbDataSource.valueField, record.data.DataSourceID);
 
@@ -33,16 +32,11 @@ function New() {
 
     tfCode.rvConfig.remoteValidated = false;
     tfCode.rvConfig.remoteValid = false;
+    tfCode.markAsValid();
 
     tfName.rvConfig.remoteValidated = false;
     tfName.rvConfig.remoteValid = false;
-
-    tfDescription.rvConfig.remoteValidated = false;
-    tfDescription.rvConfig.remoteValid = false;
-
-    tfCode.markAsValid();
     tfName.markAsValid();
-    tfDescription.markAsValid();
 
     cbDataSchema.markAsValid();
 

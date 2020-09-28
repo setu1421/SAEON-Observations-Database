@@ -3,11 +3,14 @@ using SAEON.Logs;
 using SAEON.Observations.Data;
 using SubSonic;
 using System;
+using System.Configuration;
 
 public partial class Admin_Programmes : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true" && Request.IsLocal;
+        btnValidate.Hidden = !showValidate;
         if (!X.IsAjaxRequest)
         {
             ProjectStore.DataSource = new ProjectCollection().OrderByAsc(Project.Columns.Name).Load();
@@ -30,7 +33,6 @@ public partial class Admin_Programmes : System.Web.UI.Page
         e.Success = true;
         tfCode.HasValue();
         tfName.HasValue();
-        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -61,7 +63,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             try
             {
@@ -99,7 +101,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 MessageBoxes.Error(ex, "Error", "Unable to save programme");
             }
         }
@@ -161,7 +163,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
 
     protected void ProjectLinksSave(object sender, DirectEventArgs e)
     {
-        using (Logging.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType()))
         {
             RowSelectionModel sm = AvailableProjectsGrid.SelectionModel.Primary as RowSelectionModel;
             RowSelectionModel programmeRow = ProgrammesGrid.SelectionModel.Primary as RowSelectionModel;
@@ -187,7 +189,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
                         }
                         catch (Exception ex)
                         {
-                            Logging.Exception(ex);
+                            SAEONLogs.Exception(ex);
                             MessageBoxes.Error(ex, "Error", "Unable to link programme");
                         }
                 }

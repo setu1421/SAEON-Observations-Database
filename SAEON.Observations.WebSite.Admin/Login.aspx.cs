@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
-using Ext.Net;
-using Serilog;
-using System.Threading;
+﻿using Ext.Net;
 using SAEON.Logs;
+using Serilog;
+using System;
+using System.Threading;
+using System.Web.Security;
 
 /// <summary>
 /// Summary description for Login
@@ -17,10 +14,10 @@ public partial class _Login : System.Web.UI.Page
     {
         try
         {
-            bool isValid = Membership.ValidateUser(this.txtUsername.Text, this.txtPassword.Text);
+            bool isValid = Membership.ValidateUser(txtUsername.Text, this.txtPassword.Text);
             try
             {
-                Logging.Information("Login: {UserName} {Valid}", txtUsername.Text, isValid);
+                SAEONLogs.Information("Login: {UserName} {Valid}", txtUsername.Text, isValid);
                 Auditing.Log(GetType(), new MethodCallParameters {
                     { "UserName", txtUsername.Text },
                     { "Valid", isValid }
@@ -28,24 +25,23 @@ public partial class _Login : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
             }
             if (isValid)
             {
 
                 //X.MessageBox.Alert("Success", "Logged in").Show();
 
-                FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(this.txtUsername.Text, cbRememberMe.Checked, 480);
-                FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(ticket.Version, ticket.Name, ticket.IssueDate, ticket.Expiration, ticket.IsPersistent, this.txtUsername.Text, ticket.CookiePath);
-                HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(authTicket));
+                //FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(this.txtUsername.Text, cbRememberMe.Checked, 480);
+                //FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(ticket.Version, ticket.Name, ticket.IssueDate, ticket.Expiration, ticket.IsPersistent, this.txtUsername.Text, ticket.CookiePath);
+                //HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(authTicket));
 
-                if (cbRememberMe.Checked)
-                    cookie.Expires = authTicket.Expiration;
+                //if (cbRememberMe.Checked)
+                //    cookie.Expires = authTicket.Expiration;
 
-                HttpContext.Current.Response.Cookies.Set(cookie);
-
-                Response.Redirect("Default.aspx");
-
+                //HttpContext.Current.Response.Cookies.Set(cookie);
+                FormsAuthentication.RedirectFromLoginPage(txtUsername.Text, cbRememberMe.Checked);
+                Response.Redirect("~/");
             }
             else
             {

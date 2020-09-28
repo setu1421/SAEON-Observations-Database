@@ -4,6 +4,7 @@
     [Name]          VARCHAR (150)    NOT NULL,
     [Description]   VARCHAR (5000)   NULL,
     [Url]           VARCHAR (250)    NULL,
+	[DigitalObjectIdentifierID] Int null,
     [Latitude]      FLOAT            NULL,
     [Longitude]     FLOAT            NULL,
     [Elevation] Float Null,
@@ -15,11 +16,16 @@
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Station_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
     CONSTRAINT [PKStation] PRIMARY KEY CLUSTERED ([ID]),
+    Constraint [FK_Station_DigitalObjectIdentifierID] Foreign Key ([DigitalObjectIdentifierID]) References [dbo].[DigitalObjectIdentifiers] ([ID]),
     CONSTRAINT [FK_Station_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_Station_Site] FOREIGN KEY ([SiteID]) REFERENCES [dbo].[Site] ([ID]),
     CONSTRAINT [UX_Station_SiteID_Code] UNIQUE ([SiteID], [Code]),
     CONSTRAINT [UX_Station_SiteID_Name] UNIQUE ([SiteID],[Name])
 );
+GO
+CREATE INDEX [IX_Station_DigitalObjectIdentifierID] ON [dbo].[Station]([DigitalObjectIdentifierID])
+GO
+CREATE INDEX [IX_Station_CodeName] ON [dbo].[Station] ([Code],[Name])
 GO
 CREATE INDEX [IX_Station_UserId] ON [dbo].[Station] ([UserId])
 GO
@@ -34,6 +40,8 @@ GO
 CREATE INDEX [IX_Station_StartDate] ON [dbo].[Station] ([StartDate])
 GO
 CREATE INDEX [IX_Station_EndDate] ON [dbo].[Station] ([EndDate])
+GO
+CREATE INDEX [IX_Station_StartDateEndDate] ON [dbo].[Station] ([StartDate],[EndDate])
 GO
 CREATE TRIGGER [dbo].[TR_Station_Insert] ON [dbo].[Station]
 FOR INSERT

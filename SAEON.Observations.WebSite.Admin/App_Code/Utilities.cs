@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.Transactions;
 
 /// <summary>
@@ -58,7 +59,20 @@ public static class Utilities
     public static TransactionScope NewTransactionScope()
     {
         var timeout = TimeSpan.Parse(ConfigurationManager.AppSettings["TransactionTimeout"]);
-        Logging.Information("Transaction: Config {config} Default {Default}", timeout, TransactionManager.DefaultTimeout);
+        SAEONLogs.Information("Transaction: Config {config} Default {Default}", timeout, TransactionManager.DefaultTimeout);
         return new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted, Timeout = timeout });
     }
+
+    public static NumberFormatInfo NumberFormat { get; private set; } = new NumberFormatInfo { NumberDecimalSeparator = "." };
+
+    public static double ParseDouble(string value)
+    {
+        return double.Parse(value, NumberFormat);
+    }
+
+    public static bool TryParseDouble(string value, out double result)
+    {
+        return double.TryParse(value, NumberStyles.Float, NumberFormat, out result);
+    }
+
 }

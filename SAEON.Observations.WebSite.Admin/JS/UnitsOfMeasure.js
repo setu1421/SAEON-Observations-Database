@@ -3,27 +3,30 @@
     DetailsFormPanel.getForm().loadRecord(record);
     DetailsFormPanel.getForm().clearInvalid();
 
+    tfCode.rvConfig.remoteValidated = false;
     tfCode.rvConfig.remoteValid = false;
-    tfCode.rvConfig.remoteValid = false;
+    tfCode.markAsValid();
 
     tfUnit.rvConfig.remoteValidated = false;
     tfUnit.rvConfig.remoteValid = false;
-
-    tfCode.markAsValid();
     tfUnit.markAsValid();
+
     DetailWindow.show();
 }
 
 function New() {
 
     DetailsFormPanel.getForm().reset();
+
+    tfCode.rvConfig.remoteValidated = false;
     tfCode.rvConfig.remoteValid = false;
-    tfCode.rvConfig.remoteValid = false;
+    tfCode.markAsValid();
 
     tfUnit.rvConfig.remoteValidated = false;
     tfUnit.rvConfig.remoteValid = false;
-    DetailWindow.show();
+    tfUnit.markAsValid();
 
+    DetailWindow.show();
 }
 
 function MasterRowSelect(e, record) {
