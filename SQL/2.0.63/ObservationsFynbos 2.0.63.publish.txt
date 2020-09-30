@@ -47,6 +47,8 @@
        [dbo].[Site] (Table)
        [dbo].[Station] (Table)
        [dbo].[vImportBatchSummary] (View)
+       [dbo].[vLocations] (View)
+       [dbo].[vFeatures] (View)
      Create
        [dbo].[UX_DigitalObjectIdentifiers_DOIType_Code] (Unique Constraint)
        [dbo].[UX_DigitalObjectIdentifiers_DOIType_Name] (Unique Constraint)
@@ -77,8 +79,6 @@
        [dbo].[Observation].[IX_Observation_ValueYear] (Index)
      Refresh
        [dbo].[vUserDownloads] (View)
-       [dbo].[vFeatures] (View)
-       [dbo].[vLocations] (View)
        [dbo].[vObservationExpansion] (View)
        [dbo].[vSensorThingsAPIObservations] (View)
        [dbo].[vObservation] (View)
