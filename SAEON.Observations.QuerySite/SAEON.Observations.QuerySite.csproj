@@ -10,7 +10,15 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <ApplicationIcon>SAEON.ico</ApplicationIcon>
     <UserSecretsId>1f8fb41c-861f-4ade-8c0d-3a1e688558b1</UserSecretsId>
+    <ApplicationInsightsResourceId>/subscriptions/53cea979-29f9-43db-aa3d-8349a5bd3452/resourceGroups/SAEON.Observations/providers/microsoft.insights/components/SAEON.Observations.QuerySite.Test</ApplicationInsightsResourceId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
@@ -24,10 +32,12 @@
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="3.1.2" />
     <PackageReference Include="AspNetCore.HealthChecks.Uris" Version="3.1.2" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.8" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
-    <PackageReference Include="SAEON.Observations.Auth" Version="1.0.0" />
+    <PackageReference Include="SAEON.Observations.Auth" Version="1.0.4" />
+    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="18.2.0.59" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Common\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 

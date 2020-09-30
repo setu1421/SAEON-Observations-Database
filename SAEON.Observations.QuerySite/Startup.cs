@@ -46,6 +46,8 @@ namespace SAEON.Observations.QuerySite
                     IdentityModelEventSource.ShowPII = true;
 
                     //services.AddCors();
+                    services.AddResponseCaching();
+                    services.AddResponseCompression();
                     services.Configure<CookiePolicyOptions>(options =>
                     {
                         // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -93,6 +95,7 @@ namespace SAEON.Observations.QuerySite
                     throw;
                 }
             }
+            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -116,8 +119,10 @@ namespace SAEON.Observations.QuerySite
                     app.UseStaticFiles();
 
                     app.UseCookiePolicy();
-                    app.UseRouting();
                     //app.UseCors();
+                    app.UseResponseCaching();
+                    app.UseResponseCompression();
+                    app.UseRouting();
                     app.UseAuthentication();
                     app.UseAuthorization();
                     app.UseSession();

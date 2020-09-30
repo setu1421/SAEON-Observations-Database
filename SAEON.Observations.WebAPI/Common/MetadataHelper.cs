@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SAEON.Logs;
-using SAEON.Observations.Core;
 using System;
 using System.Linq;
 using System.Text;
@@ -117,39 +116,39 @@ namespace SAEON.Observations.WebAPI
                                         metaDataset.Subjects.Add(new MetadataSubject { Name = dataset.StationName });
                                         metaDataset.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}" });
                                         metaDataset.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName} {dataset.OfferingName} {dataset.UnitName}" });
-                                        foreach (var doiPeriodic in await dbContext
-                                             .DigitalObjectIdentifiers
-                                             .Include(i => i.Parent)
-                                             .Include(i => i.Children)
-                                             .Where(i => i.ParentId == doiDataset.Id)
-                                             .ToListAsync())
-                                        {
-                                            var metaPeriodic = MetadataForDOI(doiPeriodic, metaDataset);
-                                            splits = doiPeriodic.Code.Split('~', StringSplitOptions.RemoveEmptyEntries);
-                                            var importBatchSummary = await dbContext.ImportBatchSummary.Include(i => i.ImportBatch).Where(i => i.Id == new Guid(splits[4])).SingleAsync();
-                                            var instrument = await dbContext.Instruments.SingleAsync(i => i.Id == importBatchSummary.InstrumentId);
-                                            var sensor = await dbContext.Sensors.SingleAsync(i => i.Id == importBatchSummary.SensorId);
-                                            metaPeriodic.StartDate = importBatchSummary.StartDate;
-                                            metaPeriodic.EndDate = importBatchSummary.EndDate;
-                                            metaPeriodic.LatitudeNorth = importBatchSummary.LatitudeNorth;
-                                            metaPeriodic.LatitudeSouth = importBatchSummary.LatitudeSouth;
-                                            metaPeriodic.LongitudeWest = importBatchSummary.LongitudeWest;
-                                            metaPeriodic.LongitudeEast = importBatchSummary.LongitudeEast;
-                                            metaPeriodic.ElevationMinimum = importBatchSummary.ElevationMinimum;
-                                            metaPeriodic.ElevationMaximum = importBatchSummary.ElevationMaximum;
-                                            metaPeriodic.Subjects.Add(new MetadataSubject { Name = dataset.StationName });
-                                            metaPeriodic.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}" });
-                                            metaPeriodic.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName} {dataset.OfferingName} {dataset.UnitName}" });
-                                            var periodicName = metaPeriodic.GenerateTitle($"{dataset.StationName}, instrument {instrument.Name}, sensor {sensor.Name} " +
-                                                    $"of {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName} for import batch {importBatchSummary.ImportBatch.Code}");
-                                            metaPeriodic.Generate(periodicName, periodicName);
-                                            doiPeriodic.MetadataJson = metaPeriodic.ToJson();
-                                            oldSha256 = doiPeriodic.MetadataJsonSha256;
-                                            doiPeriodic.MetadataJsonSha256 = doiPeriodic.MetadataJson.Sha256();
-                                            doiPeriodic.ODPMetadataNeedsUpdate = oldSha256 != doiPeriodic.MetadataJsonSha256;
-                                            doiPeriodic.MetadataHtml = metaPeriodic.ToHtml();
-                                            await dbContext.SaveChangesAsync();
-                                        }
+                                        //foreach (var doiPeriodic in await dbContext
+                                        //     .DigitalObjectIdentifiers
+                                        //     .Include(i => i.Parent)
+                                        //     .Include(i => i.Children)
+                                        //     .Where(i => i.ParentId == doiDataset.Id)
+                                        //     .ToListAsync())
+                                        //{
+                                        //    var metaPeriodic = MetadataForDOI(doiPeriodic, metaDataset);
+                                        //    splits = doiPeriodic.Code.Split('~', StringSplitOptions.RemoveEmptyEntries);
+                                        //    var importBatchSummary = await dbContext.ImportBatchSummary.Include(i => i.ImportBatch).Where(i => i.Id == new Guid(splits[4])).SingleAsync();
+                                        //    var instrument = await dbContext.Instruments.SingleAsync(i => i.Id == importBatchSummary.InstrumentId);
+                                        //    var sensor = await dbContext.Sensors.SingleAsync(i => i.Id == importBatchSummary.SensorId);
+                                        //    metaPeriodic.StartDate = importBatchSummary.StartDate;
+                                        //    metaPeriodic.EndDate = importBatchSummary.EndDate;
+                                        //    metaPeriodic.LatitudeNorth = importBatchSummary.LatitudeNorth;
+                                        //    metaPeriodic.LatitudeSouth = importBatchSummary.LatitudeSouth;
+                                        //    metaPeriodic.LongitudeWest = importBatchSummary.LongitudeWest;
+                                        //    metaPeriodic.LongitudeEast = importBatchSummary.LongitudeEast;
+                                        //    metaPeriodic.ElevationMinimum = importBatchSummary.ElevationMinimum;
+                                        //    metaPeriodic.ElevationMaximum = importBatchSummary.ElevationMaximum;
+                                        //    metaPeriodic.Subjects.Add(new MetadataSubject { Name = dataset.StationName });
+                                        //    metaPeriodic.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}" });
+                                        //    metaPeriodic.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName} {dataset.OfferingName} {dataset.UnitName}" });
+                                        //    var periodicName = metaPeriodic.GenerateTitle($"{dataset.StationName}, instrument {instrument.Name}, sensor {sensor.Name} " +
+                                        //            $"of {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName} for import batch {importBatchSummary.ImportBatch.Code}");
+                                        //    metaPeriodic.Generate(periodicName, periodicName);
+                                        //    doiPeriodic.MetadataJson = metaPeriodic.ToJson();
+                                        //    oldSha256 = doiPeriodic.MetadataJsonSha256;
+                                        //    doiPeriodic.MetadataJsonSha256 = doiPeriodic.MetadataJson.Sha256();
+                                        //    doiPeriodic.ODPMetadataNeedsUpdate = oldSha256 != doiPeriodic.MetadataJsonSha256;
+                                        //    doiPeriodic.MetadataHtml = metaPeriodic.ToHtml();
+                                        //    await dbContext.SaveChangesAsync();
+                                        //}
                                         var datasetName = metaDataset.GenerateTitle($"{dataset.StationName} of {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName}");
                                         metaDataset.Generate(datasetName, datasetName);
                                         doiDataset.MetadataJson = metaDataset.ToJson();

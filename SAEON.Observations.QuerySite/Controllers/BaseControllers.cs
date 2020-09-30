@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
+using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
-using SAEON.Observations.QuerySite.Common;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -52,7 +52,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var token = useSession ? HttpContext.Session.GetString(ODPAuthenticationDefaults.SessionAccessToken) : null;
                     if (string.IsNullOrWhiteSpace(token))
                     {
-                        using (var client = new HttpClient() { BaseAddress = new Uri(Config["AuthenticationServerUrl"].AddTrailingSlash()) })
+                        using (var client = new HttpClient() { BaseAddress = new Uri(Config["AuthenticationServerUrl"].AddTrailingForwardSlash()) })
                         {
                             using (var formContent = new FormUrlEncodedContent(new[] {
                                 new KeyValuePair<string, string>("grant_type", "client_credentials"),
@@ -154,7 +154,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var client = new HttpClient();
                     client.DefaultRequestHeaders.Add(TenantAuthenticationDefaults.HeaderKeyTenant, Tenant);
-                    client.BaseAddress = new Uri(Config["WebAPIUrl"].AddTrailingSlash());
+                    client.BaseAddress = new Uri(Config["WebAPIUrl"].AddTrailingForwardSlash());
                     return client;
                 }
                 catch (Exception ex)

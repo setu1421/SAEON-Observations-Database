@@ -1,10 +1,9 @@
-﻿using SAEON.Observations.Core;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
-    public class FeaturesController : BaseController<FeatureNode>
+    public class FeaturesController : InternalApiListController<FeatureNode>
     {
         protected override List<FeatureNode> GetList()
         {

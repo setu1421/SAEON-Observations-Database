@@ -2,9 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
-using SAEON.Observations.Core;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;

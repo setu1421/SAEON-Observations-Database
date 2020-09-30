@@ -5,6 +5,12 @@ namespace SAEON.Observations.WebAPI
 {
     public static class StringExtensions
     {
+        public static string ToCamelCase(this string value)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            return char.ToLowerInvariant(value[0]) + value.Substring(1);
+        }
+
         public static byte[] Sha256(this string value)
         {
             using (var sha256 = SHA256.Create())

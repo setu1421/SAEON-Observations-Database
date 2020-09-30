@@ -16,10 +16,9 @@ using Microsoft.OpenApi.Models;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
-using SAEON.Observations.Core;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+
 
 namespace SAEON.Observations.WebAPI
 {
@@ -50,7 +49,9 @@ namespace SAEON.Observations.WebAPI
             {
                 try
                 {
-                    //services.AddCors();
+                    services.AddCors(o => o.AddSAEONCorsPolicies());
+                    services.AddResponseCaching();
+                    services.AddResponseCompression();
                     services.AddAutoMapper(typeof(Startup));
                     services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
                     services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -71,6 +72,7 @@ namespace SAEON.Observations.WebAPI
                          {
                              options.AddODPPolicies();
                              options.AddTenantPolicy();
+                             options.AddSAEONPolicies();
                          });
 
                     services.AddHttpContextAccessor();
@@ -130,7 +132,10 @@ namespace SAEON.Observations.WebAPI
                     app.UseStaticFiles();
 
                     app.UseRouting();
-                    //app.UseCors();
+                    //app.UseCors(SAEONAuthenticationDefaults.CorsAllowAllPolicy);
+                    app.UseCors();
+                    app.UseResponseCaching();
+                    app.UseResponseCompression();
                     app.UseAuthentication();
                     app.UseAuthorization();
                     app.UseSwagger();
@@ -150,8 +155,9 @@ namespace SAEON.Observations.WebAPI
                             name: "default",
                             pattern: "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllers();
-                        endpoints.Select().Filter().OrderBy().Count().Expand().MaxTop(100);
-                        endpoints.MapODataRoute("OData", "OData", GetEdmModel());
+                        endpoints.Select().Filter().OrderBy().Count().Expand().MaxTop(500);
+                        endpoints.MapODataRoute("Internal", "Internal", GetInternalEdmModel());
+                        endpoints.MapODataRoute("OData", "OData", GetODataEdmModel());
                     });
                 }
                 catch (Exception ex)
@@ -161,9 +167,16 @@ namespace SAEON.Observations.WebAPI
                 }
             }
 
-            IEdmModel GetEdmModel()
+            IEdmModel GetInternalEdmModel()
             {
-                var builder = new ODataConventionModelBuilder();
+                var builder = new ODataConventionModelBuilder() { ContainerName = "Internal" };
+                builder.EntitySet<InventoryDataset>("InventoryDatasets");
+                return builder.GetEdmModel();
+            }
+
+            IEdmModel GetODataEdmModel()
+            {
+                var builder = new ODataConventionModelBuilder() { ContainerName = "OData" };
                 builder.EntitySet<InventoryDataset>("InventoryDatasets");
                 return builder.GetEdmModel();
             }
@@ -173,13 +186,19 @@ namespace SAEON.Observations.WebAPI
         {
             services.AddMvcCore(options =>
             {
-                IEnumerable<ODataOutputFormatter> outputFormatters =
-                    options.OutputFormatters.OfType<ODataOutputFormatter>()
-                        .Where(foramtter => foramtter.SupportedMediaTypes.Count == 0);
-
-                foreach (var outputFormatter in outputFormatters)
+                foreach (var formatter in options.OutputFormatters
+                    .OfType<ODataOutputFormatter>()
+                    .Where(it => !it.SupportedMediaTypes.Any()))
                 {
-                    outputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/odata"));
+                    formatter.SupportedMediaTypes.Add(
+                        new MediaTypeHeaderValue("application/odata"));
+                }
+                foreach (var formatter in options.InputFormatters
+                    .OfType<ODataInputFormatter>()
+                    .Where(it => !it.SupportedMediaTypes.Any()))
+                {
+                    formatter.SupportedMediaTypes.Add(
+                        new MediaTypeHeaderValue("application/odata"));
                 }
             });
         }

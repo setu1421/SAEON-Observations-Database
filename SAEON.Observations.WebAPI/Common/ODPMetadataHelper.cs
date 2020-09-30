@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
-using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;

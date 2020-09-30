@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
-    public class DOIController : BaseController
+    public class DOIController : InternalApiController
     {
         [HttpPost("[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]

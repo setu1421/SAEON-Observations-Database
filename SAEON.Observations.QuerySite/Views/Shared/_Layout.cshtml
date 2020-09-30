@@ -24,30 +24,30 @@
     <title>@(ViewBag.Title == "Observations Database" || string.IsNullOrEmpty(ViewBag.Title) ? "Observations Database" : @ViewBag.Title + " - Observations Database")</title>
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+
     <environment include="Development">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-        <!-- Google Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-        <!-- Bootstrap core CSS -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Material Design Bootstrap -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/SAEON.css" />
     </environment>
     <environment exclude="Development">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-        <!-- Google Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-        <!-- Bootstrap core CSS -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Material Design Bootstrap -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
         <link rel="stylesheet" href="~/css/site.min.css" />
         <link rel="stylesheet" href="~/css/SAEON.min.css" />
     </environment>
+
+    <!-- Syncfusion Essential JS 2 Styles -->
+    <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css" />
+    <!-- Syncfusion Essential JS 2 Scripts -->
+    <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+
     @RenderSection("Styles", required: false)
 </head>
 <body class="bg-SAEON" id="Document">
@@ -70,13 +70,12 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownQuery" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Query</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownQuery">
-                                <a class="dropdown-item" asp-area="" asp-controller="DataWizard" asp-action="Index">Data</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Datasets" asp-action="Index">Datasets</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="InventorySensors" asp-action="Index">Sensor Inventory</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Coverage" asp-action="Index">Coverage</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Query" asp-action="Data">Data</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Query" asp-action="Datasets">Datasets</a>
+                                @*<a class="dropdown-item" asp-area="" asp-controller="Sensors" asp-action="Index">Sensors</a>*@
+                                <a class="dropdown-item" asp-area="" asp-controller="Query" asp-action="Coverage">Coverage</a>
                             </div>
                         </li>
-                        @*<partial name="_AdminPartial" />*@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
                         </li>
@@ -107,12 +106,6 @@
             </h1>
         </header>
 
-        @*<div id="Body" class="container">
-                <main role="main" class="pb-3">
-                    @RenderBody()
-                </main>
-            </div>*@
-
         <div id="Body">
             @RenderBody()
         </div>
@@ -142,28 +135,25 @@
         </footer>
     </div>
 
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+
     <environment names="Development">
-        <!-- JQuery -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <!-- Bootstrap tooltips -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-        <!-- Bootstrap core JavaScript -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
-        <!-- MDB core JavaScript -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
-        <!-- JQuery -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <!-- Bootstrap tooltips -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-        <!-- Bootstrap core JavaScript -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
-        <!-- MDB core JavaScript -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+
     @RenderSection("Scripts", required: false)
+
+    <!-- Syncfusion Essential JS 2 ScriptManager -->
+    <ejs-scripts></ejs-scripts>
 </body>
 </html>
