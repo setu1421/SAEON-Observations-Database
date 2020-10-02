@@ -48,6 +48,8 @@
        [dbo].[Station] (Table)
        [dbo].[vImportBatchSummary] (View)
        [dbo].[vLocations] (View)
+       [dbo].[vInventoryDatasets] (View)
+       [dbo].[vInventorySensors] (View)
        [dbo].[vFeatures] (View)
      Create
        [dbo].[UX_DigitalObjectIdentifiers_DOIType_Code] (Unique Constraint)
@@ -100,8 +102,6 @@
        [dbo].[vSensorThingsAPIInstrumentDates] (View)
        [dbo].[vSensorThingsAPIStationDates] (View)
        [dbo].[vStationInstrument] (View)
-       [dbo].[vInventoryDatasets] (View)
-       [dbo].[vInventorySensors] (View)
        [dbo].[vSensorThingsAPIDatastreams] (View)
        [dbo].[vSensorThingsAPILocations] (View)
        [dbo].[vSensorThingsAPIObservedProperties] (View)

@@ -876,7 +876,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vInventoryDatasets]...';
+PRINT N'Altering [dbo].[vInventoryDatasets]...';
 
 
 GO
@@ -884,21 +884,85 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vInventoryDatasets]';
-
-
+ALTER VIEW [dbo].[vInventoryDatasets]
+AS 
+Select
+  Row_Number() over (order by StationCode, PhenomenonCode, OfferingCode, UnitOfMeasureCode) ID, s.*
+from
+(
+Select
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
+  SiteID, SiteCode, SiteName, SiteDescription, SiteUrl,
+  StationID, StationCode, StationName, StationDescription, StationUrl,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription, PhenomenonUrl,
+  PhenomenonOfferingID, OfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
+  Sum(Count) Count,
+  Min(StartDate) StartDate,
+  Max(EndDate) EndDate,
+  Max(LatitudeNorth) LatitudeNorth,
+  Min(LatitudeSouth) LatitudeSouth,
+  Min(LongitudeWest) LongitudeWest,
+  Max(LongitudeEast) LongitudeEast,
+  Min(ElevationMinimum) ElevationMinimum,
+  Max(ElevationMaximum) ElevationMaximum
+from
+  vImportBatchSummary
+group by
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
+  SiteID, SiteCode, SiteName, SiteDescription, SiteUrl,
+  StationID, StationCode, StationName, StationDescription, StationUrl,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription, PhenomenonUrl,
+  PhenomenonOfferingID, OfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol
+) s
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vInventorySensors]...';
+PRINT N'Altering [dbo].[vInventorySensors]...';
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vInventorySensors]';
-
-
+ALTER VIEW [dbo].[vInventorySensors]
+AS
+Select
+  Row_Number() over (order by SiteName, StationName, InstrumentName, SensorName, PhenomenonName, OfferingName, UnitOfMeasureUnit) ID, s.*
+from
+(
+Select
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
+  SiteID, SiteCode, SiteName, SiteDescription, SiteUrl,
+  StationID, StationCode, StationName, StationDescription, StationUrl,
+  InstrumentID, InstrumentCode, InstrumentName, InstrumentDescription, InstrumentUrl,
+  SensorID, SensorCode, SensorName, SensorDescription, SensorUrl,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription, PhenomenonUrl,
+  PhenomenonOfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
+  Sum(Count) Count, Min(StartDate) StartDate, Max(EndDate) EndDate,
+  Max(LatitudeNorth) LatitudeNorth, Min(LatitudeSouth) LatitudeSouth,
+  Min(LongitudeWest) LongitudeWest, Max(LongitudeEast) LongitudeEast
+from
+  vImportBatchSummary
+group by
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
+  SiteID, SiteCode, SiteName, SiteDescription, SiteUrl,
+  StationID, StationCode, StationName, StationDescription, StationUrl,
+  InstrumentID, InstrumentCode, InstrumentName, InstrumentDescription, InstrumentUrl,
+  SensorID, SensorCode, SensorName, SensorDescription, SensorUrl,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription, PhenomenonUrl,
+  PhenomenonOfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol
+) s
 GO
 PRINT N'Refreshing [dbo].[vSensorThingsAPIDatastreams]...';
 
@@ -1027,6 +1091,9 @@ Select
 from
 (
 Select
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
   SiteID, SiteCode, SiteName, SiteDescription,
   StationID, StationCode, StationName, StationDescription,
   PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription,
@@ -1044,6 +1111,9 @@ Select
 from
   vImportBatchSummary
 group by
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
   SiteID, SiteCode, SiteName, SiteDescription,
   StationID, StationCode, StationName, StationDescription,
   PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription,
