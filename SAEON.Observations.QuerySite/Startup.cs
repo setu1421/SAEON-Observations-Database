@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
+using Syncfusion.Licensing;
 using System;
 
 namespace SAEON.Observations.QuerySite
@@ -44,6 +45,8 @@ namespace SAEON.Observations.QuerySite
                 try
                 {
                     IdentityModelEventSource.ShowPII = true;
+
+                    SyncfusionLicenseProvider.RegisterLicense(" MzI2MjUzQDMxMzgyZTMzMmUzMEFveWppWlNSTVQzRWo2RXFldnVDMU1UQVI5M0VyN3luRUpyY0dkZkRRMWc9");
 
                     //services.AddCors();
                     services.AddResponseCaching();

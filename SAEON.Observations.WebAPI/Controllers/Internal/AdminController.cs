@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SAEON.Logs;
-using SAEON.Observations.Auth;
 using System;
 using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
-    [Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
+    //[Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
     public class AdminController : InternalApiController
     {
         [HttpPost("[action]")]

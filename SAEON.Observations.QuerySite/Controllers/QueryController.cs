@@ -10,7 +10,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         public IActionResult Datasets()
         {
-            ViewData["Tenant"] = HttpContext.Session.GetString(TenantAuthenticationDefaults.HeaderKeyTenant);
+            ViewData["Tenant"] = Tenant;
             ViewData["Authorization"] = "bearer " + HttpContext.Session.GetString(ODPAuthenticationDefaults.SessionAccessToken);
             ViewData["WebAPIUrl"] = Config["WebAPIUrl"].AddTrailingForwardSlash() + "Internal/InventoryDatasets";
             return View();

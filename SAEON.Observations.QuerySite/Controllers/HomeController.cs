@@ -25,6 +25,12 @@ namespace SAEON.Observations.QuerySite.Models
             return View();
         }
 
+        [Route("DataUsage")]
+        public IActionResult DataUsage()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

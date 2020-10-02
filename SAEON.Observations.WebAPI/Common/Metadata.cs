@@ -2,6 +2,7 @@
 using Humanizer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SAEON.Observations.WebAPI.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,22 @@ namespace SAEON.Observations.WebAPI
                 jObj.Add(new JProperty("schemeURI", SchemeUri));
             }
 #endif
+            return jObj;
+        }
+    }
+
+    public class MetadataIdentifier
+    {
+        public string Name { get; set; }
+        public string Type { get; set; }
+
+        public JObject AsJson()
+        {
+            var jObj = new JObject(new JProperty("identifier", Name));
+            if (!string.IsNullOrWhiteSpace(Type))
+            {
+                jObj.Add(new JProperty("identifierType", Type));
+            }
             return jObj;
         }
     }
@@ -199,13 +216,27 @@ namespace SAEON.Observations.WebAPI
             }
             return jObj;
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is MetadataSubject subject &&
+                   Name == subject.Name &&
+                   Scheme == subject.Scheme &&
+                   SchemeUri == subject.SchemeUri &&
+                   ValueUri == subject.ValueUri;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Scheme, SchemeUri, ValueUri);
+        }
     }
 
     public class Metadata
     {
         public Metadata Parent { get; set; }
         public DigitalObjectIdentifier DOI { get; set; }
-        public string Identifier { get; set; }
+        public MetadataIdentifier Identifier => DOI == null ? null : new MetadataIdentifier { Name = DOI.DOI, Type = "DOI" };
         public List<MetadataAlternateIdentifier> AlternateIdentifiers { get; } = new List<MetadataAlternateIdentifier>();
         public MetadataCreator Creator = new MetadataCreator
         {
@@ -420,10 +451,6 @@ namespace SAEON.Observations.WebAPI
                 }
             }
         }
-        //public double? Latitude => LatitudeNorth.HasValue && LatitudeSouth.HasValue ? (LatitudeNorth + LatitudeSouth) / 2 : null;
-        //public double? Longitude => LongitudeWest.HasValue && LongitudeEast.HasValue ? (LongitudeWest + LongitudeEast) / 2 : null;
-        // To Do
-        public MetadataRelatedIdentifier IsPartOf;
 
         public List<MetadataRelatedIdentifier> RelatedIdentifiers { get; } = new List<MetadataRelatedIdentifier>();
 
@@ -505,6 +532,10 @@ namespace SAEON.Observations.WebAPI
                 sbText.AppendLine($"This collection is part of the {(DOI.Parent.DOIType == DOIType.ObservationsDb ? "" : DOI.Parent.DOIType.Humanize(LetterCasing.LowerCase))} {DOI.Parent.Name} doi:{DOI.Parent.DOI}");
                 sbHtml.AppendHtmlP($"This collection is part of the {(DOI.Parent.DOIType == DOIType.ObservationsDb ? "" : DOI.Parent.DOIType.Humanize(LetterCasing.LowerCase))} {DOI.Parent.Name} <a href='{DOI.Parent.DOIUrl}'>{DOI.Parent.DOI}</a>");
                 RelatedIdentifiers.Add(new MetadataRelatedIdentifier { Name = "IsPartOf", Identifier = DOI.Parent.DOI, Type = "DOI" });
+                foreach (var subject in Subjects.Distinct())
+                {
+                    Parent.Subjects.AddIfNotExists(subject);
+                }
             }
             // Dynamic children
             var dynamicChildren = DOI.Children.Where(i => MetadataHelper.DynamicDOITypes.Contains(i.DOIType)).OrderBy(i => i.Name).ToList();
@@ -543,7 +574,7 @@ namespace SAEON.Observations.WebAPI
             {
                 sbHtml.AppendHtmlP($"{"License:".HtmlB()} {Rights[0].Name}");
             }
-            sbHtml.AppendHtmlP($"{"Keywords:".HtmlB()} {string.Join(", ", Subjects.Where(i => !i.Name.StartsWith("http")).Select(i => i.Name).OrderBy(i => i))}");
+            sbHtml.AppendHtmlP($"{"Keywords:".HtmlB()} {string.Join(", ", Subjects.Where(i => !i.Name.StartsWith("http")).Distinct().OrderBy(i => i.Name).Select(i => i.Name))}");
             if (!string.IsNullOrWhiteSpace(DOI.MetadataUrl))
             {
                 sbHtml.AppendHtmlP($"{"Metadata URL:".HtmlB()} <a href='{DOI.MetadataUrl}'>{DOI.MetadataUrl}</a>".Trim());
@@ -599,8 +630,13 @@ namespace SAEON.Observations.WebAPI
                             //new JProperty("geoLocationPlace", $"{splits[0]}, {splits[1]}"),
                             new JProperty("geoLocationPoint",
                                 new JObject(
+#if Schema43
                                     new JProperty("pointLatitude", LatitudeNorth.ToString()),
                                     new JProperty("pointLongitude", LongitudeWest.ToString())
+#else
+                                    new JProperty("pointLatitude", LatitudeNorth),
+                                    new JProperty("pointLongitude", LongitudeWest)
+#endif
                                 )
                             )
                         ));
@@ -611,10 +647,17 @@ namespace SAEON.Observations.WebAPI
                         new JObject(
                             new JProperty("geoLocationBox",
                                 new JObject(
+#if Schema43
                                     new JProperty("westBoundLongitude", LongitudeWest.ToString()),
                                     new JProperty("eastBoundLongitude", LongitudeEast.ToString()),
                                     new JProperty("northBoundLatitude", LatitudeNorth.ToString()),
                                     new JProperty("southBoundLatitude", LatitudeSouth.ToString())
+#else
+                                    new JProperty("westBoundLongitude", LongitudeWest),
+                                    new JProperty("eastBoundLongitude", LongitudeEast),
+                                    new JProperty("northBoundLatitude", LatitudeNorth),
+                                    new JProperty("southBoundLatitude", LatitudeSouth)
+#endif
                                 )
                             )
                         )
@@ -623,12 +666,7 @@ namespace SAEON.Observations.WebAPI
             }
             var jObj =
                 new JObject(
-                    new JProperty("identifier",
-                        new JObject(
-                            new JProperty("identifier", Identifier),
-                            new JProperty("identifierType", "DOI")
-                        )
-                    ),
+                    new JProperty("identifier", Identifier?.AsJson()),
                     new JProperty("language", Language),
                     new JProperty("resourceType", ResourceType.AsJson()),
                     new JProperty("publisher", Publisher),
@@ -652,7 +690,7 @@ namespace SAEON.Observations.WebAPI
                     ),
                     new JProperty("rightsList", new JArray(Rights.Select(i => i.AsJson()))),
                     new JProperty("contributors", new JArray(Contributors.Select(i => i.AsJson()))),
-                    new JProperty("subjects", new JArray(Subjects.Select(i => i.AsJson()))),
+                    new JProperty("subjects", new JArray(Subjects.Distinct().OrderBy(i => i.Name).Select(i => i.AsJson()))),
                     new JProperty("geoLocations", jGeoLocations),
                     new JProperty("alternateIdentifiers", new JArray(AlternateIdentifiers.Select(i => i.AsJson()))),
                     new JProperty("relatedIdentifiers", new JArray(RelatedIdentifiers.Select(i => i.AsJson()))),

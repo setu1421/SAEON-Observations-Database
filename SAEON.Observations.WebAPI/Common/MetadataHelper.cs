@@ -32,7 +32,6 @@ namespace SAEON.Observations.WebAPI
                     var metadata = new Metadata
                     {
                         DOI = doi,
-                        Identifier = doi.DOI,
                         Parent = parent,
                         ItemDescription = itemDescription,
                         ItemUrl = itemUrl

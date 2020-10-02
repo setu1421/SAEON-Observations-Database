@@ -8,9 +8,10 @@
 
 <div class="row">
     <div class="col-md">
-        <ejs-grid id="Grid">
+        <ejs-grid id="Grid" allowPaging="true" allowSorting="true">
             @*            <e-data-manager url='@config["WebAPIUrl"].AddTrailingForwardSlash()+"Internal/InventoryDatasets' headers="@new object[] {new { Tenant = @ViewData["Tenant"]}, new { Authorization = @ViewData["Authorization"]} }" adaptor="ODataV4Adaptor" crossdomain="true"></e-data-manager>*@
             <e-data-manager url="@ViewData["WebAPIUrl"]" headers="@headers" adaptor="ODataV4Adaptor"></e-data-manager>
+            <e-grid-pagesettings pageSize="25"></e-grid-pagesettings>
             <e-grid-columns>
                 <e-grid-column field="OrganisationName" headerText="Organisation"></e-grid-column>
                 <e-grid-column field="ProgrammeName" headerText="Programme"></e-grid-column>
