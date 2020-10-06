@@ -25,7 +25,8 @@ namespace SAEON.Observations.WebAPI
                     AddLine($"{doi.DOIType} {doi.Code}, {doi.Name}");
                     var jObj = new JObject(
                         new JProperty("collection_key", collection),
-                        new JProperty("schema_key", "saeon-odp-4-2"),
+                        //new JProperty("schema_key", "saeon-odp-4-2"),
+                        new JProperty("schema_key", "saeon-datacite-4-3"),
                         new JProperty("metadata", JObject.Parse(doi.MetadataJson)),
                         new JProperty("terms_conditions_accepted", true),
                         new JProperty("data_agreement_accepted", true),
@@ -72,36 +73,42 @@ namespace SAEON.Observations.WebAPI
                 foreach (var doiOrganisation in await dbContext
                    .DigitalObjectIdentifiers
                    .Where(i => i.DOIType == DOIType.Organisation && i.Code == "SAEON")
+                   .OrderBy(i => i.Name)
                    .ToListAsync())
                 {
                     await GenerateODPMetadataForDynamicDOI(doiOrganisation);
                     foreach (var doiProgramme in await dbContext
                         .DigitalObjectIdentifiers
                         .Where(i => i.ParentId == doiOrganisation.Id)
+                        .OrderBy(i => i.Name)
                         .ToListAsync())
                     {
                         await GenerateODPMetadataForDynamicDOI(doiProgramme);
                         foreach (var doiProject in await dbContext
                             .DigitalObjectIdentifiers
                             .Where(i => i.ParentId == doiProgramme.Id)
+                            .OrderBy(i => i.Name)
                             .ToListAsync())
                         {
                             await GenerateODPMetadataForDynamicDOI(doiProject);
                             foreach (var doiSite in await dbContext
                                 .DigitalObjectIdentifiers
                                 .Where(i => i.ParentId == doiProject.Id)
+                                .OrderBy(i => i.Name)
                                 .ToListAsync())
                             {
                                 await GenerateODPMetadataForDynamicDOI(doiSite);
                                 foreach (var doiStation in await dbContext
                                     .DigitalObjectIdentifiers
                                     .Where(i => i.ParentId == doiSite.Id)
+                                    .OrderBy(i => i.Name)
                                     .ToListAsync())
                                 {
                                     await GenerateODPMetadataForDynamicDOI(doiStation);
                                     foreach (var doiDataset in await dbContext
                                         .DigitalObjectIdentifiers
                                         .Where(i => i.ParentId == doiStation.Id)
+                                        .OrderBy(i => i.Name)
                                         .ToListAsync())
                                     {
                                         await GenerateODPMetadataForDynamicDOI(doiDataset);

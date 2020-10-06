@@ -1,4 +1,4 @@
-﻿//#define Schema43
+﻿#define Schema43
 using Humanizer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -20,7 +20,7 @@ namespace SAEON.Observations.WebAPI
         public JObject AsJson()
         {
             var jObj = new JObject(new JProperty("affiliation", Name));
-#if Schema43
+#if Schema44
             if (!string.IsNullOrWhiteSpace(Identifier))
             {
                 new JProperty("affiliationIdentifier", Identifier);
@@ -264,8 +264,6 @@ namespace SAEON.Observations.WebAPI
             }
         };
         public List<MetadataSubject> Subjects { get; } = new List<MetadataSubject> {
-            new MetadataSubject { Name = "Observations"},
-            new MetadataSubject { Name = "South African Environmental Observation Network (SAEON)"},
             new MetadataSubject
             {
                 Name = "Observations Database",
@@ -631,11 +629,11 @@ namespace SAEON.Observations.WebAPI
                             new JProperty("geoLocationPoint",
                                 new JObject(
 #if Schema43
-                                    new JProperty("pointLatitude", LatitudeNorth.ToString()),
-                                    new JProperty("pointLongitude", LongitudeWest.ToString())
-#else
                                     new JProperty("pointLatitude", LatitudeNorth),
                                     new JProperty("pointLongitude", LongitudeWest)
+#else
+                                    new JProperty("pointLatitude", LatitudeNorth.ToString()),
+                                    new JProperty("pointLongitude", LongitudeWest.ToString())
 #endif
                                 )
                             )
@@ -648,15 +646,15 @@ namespace SAEON.Observations.WebAPI
                             new JProperty("geoLocationBox",
                                 new JObject(
 #if Schema43
-                                    new JProperty("westBoundLongitude", LongitudeWest.ToString()),
-                                    new JProperty("eastBoundLongitude", LongitudeEast.ToString()),
-                                    new JProperty("northBoundLatitude", LatitudeNorth.ToString()),
-                                    new JProperty("southBoundLatitude", LatitudeSouth.ToString())
-#else
                                     new JProperty("westBoundLongitude", LongitudeWest),
                                     new JProperty("eastBoundLongitude", LongitudeEast),
                                     new JProperty("northBoundLatitude", LatitudeNorth),
                                     new JProperty("southBoundLatitude", LatitudeSouth)
+#else
+                                    new JProperty("westBoundLongitude", LongitudeWest.ToString()),
+                                    new JProperty("eastBoundLongitude", LongitudeEast.ToString()),
+                                    new JProperty("northBoundLatitude", LatitudeNorth.ToString()),
+                                    new JProperty("southBoundLatitude", LatitudeSouth.ToString())
 #endif
                                 )
                             )
@@ -666,9 +664,17 @@ namespace SAEON.Observations.WebAPI
             }
             var jObj =
                 new JObject(
+#if Schema43
+                    new JProperty("doi", DOI.DOI),
+#else
                     new JProperty("identifier", Identifier?.AsJson()),
+#endif
                     new JProperty("language", Language),
+#if Schema43
+                    new JProperty("types", ResourceType.AsJson()),
+#else
                     new JProperty("resourceType", ResourceType.AsJson()),
+#endif
                     new JProperty("publisher", Publisher),
                     new JProperty("publicationYear", PublicationYear.ToString()),
                     new JProperty("creators", new JArray(Creator.AsJson())),
@@ -692,8 +698,15 @@ namespace SAEON.Observations.WebAPI
                     new JProperty("contributors", new JArray(Contributors.Select(i => i.AsJson()))),
                     new JProperty("subjects", new JArray(Subjects.Distinct().OrderBy(i => i.Name).Select(i => i.AsJson()))),
                     new JProperty("geoLocations", jGeoLocations),
+#if Schema43
+                    new JProperty("identifiers", new JArray(AlternateIdentifiers.Select(i => i.AsJson()))),
+#else
                     new JProperty("alternateIdentifiers", new JArray(AlternateIdentifiers.Select(i => i.AsJson()))),
+#endif
                     new JProperty("relatedIdentifiers", new JArray(RelatedIdentifiers.Select(i => i.AsJson()))),
+#if Schema43    
+                    new JProperty("schemaVersion", "http://datacite.org/schema/kernel-4"),
+#endif
                     new JProperty("immutableResource", new JObject(
                         new JProperty("resourceURL", DOI.QueryUrl)))
                );

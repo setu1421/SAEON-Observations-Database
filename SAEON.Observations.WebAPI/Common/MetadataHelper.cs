@@ -36,7 +36,8 @@ namespace SAEON.Observations.WebAPI
                         ItemDescription = itemDescription,
                         ItemUrl = itemUrl
                     };
-                    metadata.AlternateIdentifiers.Add(new MetadataAlternateIdentifier { Name = doi.AlternateId.ToString(), Type = "Internal unique identifier" });
+                    // Not required in Schema 4.3
+                    //metadata.AlternateIdentifiers.Add(new MetadataAlternateIdentifier { Name = doi.AlternateId.ToString(), Type = "Internal unique identifier" });
                     return metadata;
                 }
 
@@ -113,8 +114,10 @@ namespace SAEON.Observations.WebAPI
                                         metaDataset.ElevationMinimum = dataset.ElevationMinimum;
                                         metaDataset.ElevationMaximum = dataset.ElevationMaximum;
                                         metaDataset.Subjects.Add(new MetadataSubject { Name = dataset.StationName });
-                                        metaDataset.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}" });
-                                        metaDataset.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName} {dataset.OfferingName} {dataset.UnitName}" });
+                                        metaDataset.Subjects.Add(new MetadataSubject { Name = dataset.PhenomenonName });
+                                        metaDataset.Subjects.Add(new MetadataSubject { Name = dataset.OfferingName });
+                                        metaDataset.Subjects.Add(new MetadataSubject { Name = dataset.UnitName });
+                                        //metaDataset.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName} {dataset.OfferingName} {dataset.UnitName}" });
                                         //foreach (var doiPeriodic in await dbContext
                                         //     .DigitalObjectIdentifiers
                                         //     .Include(i => i.Parent)
@@ -157,6 +160,7 @@ namespace SAEON.Observations.WebAPI
                                         doiDataset.MetadataHtml = metaDataset.ToHtml();
                                         await dbContext.SaveChangesAsync();
                                     }
+                                    metaStation.Subjects.Add(new MetadataSubject { Name = station.Name });
                                     metaStation.Generate();
                                     doiStation.MetadataJson = metaStation.ToJson();
                                     oldSha256 = doiStation.MetadataJsonSha256;
@@ -165,6 +169,7 @@ namespace SAEON.Observations.WebAPI
                                     doiStation.MetadataHtml = metaStation.ToHtml();
                                     await dbContext.SaveChangesAsync();
                                 }
+                                metaSite.Subjects.Add(new MetadataSubject { Name = site.Name });
                                 metaSite.Generate();
                                 doiSite.MetadataJson = metaSite.ToJson();
                                 oldSha256 = doiSite.MetadataJsonSha256;
@@ -173,6 +178,7 @@ namespace SAEON.Observations.WebAPI
                                 doiSite.MetadataHtml = metaSite.ToHtml();
                                 await dbContext.SaveChangesAsync();
                             }
+                            metaProject.Subjects.Add(new MetadataSubject { Name = project.Name });
                             metaProject.Generate();
                             doiProject.MetadataJson = metaProject.ToJson();
                             oldSha256 = doiProject.MetadataJsonSha256;
@@ -181,6 +187,7 @@ namespace SAEON.Observations.WebAPI
                             doiProject.MetadataHtml = metaProject.ToHtml();
                             await dbContext.SaveChangesAsync();
                         }
+                        metaProgramme.Subjects.Add(new MetadataSubject { Name = programme.Name });
                         metaProgramme.Generate();
                         doiProgramme.MetadataJson = metaProgramme.ToJson();
                         oldSha256 = doiProgramme.MetadataJsonSha256;

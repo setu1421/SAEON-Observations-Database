@@ -117,10 +117,6 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-ALTER TABLE [dbo].[DigitalObjectIdentifiers] DROP COLUMN [DOI], COLUMN [DOIUrl];
-
-
-GO
 ALTER TABLE [dbo].[DigitalObjectIdentifiers] ALTER COLUMN [Name] VARCHAR (500) NOT NULL;
 
 
@@ -129,8 +125,6 @@ ALTER TABLE [dbo].[DigitalObjectIdentifiers]
     ADD [AlternateID]            UNIQUEIDENTIFIER CONSTRAINT [DF_DigitalObjectIdentifiers_AlternateID] DEFAULT NewId() NULL,
         [ParentID]               INT              NULL,
         [DOIType]                TINYINT          NOT NULL,
-        [DOI]                    AS               '10.15493/obsdb.' + CONVERT (VARCHAR (20), CONVERT (VARBINARY (1), DOIType), 2) + '.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
-        [DOIUrl]                 AS               'https://doi.org/10.15493/obsdb.' + CONVERT (VARCHAR (20), CONVERT (VARBINARY (1), DOIType), 2) + '.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
         [Code]                   VARCHAR (200)    NOT NULL,
         [MetadataJson]           VARCHAR (MAX)    NOT NULL,
         [MetadataJsonSha256]     BINARY (32)      NOT NULL,

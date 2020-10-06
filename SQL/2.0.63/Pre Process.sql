@@ -1,16 +1,28 @@
 Update
   Organisation
 Set
+  Name = 'South African Environmental Observation Network',
+  Description = 'A sustained, coordinated, responsive and comprehensive South African in-situ environmental observation network that delivers long-term reliable data.',
+  Url = 'https://wwww.saeon.ac.za'
+where
+  Code = 'SAEON'
+Update
+  Programme
+Set
+  Name = 'South African Environmental Observation Network',
+  Description = 'A sustained, coordinated, responsive and comprehensive South African in-situ environmental observation network that delivers long-term reliable data.',
+  Url = 'https://wwww.saeon.ac.za'
+where
+  Code = 'SAEON'
+Update
+  Project
+Set
+  Name = 'South African Environmental Observation Network',
+  Description = 'A sustained, coordinated, responsive and comprehensive South African in-situ environmental observation network that delivers long-term reliable data.',
   Url = 'https://wwww.saeon.ac.za'
 where
   Code = 'SAEON'
 Update Organisation Set Url = null where Url = ''
-Update
-  Programme
-Set
-  Description = 'South African Environmental Observation Network'
-where
-  Code = 'SAEON'
 Update Programme Set Url = null where Url = ''
 Update Project Set Url = null where Url = ''
 Update Site Set Url = null where Url = ''

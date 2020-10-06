@@ -156,25 +156,25 @@ namespace SAEON.Observations.WebAPI
                     return doi;
                 }
 
-                async Task<DigitalObjectIdentifier> EnsureImportBatchSummaryDOI(DigitalObjectIdentifier doiDataset, ImportBatchSummary importBatchSummary)
-                {
-                    var instrument = await dbContext.Instruments.SingleAsync(i => i.Id == importBatchSummary.InstrumentId);
-                    var sensor = await dbContext.Sensors.SingleAsync(i => i.Id == importBatchSummary.SensorId);
-                    var code = $"{doiDataset.Code}~{importBatchSummary.Id}";
-                    var name = $"{doiDataset.Name}, {instrument.Name}, {sensor.Name}, {importBatchSummary.ImportBatch.Code}, {importBatchSummary.StartDate.ToJsonDate()} to {importBatchSummary.EndDate.ToJsonDate()}";
-                    var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Periodic && i.Code == code);
-                    if (doi == null)
-                    {
-                        doi = await AddDOI(DOIType.Periodic, code, name, doiDataset);
-                        importBatchSummary.DigitalObjectIdentifier = doi;
-                        await dbContext.SaveChangesAsync();
-                    }
-                    return doi;
-                }
+                //async Task<DigitalObjectIdentifier> EnsureImportBatchSummaryDOI(DigitalObjectIdentifier doiDataset, ImportBatchSummary importBatchSummary)
+                //{
+                //    var instrument = await dbContext.Instruments.SingleAsync(i => i.Id == importBatchSummary.InstrumentId);
+                //    var sensor = await dbContext.Sensors.SingleAsync(i => i.Id == importBatchSummary.SensorId);
+                //    var code = $"{doiDataset.Code}~{importBatchSummary.Id}";
+                //    var name = $"{doiDataset.Name}, {instrument.Name}, {sensor.Name}, {importBatchSummary.ImportBatch.Code}, {importBatchSummary.StartDate.ToJsonDate()} to {importBatchSummary.EndDate.ToJsonDate()}";
+                //    var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Periodic && i.Code == code);
+                //    if (doi == null)
+                //    {
+                //        doi = await AddDOI(DOIType.Periodic, code, name, doiDataset);
+                //        importBatchSummary.DigitalObjectIdentifier = doi;
+                //        await dbContext.SaveChangesAsync();
+                //    }
+                //    return doi;
+                //}
 
                 AddLine("Generating DOIs");
                 var doiObservations = await EnsureObservationsDbDOI();
-                foreach (var organisation in await dbContext.Organisations.Where(i => i.Code == "SAEON").ToListAsync())
+                foreach (var organisation in await dbContext.Organisations.Where(i => i.Code == "SAEON").OrderBy(i => i.Name).ToListAsync())
                 {
                     var doiOrganisation = await EnsureOrganisationDOI(doiObservations, organisation);
                     var programmeCodes = GetImportBatches()
@@ -195,7 +195,8 @@ namespace SAEON.Observations.WebAPI
                             .Distinct();
                         foreach (var project in await dbContext.Projects
                             .Where(i => i.Code == "SAEON" || i.Code == "SACTN") // Remove once live
-                            .Where(i => projectCodes.Contains(i.Code)).ToListAsync())
+                            .Where(i => projectCodes.Contains(i.Code))
+                            .ToListAsync())
                         {
                             var doiProject = await EnsureProjectDOI(doiProgramme, project);
                             var siteCodes = GetImportBatches()
@@ -208,7 +209,7 @@ namespace SAEON.Observations.WebAPI
                             foreach (var site in await dbContext.Sites
                                 .Where(i => i.Code == "HSB" || i.Code == "CNSP" || i.Code == "JNHK" || i.Code == "CDBG" || i.Code.StartsWith("SACTN")) // Remove once live
                                 .Where(i => siteCodes.Contains(i.Code))
-                                .ToListAsync())
+                               .ToListAsync())
                             {
                                 var doiSite = await EnsureSiteDOI(doiProject, site);
                                 var stationCodes = GetImportBatches()
@@ -219,30 +220,31 @@ namespace SAEON.Observations.WebAPI
                                         i.SiteCode == site.Code)
                                     .Select(i => i.StationCode)
                                     .Distinct();
-                                foreach (var station in await dbContext.Stations.Where(i => stationCodes.Contains(i.Code)).ToListAsync())
+                                foreach (var station in await dbContext.Stations.Where(i => stationCodes.Contains(i.Code))
+                                    .ToListAsync())
                                 {
                                     var doiStation = await EnsureStationDOI(doiSite, station);
                                     foreach (var dataset in await dbContext.Datasets.Where(i => i.StationCode == station.Code).ToListAsync())
                                     {
                                         var doiDataset = await EnsureDatasetDOI(doiStation, station, dataset);
-                                        var importBatchSummaryIds = GetImportBatches()
-                                            .Where(i =>
-                                                i.OrganisationCode == organisation.Code &&
-                                                i.ProgrammeCode == programme.Code &&
-                                                i.ProjectCode == project.Code &&
-                                                i.SiteCode == site.Code &&
-                                                i.StationCode == station.Code &&
-                                                i.PhenomenonCode == dataset.PhenomenonCode &&
-                                                i.OfferingCode == dataset.OfferingCode &&
-                                                i.UnitCode == dataset.UnitCode)
-                                            .Select(i => i.Id);
-                                        foreach (var importBatchSummary in await dbContext.ImportBatchSummary
-                                            .Include(i => i.ImportBatch)
-                                            .Where(i => importBatchSummaryIds.Contains(i.Id))
-                                            .ToListAsync())
-                                        {
-                                            var doiImportBatchSummary = await EnsureImportBatchSummaryDOI(doiDataset, importBatchSummary);
-                                        }
+                                        //var importBatchSummaryIds = GetImportBatches()
+                                        //    .Where(i =>
+                                        //        i.OrganisationCode == organisation.Code &&
+                                        //        i.ProgrammeCode == programme.Code &&
+                                        //        i.ProjectCode == project.Code &&
+                                        //        i.SiteCode == site.Code &&
+                                        //        i.StationCode == station.Code &&
+                                        //        i.PhenomenonCode == dataset.PhenomenonCode &&
+                                        //        i.OfferingCode == dataset.OfferingCode &&
+                                        //        i.UnitCode == dataset.UnitCode)
+                                        //    .Select(i => i.Id);
+                                        //foreach (var importBatchSummary in await dbContext.ImportBatchSummary
+                                        //    .Include(i => i.ImportBatch)
+                                        //    .Where(i => importBatchSummaryIds.Contains(i.Id))
+                                        //    .ToListAsync())
+                                        //{
+                                        //    var doiImportBatchSummary = await EnsureImportBatchSummaryDOI(doiDataset, importBatchSummary);
+                                        //}
                                     }
                                 }
                             }
