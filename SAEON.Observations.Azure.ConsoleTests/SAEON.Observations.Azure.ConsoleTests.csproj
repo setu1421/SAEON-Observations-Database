@@ -73,8 +73,8 @@
     <Reference Include="Microsoft.Azure.Cosmos.Table, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.Cosmos.Table.1.0.8\lib\netstandard2.0\Microsoft.Azure.Cosmos.Table.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Azure.DocumentDB.Core, Version=2.11.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.DocumentDB.Core.2.11.6\lib\netstandard1.6\Microsoft.Azure.DocumentDB.Core.dll</HintPath>
+    <Reference Include="Microsoft.Azure.DocumentDB.Core, Version=2.12.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.DocumentDB.Core.2.12.0\lib\netstandard1.6\Microsoft.Azure.DocumentDB.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.1\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -100,20 +100,20 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Azure.CosmosDB, Version=1.0.168.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Azure.CosmosDB.1.0.168\lib\net472\SAEON.Azure.CosmosDB.dll</HintPath>
+    <Reference Include="SAEON.Azure.CosmosDB, Version=1.0.172.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Azure.CosmosDB.1.0.172\lib\net472\SAEON.Azure.CosmosDB.dll</HintPath>
     </Reference>
     <Reference Include="SAEON.Azure.Storage, Version=1.0.72.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Azure.Storage.1.0.72\lib\net472\SAEON.Azure.Storage.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Core, Version=1.0.26.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Core.1.0.26\lib\net472\SAEON.Core.dll</HintPath>
+    <Reference Include="SAEON.Core, Version=1.0.28.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Core.1.0.28\lib\net472\SAEON.Core.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Logs.NetFramework, Version=1.0.24.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Logs.NetFramework.1.0.24\lib\net472\SAEON.Logs.NetFramework.dll</HintPath>
+    <Reference Include="SAEON.Logs.NetFramework, Version=1.0.27.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Logs.NetFramework.1.0.27\lib\net472\SAEON.Logs.NetFramework.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Observations.Azure, Version=1.0.152.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Observations.Azure.1.0.152\lib\net472\SAEON.Observations.Azure.dll</HintPath>
+    <Reference Include="SAEON.Observations.Azure, Version=1.0.153.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Observations.Azure.1.0.153\lib\net472\SAEON.Observations.Azure.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.10.0\lib\net46\Serilog.dll</HintPath>
@@ -372,10 +372,10 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Azure.DocumentDB.Core.2.11.6\build\Microsoft.Azure.DocumentDB.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.DocumentDB.Core.2.11.6\build\Microsoft.Azure.DocumentDB.Core.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Azure.Cosmos.3.13.0\build\netstandard2.0\Microsoft.Azure.Cosmos.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.Cosmos.3.13.0\build\netstandard2.0\Microsoft.Azure.Cosmos.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Azure.DocumentDB.Core.2.12.0\build\Microsoft.Azure.DocumentDB.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.DocumentDB.Core.2.12.0\build\Microsoft.Azure.DocumentDB.Core.targets'))" />
   </Target>
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
-  <Import Project="..\packages\Microsoft.Azure.DocumentDB.Core.2.11.6\build\Microsoft.Azure.DocumentDB.Core.targets" Condition="Exists('..\packages\Microsoft.Azure.DocumentDB.Core.2.11.6\build\Microsoft.Azure.DocumentDB.Core.targets')" />
   <Import Project="..\packages\Microsoft.Azure.Cosmos.3.13.0\build\netstandard2.0\Microsoft.Azure.Cosmos.targets" Condition="Exists('..\packages\Microsoft.Azure.Cosmos.3.13.0\build\netstandard2.0\Microsoft.Azure.Cosmos.targets')" />
+  <Import Project="..\packages\Microsoft.Azure.DocumentDB.Core.2.12.0\build\Microsoft.Azure.DocumentDB.Core.targets" Condition="Exists('..\packages\Microsoft.Azure.DocumentDB.Core.2.12.0\build\Microsoft.Azure.DocumentDB.Core.targets')" />
 </Project>

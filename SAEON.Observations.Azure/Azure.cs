@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace SAEON.Observations.Azure
 {
-    public class ObservationsAzure
+    public class ObservationsAzure : IDisposable
     {
+        private bool disposedValue;
         private const string BlobStorageContainer = "saeon-observations";
         //private const string ObservationsStorageTable = "Observations";
         private const string CosmosDBDatabase = "saeon-observations";
@@ -82,10 +83,36 @@ namespace SAEON.Observations.Azure
             }
         }
 
+        // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
         ~ObservationsAzure()
         {
-            Storage = null;
-            CosmosDB = null;
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects)
+                    Storage = null;
+                    CosmosDB.Dispose();
+                    CosmosDB = null;
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
 
         public async Task InitializeAsync()
