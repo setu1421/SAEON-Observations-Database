@@ -368,6 +368,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VStation = @"vStation";
         
+		public static readonly string VStationDataset = @"vStationDatasets";
+        
 		public static readonly string VStationInstrument = @"vStationInstrument";
         
 		public static readonly string VStationOrganisation = @"vStationOrganisation";

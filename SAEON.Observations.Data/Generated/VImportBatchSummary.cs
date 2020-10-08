@@ -321,6 +321,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarEndDate);
                 
+                TableSchema.TableColumn colvarDigitalObjectIdentifierID = new TableSchema.TableColumn(schema);
+                colvarDigitalObjectIdentifierID.ColumnName = "DigitalObjectIdentifierID";
+                colvarDigitalObjectIdentifierID.DataType = DbType.Int32;
+                colvarDigitalObjectIdentifierID.MaxLength = 0;
+                colvarDigitalObjectIdentifierID.AutoIncrement = false;
+                colvarDigitalObjectIdentifierID.IsNullable = true;
+                colvarDigitalObjectIdentifierID.IsPrimaryKey = false;
+                colvarDigitalObjectIdentifierID.IsForeignKey = false;
+                colvarDigitalObjectIdentifierID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarDigitalObjectIdentifierID);
+                
                 TableSchema.TableColumn colvarPhenomenonID = new TableSchema.TableColumn(schema);
                 colvarPhenomenonID.ColumnName = "PhenomenonID";
                 colvarPhenomenonID.DataType = DbType.Guid;
@@ -668,6 +680,186 @@ namespace SAEON.Observations.Data{
                 colvarSiteUrl.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarSiteUrl);
+                
+                TableSchema.TableColumn colvarProjectID = new TableSchema.TableColumn(schema);
+                colvarProjectID.ColumnName = "ProjectID";
+                colvarProjectID.DataType = DbType.Guid;
+                colvarProjectID.MaxLength = 0;
+                colvarProjectID.AutoIncrement = false;
+                colvarProjectID.IsNullable = true;
+                colvarProjectID.IsPrimaryKey = false;
+                colvarProjectID.IsForeignKey = false;
+                colvarProjectID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarProjectID);
+                
+                TableSchema.TableColumn colvarProjectCode = new TableSchema.TableColumn(schema);
+                colvarProjectCode.ColumnName = "ProjectCode";
+                colvarProjectCode.DataType = DbType.AnsiString;
+                colvarProjectCode.MaxLength = 50;
+                colvarProjectCode.AutoIncrement = false;
+                colvarProjectCode.IsNullable = true;
+                colvarProjectCode.IsPrimaryKey = false;
+                colvarProjectCode.IsForeignKey = false;
+                colvarProjectCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarProjectCode);
+                
+                TableSchema.TableColumn colvarProjectName = new TableSchema.TableColumn(schema);
+                colvarProjectName.ColumnName = "ProjectName";
+                colvarProjectName.DataType = DbType.AnsiString;
+                colvarProjectName.MaxLength = 150;
+                colvarProjectName.AutoIncrement = false;
+                colvarProjectName.IsNullable = true;
+                colvarProjectName.IsPrimaryKey = false;
+                colvarProjectName.IsForeignKey = false;
+                colvarProjectName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarProjectName);
+                
+                TableSchema.TableColumn colvarProjectDescription = new TableSchema.TableColumn(schema);
+                colvarProjectDescription.ColumnName = "ProjectDescription";
+                colvarProjectDescription.DataType = DbType.AnsiString;
+                colvarProjectDescription.MaxLength = 5000;
+                colvarProjectDescription.AutoIncrement = false;
+                colvarProjectDescription.IsNullable = true;
+                colvarProjectDescription.IsPrimaryKey = false;
+                colvarProjectDescription.IsForeignKey = false;
+                colvarProjectDescription.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarProjectDescription);
+                
+                TableSchema.TableColumn colvarProjectUrl = new TableSchema.TableColumn(schema);
+                colvarProjectUrl.ColumnName = "ProjectUrl";
+                colvarProjectUrl.DataType = DbType.AnsiString;
+                colvarProjectUrl.MaxLength = 250;
+                colvarProjectUrl.AutoIncrement = false;
+                colvarProjectUrl.IsNullable = true;
+                colvarProjectUrl.IsPrimaryKey = false;
+                colvarProjectUrl.IsForeignKey = false;
+                colvarProjectUrl.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarProjectUrl);
+                
+                TableSchema.TableColumn colvarProgrammeID = new TableSchema.TableColumn(schema);
+                colvarProgrammeID.ColumnName = "ProgrammeID";
+                colvarProgrammeID.DataType = DbType.Guid;
+                colvarProgrammeID.MaxLength = 0;
+                colvarProgrammeID.AutoIncrement = false;
+                colvarProgrammeID.IsNullable = true;
+                colvarProgrammeID.IsPrimaryKey = false;
+                colvarProgrammeID.IsForeignKey = false;
+                colvarProgrammeID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarProgrammeID);
+                
+                TableSchema.TableColumn colvarProgrammeCode = new TableSchema.TableColumn(schema);
+                colvarProgrammeCode.ColumnName = "ProgrammeCode";
+                colvarProgrammeCode.DataType = DbType.AnsiString;
+                colvarProgrammeCode.MaxLength = 50;
+                colvarProgrammeCode.AutoIncrement = false;
+                colvarProgrammeCode.IsNullable = true;
+                colvarProgrammeCode.IsPrimaryKey = false;
+                colvarProgrammeCode.IsForeignKey = false;
+                colvarProgrammeCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarProgrammeCode);
+                
+                TableSchema.TableColumn colvarProgrammeName = new TableSchema.TableColumn(schema);
+                colvarProgrammeName.ColumnName = "ProgrammeName";
+                colvarProgrammeName.DataType = DbType.AnsiString;
+                colvarProgrammeName.MaxLength = 150;
+                colvarProgrammeName.AutoIncrement = false;
+                colvarProgrammeName.IsNullable = true;
+                colvarProgrammeName.IsPrimaryKey = false;
+                colvarProgrammeName.IsForeignKey = false;
+                colvarProgrammeName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarProgrammeName);
+                
+                TableSchema.TableColumn colvarProgrammeDescription = new TableSchema.TableColumn(schema);
+                colvarProgrammeDescription.ColumnName = "ProgrammeDescription";
+                colvarProgrammeDescription.DataType = DbType.AnsiString;
+                colvarProgrammeDescription.MaxLength = 5000;
+                colvarProgrammeDescription.AutoIncrement = false;
+                colvarProgrammeDescription.IsNullable = true;
+                colvarProgrammeDescription.IsPrimaryKey = false;
+                colvarProgrammeDescription.IsForeignKey = false;
+                colvarProgrammeDescription.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarProgrammeDescription);
+                
+                TableSchema.TableColumn colvarProgrammeUrl = new TableSchema.TableColumn(schema);
+                colvarProgrammeUrl.ColumnName = "ProgrammeUrl";
+                colvarProgrammeUrl.DataType = DbType.AnsiString;
+                colvarProgrammeUrl.MaxLength = 250;
+                colvarProgrammeUrl.AutoIncrement = false;
+                colvarProgrammeUrl.IsNullable = true;
+                colvarProgrammeUrl.IsPrimaryKey = false;
+                colvarProgrammeUrl.IsForeignKey = false;
+                colvarProgrammeUrl.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarProgrammeUrl);
+                
+                TableSchema.TableColumn colvarOrganisationID = new TableSchema.TableColumn(schema);
+                colvarOrganisationID.ColumnName = "OrganisationID";
+                colvarOrganisationID.DataType = DbType.Guid;
+                colvarOrganisationID.MaxLength = 0;
+                colvarOrganisationID.AutoIncrement = false;
+                colvarOrganisationID.IsNullable = true;
+                colvarOrganisationID.IsPrimaryKey = false;
+                colvarOrganisationID.IsForeignKey = false;
+                colvarOrganisationID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarOrganisationID);
+                
+                TableSchema.TableColumn colvarOrganisationCode = new TableSchema.TableColumn(schema);
+                colvarOrganisationCode.ColumnName = "OrganisationCode";
+                colvarOrganisationCode.DataType = DbType.AnsiString;
+                colvarOrganisationCode.MaxLength = 50;
+                colvarOrganisationCode.AutoIncrement = false;
+                colvarOrganisationCode.IsNullable = true;
+                colvarOrganisationCode.IsPrimaryKey = false;
+                colvarOrganisationCode.IsForeignKey = false;
+                colvarOrganisationCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarOrganisationCode);
+                
+                TableSchema.TableColumn colvarOrganisationName = new TableSchema.TableColumn(schema);
+                colvarOrganisationName.ColumnName = "OrganisationName";
+                colvarOrganisationName.DataType = DbType.AnsiString;
+                colvarOrganisationName.MaxLength = 150;
+                colvarOrganisationName.AutoIncrement = false;
+                colvarOrganisationName.IsNullable = true;
+                colvarOrganisationName.IsPrimaryKey = false;
+                colvarOrganisationName.IsForeignKey = false;
+                colvarOrganisationName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarOrganisationName);
+                
+                TableSchema.TableColumn colvarOrganisationDescription = new TableSchema.TableColumn(schema);
+                colvarOrganisationDescription.ColumnName = "OrganisationDescription";
+                colvarOrganisationDescription.DataType = DbType.AnsiString;
+                colvarOrganisationDescription.MaxLength = 5000;
+                colvarOrganisationDescription.AutoIncrement = false;
+                colvarOrganisationDescription.IsNullable = true;
+                colvarOrganisationDescription.IsPrimaryKey = false;
+                colvarOrganisationDescription.IsForeignKey = false;
+                colvarOrganisationDescription.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarOrganisationDescription);
+                
+                TableSchema.TableColumn colvarOrganisationUrl = new TableSchema.TableColumn(schema);
+                colvarOrganisationUrl.ColumnName = "OrganisationUrl";
+                colvarOrganisationUrl.DataType = DbType.AnsiString;
+                colvarOrganisationUrl.MaxLength = 250;
+                colvarOrganisationUrl.AutoIncrement = false;
+                colvarOrganisationUrl.IsNullable = true;
+                colvarOrganisationUrl.IsPrimaryKey = false;
+                colvarOrganisationUrl.IsForeignKey = false;
+                colvarOrganisationUrl.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarOrganisationUrl);
                 
                 
                 BaseSchema = schema;
@@ -1024,6 +1216,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("EndDate", value);
+            }
+        }
+	      
+        [XmlAttribute("DigitalObjectIdentifierID")]
+        [Bindable(true)]
+        public int? DigitalObjectIdentifierID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<int?>("DigitalObjectIdentifierID");
+		    }
+            set 
+		    {
+			    SetColumnValue("DigitalObjectIdentifierID", value);
             }
         }
 	      
@@ -1432,6 +1638,216 @@ namespace SAEON.Observations.Data{
 			    SetColumnValue("SiteUrl", value);
             }
         }
+	      
+        [XmlAttribute("ProjectID")]
+        [Bindable(true)]
+        public Guid? ProjectID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid?>("ProjectID");
+		    }
+            set 
+		    {
+			    SetColumnValue("ProjectID", value);
+            }
+        }
+	      
+        [XmlAttribute("ProjectCode")]
+        [Bindable(true)]
+        public string ProjectCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("ProjectCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("ProjectCode", value);
+            }
+        }
+	      
+        [XmlAttribute("ProjectName")]
+        [Bindable(true)]
+        public string ProjectName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("ProjectName");
+		    }
+            set 
+		    {
+			    SetColumnValue("ProjectName", value);
+            }
+        }
+	      
+        [XmlAttribute("ProjectDescription")]
+        [Bindable(true)]
+        public string ProjectDescription 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("ProjectDescription");
+		    }
+            set 
+		    {
+			    SetColumnValue("ProjectDescription", value);
+            }
+        }
+	      
+        [XmlAttribute("ProjectUrl")]
+        [Bindable(true)]
+        public string ProjectUrl 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("ProjectUrl");
+		    }
+            set 
+		    {
+			    SetColumnValue("ProjectUrl", value);
+            }
+        }
+	      
+        [XmlAttribute("ProgrammeID")]
+        [Bindable(true)]
+        public Guid? ProgrammeID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid?>("ProgrammeID");
+		    }
+            set 
+		    {
+			    SetColumnValue("ProgrammeID", value);
+            }
+        }
+	      
+        [XmlAttribute("ProgrammeCode")]
+        [Bindable(true)]
+        public string ProgrammeCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("ProgrammeCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("ProgrammeCode", value);
+            }
+        }
+	      
+        [XmlAttribute("ProgrammeName")]
+        [Bindable(true)]
+        public string ProgrammeName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("ProgrammeName");
+		    }
+            set 
+		    {
+			    SetColumnValue("ProgrammeName", value);
+            }
+        }
+	      
+        [XmlAttribute("ProgrammeDescription")]
+        [Bindable(true)]
+        public string ProgrammeDescription 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("ProgrammeDescription");
+		    }
+            set 
+		    {
+			    SetColumnValue("ProgrammeDescription", value);
+            }
+        }
+	      
+        [XmlAttribute("ProgrammeUrl")]
+        [Bindable(true)]
+        public string ProgrammeUrl 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("ProgrammeUrl");
+		    }
+            set 
+		    {
+			    SetColumnValue("ProgrammeUrl", value);
+            }
+        }
+	      
+        [XmlAttribute("OrganisationID")]
+        [Bindable(true)]
+        public Guid? OrganisationID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid?>("OrganisationID");
+		    }
+            set 
+		    {
+			    SetColumnValue("OrganisationID", value);
+            }
+        }
+	      
+        [XmlAttribute("OrganisationCode")]
+        [Bindable(true)]
+        public string OrganisationCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("OrganisationCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("OrganisationCode", value);
+            }
+        }
+	      
+        [XmlAttribute("OrganisationName")]
+        [Bindable(true)]
+        public string OrganisationName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("OrganisationName");
+		    }
+            set 
+		    {
+			    SetColumnValue("OrganisationName", value);
+            }
+        }
+	      
+        [XmlAttribute("OrganisationDescription")]
+        [Bindable(true)]
+        public string OrganisationDescription 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("OrganisationDescription");
+		    }
+            set 
+		    {
+			    SetColumnValue("OrganisationDescription", value);
+            }
+        }
+	      
+        [XmlAttribute("OrganisationUrl")]
+        [Bindable(true)]
+        public string OrganisationUrl 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("OrganisationUrl");
+		    }
+            set 
+		    {
+			    SetColumnValue("OrganisationUrl", value);
+            }
+        }
 	    
 	    #endregion
     
@@ -1483,6 +1899,8 @@ namespace SAEON.Observations.Data{
             public static string StartDate = @"StartDate";
             
             public static string EndDate = @"EndDate";
+            
+            public static string DigitalObjectIdentifierID = @"DigitalObjectIdentifierID";
             
             public static string PhenomenonID = @"PhenomenonID";
             
@@ -1541,6 +1959,36 @@ namespace SAEON.Observations.Data{
             public static string SiteDescription = @"SiteDescription";
             
             public static string SiteUrl = @"SiteUrl";
+            
+            public static string ProjectID = @"ProjectID";
+            
+            public static string ProjectCode = @"ProjectCode";
+            
+            public static string ProjectName = @"ProjectName";
+            
+            public static string ProjectDescription = @"ProjectDescription";
+            
+            public static string ProjectUrl = @"ProjectUrl";
+            
+            public static string ProgrammeID = @"ProgrammeID";
+            
+            public static string ProgrammeCode = @"ProgrammeCode";
+            
+            public static string ProgrammeName = @"ProgrammeName";
+            
+            public static string ProgrammeDescription = @"ProgrammeDescription";
+            
+            public static string ProgrammeUrl = @"ProgrammeUrl";
+            
+            public static string OrganisationID = @"OrganisationID";
+            
+            public static string OrganisationCode = @"OrganisationCode";
+            
+            public static string OrganisationName = @"OrganisationName";
+            
+            public static string OrganisationDescription = @"OrganisationDescription";
+            
+            public static string OrganisationUrl = @"OrganisationUrl";
             
 	    }
 	    #endregion
