@@ -34,8 +34,12 @@
          changed to  VARCHAR (500) NOT NULL. Data loss could occur.
 
 ** User actions
+     Drop
+       [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_Name] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDateDesc] (Index)
      Alter
        [dbo].[DigitalObjectIdentifiers] (Table)
+       [dbo].[ImportBatchSummary] (Table)
        [dbo].[Observation] (Table)
        [dbo].[Organisation] (Table)
        [dbo].[Programme] (Table)
@@ -43,16 +47,24 @@
        [dbo].[Site] (Table)
        [dbo].[Station] (Table)
        [dbo].[vImportBatchSummary] (View)
+       [dbo].[vLocations] (View)
+       [dbo].[vInventoryDatasets] (View)
+       [dbo].[vInventorySensors] (View)
+       [dbo].[vFeatures] (View)
      Create
+       [dbo].[UX_DigitalObjectIdentifiers_DOIType_Code] (Unique Constraint)
        [dbo].[UX_DigitalObjectIdentifiers_DOIType_Name] (Unique Constraint)
        [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_DOIType] (Index)
        [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_ParentID] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_DigitalObjectIdentifierID] (Index)
        [dbo].[Organisation].[IX_Organisation_DigitalObjectIdentifierID] (Index)
        [dbo].[Programme].[IX_Programme_DigitalObjectIdentifierID] (Index)
        [dbo].[Project].[IX_Project_DigitalObjectIdentifierID] (Index)
        [dbo].[Site].[IX_Site_DigitalObjectIdentifierID] (Index)
        [dbo].[Station].[IX_Station_DigitalObjectIdentifierID] (Index)
+       [dbo].[UX_Sensor_Name] (Unique Constraint)
        [dbo].[FK_DigitalObjectIdentifiers_ParentID] (Foreign Key)
+       [dbo].[FK_ImportBatchSummary_DigitalObjectIdentifierID] (Foreign Key)
        [dbo].[FK_Organisation_DigitalObjectIdentifierID] (Foreign Key)
        [dbo].[FK_Programme_DigitalObjectIdentifierID] (Foreign Key)
        [dbo].[FK_Project_DigitalObjectIdentifierID] (Foreign Key)
@@ -62,11 +74,9 @@
 
 ** Supporting actions
      Drop
-       [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_Name] (Index)
        [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
        [dbo].[Observation].[IX_Observation_ValueYear] (Index)
      Create
-       [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_Name] (Index)
        [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
        [dbo].[Observation].[IX_Observation_ValueYear] (Index)
      Refresh
@@ -77,7 +87,6 @@
        [dbo].[vObservationJSON] (View)
        [dbo].[vStationObservations] (View)
        [dbo].[vInstrumentOrganisation] (View)
-       [dbo].[vLocations] (View)
        [dbo].[vOrganisationInstrument] (View)
        [dbo].[vOrganisationSite] (View)
        [dbo].[vOrganisationStation] (View)
@@ -89,17 +98,15 @@
        [dbo].[vSensor] (View)
        [dbo].[vSensorDates] (View)
        [dbo].[vStation] (View)
-       [dbo].[vInventoryDatasets] (View)
-       [dbo].[vInventorySensors] (View)
-       [dbo].[vSensorThingsAPIDatastreams] (View)
-       [dbo].[vSensorThingsAPIObservedProperties] (View)
-       [dbo].[vSensorThingsAPISensors] (View)
        [dbo].[vSensorLocation] (View)
        [dbo].[vSensorThingsAPIInstrumentDates] (View)
        [dbo].[vSensorThingsAPIStationDates] (View)
        [dbo].[vStationInstrument] (View)
-       [dbo].[vSensorThingsAPIThings] (View)
+       [dbo].[vSensorThingsAPIDatastreams] (View)
        [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIObservedProperties] (View)
+       [dbo].[vSensorThingsAPISensors] (View)
+       [dbo].[vSensorThingsAPIThings] (View)
        [dbo].[vSensorThingsAPIFeaturesOfInterest] (View)
        [dbo].[vSensorThingsAPIHistoricalLocations] (View)
 
