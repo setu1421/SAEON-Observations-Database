@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SAEON.Logs;
 using System;
 using System.Threading.Tasks;
@@ -59,21 +60,24 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
-        //[HttpPost("ImportSetup")]
-        //public async Task<IActionResult> ImportSetup([FromForm] string fileName)
-        //{
-        //    using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "FileName", fileName } }))
-        //    {
-        //        try
-        //        {
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            SAEONLogs.Exception(ex);
-        //            throw;
-        //        }
-        //    }
-        //}
+        [HttpPost("ImportSetup")]
+        public async Task<IActionResult> ImportSetup(IFormFile fileData)
+        {
+            using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "FileName", fileData?.FileName } }))
+            {
+                try
+                {
+                    if (fileData == null) throw new ArgumentNullException(nameof(fileData));
+                    SAEONLogs.Information("ImportSetup: {FileName}", fileData.FileName);
+                    return Content(await ImportSetupHelper.ImportFromSpreadsheet(DbContext, fileData));
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
 
 
     }
