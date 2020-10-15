@@ -245,6 +245,8 @@ namespace SAEON.Observations.WebAPI
         /// </summary>
         [StringLength(5000)]
         public string Description { get; set; }
+        public new Guid? UserId { get; set; }
+
 
         // Navigation
         public List<DataSchema> DataSchemas { get; set; }
@@ -549,6 +551,7 @@ namespace SAEON.Observations.WebAPI
     /// <summary>
     /// OrganisationRole entity
     /// </summary>
+    [Table("OrganisationRole")]
     public class OrganisationRole : NamedEntity
     {
         // Navigation

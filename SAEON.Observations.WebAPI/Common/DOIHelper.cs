@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
+using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.Data;
 using System.Linq;
@@ -12,24 +14,25 @@ namespace SAEON.Observations.WebAPI
 {
     public static class DOIHelper
     {
-        public static async Task<string> CreateDOIs(ObservationsDbContext dbContext, HttpContext httpContext)
+        public static async Task<string> CreateDOIs(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext)
         {
             var sb = new StringBuilder();
             await GenerateDOIs();
-            AddLine("Done");
+            await AddLineAsync("Done");
             return sb.ToString();
 
-            void AddLine(string line)
+            async Task AddLineAsync(string line)
             {
                 sb.AppendLine(line);
                 SAEONLogs.Information(line);
+                await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateDOIsStatusUpdate, line);
             }
 
             async Task GenerateDOIs()
             {
                 async Task<DigitalObjectIdentifier> AddDOI(DOIType doiType, string code, string name, DigitalObjectIdentifier parent)
                 {
-                    AddLine($"Adding {doiType} {code}, {name}");
+                    await AddLineAsync($"Adding {doiType} {code}, {name}");
                     var blankJson = "{}";
                     var blankHtml = "";
                     var doi = new DigitalObjectIdentifier
@@ -172,7 +175,7 @@ namespace SAEON.Observations.WebAPI
                 //    return doi;
                 //}
 
-                AddLine("Generating DOIs");
+                await AddLineAsync("Generating DOIs");
                 var doiObservations = await EnsureObservationsDbDOI();
                 foreach (var organisation in await dbContext.Organisations.Where(i => i.Code == "SAEON").OrderBy(i => i.Name).ToListAsync())
                 {
@@ -252,10 +255,10 @@ namespace SAEON.Observations.WebAPI
                     }
                 }
                 await dbContext.SaveChangesAsync();
-                AddLine("Setting Urls");
+                await AddLineAsync("Setting Urls");
                 foreach (var doi in await dbContext.DigitalObjectIdentifiers.ToListAsync())
                 {
-                    AddLine($"{doi.DOIType} {doi.Name}");
+                    await AddLineAsync($"{doi.DOIType} {doi.Name}");
                     doi.MetadataUrl = $"https://metadata.saeon.ac.za/whoknows/{doi.DOI}";
                     doi.QueryUrl = $"https://observations.saeon.ac.za/DOI/{doi.DOI}";
                 }

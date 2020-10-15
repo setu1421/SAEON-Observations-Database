@@ -8,6 +8,7 @@ namespace SAEON.Observations.Auth
         public const string AllowedClientsPolicy = "AllowedClientsPolicy";
         public const string CorsAllowAllPolicy = "CorsAllowAllPolicy";
         public const string CorsAllowQuerySitePolicy = "CorsAllowQuerySitePolicy";
+        public const string CorsAllowSignalRPolicy = "CorsAllowSignalRPolicy";
         public const string DeniedClientsPolicy = "DeniedClientsPolicy";
         public const string QuerySiteClientId = "SAEON.Observations.QuerySite";
         public const string WebAPIClientId = "SAEON.Observations.WebAPI";
@@ -52,7 +53,18 @@ namespace SAEON.Observations.Auth
 
         public static void AddCorsAllowQuerySitePolicy(this CorsOptions options)
         {
-            options.AddPolicy(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy, b => b.AllowAnyHeader().AllowAnyMethod()
+            options.AddPolicy(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy, b => b
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithOrigins("https://localhost:44340", "https://observations.saeon.ac.za", "https://observations-test.saeon.ac.za"));
+        }
+
+        public static void AddCorsAllowSignalRPolicy(this CorsOptions options)
+        {
+            options.AddPolicy(SAEONAuthenticationDefaults.CorsAllowSignalRPolicy, b => b
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
                 .WithOrigins("https://localhost:44340", "https://observations.saeon.ac.za", "https://observations-test.saeon.ac.za"));
         }
 
@@ -60,6 +72,7 @@ namespace SAEON.Observations.Auth
         {
             options.AddCorsAllowAllPolicy();
             options.AddCorsAllowQuerySitePolicy();
+            options.AddCorsAllowSignalRPolicy();
         }
     }
 

@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
+using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,14 +17,14 @@ namespace SAEON.Observations.WebAPI
 {
     public static class ODPMetadataHelper
     {
-        public static async Task<string> CreateMetadata(ObservationsDbContext dbContext, IConfiguration config)
+        public static async Task<string> CreateMetadata(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, IConfiguration config)
         {
             async Task GenerateODPMetadata(HttpClient client)
             {
                 async Task GenerateODPMetadataForDOI(DigitalObjectIdentifier doi, string collection)
                 {
                     if (!doi.ODPMetadataNeedsUpdate ?? true) return;
-                    AddLine($"{doi.DOIType} {doi.Code}, {doi.Name}");
+                    await AddLineAsync($"{doi.DOIType} {doi.Code}, {doi.Name}");
                     var jObj = new JObject(
                         new JProperty("collection_key", collection),
                         //new JProperty("schema_key", "saeon-odp-4-2"),
@@ -67,7 +69,7 @@ namespace SAEON.Observations.WebAPI
                 //    await GenerateODPMetadataForDOI(doi, "observations-database-periodic-collection");
                 //}
 
-                AddLine("Generating metadata");
+                await AddLineAsync("Generating metadata");
                 var doiObservations = await dbContext.DigitalObjectIdentifiers.SingleAsync(i => i.DOIType == DOIType.ObservationsDb);
                 await GenerateODPMetadataForDynamicDOI(doiObservations);
                 foreach (var doiOrganisation in await dbContext
@@ -126,14 +128,15 @@ namespace SAEON.Observations.WebAPI
                 client.BaseAddress = new Uri(config["ODPMetadataUrl"].AddTrailingSlash());
                 client.SetBearerToken(await GetTokenAsync());
                 await GenerateODPMetadata(client);
-                AddLine("Done");
+                await AddLineAsync("Done");
                 return sb.ToString();
             }
 
-            void AddLine(string line)
+            async Task AddLineAsync(string line)
             {
                 sb.AppendLine(line);
                 SAEONLogs.Information(line);
+                await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateODPMetadataStatusUpdate, line);
             }
 
             async Task<string> GetTokenAsync()

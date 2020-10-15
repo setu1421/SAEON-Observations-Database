@@ -16,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
+using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.Linq;
 
@@ -101,6 +102,7 @@ namespace SAEON.Observations.WebAPI
                     });
                     SetOutputFormatters(services);
 
+                    services.AddSignalR();
                     services.AddControllersWithViews();
                 }
                 catch (Exception ex)
@@ -155,6 +157,7 @@ namespace SAEON.Observations.WebAPI
                             name: "default",
                             pattern: "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllers();
+                        endpoints.MapHub<AdminHub>("/AdminHub").RequireCors(SAEONAuthenticationDefaults.CorsAllowSignalRPolicy);
                         endpoints.Select().Filter().OrderBy().Count().Expand().MaxTop(500);
                         endpoints.MapODataRoute("Internal", "Internal", GetInternalEdmModel());
                         endpoints.MapODataRoute("OData", "OData", GetODataEdmModel());

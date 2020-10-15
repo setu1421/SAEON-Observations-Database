@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using SAEON.Logs;
+using SAEON.Observations.WebAPI.Hubs;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
@@ -9,6 +12,13 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     //[Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
     public class AdminController : InternalApiController
     {
+        private readonly IHubContext<AdminHub> AdminHub;
+
+        public AdminController(IHubContext<AdminHub> webApiHub)
+        {
+            AdminHub = webApiHub;
+        }
+
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateDOIs()
         {
@@ -16,7 +26,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await DOIHelper.CreateDOIs(DbContext, HttpContext));
+                    return Content(await DOIHelper.CreateDOIs(DbContext, AdminHub, HttpContext));
                 }
                 catch (Exception ex)
                 {
@@ -33,7 +43,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await MetadataHelper.CreateMetadata(DbContext));
+                    return Content(await MetadataHelper.CreateMetadata(DbContext, AdminHub));
                 }
                 catch (Exception ex)
                 {
@@ -50,7 +60,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await ODPMetadataHelper.CreateMetadata(DbContext, Config));
+                    return Content(await ODPMetadataHelper.CreateMetadata(DbContext, AdminHub, Config));
                 }
                 catch (Exception ex)
                 {
@@ -61,15 +71,18 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpPost("ImportSetup")]
-        public async Task<IActionResult> ImportSetup(IFormFile fileData)
+        public async Task<IActionResult> ImportSetup(IFormFile formFile)
         {
-            using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "FileName", fileData?.FileName } }))
+            using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "FileName", formFile?.FileName } }))
             {
                 try
                 {
-                    if (fileData == null) throw new ArgumentNullException(nameof(fileData));
-                    SAEONLogs.Information("ImportSetup: {FileName}", fileData.FileName);
-                    return Content(await ImportSetupHelper.ImportFromSpreadsheet(DbContext, fileData));
+                    if (formFile == null) throw new ArgumentNullException(nameof(formFile));
+                    if (formFile.Length == 0) throw new ArgumentOutOfRangeException(nameof(formFile.Length), "File length cannot be zero");
+                    var ext = Path.GetExtension(formFile.FileName).ToLowerInvariant();
+                    if (!(ext == ".xls" || ext == ".xlsx")) throw new ArgumentOutOfRangeException(nameof(formFile.FileName), "Invalid file extension");
+                    SAEONLogs.Information("ImportSetup: {FileName}", formFile.FileName);
+                    return Content(await ImportSetupHelper.ImportFromSpreadsheet(DbContext, AdminHub, formFile));
                 }
                 catch (Exception ex)
                 {
@@ -78,7 +91,5 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 }
             }
         }
-
-
     }
 }

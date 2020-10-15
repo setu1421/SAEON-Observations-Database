@@ -43,6 +43,9 @@ GO
 CREATE INDEX [IX_Observation_SensorID_PhenomenonOfferingID] ON [dbo].[Observation] ([SensorID],[PhenomenonOfferingID])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO
+CREATE INDEX [IX_Observation_SensorID_PhenomenonOfferingID_PhenomenonUOMID_ImportBatchID] ON [dbo].[Observation] ([SensorID],[PhenomenonOfferingID],[PhenomenonUOMID],[ImportBatchID])
+  WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
+GO
 CREATE INDEX [IX_Observation_SensorID_PhenomenonUOMID] ON [dbo].[Observation] ([SensorID],[PhenomenonUOMID])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO

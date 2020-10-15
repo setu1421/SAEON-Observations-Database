@@ -16,5 +16,11 @@
     "inputFiles": [
       "wwwroot/js/site.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/Admin.min.js",
+    "inputFiles": [
+      "wwwroot/js/Admin.js"
+    ]
   }
 ]

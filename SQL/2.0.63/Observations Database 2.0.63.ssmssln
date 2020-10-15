@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{39023EE1-BD0D-43AE-AFBE-8E1AFCA89433}"
 	ProjectSection(SolutionItems) = preProject
 		..\Digital Object Identifiers.sql = ..\Digital Object Identifiers.sql
+		Elwandle unverify.sql = Elwandle unverify.sql
 		Fix Sensor Duplicate Names.sql = Fix Sensor Duplicate Names.sql
 		Observations 2.0.63.publish.sql = Observations 2.0.63.publish.sql
 		Observations 2.0.63.publish.txt = Observations 2.0.63.publish.txt
@@ -24,7 +25,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{46D22259-2F6F-423E-A4A1-CC453D90ABA3}.Default|Default.ActiveCfg = Default
+		{0CE5BFAC-6E05-478B-B81B-DE4F82B0F6D5}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

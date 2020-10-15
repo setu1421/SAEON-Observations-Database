@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -15,6 +16,7 @@ using SAEON.Logs;
 using SAEON.Observations.Auth;
 using Syncfusion.Licensing;
 using System;
+using System.IO;
 
 namespace SAEON.Observations.QuerySite
 {
@@ -48,7 +50,6 @@ namespace SAEON.Observations.QuerySite
 
                     SyncfusionLicenseProvider.RegisterLicense(" MzI2MjUzQDMxMzgyZTMzMmUzMEFveWppWlNSTVQzRWo2RXFldnVDMU1UQVI5M0VyN3luRUpyY0dkZkRRMWc9");
 
-                    //services.AddCors();
                     services.AddResponseCaching();
                     services.AddResponseCompression();
                     services.Configure<CookiePolicyOptions>(options =>
@@ -86,6 +87,7 @@ namespace SAEON.Observations.QuerySite
                             SAEONLogs.Information("Options: {@Options}", options);
                             //options.Validate();
                         });
+                    services.AddAuthorization();
                     services.AddHttpContextAccessor();
                     services.AddHealthChecks()
                        .AddUrlGroup(new Uri(Configuration["AuthenticationServerHealthCheckUrl"]), "Authentication Server")
@@ -120,9 +122,14 @@ namespace SAEON.Observations.QuerySite
                     }
                     app.UseHttpsRedirection();
                     app.UseStaticFiles();
+                    app.UseStaticFiles(new StaticFileOptions
+                    {
+                        FileProvider = new PhysicalFileProvider(
+                            Path.Combine(Directory.GetCurrentDirectory(), "node_modules")),
+                        RequestPath = "/node_modules"
+                    });
 
                     app.UseCookiePolicy();
-                    //app.UseCors();
                     app.UseResponseCaching();
                     app.UseResponseCompression();
                     app.UseRouting();

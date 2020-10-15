@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using SAEON.Logs;
+using SAEON.Observations.Auth;
+using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.Linq;
 using System.Text;
@@ -11,24 +14,25 @@ namespace SAEON.Observations.WebAPI
     {
         public static DOIType[] DynamicDOITypes = { DOIType.ObservationsDb, DOIType.Organisation, DOIType.Programme, DOIType.Project, DOIType.Site, DOIType.Station, DOIType.Dataset };
 
-        public static async Task<string> CreateMetadata(ObservationsDbContext dbContext)
+        public static async Task<string> CreateMetadata(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub)
         {
             var sb = new StringBuilder();
             await GenerateMetadata();
-            AddLine("Done");
+            await AddLineAsync("Done");
             return sb.ToString();
 
-            void AddLine(string line)
+            async Task AddLineAsync(string line)
             {
                 sb.AppendLine(line);
                 SAEONLogs.Information(line);
+                await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateMetadataStatusUpdate, line);
             }
 
             async Task GenerateMetadata()
             {
-                Metadata MetadataForDOI(DigitalObjectIdentifier doi, Metadata parent, string itemDescription = null, string itemUrl = null)
+                async Task<Metadata> MetadataForDOIAsync(DigitalObjectIdentifier doi, Metadata parent, string itemDescription = null, string itemUrl = null)
                 {
-                    AddLine($"{doi.DOIType} {doi.Code}, {doi.Name}");
+                    await AddLineAsync($"{doi.DOIType} {doi.Code}, {doi.Name}");
                     var metadata = new Metadata
                     {
                         DOI = doi,
@@ -41,10 +45,10 @@ namespace SAEON.Observations.WebAPI
                     return metadata;
                 }
 
-                AddLine("Generating metadata");
+                await AddLineAsync("Generating metadata");
                 byte[] oldSha256;
                 var doiObservations = await dbContext.DigitalObjectIdentifiers.Include(i => i.Children).SingleAsync(i => i.DOIType == DOIType.ObservationsDb);
-                var metaObservations = MetadataForDOI(doiObservations, null);
+                var metaObservations = await MetadataForDOIAsync(doiObservations, null);
                 foreach (var doiOrganisation in await dbContext
                     .DigitalObjectIdentifiers
                     .Include(i => i.Parent)
@@ -53,7 +57,7 @@ namespace SAEON.Observations.WebAPI
                     .ToListAsync())
                 {
                     var organisation = await dbContext.Organisations.SingleAsync(i => i.Code == doiOrganisation.Code);
-                    var metaOrganisation = MetadataForDOI(doiOrganisation, metaObservations, organisation.Description, organisation.Url);
+                    var metaOrganisation = await MetadataForDOIAsync(doiOrganisation, metaObservations, organisation.Description, organisation.Url);
                     foreach (var doiProgramme in await dbContext
                         .DigitalObjectIdentifiers
                         .Include(i => i.Parent)
@@ -62,7 +66,7 @@ namespace SAEON.Observations.WebAPI
                         .ToListAsync())
                     {
                         var programme = await dbContext.Programmes.SingleAsync(i => i.Code == doiProgramme.Code);
-                        var metaProgramme = MetadataForDOI(doiProgramme, metaOrganisation, programme.Description, programme.Url);
+                        var metaProgramme = await MetadataForDOIAsync(doiProgramme, metaOrganisation, programme.Description, programme.Url);
                         foreach (var doiProject in await dbContext
                             .DigitalObjectIdentifiers
                             .Include(i => i.Parent)
@@ -71,7 +75,7 @@ namespace SAEON.Observations.WebAPI
                             .ToListAsync())
                         {
                             var project = await dbContext.Projects.SingleAsync(i => i.Code == doiProject.Code);
-                            var metaProject = MetadataForDOI(doiProject, metaProgramme, project.Description, project.Url);
+                            var metaProject = await MetadataForDOIAsync(doiProject, metaProgramme, project.Description, project.Url);
                             foreach (var doiSite in await dbContext
                                 .DigitalObjectIdentifiers
                                 .Include(i => i.Parent)
@@ -80,7 +84,7 @@ namespace SAEON.Observations.WebAPI
                                 .ToListAsync())
                             {
                                 var site = await dbContext.Sites.SingleAsync(i => i.Code == doiSite.Code);
-                                var metaSite = MetadataForDOI(doiSite, metaProject, site.Description, site.Url);
+                                var metaSite = await MetadataForDOIAsync(doiSite, metaProject, site.Description, site.Url);
                                 foreach (var doiStation in await dbContext
                                     .DigitalObjectIdentifiers
                                     .Include(i => i.Parent)
@@ -89,7 +93,7 @@ namespace SAEON.Observations.WebAPI
                                     .ToListAsync())
                                 {
                                     var station = await dbContext.Stations.SingleAsync(i => i.Code == doiStation.Code);
-                                    var metaStation = MetadataForDOI(doiStation, metaSite, station.Description, station.Url);
+                                    var metaStation = await MetadataForDOIAsync(doiStation, metaSite, station.Description, station.Url);
                                     foreach (var doiDataset in await dbContext
                                         .DigitalObjectIdentifiers
                                         .Include(i => i.Parent)
@@ -104,7 +108,7 @@ namespace SAEON.Observations.WebAPI
                                             i.OfferingCode == splits[2] &&
                                             i.UnitCode == splits[3])
                                             .SingleAsync();
-                                        var metaDataset = MetadataForDOI(doiDataset, metaStation);
+                                        var metaDataset = await MetadataForDOIAsync(doiDataset, metaStation);
                                         metaDataset.StartDate = dataset.StartDate;
                                         metaDataset.EndDate = dataset.EndDate;
                                         metaDataset.LatitudeNorth = dataset.LatitudeNorth;
