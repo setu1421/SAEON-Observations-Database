@@ -49,10 +49,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.SubSonic", "SAEON.SubSonic\SubSonic\SAEON.SubSonic.csproj", "{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAEON.Observations.WebAPI", "SAEON.Observations.WebAPI\SAEON.Observations.WebAPI.csproj", "{491B3650-B3B3-4FC1-9C5A-18EDAD330A5F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{95890E69-5D10-4C51-9041-075C6EDF53E1} = {95890E69-5D10-4C51-9041-075C6EDF53E1}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAEON.Observations.QuerySite", "SAEON.Observations.QuerySite\SAEON.Observations.QuerySite.csproj", "{5801A1B7-E11C-47FC-A48B-E277D17451D0}"
 	ProjectSection(ProjectDependencies) = postProject
-		{491B3650-B3B3-4FC1-9C5A-18EDAD330A5F} = {491B3650-B3B3-4FC1-9C5A-18EDAD330A5F}
+		{95890E69-5D10-4C51-9041-075C6EDF53E1} = {95890E69-5D10-4C51-9041-075C6EDF53E1}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAEON.Observations.Azure", "SAEON.Observations.Azure\SAEON.Observations.Azure.csproj", "{BF48C97A-39A1-46A2-B6D8-4888A609274D}"

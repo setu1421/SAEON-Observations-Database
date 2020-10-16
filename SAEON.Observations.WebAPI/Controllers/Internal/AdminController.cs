@@ -78,9 +78,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 try
                 {
                     if (formFile == null) throw new ArgumentNullException(nameof(formFile));
-                    if (formFile.Length == 0) throw new ArgumentOutOfRangeException(nameof(formFile.Length), "File length cannot be zero");
+                    if (formFile.Length == 0) throw new ArgumentOutOfRangeException(nameof(formFile), "File length cannot be zero");
                     var ext = Path.GetExtension(formFile.FileName).ToLowerInvariant();
-                    if (!(ext == ".xls" || ext == ".xlsx")) throw new ArgumentOutOfRangeException(nameof(formFile.FileName), "Invalid file extension");
+                    if (!(ext == ".xls" || ext == ".xlsx")) throw new ArgumentOutOfRangeException(nameof(formFile), "Invalid file extension");
                     SAEONLogs.Information("ImportSetup: {FileName}", formFile.FileName);
                     return Content(await ImportSetupHelper.ImportFromSpreadsheet(DbContext, AdminHub, formFile));
                 }

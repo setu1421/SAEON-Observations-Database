@@ -57,6 +57,7 @@
        [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_DOIType] (Index)
        [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_ParentID] (Index)
        [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_DigitalObjectIdentifierID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_PhenomenonOfferingID_PhenomenonUOMID_ImportBatchID] (Index)
        [dbo].[Organisation].[IX_Organisation_DigitalObjectIdentifierID] (Index)
        [dbo].[Programme].[IX_Programme_DigitalObjectIdentifierID] (Index)
        [dbo].[Project].[IX_Project_DigitalObjectIdentifierID] (Index)
