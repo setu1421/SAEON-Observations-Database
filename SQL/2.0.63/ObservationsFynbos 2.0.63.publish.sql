@@ -239,6 +239,16 @@ CREATE NONCLUSTERED INDEX [IX_Observation_ValueYear]
 
 
 GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_PhenomenonOfferingID_PhenomenonUOMID_ImportBatchID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_PhenomenonOfferingID_PhenomenonUOMID_ImportBatchID]
+    ON [dbo].[Observation]([SensorID] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC, [ImportBatchID] ASC)
+    ON [Observations];
+
+
+GO
 PRINT N'Altering [dbo].[Organisation]...';
 
 
