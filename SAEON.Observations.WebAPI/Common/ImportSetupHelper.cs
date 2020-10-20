@@ -37,18 +37,18 @@ namespace SAEON.Observations.WebAPI
                         for (int rProgramme = 0; rProgramme < programmesList.GetUpperBound(0) + 1; rProgramme++)
                         {
                             var programmeCode = GetString(programmesList, rProgramme, 0);
-                            //SAEONLogs.Verbose("Row: {Row} Code: {Code}", rProgramme, programmeCode);
                             if (string.IsNullOrWhiteSpace(programmeCode)) continue;
+                            var programmeName = GetString(programmesList, rProgramme, 1);
                             var programme = await dbContext.Programmes.FirstOrDefaultAsync(i => i.Code == programmeCode);
                             if (programme != null)
                                 if (!UpdateData)
                                 {
-                                    SAEONLogs.Verbose("Ignoring Programme {ProgrammeCode}", programmeCode);
+                                    SAEONLogs.Verbose("Ignoring Programme {ProgrammeCode}, {ProgrammeName}", programmeCode, programmeName);
                                 }
                                 else
                                 {
-                                    await AddLineAsync($"Updating Programme {programmeCode}");
-                                    programme.Name = (string)programmesList[rProgramme, 1];
+                                    await AddLineAsync($"Updating Programme {programmeCode}, {programmeName}");
+                                    programme.Name = programmeName;
                                     programme.Description = GetString(programmesList, rProgramme, 2);
                                     programme.Url = GetString(programmesData, rProgramme, 3);
                                     programme.StartDate = GetDate(programmesData, rProgramme, 4);
@@ -57,11 +57,11 @@ namespace SAEON.Observations.WebAPI
                                 }
                             else
                             {
-                                await AddLineAsync($"Adding Programme {programmeCode}");
+                                await AddLineAsync($"Adding Programme {programmeCode}, {programmeName}");
                                 programme = new Programme
                                 {
                                     Code = programmeCode,
-                                    Name = (string)programmesList[rProgramme, 1],
+                                    Name = programmeName,
                                     Description = GetString(programmesList, rProgramme, 2),
                                     Url = GetString(programmesData, rProgramme, 3),
                                     StartDate = GetDate(programmesData, rProgramme, 4),
@@ -81,16 +81,17 @@ namespace SAEON.Observations.WebAPI
                         {
                             var projectCode = GetString(projectsList, rProject, 0);
                             if (string.IsNullOrWhiteSpace(projectCode)) continue;
+                            var projectName = GetString(projectsList, rProject, 1);
                             var project = await dbContext.Projects.FirstOrDefaultAsync(i => i.Code == projectCode);
                             if (project != null)
                                 if (!UpdateData)
                                 {
-                                    SAEONLogs.Verbose("Ignoring Project {ProjectCode}", projectCode);
+                                    SAEONLogs.Verbose("Ignoring Project {ProjectCode}, {ProjectName}", projectCode, projectName);
                                 }
                                 else
                                 {
-                                    await AddLineAsync($"Updating Project {projectCode}");
-                                    project.Name = GetString(projectsList, rProject, 1);
+                                    await AddLineAsync($"Updating Project {projectCode}, {projectName}");
+                                    project.Name = projectName;
                                     project.Description = GetString(projectsList, rProject, 2);
                                     project.Url = GetString(projectsData, rProject, 3);
                                     project.StartDate = GetDate(projectsData, rProject, 4);
@@ -99,13 +100,13 @@ namespace SAEON.Observations.WebAPI
                                 }
                             else
                             {
-                                await AddLineAsync($"Adding Project {projectCode}");
+                                await AddLineAsync($"Adding Project {projectCode}, {projectName}");
                                 var programmeCode = GetString(projectProgrammes, rProject, 0);
                                 project = new Project
                                 {
                                     ProgrammeId = (await dbContext.Programmes.FirstAsync(i => i.Code == programmeCode)).Id,
                                     Code = projectCode,
-                                    Name = GetString(projectsList, rProject, 1),
+                                    Name = projectName,
                                     Description = GetString(projectsList, rProject, 2),
                                     Url = GetString(projectsData, rProject, 3),
                                     StartDate = GetDate(projectsData, rProject, 4),
@@ -124,16 +125,17 @@ namespace SAEON.Observations.WebAPI
                         {
                             var siteCode = GetString(sitesList, rSite, 0);
                             if (string.IsNullOrWhiteSpace(siteCode)) continue;
+                            var siteName = GetString(sitesList, rSite, 1);
                             var site = await dbContext.Sites.FirstOrDefaultAsync(i => i.Code == siteCode);
                             if (site != null)
                                 if (!UpdateData)
                                 {
-                                    SAEONLogs.Verbose("Ignoring Site {SiteCode}", siteCode);
+                                    SAEONLogs.Verbose("Ignoring Site {SiteCode} {SiteName}", siteCode, siteName);
                                 }
                                 else
                                 {
-                                    await AddLineAsync($"Updating Site {siteCode}");
-                                    site.Name = GetString(sitesList, rSite, 1);
+                                    await AddLineAsync($"Updating Site {siteCode}, {siteName}");
+                                    site.Name = siteName;
                                     site.Description = GetString(sitesList, rSite, 2);
                                     site.Url = GetString(sitesData, rSite, 3);
                                     site.StartDate = GetDate(sitesData, rSite, 4);
@@ -142,11 +144,11 @@ namespace SAEON.Observations.WebAPI
                                 }
                             else
                             {
-                                await AddLineAsync($"Adding Site {siteCode}");
+                                await AddLineAsync($"Adding Site {siteCode}, {siteName}");
                                 site = new Site
                                 {
                                     Code = siteCode,
-                                    Name = GetString(sitesList, rSite, 1),
+                                    Name = siteName,
                                     Description = GetString(sitesList, rSite, 2),
                                     Url = GetString(sitesData, rSite, 3),
                                     StartDate = GetDate(sitesData, rSite, 4),
@@ -159,12 +161,12 @@ namespace SAEON.Observations.WebAPI
                                 var ownerRoleId = (await dbContext.OrganisationRoles.FirstAsync(i => i.Code == "Owner")).Id;
                                 var siteId = (await dbContext.Sites.FirstAsync(i => i.Code == siteCode)).Id;
                                 var sql =
-                                    "Insert Organisation_Site " +
-                                    "  (OrganisationID, SiteID, OrganisationRoleID, UserID) " +
-                                    "Values " +
-                                   $"  ('{saeonOrganisationId}','{siteId}','{ownerRoleId}','{userId}')";
-                                //SAEONLogs.Verbose("Sql: {Sql}", sql);
-                                await dbContext.Database.ExecuteSqlRawAsync(sql);
+                                await dbContext.Database.ExecuteSqlInterpolatedAsync(
+                                    $@"
+                                    Insert Organisation_Site 
+                                      (OrganisationID, SiteID, OrganisationRoleID, UserID) 
+                                    Values 
+                                      ({saeonOrganisationId},{siteId},{ownerRoleId},{userId})");
                             }
                         }
                         // Stations
@@ -177,16 +179,17 @@ namespace SAEON.Observations.WebAPI
                         {
                             var stationCode = GetString(stationsList, rStation, 0);
                             if (string.IsNullOrWhiteSpace(stationCode)) continue;
+                            var stationName = GetString(stationsList, rStation, 1);
                             var station = await dbContext.Stations.FirstOrDefaultAsync(i => i.Code == stationCode);
                             if (station != null)
                                 if (!UpdateData)
                                 {
-                                    SAEONLogs.Verbose("Ignoring Station {StationCode}", stationCode);
+                                    SAEONLogs.Verbose("Ignoring Station {StationCode}, {StationName}", stationCode, stationName);
                                 }
                                 else
                                 {
-                                    await AddLineAsync($"Updating Station {stationCode}");
-                                    station.Name = GetString(stationsList, rStation, 1);
+                                    await AddLineAsync($"Updating Station {stationCode}, {stationName}");
+                                    station.Name = stationName;
                                     station.Description = GetString(stationsList, rStation, 2);
                                     station.Url = GetString(stationsData, rStation, 3);
                                     station.Latitude = GetDouble(stationsData, rStation, 4);
@@ -198,13 +201,13 @@ namespace SAEON.Observations.WebAPI
                                 }
                             else
                             {
-                                await AddLineAsync($"Adding Station {stationCode}");
+                                await AddLineAsync($"Adding Station {stationCode}, {stationName}");
                                 var siteCode = GetString(stationSites, rStation, 0);
                                 station = new Station
                                 {
                                     SiteId = (await dbContext.Sites.FirstAsync(i => i.Code == siteCode)).Id,
                                     Code = stationCode,
-                                    Name = GetString(stationsList, rStation, 1),
+                                    Name = stationName,
                                     Description = GetString(stationsList, rStation, 2),
                                     Url = GetString(stationsData, rStation, 3),
                                     Latitude = GetDouble(stationsData, rStation, 4),
@@ -219,13 +222,12 @@ namespace SAEON.Observations.WebAPI
                                 var stationId = (await dbContext.Stations.FirstAsync(i => i.Code == stationCode)).Id;
                                 var projectCode = GetString(stationProjects, rStation, 0);
                                 var projectId = (await dbContext.Projects.FirstAsync(i => i.Code == projectCode)).Id;
-                                var sql =
-                                    "Insert Project_Station " +
-                                    "  (ProjectID, StationID, UserID) " +
-                                    "Values " +
-                                   $"  ('{projectId}','{stationId}','{userId}')";
-                                //SAEONLogs.Verbose("Sql: {Sql}", sql);
-                                await dbContext.Database.ExecuteSqlRawAsync(sql);
+                                await dbContext.Database.ExecuteSqlInterpolatedAsync(
+                                    $@"
+                                    Insert Project_Station 
+                                      (ProjectID, StationID, UserID)
+                                    Values 
+                                      ({projectId},{stationId},{userId})");
                             }
                         }
                         // Instruments
@@ -238,16 +240,17 @@ namespace SAEON.Observations.WebAPI
                         {
                             var instrumentCode = GetString(instrumentsList, rInstrument, 0);
                             if (string.IsNullOrWhiteSpace(instrumentCode)) continue;
+                            var instrumentName = GetString(instrumentsList, rInstrument, 1);
                             var instrument = await dbContext.Instruments.FirstOrDefaultAsync(i => i.Code == instrumentCode);
                             if (instrument != null)
                                 if (!UpdateData)
                                 {
-                                    SAEONLogs.Verbose("Ignoring Instrument {InstrumentCode}", instrumentCode);
+                                    SAEONLogs.Verbose("Ignoring Instrument {InstrumentCode}, {InstrumentName}", instrumentCode, instrumentName);
                                 }
                                 else
                                 {
-                                    await AddLineAsync($"Updating Instrument {instrumentCode}");
-                                    instrument.Name = GetString(instrumentsList, rInstrument, 1);
+                                    await AddLineAsync($"Updating Instrument {instrumentCode}, {instrumentName}");
+                                    instrument.Name = instrumentName;
                                     instrument.Description = GetString(instrumentsList, rInstrument, 2);
                                     instrument.Url = GetString(instrumentsData, rInstrument, 3);
                                     instrument.Latitude = GetDouble(instrumentsData, rInstrument, 4);
@@ -258,11 +261,11 @@ namespace SAEON.Observations.WebAPI
                                 }
                             else
                             {
-                                await AddLineAsync($"Adding Instrument {instrumentCode}");
+                                await AddLineAsync($"Adding Instrument {instrumentCode}, {instrumentName}");
                                 instrument = new Instrument
                                 {
                                     Code = instrumentCode,
-                                    Name = GetString(instrumentsList, rInstrument, 1),
+                                    Name = instrumentName,
                                     Description = GetString(instrumentsList, rInstrument, 2),
                                     Url = GetString(instrumentsData, rInstrument, 3),
                                     Latitude = GetDouble(instrumentsData, rInstrument, 4),
@@ -284,27 +287,28 @@ namespace SAEON.Observations.WebAPI
                         {
                             var dataSchemaCode = GetString(dataSchemasList, rInstrument, 0);
                             if (string.IsNullOrWhiteSpace(dataSchemaCode)) continue;
+                            var dataSchemaName = GetString(dataSchemasList, rInstrument, 1);
                             var dataSchema = await dbContext.DataSchemas.FirstOrDefaultAsync(i => i.Code == dataSchemaCode);
                             if (dataSchema != null)
                                 if (!UpdateData)
                                 {
-                                    SAEONLogs.Verbose("Ignoring DataSchema {DataSchemaCode}", dataSchemaCode);
+                                    SAEONLogs.Verbose("Ignoring DataSchema {DataSchemaCode}, {DataSchemaName}", dataSchemaCode, dataSchemaName);
                                 }
                                 else
                                 {
-                                    await AddLineAsync($"Updating DataSchema {dataSchemaCode}");
-                                    dataSchema.Name = GetString(dataSchemasList, rInstrument, 1);
+                                    await AddLineAsync($"Updating DataSchema {dataSchemaCode}, {dataSchemaName}");
+                                    dataSchema.Name = dataSchemaName;
                                     dataSchema.Description = GetString(dataSchemasList, rInstrument, 2);
                                     dataSchema.DataSourceTypeId = CSVTypeId;
                                     await dbContext.SaveChangesAsync();
                                 }
                             else
                             {
-                                await AddLineAsync($"Adding DataSchema {dataSchemaCode}");
+                                await AddLineAsync($"Adding DataSchema {dataSchemaCode}, {dataSchemaName}");
                                 dataSchema = new DataSchema
                                 {
                                     Code = dataSchemaCode,
-                                    Name = GetString(dataSchemasList, rInstrument, 1),
+                                    Name = dataSchemaName,
                                     Description = GetString(dataSchemasList, rInstrument, 2),
                                     DataSourceTypeId = CSVTypeId,
                                     UserId = userId
@@ -320,16 +324,17 @@ namespace SAEON.Observations.WebAPI
                         {
                             var dataSourceCode = GetString(dataSourcesList, rInstrument, 0);
                             if (string.IsNullOrWhiteSpace(dataSourceCode)) continue;
+                            var dataSourceName = GetString(dataSourcesList, rInstrument, 1);
                             var dataSource = await dbContext.DataSources.FirstOrDefaultAsync(i => i.Code == dataSourceCode);
                             if (dataSource != null)
                                 if (!UpdateData)
                                 {
-                                    SAEONLogs.Verbose("Ignoring DataSource {DataSourceCode}", dataSourceCode);
+                                    SAEONLogs.Verbose("Ignoring DataSource {DataSourceCode}, {DataSourceName}", dataSourceCode, dataSourceName);
                                 }
                                 else
                                 {
-                                    await AddLineAsync($"Updating DataSource {dataSourceCode}");
-                                    var dataSchemaCode = GetString(dataSchemasList, rInstrument, 0);
+                                    await AddLineAsync($"Updating DataSource {dataSourceCode}, {dataSourceName}");
+                                    var dataSchemaCode = dataSourceName;
                                     dataSource.Name = GetString(dataSourcesList, rInstrument, 1);
                                     dataSource.Description = GetString(dataSourcesList, rInstrument, 2);
                                     dataSource.DataSchemaId = (await dbContext.DataSchemas.FirstAsync(i => i.Code == dataSchemaCode)).Id;
@@ -340,12 +345,12 @@ namespace SAEON.Observations.WebAPI
                                 }
                             else
                             {
-                                await AddLineAsync($"Adding DataSource {dataSourceCode}");
+                                await AddLineAsync($"Adding DataSource {dataSourceCode}, {dataSourceName}");
                                 var dataSchemaCode = GetString(dataSchemasList, rInstrument, 0);
                                 dataSource = new DataSource
                                 {
                                     Code = dataSourceCode,
-                                    Name = GetString(dataSourcesList, rInstrument, 1),
+                                    Name = dataSourceName,
                                     Description = GetString(dataSourcesList, rInstrument, 2),
                                     DataSchemaId = (await dbContext.DataSchemas.FirstAsync(i => i.Code == dataSchemaCode)).Id,
                                     Url = "http://observations.saeon.ac.za",
@@ -364,27 +369,28 @@ namespace SAEON.Observations.WebAPI
                         {
                             var phenomenonCode = GetString(phenomenaList, rPhenomenon, 0);
                             if (string.IsNullOrWhiteSpace(phenomenonCode)) continue;
+                            var phenomenonName = GetString(phenomenaList, rPhenomenon, 1);
                             var phenomenon = await dbContext.Phenomena.FirstOrDefaultAsync(i => i.Code == phenomenonCode);
                             if (phenomenon != null)
                                 if (!UpdateData)
                                 {
-                                    SAEONLogs.Verbose("Ignoring Phenomenon {PhenomenonCode}", phenomenonCode);
+                                    SAEONLogs.Verbose("Ignoring Phenomenon {PhenomenonCode}, {PhenomenonName}", phenomenonCode, phenomenonName);
                                 }
                                 else
                                 {
-                                    await AddLineAsync($"Updating Phenomenon {phenomenonCode}");
-                                    phenomenon.Name = GetString(phenomenaList, rPhenomenon, 1);
+                                    await AddLineAsync($"Updating Phenomenon {phenomenonCode}, {phenomenonName}");
+                                    phenomenon.Name = phenomenonName;
                                     phenomenon.Description = GetString(phenomenaList, rPhenomenon, 2);
                                     phenomenon.Url = GetString(phenomenaList, rPhenomenon, 3);
                                     await dbContext.SaveChangesAsync();
                                 }
                             else
                             {
-                                await AddLineAsync($"Adding Phenomenon {phenomenonCode}");
+                                await AddLineAsync($"Adding Phenomenon {phenomenonCode}, {phenomenonName}");
                                 phenomenon = new Phenomenon
                                 {
                                     Code = phenomenonCode,
-                                    Name = GetString(phenomenaList, rPhenomenon, 1),
+                                    Name = phenomenonName,
                                     Description = GetString(phenomenaList, rPhenomenon, 2),
                                     Url = GetString(phenomenaList, rPhenomenon, 3),
                                     UserId = userId
@@ -394,6 +400,58 @@ namespace SAEON.Observations.WebAPI
                             }
                         }
                         // Sensors
+                        var sensorInstruments = ExcelHelper.GetNameValues(doc, "SensorsInstruments");
+                        var sensorPhenomena = ExcelHelper.GetNameValues(doc, "SensorsPhenomena");
+                        var sensorsData = ExcelHelper.GetNameValues(doc, "SensorsData");
+                        var sensorsList = ExcelHelper.GetTableValues(doc, "Table_Sensors");
+                        for (int rSensor = 0; rSensor < sensorsList.GetUpperBound(0) + 1; rSensor++)
+                        {
+                            var sensorCode = GetString(sensorsList, rSensor, 0);
+                            if (string.IsNullOrWhiteSpace(sensorCode)) continue;
+                            var sensorName = GetString(sensorsList, rSensor, 1);
+                            var sensor = await dbContext.Sensors.FirstOrDefaultAsync(i => i.Code == sensorCode);
+                            if (sensor != null)
+                                if (!UpdateData)
+                                {
+                                    SAEONLogs.Verbose("Ignoring Sensor {SensorCode}, {SensorName}", sensorCode, sensorName);
+                                }
+                                else
+                                {
+                                    await AddLineAsync($"Updating Sensor {sensorCode}, {sensorName}");
+
+                                }
+                            else
+                            {
+                                await AddLineAsync($"Adding Sensor {sensorCode}, {sensorName}");
+                                var instrumentCode = GetString(sensorInstruments, rSensor, 0);
+                                //var rInstrument = FindRowIndex(instrumentsList, 0, instrumentCode);
+                                //var dataSourceCode = GetString(dataSourcesList, rInstrument, 0);
+                                var phenomenaCode = GetString(sensorPhenomena, rSensor, 0);
+                                sensor = new Sensor
+                                {
+                                    Code = sensorCode,
+                                    Name = GetString(sensorsList, rSensor, 1),
+                                    Description = GetString(sensorsList, rSensor, 2),
+                                    Url = GetString(sensorsData, rSensor, 2),
+                                    Latitude = GetDouble(sensorsData, rSensor, 3),
+                                    Longitude = GetDouble(sensorsData, rSensor, 4),
+                                    Elevation = GetDouble(sensorsData, rSensor, 5),
+                                    //DataSourceId = (await dbContext.DataSources.FirstAsync(i => i.Code == dataSourceCode)).Id,
+                                    PhenomenonId = (await dbContext.Phenomena.FirstAsync(i => i.Code == phenomenaCode)).Id,
+                                    UserId = userId
+                                };
+                                dbContext.Sensors.Add(sensor);
+                                await dbContext.SaveChangesAsync();
+                                var instrumentId = (await dbContext.Instruments.FirstAsync(i => i.Code == instrumentCode)).Id;
+                                var sensorId = (await dbContext.Sensors.FirstAsync(i => i.Code == sensorCode)).Id;
+                                await dbContext.Database.ExecuteSqlInterpolatedAsync(
+                                    $@"
+                                    Insert Instrument_Sensor 
+                                      (InstrumentID, SensorID, UserID) 
+                                    Values 
+                                      ({instrumentId},{sensorId},{userId})");
+                            }
+                        }
                     }
                     await AddLineAsync("Done");
                     return sb.ToString();
@@ -474,4 +532,46 @@ namespace SAEON.Observations.WebAPI
                 }
         }
     }
+
+    //public class ImportSetupService : IHostedService
+    //{
+    //    private readonly IServiceScopeFactory scopeFactory;
+
+    //    public ImportSetupService(IServiceScopeFactory scopeFactory)
+    //    {
+    //        this.scopeFactory = scopeFactory;
+    //    }
+
+    //    public Task StartAsync(CancellationToken cancellationToken)
+    //    {
+    //        using (SAEONLogs.MethodCall(GetType()))
+    //        {
+    //            try
+    //            {
+    //                DoWork()
+
+    //            }
+    //            catch (Exception ex)
+    //            {
+    //                SAEONLogs.Exception(ex);
+    //                throw;
+    //            }
+
+    //        }
+    //    }
+
+    //    public Task StopAsync(CancellationToken cancellationToken)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    private void DoWork()
+    //    {
+    //        using (var scope = scopeFactory.CreateScope())
+    //        {
+    //            var dbContext = scope.ServiceProvider.GetRequiredService<ObservationsDbContext>();
+    //            var adminGub = scope.ServiceProvider.GetRequiredService<IHubContext<AdminHub>>();
+    //        }
+    //    }
+    //}
 }

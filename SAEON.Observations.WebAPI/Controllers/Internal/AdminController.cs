@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
@@ -81,6 +82,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     if (formFile.Length == 0) throw new ArgumentOutOfRangeException(nameof(formFile), "File length cannot be zero");
                     var ext = Path.GetExtension(formFile.FileName).ToLowerInvariant();
                     if (!(ext == ".xls" || ext == ".xlsx")) throw new ArgumentOutOfRangeException(nameof(formFile), "Invalid file extension");
+                    ImportSetupHelper.UpdateData = Config["ImportSetupUpdateData"].IsTrue();
                     SAEONLogs.Information("ImportSetup: {FileName}", formFile.FileName);
                     return Content(await ImportSetupHelper.ImportFromSpreadsheet(DbContext, AdminHub, formFile));
                 }

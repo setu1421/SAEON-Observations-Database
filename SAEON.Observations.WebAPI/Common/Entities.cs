@@ -162,7 +162,7 @@ namespace SAEON.Observations.WebAPI
         /// Code of the Entity
         /// </summary>
         [Required, StringLength(50)]
-        public string Code { get; set; }
+        public virtual string Code { get; set; }
     }
 
     public abstract class NamedEntity : CodedEntity
@@ -703,6 +703,8 @@ namespace SAEON.Observations.WebAPI
     [Table("Sensor")]
     public class Sensor : NamedEntity
     {
+        [StringLength(75)]
+        public override string Code { get => base.Code; set => base.Code = value; }
         /// <summary>
         /// Description of the Sensor
         /// </summary>
