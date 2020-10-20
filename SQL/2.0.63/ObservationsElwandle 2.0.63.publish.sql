@@ -100,12 +100,29 @@ DROP INDEX [IX_Observation_ValueYear]
 
 
 GO
+PRINT N'Dropping [dbo].[Sensor].[IX_Sensor_CodeName]...';
+
+
+GO
+DROP INDEX [IX_Sensor_CodeName]
+    ON [dbo].[Sensor];
+
+
+GO
 PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueDateDesc]...';
 
 
 GO
 DROP INDEX [IX_Observation_ValueDateDesc]
     ON [dbo].[Observation];
+
+
+GO
+PRINT N'Dropping [dbo].[UX_Sensor_Code]...';
+
+
+GO
+ALTER TABLE [dbo].[Sensor] DROP CONSTRAINT [UX_Sensor_Code];
 
 
 GO
@@ -319,6 +336,41 @@ CREATE NONCLUSTERED INDEX [IX_Project_DigitalObjectIdentifierID]
 
 
 GO
+PRINT N'Altering [dbo].[Sensor]...';
+
+
+GO
+ALTER TABLE [dbo].[Sensor] ALTER COLUMN [Code] VARCHAR (75) NOT NULL;
+
+
+GO
+PRINT N'Creating [dbo].[UX_Sensor_Code]...';
+
+
+GO
+ALTER TABLE [dbo].[Sensor]
+    ADD CONSTRAINT [UX_Sensor_Code] UNIQUE NONCLUSTERED ([Code] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[UX_Sensor_Name]...';
+
+
+GO
+ALTER TABLE [dbo].[Sensor]
+    ADD CONSTRAINT [UX_Sensor_Name] UNIQUE NONCLUSTERED ([Name] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Sensor].[IX_Sensor_CodeName]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Sensor_CodeName]
+    ON [dbo].[Sensor]([Code] ASC, [Name] ASC);
+
+
+GO
 PRINT N'Altering [dbo].[Site]...';
 
 
@@ -360,15 +412,6 @@ PRINT N'Creating [dbo].[Station].[IX_Station_DigitalObjectIdentifierID]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Station_DigitalObjectIdentifierID]
     ON [dbo].[Station]([DigitalObjectIdentifierID] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[UX_Sensor_Name]...';
-
-
-GO
-ALTER TABLE [dbo].[Sensor]
-    ADD CONSTRAINT [UX_Sensor_Name] UNIQUE NONCLUSTERED ([Name] ASC);
 
 
 GO
@@ -667,6 +710,22 @@ EXECUTE sp_refreshsqlmodule N'[dbo].[vDataLog]';
 
 
 GO
+PRINT N'Refreshing [dbo].[vInstrumentSensor]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vInstrumentSensor]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
 PRINT N'Refreshing [dbo].[vSensor]...';
 
 
@@ -691,14 +750,6 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vStation]...';
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vStation]';
-
-
-GO
 PRINT N'Refreshing [dbo].[vSensorLocation]...';
 
 
@@ -712,6 +763,14 @@ EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorLocation]';
 
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing [dbo].[vStation]...';
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vStation]';
 
 
 GO
