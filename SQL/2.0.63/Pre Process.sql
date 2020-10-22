@@ -32,3 +32,5 @@ Delete DigitalObjectIdentifiers
 --DBCC CheckIdent('DigitalObjectIdentifiers')
 DBCC CheckIdent('DigitalObjectIdentifiers',Reseed, 0)
 drop view if exists vStationDataStreams
+drop view if exists vInventoryDataStream
+drop view if exists vInventoryDatasets

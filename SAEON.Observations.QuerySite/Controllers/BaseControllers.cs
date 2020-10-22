@@ -155,6 +155,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var client = new HttpClient();
                     client.DefaultRequestHeaders.Add(TenantAuthenticationDefaults.HeaderKeyTenant, Tenant);
                     client.BaseAddress = new Uri(Config["WebAPIUrl"].AddTrailingForwardSlash());
+                    client.Timeout = TimeSpan.FromMinutes(Convert.ToInt32(Config["WebAPITimeoutMins"] ?? "15"));
                     return client;
                 }
                 catch (Exception ex)

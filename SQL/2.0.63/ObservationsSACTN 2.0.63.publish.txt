@@ -49,7 +49,6 @@
        [dbo].[Station] (Table)
        [dbo].[vImportBatchSummary] (View)
        [dbo].[vLocations] (View)
-       [dbo].[vInventoryDatasets] (View)
        [dbo].[vInventorySensors] (View)
        [dbo].[vFeatures] (View)
      Create
@@ -72,6 +71,7 @@
        [dbo].[FK_Project_DigitalObjectIdentifierID] (Foreign Key)
        [dbo].[FK_Site_DigitalObjectIdentifierID] (Foreign Key)
        [dbo].[FK_Station_DigitalObjectIdentifierID] (Foreign Key)
+       [dbo].[vInventoryDatasets] (View)
        [dbo].[vStationDatasets] (View)
 
 ** Supporting actions

@@ -1,3 +1,4 @@
+use Observations
 --Select distinct
   --SensorName, SensorCode, InstrumentCode, InstrumentName, StationCode, StationName, SiteCode, SiteName
 --  Sum(Count)
