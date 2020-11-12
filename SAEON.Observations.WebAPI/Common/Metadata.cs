@@ -20,7 +20,7 @@ namespace SAEON.Observations.WebAPI
         public JObject AsJson()
         {
             var jObj = new JObject(new JProperty("affiliation", Name));
-#if Schema44
+#if Schema43
             if (!string.IsNullOrWhiteSpace(Identifier))
             {
                 new JProperty("affiliationIdentifier", Identifier);
@@ -112,7 +112,11 @@ namespace SAEON.Observations.WebAPI
             }
             if (Affiliations?.Any() ?? false)
             {
+#if Schema43
+                jObj.Add(new JProperty("affiliation", new JArray(Affiliations.Select(i => i.AsJson()))));
+#else
                 jObj.Add(new JProperty("affiliations", new JArray(Affiliations.Select(i => i.AsJson()))));
+#endif
             }
             return jObj;
         }
@@ -572,7 +576,12 @@ namespace SAEON.Observations.WebAPI
             {
                 sbHtml.AppendHtmlP($"{"License:".HtmlB()} {Rights[0].Name}");
             }
-            sbHtml.AppendHtmlP($"{"Keywords:".HtmlB()} {string.Join(", ", Subjects.Where(i => !i.Name.StartsWith("http")).Distinct().OrderBy(i => i.Name).Select(i => i.Name))}");
+            // Keyword cleanup
+            var cleanSubjects = Subjects.Where(i => !i.Name.StartsWith("http")).Distinct().ToList();
+            var excludes = new List<string> { "South African Environmental Observation Network", "Observations Database" };
+            cleanSubjects.RemoveAll(i => excludes.Contains(i.Name));
+            cleanSubjects.ForEach(i => i.Name = i.Name.Replace(",", "").Replace("  ", " "));
+            sbHtml.AppendHtmlP($"{"Keywords:".HtmlB()} {string.Join(", ", cleanSubjects.OrderBy(i => i.Name).Select(i => i.Name))}");
             if (!string.IsNullOrWhiteSpace(DOI.MetadataUrl))
             {
                 sbHtml.AppendHtmlP($"{"Metadata URL:".HtmlB()} <a href='{DOI.MetadataUrl}'>{DOI.MetadataUrl}</a>".Trim());
@@ -676,7 +685,11 @@ namespace SAEON.Observations.WebAPI
                     new JProperty("resourceType", ResourceType.AsJson()),
 #endif
                     new JProperty("publisher", Publisher),
+#if Schema43
+                    new JProperty("publicationYear", PublicationYear),
+#else
                     new JProperty("publicationYear", PublicationYear.ToString()),
+#endif
                     new JProperty("creators", new JArray(Creator.AsJson())),
                     new JProperty("dates", jDates),
                     new JProperty("titles",
@@ -704,11 +717,11 @@ namespace SAEON.Observations.WebAPI
                     new JProperty("alternateIdentifiers", new JArray(AlternateIdentifiers.Select(i => i.AsJson()))),
 #endif
                     new JProperty("relatedIdentifiers", new JArray(RelatedIdentifiers.Select(i => i.AsJson()))),
-#if Schema43    
+#if Schema43
                     new JProperty("schemaVersion", "http://datacite.org/schema/kernel-4"),
 #endif
                     new JProperty("immutableResource", new JObject(
-                        new JProperty("resourceURL", DOI.QueryUrl)))
+                        new JProperty("resourceData", DOI.QueryUrl)))
                );
             return jObj.ToString(Formatting.Indented);
         }

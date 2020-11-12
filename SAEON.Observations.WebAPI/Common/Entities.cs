@@ -448,20 +448,14 @@ namespace SAEON.Observations.WebAPI
 
         // Navigation
 
-        [NotMapped, JsonIgnore]
-        public List<Organisation> Organisations => OrganisationInstruments?.Select(oi => oi.Organisation).ToList();
         [JsonIgnore, SwaggerIgnore]
-        public List<OrganisationInstrument> OrganisationInstruments { get; set; }
+        public List<Organisation> Organisations { get; set; }
 
-        [NotMapped, JsonIgnore, SwaggerIgnore]
-        public List<Station> Stations => StationInstruments?.Select(si => si.Station).ToList();
         [JsonIgnore, SwaggerIgnore]
-        public List<StationInstrument> StationInstruments { get; set; }
+        public List<Station> Stations { get; set; }
 
-        [NotMapped, JsonIgnore, SwaggerIgnore]
-        public List<Sensor> Sensors => InstrumentSensors?.Select(i => i.Sensor).ToList();
         [JsonIgnore, SwaggerIgnore]
-        public List<InstrumentSensor> InstrumentSensors { get; set; }
+        public List<Sensor> Sensors { get; set; }
 
         public Instrument() : base()
         {
@@ -486,10 +480,8 @@ namespace SAEON.Observations.WebAPI
 
         // Navigation
 
-        [NotMapped, JsonIgnore]
-        public List<Phenomenon> Phenomena => PhenomenonOfferings?.Select(po => po.Phenomenon).ToList();
         [JsonIgnore, SwaggerIgnore]
-        public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
+        public List<Phenomenon> Phenomena { get; set; }
 
         public Offering() : base()
         {
@@ -519,25 +511,18 @@ namespace SAEON.Observations.WebAPI
         /// <summary>
         /// DigitalObjectIdentifierID of the Organisation
         /// </summary>
-        [JsonIgnore]
         public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
 
-        [JsonIgnore]
+        [JsonIgnore, SwaggerIgnore]
         public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
-        [NotMapped, JsonIgnore]
-        public List<Instrument> Instruments => OrganisationInstruments?.Select(oi => oi.Instrument).ToList();
         [JsonIgnore, SwaggerIgnore]
-        public List<OrganisationInstrument> OrganisationInstruments { get; set; }
-        [NotMapped, JsonIgnore]
-        public List<Site> Sites => OrganisationSites?.Select(os => os.Site).ToList();
+        public List<Instrument> Instruments { get; set; }
         [JsonIgnore, SwaggerIgnore]
-        public List<OrganisationSite> OrganisationSites { get; set; }
-        [NotMapped, JsonIgnore]
-        public List<Station> Stations => OrganisationStations?.Select(os => os.Station).ToList();
+        public List<Site> Sites { get; set; }
         [JsonIgnore, SwaggerIgnore]
-        public List<OrganisationStation> OrganisationStations { get; set; }
+        public List<Station> Stations { get; set; }
 
         public Organisation() : base()
         {
@@ -578,13 +563,9 @@ namespace SAEON.Observations.WebAPI
         // Navigation
 
         [JsonIgnore, SwaggerIgnore]
-        public List<Offering> Offerings => PhenomenonOfferings?.Select(ph => ph.Offering).ToList();
+        public List<Offering> Offerings { get; set; }
         [JsonIgnore, SwaggerIgnore]
-        public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
-        [JsonIgnore, SwaggerIgnore]
-        public List<Unit> Units => PhenomenonUnits?.Select(pu => pu.Unit).ToList();
-        [JsonIgnore, SwaggerIgnore]
-        public List<PhenomenonUnit> PhenomenonUnits { get; set; }
+        public List<Unit> Units { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public List<Sensor> Sensors { get; set; }
 
@@ -625,14 +606,13 @@ namespace SAEON.Observations.WebAPI
         /// <summary>
         /// DigitalObjectIdentifierID of the Programme
         /// </summary>
-        [JsonIgnore]
         public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
 
-        [JsonIgnore]
+        [JsonIgnore, SwaggerIgnore]
         public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
-        [JsonIgnore]
+        [JsonIgnore, SwaggerIgnore]
         public List<Project> Projects { get; set; }
 
         public Programme() : base()
@@ -675,19 +655,16 @@ namespace SAEON.Observations.WebAPI
         /// <summary>
         /// DigitalObjectIdentifierID of the Project
         /// </summary>
-        [JsonIgnore]
         public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
 
-        [JsonIgnore]
-        public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
-        [JsonIgnore]
-        public Programme Programme { get; set; }
-        [NotMapped, JsonIgnore]
-        public List<Station> Stations => ProjectStations?.Select(ps => ps.Station).ToList();
         [JsonIgnore, SwaggerIgnore]
-        public List<ProjectStation> ProjectStations { get; set; }
+        public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
+        [JsonIgnore, SwaggerIgnore]
+        public Programme Programme { get; set; }
+        [JsonIgnore, SwaggerIgnore]
+        public List<Station> Stations { get; set; }
 
         public Project() : base()
         {
@@ -740,10 +717,8 @@ namespace SAEON.Observations.WebAPI
         public DataSource DataSource { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public Phenomenon Phenomenon { get; set; }
-        [NotMapped, JsonIgnore, SwaggerIgnore]
-        public List<Instrument> Instruments => InstrumentSensors?.Select(i => i.Instrument).ToList();
         [JsonIgnore, SwaggerIgnore]
-        public List<InstrumentSensor> InstrumentSensors { get; set; }
+        public List<Instrument> Instruments { get; set; }
 
         public Sensor() : base()
         {
@@ -784,17 +759,14 @@ namespace SAEON.Observations.WebAPI
         /// <summary>
         /// DigitalObjectIdentifierID of the Site
         /// </summary>
-        [JsonIgnore]
         public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
 
         [JsonIgnore, SwaggerIgnore]
         public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
-        [NotMapped, JsonIgnore, SwaggerIgnore]
-        public List<Organisation> Organisations => OrganisationSites?.Select(os => os.Organisation).ToList();
         [JsonIgnore, SwaggerIgnore]
-        public List<OrganisationSite> OrganisationSites { get; set; }
+        public List<Organisation> Organisations { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public List<Station> Stations { get; set; }
 
@@ -856,18 +828,12 @@ namespace SAEON.Observations.WebAPI
         public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public Site Site { get; set; }
-        [NotMapped, JsonIgnore, SwaggerIgnore]
-        public List<Organisation> Organisations => OrganisationStations?.Select(os => os.Organisation).ToList();
         [JsonIgnore, SwaggerIgnore]
-        public List<OrganisationStation> OrganisationStations { get; set; }
-        [NotMapped, JsonIgnore, SwaggerIgnore]
-        public List<Project> Projects => ProjectStations?.Select(ps => ps.Project).ToList();
+        public List<Organisation> Organisations { get; set; }
         [JsonIgnore, SwaggerIgnore]
-        public List<ProjectStation> ProjectStations { get; set; }
-        [NotMapped, JsonIgnore, SwaggerIgnore]
-        public List<Instrument> Instruments => StationInstruments?.Select(si => si.Instrument).ToList();
+        public List<Project> Projects { get; set; }
         [JsonIgnore, SwaggerIgnore]
-        public List<StationInstrument> StationInstruments { get; set; }
+        public List<Instrument> Instruments { get; set; }
 
         public Station() : base()
         {
@@ -894,10 +860,8 @@ namespace SAEON.Observations.WebAPI
 
         // Navigation
 
-        [NotMapped, JsonIgnore]
-        public List<Phenomenon> Phenomena => PhenomenonUnits?.Select(pu => pu.Phenomenon).ToList();
         [JsonIgnore, SwaggerIgnore]
-        public List<PhenomenonUnit> PhenomenonUnits { get; set; }
+        public List<Phenomenon> Phenomena { get; set; }
 
         public Unit() : base()
         {
@@ -1424,7 +1388,7 @@ namespace SAEON.Observations.WebAPI
         public double? ElevationMaximum { get; set; }
 
         // Navigation
-        [JsonIgnore]
+        [JsonIgnore, SwaggerIgnore]
         public Station Station { get; set; }
     }
 
@@ -1479,7 +1443,7 @@ namespace SAEON.Observations.WebAPI
         public string StatusReasonDescription { get; set; }
 
         // Navigation
-        [JsonIgnore]
+        [JsonIgnore, SwaggerIgnore]
         public Station Station { get; set; }
     }
 
@@ -1599,6 +1563,7 @@ namespace SAEON.Observations.WebAPI
     #endregion
 
     #region ManyToManyTables
+    /*
     //> Remove once EFCore has many to many
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("Instrument_Sensor")]
@@ -1696,6 +1661,7 @@ namespace SAEON.Observations.WebAPI
         public Instrument Instrument { get; set; }
     }
     //< Remove once EFCore has many to many
+    */
     #endregion
 
 
@@ -1722,8 +1688,6 @@ namespace SAEON.Observations.WebAPI
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<OrganisationRole> OrganisationRoles { get; set; }
         public DbSet<Phenomenon> Phenomena { get; set; }
-        public DbSet<PhenomenonOffering> PhenomenonOfferings { get; set; }
-        public DbSet<PhenomenonUnit> PhenomenonUnits { get; set; }
         public DbSet<Programme> Programmes { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Sensor> Sensors { get; set; }
@@ -1780,6 +1744,7 @@ namespace SAEON.Observations.WebAPI
             modelBuilder.Entity<DigitalObjectIdentifier>().Property("DOIType").HasConversion<byte>();
             modelBuilder.Entity<DigitalObjectIdentifier>().HasOne(i => i.Parent).WithMany(i => i.Children).HasForeignKey(i => i.ParentId);
             //> Remove once EFCore has many to many
+            /*
             modelBuilder.Entity<InstrumentSensor>().HasKey(e => new { e.InstrumentId, e.SensorId });
             modelBuilder.Entity<InstrumentSensor>().HasOne(i => i.Instrument).WithMany(i => i.InstrumentSensors).HasForeignKey(pt => pt.InstrumentId);
             modelBuilder.Entity<InstrumentSensor>().HasOne(i => i.Sensor).WithMany(i => i.InstrumentSensors).HasForeignKey(pt => pt.SensorId);
@@ -1805,6 +1770,7 @@ namespace SAEON.Observations.WebAPI
             modelBuilder.Entity<StationInstrument>().HasOne(i => i.Station).WithMany(i => i.StationInstruments).HasForeignKey(i => i.StationId);
             modelBuilder.Entity<StationInstrument>().HasOne(i => i.Instrument).WithMany(i => i.StationInstruments).HasForeignKey(i => i.InstrumentId);
             //< Remove once EFCore has many to many
+            */
         }
     }
 }

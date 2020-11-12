@@ -444,7 +444,7 @@ namespace SAEON.Observations.Data{
                 TableSchema.TableColumn colvarSensorCode = new TableSchema.TableColumn(schema);
                 colvarSensorCode.ColumnName = "SensorCode";
                 colvarSensorCode.DataType = DbType.AnsiString;
-                colvarSensorCode.MaxLength = 50;
+                colvarSensorCode.MaxLength = 75;
                 colvarSensorCode.AutoIncrement = false;
                 colvarSensorCode.IsNullable = false;
                 colvarSensorCode.IsPrimaryKey = false;

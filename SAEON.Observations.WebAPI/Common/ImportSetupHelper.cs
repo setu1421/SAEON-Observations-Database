@@ -424,8 +424,8 @@ namespace SAEON.Observations.WebAPI
                             {
                                 await AddLineAsync($"Adding Sensor {sensorCode}, {sensorName}");
                                 var instrumentCode = GetString(sensorInstruments, rSensor, 0);
-                                //var rInstrument = FindRowIndex(instrumentsList, 0, instrumentCode);
-                                //var dataSourceCode = GetString(dataSourcesList, rInstrument, 0);
+                                var rInstrument = FindRowIndex(instrumentsList, 0, instrumentCode);
+                                var dataSourceCode = GetString(dataSourcesList, rInstrument, 0);
                                 var phenomenaCode = GetString(sensorPhenomena, rSensor, 0);
                                 sensor = new Sensor
                                 {
@@ -436,7 +436,7 @@ namespace SAEON.Observations.WebAPI
                                     Latitude = GetDouble(sensorsData, rSensor, 3),
                                     Longitude = GetDouble(sensorsData, rSensor, 4),
                                     Elevation = GetDouble(sensorsData, rSensor, 5),
-                                    //DataSourceId = (await dbContext.DataSources.FirstAsync(i => i.Code == dataSourceCode)).Id,
+                                    DataSourceId = (await dbContext.DataSources.FirstAsync(i => i.Code == dataSourceCode)).Id,
                                     PhenomenonId = (await dbContext.Phenomena.FirstAsync(i => i.Code == phenomenaCode)).Id,
                                     UserId = userId
                                 };
@@ -508,22 +508,34 @@ namespace SAEON.Observations.WebAPI
                         }
                     }
 
-                    void Dump(object[,] array, bool showTypes = false)
+                    int FindRowIndex(object[,] array, int col, string value)
                     {
-                        var sb = new StringBuilder();
-                        sb.AppendLine($"Rows: {array.GetUpperBound(0) + 1} Cols: {array.GetUpperBound(1) + 1}");
-                        for (var r = 0; r <= array.GetUpperBound(0); r++)
+                        for (int row = array.GetLowerBound(col); row < array.GetUpperBound(col) + 1; row++)
                         {
-                            sb.Append($"R: {r}");
-                            for (var c = 0; c <= array.GetUpperBound(1); c++)
+                            if ((string)array[row, col] == value)
                             {
-                                sb.Append($" {c}={array[r, c]}");
-                                if (showTypes) sb.Append($" {array[r, c].GetType().Name}");
+                                return row;
                             }
-                            sb.AppendLine();
                         }
-                        SAEONLogs.Information(sb.ToString());
+                        return -1;
                     }
+
+                    //void Dump(object[,] array, bool showTypes = false)
+                    //{
+                    //    var sb = new StringBuilder();
+                    //    sb.AppendLine($"Rows: {array.GetUpperBound(0) + 1} Cols: {array.GetUpperBound(1) + 1}");
+                    //    for (var r = 0; r <= array.GetUpperBound(0); r++)
+                    //    {
+                    //        sb.Append($"R: {r}");
+                    //        for (var c = 0; c <= array.GetUpperBound(1); c++)
+                    //        {
+                    //            sb.Append($" {c}={array[r, c]}");
+                    //            if (showTypes) sb.Append($" {array[r, c].GetType().Name}");
+                    //        }
+                    //        sb.AppendLine();
+                    //    }
+                    //    SAEONLogs.Information(sb.ToString());
+                    //}
                 }
                 catch (Exception ex)
                 {

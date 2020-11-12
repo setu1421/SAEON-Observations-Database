@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Packaging;
-using Ext.Net;
+﻿using Ext.Net;
 using Newtonsoft.Json;
 using SAEON.Core;
 using SAEON.Logs;
@@ -70,24 +69,9 @@ public static class DataTableExtensions
     {
         using (var ms = new MemoryStream())
         {
-            using (var doc = ExcelHelper.CreateSpreadsheet(ms))
+            using (var doc = ExcelSaxHelper.CreateSpreadsheet(ms, dataTable))
             {
-                WorksheetPart wsp = ExcelHelper.GetWorksheetPart(doc, 1);
-                int r = 1;
-                int c = 1;
-                foreach (DataColumn col in dataTable.Columns)
-                {
-                    ExcelHelper.SetCellValue(doc, wsp, c++, r, col.Caption);
-                }
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    r++;
-                    c = 1;
-                    foreach (DataColumn col in dataTable.Columns)
-                    {
-                        ExcelHelper.SetCellValue(doc, wsp, c++, r, row[col]);
-                    }
-                }
+                doc.Save();
             }
             return ms.ToArray();
         }

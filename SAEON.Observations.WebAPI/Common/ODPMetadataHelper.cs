@@ -50,8 +50,8 @@ namespace SAEON.Observations.WebAPI
                     doi.ODPMetadataId = new Guid(odpId);
                     var errors = jODP["errors"];
                     doi.ODPMetadataErrors = errors.ToString();
-                    doi.ODPMetadataNeedsUpdate = false;
                     doi.ODPMetadataIsValid = validated && !errors.HasValues;
+                    doi.ODPMetadataNeedsUpdate = !doi.ODPMetadataIsValid;
                     await dbContext.SaveChangesAsync();
                 }
 

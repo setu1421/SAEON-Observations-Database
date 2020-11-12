@@ -119,8 +119,7 @@ namespace SAEON.Observations.WebAPI
                                         metaDataset.ElevationMaximum = dataset.ElevationMaximum;
                                         metaDataset.Subjects.Add(new MetadataSubject { Name = dataset.StationName });
                                         metaDataset.Subjects.Add(new MetadataSubject { Name = dataset.PhenomenonName });
-                                        metaDataset.Subjects.Add(new MetadataSubject { Name = dataset.OfferingName });
-                                        metaDataset.Subjects.Add(new MetadataSubject { Name = dataset.UnitName });
+                                        metaDataset.Subjects.Add(new MetadataSubject { Name = $"{dataset.OfferingName} {dataset.UnitName}" });
                                         //metaDataset.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName} {dataset.OfferingName} {dataset.UnitName}" });
                                         //foreach (var doiPeriodic in await dbContext
                                         //     .DigitalObjectIdentifiers
@@ -160,7 +159,7 @@ namespace SAEON.Observations.WebAPI
                                         doiDataset.MetadataJson = metaDataset.ToJson();
                                         oldSha256 = doiDataset.MetadataJsonSha256;
                                         doiDataset.MetadataJsonSha256 = doiDataset.MetadataJson.Sha256();
-                                        doiDataset.ODPMetadataNeedsUpdate = oldSha256 != doiDataset.MetadataJsonSha256;
+                                        doiDataset.ODPMetadataNeedsUpdate = (oldSha256 != doiDataset.MetadataJsonSha256) || (!doiDataset.ODPMetadataIsValid ?? true);
                                         doiDataset.MetadataHtml = metaDataset.ToHtml();
                                         await dbContext.SaveChangesAsync();
                                     }
@@ -169,7 +168,7 @@ namespace SAEON.Observations.WebAPI
                                     doiStation.MetadataJson = metaStation.ToJson();
                                     oldSha256 = doiStation.MetadataJsonSha256;
                                     doiStation.MetadataJsonSha256 = doiStation.MetadataJson.Sha256();
-                                    doiStation.ODPMetadataNeedsUpdate = oldSha256 != doiStation.MetadataJsonSha256;
+                                    doiStation.ODPMetadataNeedsUpdate = oldSha256 != doiStation.MetadataJsonSha256 || (!doiStation.ODPMetadataIsValid ?? true); ;
                                     doiStation.MetadataHtml = metaStation.ToHtml();
                                     await dbContext.SaveChangesAsync();
                                 }
@@ -178,7 +177,7 @@ namespace SAEON.Observations.WebAPI
                                 doiSite.MetadataJson = metaSite.ToJson();
                                 oldSha256 = doiSite.MetadataJsonSha256;
                                 doiSite.MetadataJsonSha256 = doiSite.MetadataJson.Sha256();
-                                doiSite.ODPMetadataNeedsUpdate = oldSha256 != doiSite.MetadataJsonSha256;
+                                doiSite.ODPMetadataNeedsUpdate = oldSha256 != doiSite.MetadataJsonSha256 || (!doiSite.ODPMetadataIsValid ?? true); ;
                                 doiSite.MetadataHtml = metaSite.ToHtml();
                                 await dbContext.SaveChangesAsync();
                             }
@@ -187,7 +186,7 @@ namespace SAEON.Observations.WebAPI
                             doiProject.MetadataJson = metaProject.ToJson();
                             oldSha256 = doiProject.MetadataJsonSha256;
                             doiProject.MetadataJsonSha256 = doiProject.MetadataJson.Sha256();
-                            doiProject.ODPMetadataNeedsUpdate = oldSha256 != doiProject.MetadataJsonSha256;
+                            doiProject.ODPMetadataNeedsUpdate = oldSha256 != doiProject.MetadataJsonSha256 || (!doiProject.ODPMetadataIsValid ?? true); ;
                             doiProject.MetadataHtml = metaProject.ToHtml();
                             await dbContext.SaveChangesAsync();
                         }
@@ -196,7 +195,7 @@ namespace SAEON.Observations.WebAPI
                         doiProgramme.MetadataJson = metaProgramme.ToJson();
                         oldSha256 = doiProgramme.MetadataJsonSha256;
                         doiProgramme.MetadataJsonSha256 = doiProgramme.MetadataJson.Sha256();
-                        doiProgramme.ODPMetadataNeedsUpdate = oldSha256 != doiProgramme.MetadataJsonSha256;
+                        doiProgramme.ODPMetadataNeedsUpdate = oldSha256 != doiProgramme.MetadataJsonSha256 || (!doiProgramme.ODPMetadataIsValid ?? true); ;
                         doiProgramme.MetadataHtml = metaProgramme.ToHtml();
                         await dbContext.SaveChangesAsync();
                     }
@@ -204,7 +203,7 @@ namespace SAEON.Observations.WebAPI
                     doiOrganisation.MetadataJson = metaOrganisation.ToJson();
                     oldSha256 = doiOrganisation.MetadataJsonSha256;
                     doiOrganisation.MetadataJsonSha256 = doiOrganisation.MetadataJson.Sha256();
-                    doiOrganisation.ODPMetadataNeedsUpdate = oldSha256 != doiOrganisation.MetadataJsonSha256;
+                    doiOrganisation.ODPMetadataNeedsUpdate = oldSha256 != doiOrganisation.MetadataJsonSha256 || (!doiOrganisation.ODPMetadataIsValid ?? true); ;
                     doiOrganisation.MetadataHtml = metaOrganisation.ToHtml();
                     await dbContext.SaveChangesAsync();
                 }
@@ -213,7 +212,7 @@ namespace SAEON.Observations.WebAPI
                 doiObservations.MetadataJson = metaObservations.ToJson();
                 oldSha256 = doiObservations.MetadataJsonSha256;
                 doiObservations.MetadataJsonSha256 = doiObservations.MetadataJson.Sha256();
-                doiObservations.ODPMetadataNeedsUpdate = oldSha256 != doiObservations.MetadataJsonSha256;
+                doiObservations.ODPMetadataNeedsUpdate = oldSha256 != doiObservations.MetadataJsonSha256 || (!doiObservations.ODPMetadataIsValid ?? true); ;
                 doiObservations.MetadataHtml = metaObservations.ToHtml();
                 await dbContext.SaveChangesAsync();
             }

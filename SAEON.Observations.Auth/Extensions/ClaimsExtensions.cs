@@ -6,7 +6,7 @@ namespace SAEON.Observations.Auth
 {
     public static class ClaimsExtensions
     {
-        public static Dictionary<string, string> ToClaimsList(this IEnumerable<Claim> claims)
+        public static Dictionary<string, string> ToClaimsList(this IEnumerable<Claim> claims) 
         {
             return claims.ToDictionary(c => c.Type, c => c.Value);
         }

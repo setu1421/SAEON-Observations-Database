@@ -1,12 +1,5 @@
 ﻿using Ext.Net;
-using SAEON.Observations.Data;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Xml;
 
 public partial class Admin_Inventory : System.Web.UI.Page
@@ -41,6 +34,6 @@ public partial class Admin_Inventory : System.Web.UI.Page
 
         //string js = ViewRepository.Export(gridData, visCols, sortCol, sortDir, "vInventory");
         //BaseRepository.doExport(type, js);
-        BaseRepository.Export("vInventory", gridData, visCols, sortCol, sortDir, type, "Inventory", Response);
+        BaseRepository.Export("vInventorySensors", gridData, visCols, sortCol, sortDir, type, "Inventory", Response);
     }
 }
