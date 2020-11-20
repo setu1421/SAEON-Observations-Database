@@ -26,6 +26,7 @@ namespace SAEON.Observations.WebAPI
                     if (!doi.ODPMetadataNeedsUpdate ?? true) return;
                     await AddLineAsync($"{doi.DOIType} {doi.Code}, {doi.Name}");
                     var jObj = new JObject(
+                        new JProperty("doi", doi.DOI),
                         new JProperty("collection_key", collection),
                         //new JProperty("schema_key", "saeon-odp-4-2"),
                         new JProperty("schema_key", "saeon-datacite-4-3"),

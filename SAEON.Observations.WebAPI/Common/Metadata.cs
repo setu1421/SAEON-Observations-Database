@@ -590,7 +590,7 @@ namespace SAEON.Observations.WebAPI
             {
                 sbHtml.AppendHtmlP($"{"Query URL:".HtmlB()} <a href='{DOI.QueryUrl}'>{DOI.QueryUrl}</a>".Trim());
             }
-            sbHtml.AppendHtmlP($"{"Citation".HtmlB()} {Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). <a href='{DOI.DOIUrl}'>{DOI.DOIUrl}</a>");
+            sbHtml.AppendHtmlP($"{"Citation:".HtmlB()} {Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). <a href='{DOI.DOIUrl}'>{DOI.DOIUrl}</a>");
             Description = sbText.ToString().Replace(Environment.NewLine, " ").Replace("  ", " ").Trim(); //.Replace(Environment.NewLine,"<br>");
             DescriptionHtml = sbHtml.ToString();
         }
@@ -721,7 +721,9 @@ namespace SAEON.Observations.WebAPI
                     new JProperty("schemaVersion", "http://datacite.org/schema/kernel-4"),
 #endif
                     new JProperty("immutableResource", new JObject(
-                        new JProperty("resourceData", DOI.QueryUrl)))
+                        new JProperty("resourceDescription", Title),
+                        new JProperty("resourceData", new JObject(
+                            new JProperty("downloadURL", DOI.QueryUrl)))))
                );
             return jObj.ToString(Formatting.Indented);
         }

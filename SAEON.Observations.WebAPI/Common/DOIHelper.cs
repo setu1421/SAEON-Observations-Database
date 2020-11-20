@@ -42,9 +42,9 @@ namespace SAEON.Observations.WebAPI
                         Name = name ?? code,
                         MetadataJson = blankJson,
                         MetadataJsonSha256 = blankJson.Sha256(),
-                        MetadataUrl = "https://metadata.saeon.ac.za/whoknows/",
+                        MetadataUrl = "https://catalogue.saeon.ac.za/records/",
                         MetadataHtml = blankHtml,
-                        QueryUrl = "https://observations.saeon.ac.za",
+                        QueryUrl = "https://observations.saeon.ac.za/",
                         AddedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString(),
                         UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString()
                     };
@@ -185,7 +185,7 @@ namespace SAEON.Observations.WebAPI
                         .Select(i => i.ProgrammeCode)
                         .Distinct();
                     foreach (var programme in await dbContext.Programmes
-                        .Where(i => i.Code == "SAEON" || i.Code == "SACTN") // Remove once live
+                        //.Where(i => i.Code == "SAEON" || i.Code == "SACTN") // Remove once live
                         .Where(i => programmeCodes.Contains(i.Code))
                         .ToListAsync())
                     {
@@ -197,7 +197,7 @@ namespace SAEON.Observations.WebAPI
                             .Select(i => i.ProjectCode)
                             .Distinct();
                         foreach (var project in await dbContext.Projects
-                            .Where(i => i.Code == "SAEON" || i.Code == "SACTN") // Remove once live
+                            //.Where(i => i.Code == "SAEON" || i.Code == "SACTN") // Remove once live
                             .Where(i => projectCodes.Contains(i.Code))
                             .ToListAsync())
                         {
@@ -210,7 +210,7 @@ namespace SAEON.Observations.WebAPI
                                 .Select(i => i.SiteCode)
                                 .Distinct();
                             foreach (var site in await dbContext.Sites
-                                .Where(i => i.Code == "HSB" || i.Code == "CNSP" || i.Code == "JNHK" || i.Code == "CDBG" || i.Code.StartsWith("SACTN")) // Remove once live
+                                //.Where(i => i.Code == "HSB" || i.Code == "CNSP" || i.Code == "JNHK" || i.Code == "CDBG" || i.Code.StartsWith("SACTN")) // Remove once live
                                 .Where(i => siteCodes.Contains(i.Code))
                                .ToListAsync())
                             {
@@ -259,8 +259,13 @@ namespace SAEON.Observations.WebAPI
                 foreach (var doi in await dbContext.DigitalObjectIdentifiers.ToListAsync())
                 {
                     await AddLineAsync($"{doi.DOIType} {doi.Name}");
-                    doi.MetadataUrl = $"https://metadata.saeon.ac.za/whoknows/{doi.DOI}";
-                    doi.QueryUrl = $"https://observations.saeon.ac.za/DOI/{doi.DOI}";
+                    doi.MetadataUrl = $"https://catalogue.saeon.ac.za/records/{doi.DOI}";
+                    if (doi.DOIType == DOIType.AdHoc)
+                        doi.QueryUrl = $"https://observations.saeon.ac.za/Download/AdHoc/{doi.DOI}";
+                    else if (doi.DOIType == DOIType.Periodic)
+                        doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Periodic/{doi.DOI}";
+                    else
+                        doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Dynamic/{doi.DOI}";
                 }
                 await dbContext.SaveChangesAsync();
             }
