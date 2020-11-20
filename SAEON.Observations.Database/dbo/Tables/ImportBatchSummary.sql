@@ -23,6 +23,7 @@
     [ElevationMaximum] FLOAT NULL, 
     [StartDate] DATETIME NULL, 
     [EndDate] DATETIME NULL, 
+    [VerifiedCount] INT NULL, 
     CONSTRAINT [PK_ImportBatchSummary] PRIMARY KEY CLUSTERED ([ID]), 
     CONSTRAINT [FK_ImportBatchSummary_ImportBatchID] FOREIGN KEY ([ImportBatchID]) REFERENCES [ImportBatch]([ID]), 
     CONSTRAINT [FK_ImportBatchSummary_SensorID] FOREIGN KEY ([SensorID]) REFERENCES [Sensor]([ID]), 
