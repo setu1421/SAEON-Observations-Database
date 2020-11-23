@@ -1,0 +1,47 @@
+﻿@using Syncfusion.EJ2.Navigations;
+@{
+    ViewData["Title"] = "Data";
+}
+@{
+    var tabs = new List<TabTabItem> {
+        new TabTabItem{ Header= new TabHeader{ Text = "Locations"}, Content = "Locations content" },
+        new TabTabItem{ Header= new TabHeader{ Text = "Phenomena"}, Content = "Phenomena content" },
+        new TabTabItem{ Header= new TabHeader{ Text = "Filters"}, Content = "Filters content" },
+        new TabTabItem{ Header= new TabHeader{ Text = "Stations"}, Content = "Stations content" },
+        new TabTabItem{ Header= new TabHeader{ Text = "Table"}, Content = "Table content" },
+        new TabTabItem{ Header= new TabHeader{ Text = "Chart"}, Content = "Chart content" }
+    };
+}
+@*@section Styles {
+        <style type="text/css">
+            .e-tab .e-tab-header .e-toolbar-item.e-active .e-tab-text,
+            .e-tab .e-tab-header .e-toolbar-item.e-active .e-tab-icon {
+                color: green !important;
+            }
+        </style>
+    }*@
+<div class="row">
+    <div class="col-md">
+        <ejs-tab id="DataWizardTabs" items="tabs"></ejs-tab>
+    </div>
+</div>
+<div class="row PaddedRow">
+    <div class="col-md" id="PartialButtons">
+        @*            @Html.Partial("_Buttons", Model)*@
+        Buttons
+    </div>
+</div>
+<div id="PartialApproximation">
+    @*@Html.Partial("_Approximation", Model)*@
+    Approximation
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            var tabObj = document.getElementById('DataWizardTabs').ej2_instances[0];
+            tabObj.animation.previous.effect = 'none';
+            tabObj.animation.next.effect = 'none';
+        });
+    </script>
+}

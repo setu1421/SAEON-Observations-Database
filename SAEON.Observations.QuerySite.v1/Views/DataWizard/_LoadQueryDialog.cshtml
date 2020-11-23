@@ -1,0 +1,38 @@
+﻿@using SAEON.Observations.QuerySite.Models
+@model DataWizardModel
+<div class="row">
+    <div class="col-md">
+        @(Html.EJ()
+            .Autocomplete("editLoadQueryName")
+            .Datasource(ds => ds.URL("/DataWizard/GetUserQueries")
+                .Headers(new { Tenant = Session["Tenant"] })
+                .CrossDomain(true)
+                .Adaptor(AdaptorType.WebApiAdaptor))
+            .AutocompleteFields(f => f.Text("Name").Key("Id"))
+            .WatermarkText("Name")
+            .Width("300px")
+            .ShowPopupButton(true)
+            .ClientSideEvents(ev => ev.Change("DataWizard.LoadQueryNameChange"))
+        )
+    </div>
+</div>
+<div class="row ErrorRow">
+    <div class="col-md" id="LoadError">
+    </div>
+</div>
+<div class="row ButtonRow">
+    <div class="col-md">
+        @(Html.EJ()
+            .Button("btnLoadQueryLoad")
+            .Text("Load")
+            .ShowRoundedCorner(true)
+            .Type(ButtonType.Button)
+            .Size(ButtonSize.Medium)
+            .ContentType(ContentType.TextAndImage)
+            .PrefixIcon("e-icon e-save")
+            .Enabled(false)
+            .ClientSideEvents(e => e.Click("DataWizard.LoadQuery"))
+        )
+    </div>
+</div>
+@Html.EJ().ScriptManager()

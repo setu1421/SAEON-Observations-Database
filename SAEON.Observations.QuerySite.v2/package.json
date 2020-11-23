@@ -1,0 +1,17 @@
+{
+  "name": "saeon.observations.querysite",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Tim Parker-Nance",
+  "license": "MIT",
+  "description": "South African Environmental Observation Network (SAEON) Observations Database Query Site",
+  "repository": "https://github.com/SAEONData/SAEON-Observations-Database",
+  "dependencies": {
+    "@microsoft/signalr": "^3.1.8",
+    "mdbootstrap": "^4.19.1"
+  }
+}
