@@ -4,176 +4,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
+using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace SAEON.Observations.WebAPI
 {
-    public static class EntityConfig
-    {
-        public static string BaseUrl { get; set; }
-    }
-
-    /// <summary>
-    /// Absolute base class
-    /// </summary>
-    public abstract class BaseEntity
-    {
-        [NotMapped, JsonIgnore]
-        public string EntitySetName { get; protected set; } = null;
-        [NotMapped, JsonIgnore]
-        public List<string> Links { get; } = new List<string>();
-    }
-
-    public abstract class GuidIdEntity : BaseEntity
-    {
-        /// <summary>
-        /// Id of the Entity
-        /// </summary>
-        //[Required]
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [ScaffoldColumn(false)]
-        [HiddenInput]
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Navigation links of this Entity
-        /// </summary>
-        [NotMapped]
-        public Dictionary<string, string> NavigationLinks
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(EntitySetName))
-                    return null;
-                else
-                {
-                    var result = new Dictionary<string, string>
-                    {
-                        { "Self", $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}" }
-                    };
-                    foreach (var link in Links.OrderBy(i => i))
-                    {
-                        result.Add(link, $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}/{link}");
-                    }
-                    return result;
-                };
-            }
-        }
-    }
-
-    public abstract class IntIdEntity : BaseEntity
-    {
-        /// <summary>
-        /// Id of the Entity
-        /// </summary>
-        //[Required]
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [ScaffoldColumn(false)]
-        [HiddenInput]
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Navigation links of this Entity
-        /// </summary>
-        [NotMapped]
-        public Dictionary<string, string> NavigationLinks
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(EntitySetName))
-                    return null;
-                else
-                {
-                    var result = new Dictionary<string, string>
-                    {
-                        { "Self", $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}" }
-                    };
-                    foreach (var link in Links.OrderBy(i => i))
-                    {
-                        result.Add(link, $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}/{link}");
-                    }
-                    return result;
-                };
-            }
-        }
-    }
-
-    public abstract class LongIdEntity : BaseEntity
-    {
-        /// <summary>
-        /// Id of the Entity
-        /// </summary>
-        //[Required]
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [ScaffoldColumn(false)]
-        [HiddenInput]
-        public long Id { get; set; }
-
-        /// <summary>
-        /// Navigation links of this Entity
-        /// </summary>
-        [NotMapped]
-        public Dictionary<string, string> NavigationLinks
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(EntitySetName))
-                    return null;
-                else
-                {
-                    var result = new Dictionary<string, string>
-                    {
-                        { "Self", $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}" }
-                    };
-                    foreach (var link in Links.OrderBy(i => i))
-                    {
-                        result.Add(link, $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}/{link}");
-                    }
-                    return result;
-                };
-            }
-        }
-    }
-
-    /// <summary>
-    /// Base for entities
-    /// </summary>
-    public abstract class IdedEntity : GuidIdEntity
-    {
-        [JsonIgnore, Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false)]
-        [HiddenInput]
-        public byte[] RowVersion { get; set; }
-        [JsonIgnore, Required]
-        public Guid UserId { get; set; }
-    }
-
-    public abstract class CodedEntity : IdedEntity
-    {
-        /// <summary>
-        /// Code of the Entity
-        /// </summary>
-        [Required, StringLength(50)]
-        public virtual string Code { get; set; }
-    }
-
-    public abstract class NamedEntity : CodedEntity
-    {
-        /// <summary>
-        /// Name of the Entity
-        /// </summary>
-        [Required, StringLength(150)]
-        public string Name { get; set; }
-    }
-
     /// <summary>
     /// Data Schema entity
     /// </summary>
@@ -1739,7 +1579,7 @@ namespace SAEON.Observations.WebAPI
             modelBuilder.Entity<VFeature>().HasNoKey().ToView("vFeatures");
             modelBuilder.Entity<VLocation>().HasNoKey().ToView("vLocations");
             modelBuilder.Entity<InventoryDataset>().HasNoKey().ToView("vInventoryDatasets");
-            //modelBuilder.Entity<InventorySensor>().HasNoKey().ToView("vInventorySensors");
+            modelBuilder.Entity<InventorySensor>().HasNoKey().ToView("vInventorySensors");
             modelBuilder.Entity<Dataset>().HasNoKey().ToView("vStationDatasets");
             modelBuilder.Entity<DigitalObjectIdentifier>().Property("DOIType").HasConversion<byte>();
             modelBuilder.Entity<DigitalObjectIdentifier>().HasOne(i => i.Parent).WithMany(i => i.Children).HasForeignKey(i => i.ParentId);

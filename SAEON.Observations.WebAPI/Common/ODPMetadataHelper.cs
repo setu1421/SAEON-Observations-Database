@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
+using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
 using SAEON.Observations.WebAPI.Hubs;
@@ -126,7 +127,7 @@ namespace SAEON.Observations.WebAPI
             var sb = new StringBuilder();
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(config["ODPMetadataUrl"].AddTrailingSlash());
+                client.BaseAddress = new Uri(config["ODPMetadataUrl"].AddTrailingForwardSlash());
                 client.SetBearerToken(await GetTokenAsync());
                 await GenerateODPMetadata(client);
                 await AddLineAsync("Done");
@@ -146,7 +147,7 @@ namespace SAEON.Observations.WebAPI
                 {
                     try
                     {
-                        using (var client = new HttpClient() { BaseAddress = new Uri(config["AuthenticationServerUrl"].AddTrailingSlash()) })
+                        using (var client = new HttpClient() { BaseAddress = new Uri(config["AuthenticationServerUrl"].AddTrailingForwardSlash()) })
                         {
                             using (var formContent = new FormUrlEncodedContent(new[] {
                                 new KeyValuePair<string, string>("grant_type", "client_credentials"),

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SAEON.Observations.Core;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal

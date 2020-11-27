@@ -181,6 +181,7 @@ namespace SAEON.Observations.WebAPI
             {
                 var builder = new ODataConventionModelBuilder() { ContainerName = "OData" };
                 builder.EntitySet<InventoryDataset>("InventoryDatasets");
+                builder.EntitySet<InventorySensor>("InventorySensors");
                 return builder.GetEdmModel();
             }
         }

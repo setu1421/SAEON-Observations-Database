@@ -61,7 +61,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                     throw;
                 }
             }
-
         }
 
         public IActionResult ClaimsQuerySite()
@@ -196,7 +195,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     using (var client = await GetWebAPIClientWithAccessTokenAsync(false))
                     {
-                        //client.SetBearerToken("ag3JOPT14XGbSM9C4QUwkNTolO0PgHijZLiEfKbPPW0.Y9VI5WMTdh_oKV2Bj0PW4UYiyUqgCPBF4fEkaeQJRpw");
                         var response = await client.GetAsync("Claims/GetBearerToken");
                         if (!response.IsSuccessStatusCode)
                         {
@@ -215,8 +213,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                     throw;
                 }
             }
-
         }
-
     }
 }

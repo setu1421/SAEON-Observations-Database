@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
+using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,7 +18,7 @@ namespace SAEON.Observations.WebAPI
 {
     #region ApiControllers
     [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
-    //[Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+    [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
     [ApiController]
     public abstract class BaseApiController : ControllerBase
     {
@@ -115,7 +116,7 @@ namespace SAEON.Observations.WebAPI
 
     #region ODataControllers
     [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
-    //[Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+    [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
     public abstract class BaseODataController<TEntity> : ODataController where TEntity : BaseEntity
     {

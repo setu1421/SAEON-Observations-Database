@@ -1,0 +1,23 @@
+﻿@using System.Configuration
+@{
+    List<(string id, string name)> tenants = new List<(string id, string name)>();
+    var tenantList = ConfigurationManager.AppSettings[Constants.ConfigKeyTenants].Split(new char[] { ';' });
+    foreach (var tenantItem in tenantList)
+    {
+        var split = tenantItem.Split(new char[] { ',' });
+        tenants.Add((split[0], split[1]));
+    }
+}
+@if ((Session != null) &&tenants.Any())
+{
+    var sessionTenant = Session[Constants.SessionKeyTenant]?.ToString() ?? ConfigurationManager.AppSettings[Constants.ConfigKeyDefaultTenant] ?? "Fynbos";
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDataSource" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Data Source</a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownDataSource">
+            @foreach (var tenant in tenants)
+            {
+                @Html.ActionLink(tenant.name, "SetTenant", "Home", new { name = tenant.id }, new { @class = sessionTenant == tenant.id ? "dropdown-item active" : "dropdown-item" })
+            }
+        </div>
+    </li>
+}

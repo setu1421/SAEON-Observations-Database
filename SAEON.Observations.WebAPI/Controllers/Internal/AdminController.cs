@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using SAEON.Core;
 using SAEON.Logs;
+using SAEON.Observations.Auth;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.IO;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
-    //[Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
+    [Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
     public class AdminController : InternalApiController
     {
         private readonly IHubContext<AdminHub> AdminHub;
@@ -71,7 +73,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
-        [HttpPost("ImportSetup")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> ImportSetup(IFormFile formFile)
         {
             using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "FileName", formFile?.FileName } }))

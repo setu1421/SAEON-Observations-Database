@@ -134,7 +134,7 @@ namespace SAEON.Observations.Auth
                                 {
                                     claims.Add(new Claim(ClaimTypes.Role, userRole));
                                 }
-                                if (userRoles.Contains("admin"))
+                                if (userRoles.Contains("admin") || userRoles.Contains("Admin"))
                                 {
                                     claims.Add(new Claim(ODPAuthenticationDefaults.AdminTokenClaim, true.ToString()));
                                 }
@@ -186,7 +186,10 @@ namespace SAEON.Observations.Auth
             {
                 policy.AddAuthenticationSchemes(ODPAuthenticationDefaults.AuthenticationScheme);
                 policy.RequireAuthenticatedUser();
-                policy.RequireClaim(ODPAuthenticationDefaults.AccessTokenClaim);
+                //policy.RequireClaim(ODPAuthenticationDefaults.AccessTokenClaim); 
+                policy.RequireAssertion(context =>
+                    context.User.HasClaim(c => c.Type == ODPAuthenticationDefaults.AccessTokenClaim) ||
+                    context.User.HasClaim(c => c.Type == ODPAuthenticationDefaults.IdTokenClaim));
             });
         }
 

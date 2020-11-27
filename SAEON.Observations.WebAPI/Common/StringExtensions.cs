@@ -8,7 +8,7 @@ namespace SAEON.Observations.WebAPI
         public static string ToCamelCase(this string value)
         {
             if (string.IsNullOrEmpty(value)) return value;
-            return char.ToLowerInvariant(value[0]) + value.Substring(1);
+            return char.ToLowerInvariant(value[0]) + value[1..];
         }
 
         public static byte[] Sha256(this string value)
@@ -22,13 +22,6 @@ namespace SAEON.Observations.WebAPI
         public static string HtmlB(this string value)
         {
             return $"<b>{value}</b>";
-        }
-        public static string AddTrailingSlash(this string aString)
-        {
-            if (aString.EndsWith("/"))
-                return aString;
-            else
-                return aString + "/";
         }
     }
 }

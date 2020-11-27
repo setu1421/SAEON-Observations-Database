@@ -1,0 +1,45 @@
+﻿<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownLogin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
+    @if (!Request.IsAuthenticated)
+    {
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownLogin">
+            @Html.ActionLink("Login", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+            @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+            @*@Html.ActionLink("ClearAccessToken", "ClearAccessToken", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+            @Html.ActionLink("ClaimsQuerySite", "ClaimsQuerySite", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+            @Html.ActionLink("ClaimsQuerySiteUser", "ClaimsQuerySiteUser", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+            @Html.ActionLink("ClaimsWebAPI", "ClaimsWebAPI", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+            @Html.ActionLink("ClaimsWebAPIAccessToken", "ClaimsWebAPIAccessToken", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+            @Html.ActionLink("ClaimsWebAPIIdToken", "ClaimsWebAPIIdToken", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+            @Html.ActionLink("GetBearerToken", "GetBearerToken", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })*@
+        </div>
+    }
+    else
+    {
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownLogin">
+            @*<a class="dropdown-item disabled" href="#">@User.GetUserId()</a>*@
+            <a class="dropdown-item disabled" href="#">@User.Email()</a>
+            @*<div class="dropdown-divider"></div>
+            @Html.ActionLink("Manage", "Manage", "Account", routeValues: null, htmlAttributes: new { title = "Manage your account", @class = "dropdown-item" })
+            @Html.ActionLink("Change password", "ChangePassword", "Account", routeValues: null, htmlAttributes: new { title = "Change your account password", @class = "dropdown-item" })*@
+            <div class="dropdown-divider"></div>
+            @Html.ActionLink("My Queries", "Index", "UserQueries", routeValues: null, htmlAttributes: new { title = "Manage you queries", @class = "dropdown-item" })
+            @Html.ActionLink("My Downloads", "Index", "UserDownloads", routeValues: null, htmlAttributes: new { title = "Manage your downloads", @class = "dropdown-item" })
+            @*<div class="dropdown-divider"></div>
+            @Html.ActionLink("Claims", "Claims", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+            @Html.ActionLink("CallApi", "CallApi", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })*@
+            @*<div class="dropdown-divider"></div>
+            @Html.ActionLink("ClearAccessToken", "ClearAccessToken", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+            @Html.ActionLink("ClaimsQuerySite", "ClaimsQuerySite", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+            @Html.ActionLink("ClaimsQuerySiteUser", "ClaimsQuerySiteUser", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+            @Html.ActionLink("ClaimsWebAPI", "ClaimsWebAPI", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+            @Html.ActionLink("ClaimsWebAPIAccessToken", "ClaimsWebAPIAccessToken", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+            @Html.ActionLink("ClaimsWebAPIIdToken", "ClaimsWebAPIIdToken", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+            @Html.ActionLink("GetBearerToken", "GetBearerToken", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })*@
+            <div class="dropdown-divider"></div>
+            @Html.ActionLink("Logout", "Logout", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
+        </div>
+    }
+</li>
+
+

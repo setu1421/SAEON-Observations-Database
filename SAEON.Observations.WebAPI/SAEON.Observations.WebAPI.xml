@@ -10,66 +10,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="P:SAEON.Observations.WebAPI.DataWizardDataOutput.Keywords">
-            <summary>
-            Semi-colon separated Name;Scheme;Uri
-            </summary>
-        </member>
-        <member name="P:SAEON.Observations.WebAPI.DataWizardDataOutput.Places">
-            <summary>
-            Lookup on GeoNames in format Name:Country:Lat:Lon
-            </summary>
-        </member>
-        <member name="T:SAEON.Observations.WebAPI.BaseEntity">
-            <summary>
-            Absolute base class
-            </summary>
-        </member>
-        <member name="P:SAEON.Observations.WebAPI.GuidIdEntity.Id">
-            <summary>
-            Id of the Entity
-            </summary>
-        </member>
-        <member name="P:SAEON.Observations.WebAPI.GuidIdEntity.NavigationLinks">
-            <summary>
-            Navigation links of this Entity
-            </summary>
-        </member>
-        <member name="P:SAEON.Observations.WebAPI.IntIdEntity.Id">
-            <summary>
-            Id of the Entity
-            </summary>
-        </member>
-        <member name="P:SAEON.Observations.WebAPI.IntIdEntity.NavigationLinks">
-            <summary>
-            Navigation links of this Entity
-            </summary>
-        </member>
-        <member name="P:SAEON.Observations.WebAPI.LongIdEntity.Id">
-            <summary>
-            Id of the Entity
-            </summary>
-        </member>
-        <member name="P:SAEON.Observations.WebAPI.LongIdEntity.NavigationLinks">
-            <summary>
-            Navigation links of this Entity
-            </summary>
-        </member>
-        <member name="T:SAEON.Observations.WebAPI.IdedEntity">
-            <summary>
-            Base for entities
-            </summary>
-        </member>
-        <member name="P:SAEON.Observations.WebAPI.CodedEntity.Code">
-            <summary>
-            Code of the Entity
-            </summary>
-        </member>
-        <member name="P:SAEON.Observations.WebAPI.NamedEntity.Name">
-            <summary>
-            Name of the Entity
-            </summary>
-        </member>
         <member name="T:SAEON.Observations.WebAPI.DataSchema">
             <summary>
             Data Schema entity

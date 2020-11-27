@@ -2,7 +2,7 @@
 using Humanizer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SAEON.Observations.WebAPI.Common;
+using SAEON.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +23,7 @@ namespace SAEON.Observations.WebAPI
 #if Schema43
             if (!string.IsNullOrWhiteSpace(Identifier))
             {
-                new JProperty("affiliationIdentifier", Identifier);
+                jObj.Add(new JProperty("affiliationIdentifier", Identifier));
             }
             if (!string.IsNullOrWhiteSpace(Scheme))
             {
@@ -292,8 +292,9 @@ namespace SAEON.Observations.WebAPI
                     new MetadataAffiliation
                     {
                         Name = "South African Environmental Observation Network (SAEON)",
+                        Identifier = "https://ror.org/041j42q70",
                         Scheme = "ROR",
-                        SchemeUri = "https://ror.org/041j42q70"
+                        SchemeUri = "https://ror.org"
                     }
                 }
             },
@@ -318,8 +319,9 @@ namespace SAEON.Observations.WebAPI
                     new MetadataAffiliation
                     {
                         Name = "South African Environmental Observation Network (SAEON)",
+                        Identifier = "https://ror.org/041j42q70",
                         Scheme = "ROR",
-                        SchemeUri = "https://ror.org/041j42q70"
+                        SchemeUri = "https://ror.org"
                     }
                 }
             }
