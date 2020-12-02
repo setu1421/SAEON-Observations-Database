@@ -8,17 +8,13 @@ namespace SAEON.Observations.QuerySite.Models
 {
     public class DataWizardModel : BaseModel
     {
-        public List<LocationNode> Locations { get; } = new List<LocationNode>();
-        public List<LocationNode> LocationsSelected { get; } = new List<LocationNode>();
-        public List<Guid> Organisations { get; } = new List<Guid>();
-        public List<Guid> Sites { get; } = new List<Guid>();
-        public List<Guid> Stations { get; } = new List<Guid>();
+        public List<LocationNode> LocationNodes { get; } = new List<LocationNode>();
+        public List<LocationNode> LocationNodesSelected { get; } = new List<LocationNode>();
+        public List<Location> Locations { get; } = new List<Location>();
+        public List<VariableNode> VariableNodes { get; } = new List<VariableNode>();
+        public List<VariableNode> VariableNodesSelected { get; } = new List<VariableNode>();
+        public List<Variable> Variables { get; } = new List<Variable>();
         public List<MapPoint> MapPoints { get; } = new List<MapPoint>();
-        public List<FeatureNode> Features { get; } = new List<FeatureNode>();
-        public List<FeatureNode> FeaturesSelected { get; } = new List<FeatureNode>();
-        public List<Guid> Phenomena { get; } = new List<Guid>();
-        public List<Guid> Offerings { get; } = new List<Guid>();
-        public List<Guid> Units { get; } = new List<Guid>();
         [DisplayName("Start Date")]
         public DateTime StartDate { get; set; } = DateTime.Now.AddYears(-100).Date;
         [DisplayName("End Date")]
@@ -36,17 +32,13 @@ namespace SAEON.Observations.QuerySite.Models
 
         public override void Clear()
         {
+            LocationNodes.Clear();
+            LocationNodesSelected.Clear();
             Locations.Clear();
-            LocationsSelected.Clear();
-            Organisations.Clear();
-            Sites.Clear();
-            Stations.Clear();
+            VariableNodes.Clear();
+            VariableNodesSelected.Clear();
+            Variables.Clear();
             MapPoints.Clear();
-            Features.Clear();
-            FeaturesSelected.Clear();
-            Phenomena.Clear();
-            Offerings.Clear();
-            Units.Clear();
             StartDate = DateTime.Now.AddYears(-100).Date;
             EndDate = DateTime.Now.Date;
             ElevationMinimum = -100;

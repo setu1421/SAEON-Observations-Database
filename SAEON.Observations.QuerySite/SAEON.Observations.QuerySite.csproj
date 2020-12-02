@@ -43,6 +43,19 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=3.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -158,6 +171,9 @@
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.3.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -234,6 +250,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseControllers.cs" />
+    <Compile Include="Controllers\DataWizardController.cs" />
     <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\DOIController.cs" />
     <Compile Include="Controllers\HealthController.cs" />
@@ -713,6 +730,9 @@
     <Content Include="Content\ej\mobile\images\ejmmobilefonts.woff" />
     <Content Include="Content\ej\mobile\images\ejmmobilefonts.ttf" />
     <Content Include="Content\ej\mobile\images\ejmmobilefonts.eot" />
+    <Content Include="bundleconfig.json.bindings">
+      <DependentUpon>bundleconfig.json</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\App03.pubxml" />
     <None Include="Properties\PublishProfiles\Local Folder.pubxml" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
@@ -903,6 +923,30 @@
     <Content Include="Views\DOI\Index.cshtml" />
     <Content Include="Views\Query\Datasets.cshtml" />
     <Content Include="Views\Query\Sensors.cshtml" />
+    <Content Include="Views\DataWizard\Index.cshtml" />
+    <Content Include="Views\DataWizard\ViewDownload.cshtml" />
+    <Content Include="Views\DataWizard\_Approximation.cshtml" />
+    <Content Include="Views\DataWizard\_ApproximationHtml.cshtml" />
+    <Content Include="Views\DataWizard\_Buttons.cshtml" />
+    <Content Include="Views\DataWizard\_Chart.cshtml" />
+    <Content Include="Views\DataWizard\_ChartHtml.cshtml" />
+    <Content Include="Views\DataWizard\_DownloadDialog.cshtml" />
+    <Content Include="Views\DataWizard\_Variables.cshtml" />
+    <Content Include="Views\DataWizard\_VariablesHtml.cshtml" />
+    <Content Include="Views\DataWizard\_VariablesSelected.cshtml" />
+    <Content Include="Views\DataWizard\_VariablesSelectedHtml.cshtml" />
+    <Content Include="Views\DataWizard\_Filters.cshtml" />
+    <Content Include="Views\DataWizard\_FiltersHtml.cshtml" />
+    <Content Include="Views\DataWizard\_LoadQueryDialog.cshtml" />
+    <Content Include="Views\DataWizard\_Locations.cshtml" />
+    <Content Include="Views\DataWizard\_LocationsHtml.cshtml" />
+    <Content Include="Views\DataWizard\_LocationsSelected.cshtml" />
+    <Content Include="Views\DataWizard\_LocationsSelectedHtml.cshtml" />
+    <Content Include="Views\DataWizard\_SaveQueryDialog.cshtml" />
+    <Content Include="Views\DataWizard\_StationsMap.cshtml" />
+    <Content Include="Views\DataWizard\_Table.cshtml" />
+    <Content Include="Views\DataWizard\_TableHtml.cshtml" />
+    <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -917,6 +961,9 @@
       <Project>{89547317-65c0-4258-b764-a3d32566f7cd}</Project>
       <Name>SAEON.Observations.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\DataWizard.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -15,7 +15,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             LocationNode project = null;
             LocationNode site = null;
             LocationNode station = null;
-            foreach (var location in DbContext.VLocations.OrderBy(i => i.OrganisationName).ThenBy(i => i.ProgrammeName).ThenBy(i => i.ProjectName).ThenBy(i => i.SiteName).ThenBy(i => i.StationName))
+            foreach (var location in DbContext.VLocations.Where(i => i.Latitude != null && i.Longitude != null).OrderBy(i => i.OrganisationName).ThenBy(i => i.ProgrammeName).ThenBy(i => i.ProjectName).ThenBy(i => i.SiteName).ThenBy(i => i.StationName))
             {
                 if (organisation?.Id != location.OrganisationID)
                 {
@@ -44,7 +44,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     {
                         Id = location.ProgrammeID,
                         ParentId = organisation.Id,
-                        Key = $"PRG~{location.ProgrammeID}~{organisation.Key}",
+                        Key = $"PRG~{location.ProgrammeID}|{organisation.Key}",
+                        ParentKey = organisation.Key,
                         Text = location.ProgrammeName,
                         Name = $"{organisation.Text}|{location.ProgrammeName}",
                         ToolTip = new LinkAttribute("Programme"),
@@ -61,7 +62,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     {
                         Id = location.ProjectID,
                         ParentId = programme.Id,
-                        Key = $"PRJ~{location.ProjectID}~{programme.Key}",
+                        Key = $"PRJ~{location.ProjectID}|{programme.Key}",
+                        ParentKey = programme.Key,
                         Text = location.ProjectName,
                         Name = $"{organisation.Text}|{programme.Text}|{location.ProjectName}",
                         ToolTip = new LinkAttribute("Project"),
@@ -77,7 +79,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     {
                         Id = location.SiteID,
                         ParentId = project.Id,
-                        Key = $"SIT~{location.SiteID}~{project.Key}",
+                        Key = $"SIT~{location.SiteID}|{project.Key}",
                         ParentKey = project.Key,
                         Text = location.SiteName,
                         Name = $"{organisation.Text}|{programme.Text}|{project.Text}|{location.SiteName}",
@@ -93,10 +95,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     {
                         Id = location.StationID,
                         ParentId = site.Id,
-                        Key = $"STA~{location.StationID}~{site.Key}",
+                        Key = $"STA~{location.StationID}|{site.Key}",
                         ParentKey = site.Key,
                         Text = location.StationName,
-                        Name = $"{organisation.Text}|{programme.Text}|{project.Text}|{site.Text}|{location.StationName}",
+                        Name = $"{site.Text} | {location.StationName}",
                         ToolTip = new LinkAttribute("Station"),
                         Latitude = location.Latitude,
                         Longitude = location.Longitude,

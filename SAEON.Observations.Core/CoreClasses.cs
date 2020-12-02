@@ -45,7 +45,7 @@ namespace SAEON.Observations.Core
         public string Url { get; set; }
     }
 
-    public class FeatureNode : TreeNode { }
+    public class VariableNode : TreeNode { }
 
     #region Maps
     public class MapPoint
@@ -264,15 +264,57 @@ namespace SAEON.Observations.Core
         }
     }
 
+    public class Location
+    {
+        public Guid StationId { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Location location &&
+                   StationId.Equals(location.StationId);
+        }
+
+        public override int GetHashCode()
+        {
+            return -637447666 + StationId.GetHashCode();
+        }
+    }
+
+    public class Variable
+    {
+        public Guid PhenomenonId { get; set; }
+        public Guid OfferingId { get; set; }
+        public Guid UnitId { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Variable variable &&
+                   PhenomenonId.Equals(variable.PhenomenonId) &&
+                   OfferingId.Equals(variable.OfferingId) &&
+                   UnitId.Equals(variable.UnitId);
+        }
+
+#if NET472
+        public override int GetHashCode()
+        {
+            var hashCode = 1825368645;
+            hashCode = hashCode * -1521134295 + PhenomenonId.GetHashCode();
+            hashCode = hashCode * -1521134295 + OfferingId.GetHashCode();
+            hashCode = hashCode * -1521134295 + UnitId.GetHashCode();
+            return hashCode;
+        }
+#else
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(PhenomenonId, OfferingId, UnitId);
+        }
+#endif
+    }
+
     public class DataWizardDataInput
     {
-        public List<Guid> Organisations { get; } = new List<Guid>();
-        public List<Guid> Sites { get; } = new List<Guid>();
-        public List<Guid> Stations { get; } = new List<Guid>();
-        //public List<Guid> Instruments { get; } = new List<Guid>();
-        public List<Guid> Phenomena { get; } = new List<Guid>();
-        public List<Guid> Offerings { get; } = new List<Guid>();
-        public List<Guid> Units { get; } = new List<Guid>();
+        public List<Location> Locations { get; set; } = new List<Location>();
+        public List<Variable> Variables { get; set; } = new List<Variable>();
         public DateTime StartDate { get; set; } = DateTime.Now.AddYears(-100).Date;
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
         public float ElevationMinimum { get; set; } = -100; // m

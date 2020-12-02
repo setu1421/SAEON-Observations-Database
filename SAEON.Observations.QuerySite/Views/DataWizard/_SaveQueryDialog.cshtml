@@ -1,0 +1,37 @@
+﻿@using SAEON.Observations.QuerySite.Models
+@model DataWizardModel
+<div class="row">
+    <div class="col-md">
+        @(Html.EJ()
+                    .MaskEdit("editSaveQueryName")
+                    .WatermarkText("Name")
+                    .Width("300px")
+                    .ClientSideEvents(ev => ev.Change("DataWizard.SaveQueryNameChange"))
+        )
+    </div>
+</div>
+<div class="row">
+    <div class="col-md">
+        @Html.EJ().MaskEdit("editSaveQueryDescription").WatermarkText("Description").Width("500px")
+    </div>
+</div>
+<div class="row ErrorRow">
+    <div class="col-md" id="SaveError">
+    </div>
+</div>
+<div class="row ButtonRow">
+    <div class="col-md">
+        @(Html.EJ()
+                    .Button("btnSaveQuerySave")
+                    .Text("Save")
+                    .ShowRoundedCorner(true)
+                    .Type(ButtonType.Button)
+                    .Size(ButtonSize.Medium)
+                    .ContentType(ContentType.TextAndImage)
+                    .PrefixIcon("e-icon e-save")
+                    .Enabled(false)
+                    .ClientSideEvents(e => e.Click("DataWizard.SaveQuery"))
+        )
+    </div>
+</div>
+@Html.EJ().ScriptManager()

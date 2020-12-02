@@ -49,7 +49,7 @@ namespace SAEON.Observations.QuerySite
                         {
                             SecurityTokenValidated = async (context) =>
                             {
-                                SAEONLogs.Information("*** SecurityTokenValidated {@ProtocolMessage}", context.ProtocolMessage);
+                                //SAEONLogs.Information("*** SecurityTokenValidated {@ProtocolMessage}", context.ProtocolMessage);
                                 var token = context.ProtocolMessage.AccessToken;
                                 if (string.IsNullOrWhiteSpace(token))
                                 {

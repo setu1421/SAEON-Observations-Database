@@ -945,16 +945,20 @@ namespace SAEON.Observations.WebAPI
         public string SensorName { get; set; }
         public string SensorDescription { get; set; }
         public string SensorUrl { get; set; }
+        public Guid PhenomenonId { get; set; }
         public string PhenomenonCode { get; set; }
         public string PhenomenonName { get; set; }
         public string PhenomenonDescription { get; set; }
         public string PhenomenonUrl { get; set; }
         public Guid PhenomenonOfferingId { get; set; }
+        public Guid OfferingId { get; set; }
         public string OfferingCode { get; set; }
         public string OfferingName { get; set; }
         public string OfferingDescription { get; set; }
         [Column("PhenomenonUOMID")]
         public Guid PhenomenonUnitId { get; set; }
+        [Column("UnitOfMeasureId")]
+        public Guid UnitId { get; set; }
         [Column("UnitOfMeasureCode")]
         public string UnitCode { get; set; }
         [Column("UnitOfMeasureUnit")]
@@ -1581,6 +1585,7 @@ namespace SAEON.Observations.WebAPI
             modelBuilder.Entity<InventoryDataset>().HasNoKey().ToView("vInventoryDatasets");
             modelBuilder.Entity<InventorySensor>().HasNoKey().ToView("vInventorySensors");
             modelBuilder.Entity<Dataset>().HasNoKey().ToView("vStationDatasets");
+            modelBuilder.Entity<VObservationExpansion>().ToView("vObservationExpansion");
             modelBuilder.Entity<DigitalObjectIdentifier>().Property("DOIType").HasConversion<byte>();
             modelBuilder.Entity<DigitalObjectIdentifier>().HasOne(i => i.Parent).WithMany(i => i.Children).HasForeignKey(i => i.ParentId);
             //> Remove once EFCore has many to many

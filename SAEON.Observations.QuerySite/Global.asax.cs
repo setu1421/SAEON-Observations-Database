@@ -13,7 +13,7 @@ namespace SAEON.Observations.QuerySite
         protected void Application_Start()
         {
             SAEONLogs
-                 .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.QuerySite-.txt"))
+                 .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.QuerySite-.log"))
                  .Initialize();
             using (SAEONLogs.MethodCall(GetType()))
             {
