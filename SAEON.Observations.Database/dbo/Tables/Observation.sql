@@ -30,7 +30,7 @@
     CONSTRAINT [FK_Observation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]),
     CONSTRAINT [FK_Observation_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]),
     CONSTRAINT [FK_Observation_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]),
-    CONSTRAINT [UX_Observation] UNIQUE ([SensorID], [ValueDate], [DataValue], [PhenomenonOfferingID], [PhenomenonUOMID], [Elevation]) on [Observations]
+    CONSTRAINT [UX_Observation] UNIQUE ([SensorID], [ValueDate], [PhenomenonOfferingID], [PhenomenonUOMID], [Elevation]) on [Observations]
 );
 GO
 CREATE INDEX [IX_Observation_ImportBatchID] ON [dbo].[Observation]([ImportBatchID])
@@ -38,6 +38,7 @@ INCLUDE ([ValueDate],[RawValue],[DataValue],[Comment],[CorrelationID])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO
 CREATE INDEX [IX_Observation_SensorID] ON [dbo].[Observation] ([SensorID])
+  INCLUDE ([ValueDate],[DataValue],[PhenomenonOfferingID],[PhenomenonUOMID],[ImportBatchID],[Elevation],[Latitude],[Longitude],[ValueDay])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO
 CREATE INDEX [IX_Observation_SensorID_PhenomenonOfferingID] ON [dbo].[Observation] ([SensorID],[PhenomenonOfferingID])
@@ -74,6 +75,7 @@ CREATE INDEX [IX_Observation_ValueDecade] ON [dbo].[Observation] ([ValueDecade])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO
 CREATE INDEX [IX_Observation_StatusID] ON [dbo].[Observation] ([StatusID])
+  INCLUDE ([SensorID],[PhenomenonOfferingID],[PhenomenonUOMID],[ImportBatchID])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO
 CREATE INDEX [IX_Observation_StatusReasonID] ON [dbo].[Observation] ([StatusReasonID])

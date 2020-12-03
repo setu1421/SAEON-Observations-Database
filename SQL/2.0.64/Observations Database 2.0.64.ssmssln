@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Solution File, Format Version 18.00
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{11B4C3E1-2591-4794-8119-FB9A9182C370}"
+	ProjectSection(SolutionItems) = preProject
+		Delete Duplicate Observations.sql = Delete Duplicate Observations.sql
+		..\..\SAEON.Observations.Database\bin\Release\DeploymentReport_3.txt = ..\..\SAEON.Observations.Database\bin\Release\DeploymentReport_3.txt
+		Fix SACTN null ProjectIDs.sql = Fix SACTN null ProjectIDs.sql
+		..\..\SAEON.Observations.Database\bin\Release\ObservationsElwandle.2.64.publish.sql = ..\..\SAEON.Observations.Database\bin\Release\ObservationsElwandle.2.64.publish.sql
+		..\..\SAEON.Observations.Database\bin\Release\ObservationsElwandle.2.64.publish.txt = ..\..\SAEON.Observations.Database\bin\Release\ObservationsElwandle.2.64.publish.txt
+		..\..\SAEON.Observations.Database\bin\Release\ObservationsSACTN_1.publish.sql = ..\..\SAEON.Observations.Database\bin\Release\ObservationsSACTN_1.publish.sql
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{28AE74CE-623A-4862-B7EA-733CAF5A6085}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {50454168-CFBD-4754-A74A-9889008DDC4C}
+	EndGlobalSection
+EndGlobal
