@@ -1,4 +1,5 @@
-﻿using SAEON.Logs;
+﻿using Humanizer;
+using SAEON.Logs;
 using System;
 using System.IO;
 using System.Net;
@@ -101,29 +102,29 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> APIImportSetup(HttpPostedFileBase file)
+        public async Task<ActionResult> APIImportSetup(HttpPostedFileBase formFile)
         {
-            using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "FileName", file?.FileName } }))
+            using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "FileName", formFile?.FileName } }))
             {
                 try
                 {
-                    if (file is null) throw new ArgumentNullException(nameof(file));
-                    if (file.ContentLength == 0) throw new ArgumentOutOfRangeException(nameof(file.ContentLength), "File length cannot be zero");
-                    var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-                    if (!(ext == ".xls" || ext == ".xlsx")) throw new ArgumentOutOfRangeException(nameof(file.FileName), "Invalid file extension");
-                    SAEONLogs.Information("Uploading {FileName}", file.FileName);
-                    using (var client = await GetWebAPIClientWithAccessTokenAsync())
+                    if (formFile is null) throw new ArgumentNullException(nameof(formFile));
+                    if (formFile.ContentLength == 0) throw new ArgumentOutOfRangeException(nameof(formFile.ContentLength), "File length cannot be zero");
+                    var ext = Path.GetExtension(formFile.FileName).ToLowerInvariant();
+                    if (!(ext == ".xls" || ext == ".xlsx")) throw new ArgumentOutOfRangeException(nameof(formFile.FileName), "Invalid file extension");
+                    SAEONLogs.Information("Uploading {FileName} Size: {Size} Type: {Type}", formFile.FileName, formFile.ContentLength.Bytes().Humanize("MB"), formFile.ContentType);
+                    using (var client = GetWebAPIClientWithIdToken())
                     {
                         using (var content = new MultipartFormDataContent())
                         {
-                            content.Add(new StreamContent(file.InputStream)
+                            content.Add(new StreamContent(formFile.InputStream)
                             {
                                 Headers =
                                     {
-                                        ContentLength = file.ContentLength,
-                                        ContentType = new MediaTypeHeaderValue(file.ContentType)
+                                        ContentLength = formFile.ContentLength,
+                                        ContentType = new MediaTypeHeaderValue(formFile.ContentType)
                                     }
-                            }, "formFile", file.FileName);
+                            }, "formFile", formFile.FileName);
                             var response = await client.PostAsync("/Internal/Admin/ImportSetup", content);
                             response.EnsureSuccessStatusCode();
                         }

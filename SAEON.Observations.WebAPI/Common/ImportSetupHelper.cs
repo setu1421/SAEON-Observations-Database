@@ -14,7 +14,7 @@ namespace SAEON.Observations.WebAPI
 {
     public static class ImportSetupHelper
     {
-        public static bool UpdateData = false;
+        public static bool UpdateData { get; set; } = false;
 
         public static async Task<string> ImportFromSpreadsheet(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, IFormFile fileData)
         {
@@ -192,8 +192,8 @@ namespace SAEON.Observations.WebAPI
                                     station.Name = stationName;
                                     station.Description = GetString(stationsList, rStation, 2);
                                     station.Url = GetString(stationsData, rStation, 3);
-                                    station.Latitude = GetDouble(stationsData, rStation, 4);
-                                    station.Longitude = GetDouble(stationsData, rStation, 5);
+                                    station.Latitude = GetLatitude(stationsData, rStation, 4);
+                                    station.Longitude = GetLongitude(stationsData, rStation, 5);
                                     station.Elevation = GetDouble(stationsData, rStation, 6);
                                     station.StartDate = GetDate(stationsData, rStation, 7);
                                     station.EndDate = GetDate(stationsData, rStation, 8);
@@ -210,8 +210,8 @@ namespace SAEON.Observations.WebAPI
                                     Name = stationName,
                                     Description = GetString(stationsList, rStation, 2),
                                     Url = GetString(stationsData, rStation, 3),
-                                    Latitude = GetDouble(stationsData, rStation, 4),
-                                    Longitude = GetDouble(stationsData, rStation, 5),
+                                    Latitude = GetLatitude(stationsData, rStation, 4),
+                                    Longitude = GetLongitude(stationsData, rStation, 5),
                                     Elevation = GetDouble(stationsData, rStation, 6),
                                     StartDate = GetDate(stationsData, rStation, 7),
                                     EndDate = GetDate(stationsData, rStation, 8),
@@ -253,8 +253,8 @@ namespace SAEON.Observations.WebAPI
                                     instrument.Name = instrumentName;
                                     instrument.Description = GetString(instrumentsList, rInstrument, 2);
                                     instrument.Url = GetString(instrumentsData, rInstrument, 3);
-                                    instrument.Latitude = GetDouble(instrumentsData, rInstrument, 4);
-                                    instrument.Longitude = GetDouble(instrumentsData, rInstrument, 5);
+                                    instrument.Latitude = GetLatitude(instrumentsData, rInstrument, 4);
+                                    instrument.Longitude = GetLongitude(instrumentsData, rInstrument, 5);
                                     instrument.Elevation = GetDouble(instrumentsData, rInstrument, 6);
                                     instrument.StartDate = GetDate(instrumentsData, rInstrument, 7);
                                     instrument.EndDate = GetDate(instrumentsData, rInstrument, 8);
@@ -268,8 +268,8 @@ namespace SAEON.Observations.WebAPI
                                     Name = instrumentName,
                                     Description = GetString(instrumentsList, rInstrument, 2),
                                     Url = GetString(instrumentsData, rInstrument, 3),
-                                    Latitude = GetDouble(instrumentsData, rInstrument, 4),
-                                    Longitude = GetDouble(instrumentsData, rInstrument, 5),
+                                    Latitude = GetLatitude(instrumentsData, rInstrument, 4),
+                                    Longitude = GetLongitude(instrumentsData, rInstrument, 5),
                                     Elevation = GetDouble(instrumentsData, rInstrument, 6),
                                     StartDate = GetDate(instrumentsData, rInstrument, 7),
                                     EndDate = GetDate(instrumentsData, rInstrument, 8),
@@ -410,6 +410,10 @@ namespace SAEON.Observations.WebAPI
                             if (string.IsNullOrWhiteSpace(sensorCode)) continue;
                             var sensorName = GetString(sensorsList, rSensor, 1);
                             var sensor = await dbContext.Sensors.FirstOrDefaultAsync(i => i.Code == sensorCode);
+                            var instrumentCode = GetString(sensorInstruments, rSensor, 0);
+                            var rInstrument = FindRowIndex(instrumentsList, 0, instrumentCode);
+                            var dataSourceCode = GetString(dataSourcesList, rInstrument, 0);
+                            var phenomenaCode = GetString(sensorPhenomena, rSensor, 0);
                             if (sensor != null)
                                 if (!UpdateData)
                                 {
@@ -418,23 +422,27 @@ namespace SAEON.Observations.WebAPI
                                 else
                                 {
                                     await AddLineAsync($"Updating Sensor {sensorCode}, {sensorName}");
-
+                                    sensor.Name = GetString(sensorsList, rSensor, 1);
+                                    sensor.Description = GetString(sensorsList, rSensor, 2);
+                                    sensor.Url = GetString(sensorsData, rSensor, 2);
+                                    sensor.Latitude = GetLatitude(sensorsData, rSensor, 3);
+                                    sensor.Longitude = GetLongitude(sensorsData, rSensor, 4);
+                                    sensor.Elevation = GetDouble(sensorsData, rSensor, 5);
+                                    sensor.DataSourceId = (await dbContext.DataSources.FirstAsync(i => i.Code == dataSourceCode)).Id;
+                                    sensor.PhenomenonId = (await dbContext.Phenomena.FirstAsync(i => i.Code == phenomenaCode)).Id;
+                                    await dbContext.SaveChangesAsync();
                                 }
                             else
                             {
                                 await AddLineAsync($"Adding Sensor {sensorCode}, {sensorName}");
-                                var instrumentCode = GetString(sensorInstruments, rSensor, 0);
-                                var rInstrument = FindRowIndex(instrumentsList, 0, instrumentCode);
-                                var dataSourceCode = GetString(dataSourcesList, rInstrument, 0);
-                                var phenomenaCode = GetString(sensorPhenomena, rSensor, 0);
                                 sensor = new Sensor
                                 {
                                     Code = sensorCode,
                                     Name = GetString(sensorsList, rSensor, 1),
                                     Description = GetString(sensorsList, rSensor, 2),
                                     Url = GetString(sensorsData, rSensor, 2),
-                                    Latitude = GetDouble(sensorsData, rSensor, 3),
-                                    Longitude = GetDouble(sensorsData, rSensor, 4),
+                                    Latitude = GetLatitude(sensorsData, rSensor, 3),
+                                    Longitude = GetLongitude(sensorsData, rSensor, 4),
                                     Elevation = GetDouble(sensorsData, rSensor, 5),
                                     DataSourceId = (await dbContext.DataSources.FirstAsync(i => i.Code == dataSourceCode)).Id,
                                     PhenomenonId = (await dbContext.Phenomena.FirstAsync(i => i.Code == phenomenaCode)).Id,
@@ -492,6 +500,26 @@ namespace SAEON.Observations.WebAPI
                                 throw;
                             }
                         }
+                    }
+
+                    Double? GetLatitude(object[,] array, int row, int col)
+                    {
+                        var latitude = GetDouble(array, row, col);
+                        if (latitude.HasValue)
+                        {
+                            latitude = -Math.Abs(latitude.Value);
+                        }
+                        return latitude;
+                    }
+
+                    Double? GetLongitude(object[,] array, int row, int col)
+                    {
+                        var longitude = GetDouble(array, row, col);
+                        if (longitude.HasValue)
+                        {
+                            longitude = Math.Abs(longitude.Value);
+                        }
+                        return longitude;
                     }
 
                     string GetString(object[,] array, int row, int col)

@@ -137,9 +137,8 @@ namespace SAEON.Observations.QuerySite.Controllers
             var token = Session[Constants.SessionKeyIdToken]?.ToString();
             if (string.IsNullOrWhiteSpace(token))
             {
-                token = await GetAccessTokenAsync();
+                token = GetBearerTokenFromAccessToken(await GetAccessTokenAsync());
             }
-            token = GetBearerTokenFromAccessToken(token);
             return $"Bearer {token}";
         }
 
@@ -188,7 +187,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     var client = GetWebAPIClientBase();
-                    client.SetBearerToken(GetBearerTokenFromAccessToken(GetIdToken(useSession)));
+                    client.SetBearerToken(GetIdToken(useSession));
                     return client;
                 }
                 catch (Exception ex)
@@ -201,13 +200,17 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         protected async Task<HttpClient> GetWebAPIClientAsync(bool useSession = true)
         {
+            var client = GetWebAPIClientBase();
             var token = Session[Constants.SessionKeyIdToken]?.ToString();
-            if (string.IsNullOrWhiteSpace(token))
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                client.SetBearerToken(token);
+            }
+            else
             {
                 token = await GetAccessTokenAsync(useSession);
+                client.SetBearerToken(GetBearerTokenFromAccessToken(token));
             }
-            var client = GetWebAPIClientBase();
-            client.SetBearerToken(GetBearerTokenFromAccessToken(token));
             return client;
         }
     }
