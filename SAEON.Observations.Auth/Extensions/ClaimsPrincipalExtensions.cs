@@ -6,7 +6,7 @@ namespace SAEON.Observations.Auth
     {
         public static string UserId(this ClaimsPrincipal principal)
         {
-            return principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            return principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
 
         public static bool IsAdmin(this ClaimsPrincipal principal)
@@ -19,12 +19,12 @@ namespace SAEON.Observations.Auth
 
         public static string Name(this ClaimsPrincipal principal)
         {
-            return principal.FindFirstValue(ClaimTypes.Name);
+            return principal.FindFirst(ClaimTypes.Name)?.Value;
         }
 
         public static string Email(this ClaimsPrincipal principal)
         {
-            return principal.FindFirstValue(ClaimTypes.Email);
+            return principal.FindFirst(ClaimTypes.Email)?.Value;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAEON.Core;
 using SAEON.Logs;
+using SAEON.Observations.Auth;
 using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Collections.Generic;

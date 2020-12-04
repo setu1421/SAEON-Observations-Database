@@ -4,6 +4,7 @@ using Microsoft.Owin.Security.OpenIdConnect;
 using Newtonsoft.Json.Linq;
 using Owin;
 using SAEON.Logs;
+using SAEON.Observations.Auth;
 using Syncfusion.Licensing;
 using System;
 using System.Collections.Generic;

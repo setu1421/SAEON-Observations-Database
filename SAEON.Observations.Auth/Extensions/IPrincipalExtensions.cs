@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Security.Principal;
 
-namespace SAEON.Observations.QuerySite
+namespace SAEON.Observations.Auth
 {
     public static class IPrincipalExtensions
     {

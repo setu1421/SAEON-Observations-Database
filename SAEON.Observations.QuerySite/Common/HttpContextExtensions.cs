@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using SAEON.Observations.Auth;
+using System.Security.Claims;
 using System.Web;
 
 namespace SAEON.Observations.QuerySite
