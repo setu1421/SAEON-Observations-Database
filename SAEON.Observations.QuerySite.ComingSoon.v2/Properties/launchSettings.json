@@ -1,10 +1,10 @@
-﻿{
+{
   "iisSettings": {
-    "windowsAuthentication": false, 
-    "anonymousAuthentication": true, 
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:53577",
-      "sslPort": 44398
+      "applicationUrl": "http://localhost:56625/",
+      "sslPort": 44364
     }
   },
   "profiles": {
@@ -18,10 +18,10 @@
     "SAEON.Observations.QuerySite.ComingSoon.v2": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:44398;http://localhost:53577",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "https://localhost:44398;http://localhost:53577"
     }
   }
 }

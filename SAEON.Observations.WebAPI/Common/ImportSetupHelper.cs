@@ -232,6 +232,7 @@ namespace SAEON.Observations.WebAPI
                         }
                         // Instruments
                         await AddLineAsync("Adding Instruments");
+                        var instrumentStations = ExcelHelper.GetNameValues(doc, "InstrumentsStations");
                         var instrumentInstrumentTypes = ExcelHelper.GetNameValues(doc, "InstrumentsTypes");
                         var instrumentManufacturers = ExcelHelper.GetNameValues(doc, "InstrumentsManufacturers");
                         var instrumentsData = ExcelHelper.GetNameValues(doc, "InstrumentsData");
@@ -242,6 +243,7 @@ namespace SAEON.Observations.WebAPI
                             if (string.IsNullOrWhiteSpace(instrumentCode)) continue;
                             var instrumentName = GetString(instrumentsList, rInstrument, 1);
                             var instrument = await dbContext.Instruments.FirstOrDefaultAsync(i => i.Code == instrumentCode);
+                            var stationCode = GetString(instrumentStations, rInstrument, 0);
                             if (instrument != null)
                                 if (!UpdateData)
                                 {
@@ -277,6 +279,17 @@ namespace SAEON.Observations.WebAPI
                                 };
                                 dbContext.Instruments.Add(instrument);
                                 await dbContext.SaveChangesAsync();
+                                if (!string.IsNullOrWhiteSpace(stationCode))
+                                {
+                                    var instrumentId = (await dbContext.Instruments.FirstAsync(i => i.Code == instrumentCode)).Id;
+                                    var stationId = (await dbContext.Stations.FirstAsync(i => i.Code == stationCode)).Id;
+                                    await dbContext.Database.ExecuteSqlInterpolatedAsync(
+                                        $@"
+                                        Insert Station_Instrument
+                                          (StationID, InstrumentID, UserID) 
+                                        Values 
+                                          ({stationId},{instrumentId},{userId})");
+                                }
                             }
                         }
                         // DataSchemas

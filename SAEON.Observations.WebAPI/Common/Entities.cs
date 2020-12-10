@@ -351,6 +351,7 @@ namespace SAEON.Observations.WebAPI
         /// <summary>
         /// DigitalObjectIdentifierID of the Organisation
         /// </summary>
+        [JsonIgnore, SwaggerIgnore]
         public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
@@ -599,6 +600,7 @@ namespace SAEON.Observations.WebAPI
         /// <summary>
         /// DigitalObjectIdentifierID of the Site
         /// </summary>
+        [JsonIgnore, SwaggerIgnore]
         public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
@@ -659,11 +661,11 @@ namespace SAEON.Observations.WebAPI
         /// Elevation of the Station, positive above sea level, negative below sea level
         /// </summary>
         public double? Elevation { get; set; }
+        [JsonIgnore, SwaggerIgnore]
+        public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
 
-        [JsonIgnore, SwaggerIgnore]
-        public int? DigitalObjectIdentifierID { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
         [JsonIgnore, SwaggerIgnore]
@@ -1407,6 +1409,37 @@ namespace SAEON.Observations.WebAPI
     #endregion
 
     #region ManyToManyTables
+
+    public class OrganisationInstrument
+    {
+        public Guid OrganisationId { get; set; }
+        public Guid InstrumentId { get; set; }
+
+        // Navigation
+        public Organisation Organisation { get; set; }
+        public Instrument Instrument { get; set; }
+    }
+
+    public class OrganisationSite
+    {
+        public Guid OrganisationId { get; set; }
+        public Guid SiteId { get; set; }
+
+        // Navigation
+        public Organisation Organisation { get; set; }
+        public Site Site { get; set; }
+    }
+
+    public class OrganisationStation
+    {
+        public Guid OrganisationId { get; set; }
+        public Guid StationId { get; set; }
+
+        // Navigation
+        public Organisation Organisation { get; set; }
+        public Station Station { get; set; }
+    }
+
     /*
     //> Remove once EFCore has many to many
     //[ApiExplorerSettings(IgnoreApi = true)]
@@ -1588,6 +1621,35 @@ namespace SAEON.Observations.WebAPI
             modelBuilder.Entity<VObservationExpansion>().ToView("vObservationExpansion");
             modelBuilder.Entity<DigitalObjectIdentifier>().Property("DOIType").HasConversion<byte>();
             modelBuilder.Entity<DigitalObjectIdentifier>().HasOne(i => i.Parent).WithMany(i => i.Children).HasForeignKey(i => i.ParentId);
+            // Many to Many
+            modelBuilder
+                .Entity<Organisation>()
+                .HasMany(i => i.Instruments)
+                .WithMany(i => i.Organisations)
+                .UsingEntity<OrganisationInstrument>(
+                    os => os.HasOne<Instrument>().WithMany().HasForeignKey(i => i.InstrumentId),
+                    os => os.HasOne<Organisation>().WithMany().HasForeignKey(i => i.OrganisationId))
+                .ToTable("Organisation_Instrument")
+                .HasKey(os => new { os.OrganisationId, os.InstrumentId });
+            modelBuilder
+                .Entity<Organisation>()
+                .HasMany(i => i.Sites)
+                .WithMany(i => i.Organisations)
+                .UsingEntity<OrganisationSite>(
+                    os => os.HasOne<Site>().WithMany().HasForeignKey(i => i.SiteId),
+                    os => os.HasOne<Organisation>().WithMany().HasForeignKey(i => i.OrganisationId))
+                .ToTable("Organisation_Site")
+                .HasKey(os => new { os.OrganisationId, os.SiteId });
+            modelBuilder
+                .Entity<Organisation>()
+                .HasMany(i => i.Stations)
+                .WithMany(i => i.Organisations)
+                .UsingEntity<OrganisationStation>(
+                    os => os.HasOne<Station>().WithMany().HasForeignKey(i => i.StationId),
+                    os => os.HasOne<Organisation>().WithMany().HasForeignKey(i => i.OrganisationId))
+                .ToTable("Organisation_Station")
+                .HasKey(os => new { os.OrganisationId, os.StationId });
+
             //> Remove once EFCore has many to many
             /*
             modelBuilder.Entity<InstrumentSensor>().HasKey(e => new { e.InstrumentId, e.SensorId });

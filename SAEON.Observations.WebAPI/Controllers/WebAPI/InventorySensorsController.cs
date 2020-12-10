@@ -2,13 +2,13 @@
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    public class InventoryDatasetsController : WebApiController<InventoryDataset>
+    public class InventorySensorsController : WebApiController<InventorySensor>
     {
         /// <summary>
-        /// All Datasets
+        /// All Sensors
         /// </summary>
         /// <returns></returns>
-        public override IQueryable<InventoryDataset> GetAll()
+        public override IQueryable<InventorySensor> GetAll()
         {
             return base.GetAll();
         }

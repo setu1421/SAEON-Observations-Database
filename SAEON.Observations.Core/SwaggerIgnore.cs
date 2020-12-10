@@ -1,10 +1,11 @@
-﻿using Microsoft.OpenApi.Models;
+﻿#if NET5_0
+using Microsoft.OpenApi.Models;
 using SAEON.Logs;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Linq;
 
-namespace SAEON.Observations.WebAPI
+namespace SAEON.Observations.Core
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public class SwaggerIgnoreAttribute : Attribute { }
@@ -28,4 +29,15 @@ namespace SAEON.Observations.WebAPI
             }
         }
     }
+
+    internal static class StringExtensions
+    {
+        public static string ToCamelCase(this string value)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            return char.ToLowerInvariant(value[0]) + value[1..];
+        }
+    }
+
 }
+#endif

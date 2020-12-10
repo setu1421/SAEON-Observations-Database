@@ -16,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
+using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.Linq;

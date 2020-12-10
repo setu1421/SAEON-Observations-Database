@@ -596,9 +596,129 @@
         </member>
         <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InventoryDatasetsController.GetAll">
             <summary>
-            Inventory of Datasets
+            All Datasets
             </summary>
-            <returns>ListOf(InventoryDataset)</returns>
+            <returns></returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InventorySensorsController.GetAll">
+            <summary>
+            All Sensors
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OrganisationsController.GetAll">
+            <summary>
+            All Organisations
+            </summary>
+            <returns>ListOf(Organisation)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OrganisationsController.GetByIdAsync(System.Guid)">
+            <summary>
+            Organisation by Id
+            </summary>
+            <param name="id">The Id of the Organisation</param>
+            <returns>Organisation</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OrganisationsController.GetByCodeAsync(System.String)">
+            <summary>
+            Organisation by Code
+            </summary>
+            <param name="code">The Code of the Organisation</param>
+            <returns>Organisation</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OrganisationsController.GetByNameAsync(System.String)">
+            <summary>
+            Organisation by Name
+            </summary>
+            <param name="name">The Name of the Organisation</param>
+            <returns>Organisation</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OrganisationsController.GetSites(System.Guid)">
+            <summary>
+            Sites of the Organisation
+            </summary>
+            <param name="id">Id of Organisation</param>
+            <returns>ListOf(Site)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OrganisationsController.GetStations(System.Guid)">
+            <summary>
+            Stations of the Organisation
+            </summary>
+            <param name="id">Id of Organisation</param>
+            <returns>ListOf(Station)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OrganisationsController.GetInstruments(System.Guid)">
+            <summary>
+            Instruments of the Organisation
+            </summary>
+            <param name="id">Id of Organisation</param>
+            <returns>ListOf(Instrument)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.IDEntityController`1.GetByIdAsync(System.Guid)">
+            <summary>
+            Get a TEntity by Id
+            </summary>
+            <param name="id">The Id of the TEntity</param>
+            <returns>TEntity</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.IDEntityController`1.GetSingleAsync``1(System.Guid,System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Related Entity TEntity.TRelated
+            </summary>
+            <typeparam name="TRelated"></typeparam>
+            <param name="id">Id of TEntity</param>
+            <param name="select">Lambda to select TRelated</param>
+            <returns>TaskOf(IHttpActionResult)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.IDEntityController`1.GetSingle``1(System.Guid,System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Related Entity TEntity.TRelated
+            </summary>
+            <typeparam name="TRelated"></typeparam>
+            <param name="id">Id of TEntity</param>
+            <param name="select">Lambda to select TRelated</param>
+            <returns>TaskOf(IHttpActionResult)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.IDEntityController`1.GetManyWithGuidId``1(System.Guid,System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.IEnumerable{``0}}})">
+            <summary>
+            Get IQueryableOf(TRelated)
+            </summary>
+            <typeparam name="TRelated"></typeparam>
+            <param name="id">Id of TEntity</param>
+            <param name="select">Lambda to select ListOf(TRelated)</param>
+            <returns>IQueryableOf(TRelated)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.IDEntityController`1.GetManyWithIntId``1(System.Guid,System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.IEnumerable{``0}}})">
+            <summary>
+            Get IQueryableOf(TRelated)
+            </summary>
+            <typeparam name="TRelated"></typeparam>
+            <param name="id">Id of TEntity</param>
+            <param name="select">Lambda to select ListOf(TRelated)</param>
+            <returns>IQueryableOf(TRelated)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.IDEntityController`1.GetManyWithLongId``1(System.Guid,System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.IEnumerable{``0}}})">
+            <summary>
+            Get IQueryableOf(TRelated)
+            </summary>
+            <typeparam name="TRelated"></typeparam>
+            <param name="id">Id of TEntity</param>
+            <param name="select">Lambda to select ListOf(TRelated)</param>
+            <returns>IQueryableOf(TRelated)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.CodedApiController`1.GetByCodeAsync(System.String)">
+            <summary>
+            Get a TEntity by Code
+            </summary>
+            <param name="code">The Code of the TEntity</param>
+            <returns>TEntity</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.NamedApiController`1.GetByNameAsync(System.String)">
+            <summary>
+            Get a TEntity by Name
+            </summary>
+            <param name="name">The Name of the TEntity</param>
+            <returns>TEntity</returns>
         </member>
     </members>
 </doc>

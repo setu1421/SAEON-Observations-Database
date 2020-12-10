@@ -35,10 +35,10 @@
     <PackageReference Include="AspNetCore.HealthChecks.Uris" Version="3.1.2" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.16.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.1" />
     <PackageReference Include="SAEON.Observations.Auth" Version="1.0.18" />
-    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="18.3.0.52" />
+    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="18.3.0.53" />
   </ItemGroup>
 
   <ItemGroup>

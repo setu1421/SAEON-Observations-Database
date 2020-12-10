@@ -1,4 +1,5 @@
-﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+﻿//#define ODPAuth
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,9 @@ namespace SAEON.Observations.WebAPI
 {
     #region ApiControllers
     [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
+#if ODPAuth
     [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+#endif
     [ApiController]
     public abstract class BaseApiController : ControllerBase
     {
@@ -61,7 +64,7 @@ namespace SAEON.Observations.WebAPI
         [NotMapped]
         public List<string> NavigationLinks { get; } = new List<string>();
 
-        //protected abstract void UpdateRequest();
+        protected abstract void UpdateRequest();
 
         protected virtual List<Expression<Func<TEntity, object>>> GetOrderBys()
         {
@@ -89,7 +92,7 @@ namespace SAEON.Observations.WebAPI
             {
                 try
                 {
-                    //UpdateRequest();
+                    UpdateRequest();
                     SAEONLogs.Verbose("Uri: {Uri}", Request.GetUri());
                     return GetQuery();
                 }
@@ -116,11 +119,13 @@ namespace SAEON.Observations.WebAPI
 
     #region ODataControllers
     [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
+#if ODPAuth
     [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+#endif
     [ApiExplorerSettings(IgnoreApi = true)]
     public abstract class BaseODataController<TEntity> : ODataController where TEntity : BaseEntity
     {
-        //public static string BaseUrl { get; set; }
+        public static string BaseUrl { get; set; }
 
         private ObservationsDbContext _dbContext;
         protected ObservationsDbContext DbContext => _dbContext ??= HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
@@ -150,7 +155,7 @@ namespace SAEON.Observations.WebAPI
 
         protected void UpdateRequest()
         {
-            //BaseUrl = Request.GetUri().GetLeftPart(UriPartial.Authority) + "/OData";
+            BaseUrl = Request.GetUri().GetLeftPart(UriPartial.Authority) + "/OData";
             //if (isMany)
             //{
             //    var uri = Request.RequestUri.ToString();

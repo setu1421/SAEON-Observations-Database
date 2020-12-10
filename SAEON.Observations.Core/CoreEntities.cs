@@ -23,8 +23,14 @@ namespace SAEON.Observations.Core
     public abstract class BaseEntity
     {
         [NotMapped, JsonIgnore]
+#if NET5_0
+        [SwaggerIgnore]
+#endif
         public string EntitySetName { get; protected set; } = null;
         [NotMapped, JsonIgnore]
+#if NET5_0
+        [SwaggerIgnore]
+#endif
         public List<string> Links { get; } = new List<string>();
     }
 
