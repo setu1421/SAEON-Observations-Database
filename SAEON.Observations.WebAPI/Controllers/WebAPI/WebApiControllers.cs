@@ -1,5 +1,4 @@
-﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
-using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +17,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [EnableCors(SAEONAuthenticationDefaults.CorsAllowAllPolicy)]
     public abstract class WebApiController<TEntity> : BaseApiEntityController<TEntity> where TEntity : BaseEntity
     {
-        protected override void UpdateRequest()
-        {
-            EntityConfig.BaseUrl = Request.GetUri().GetLeftPart(UriPartial.Authority) + "/Api";
-        }
     }
 
-    public abstract class IDEntityController<TEntity> : WebApiController<TEntity> where TEntity : GuidIdEntity
+    public abstract class IDEntityApiController<TEntity> : WebApiController<TEntity> where TEntity : GuidIdEntity
     {
         /// <summary>
         /// Get a TEntity by Id
@@ -67,7 +62,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         //[HttpGet("{id:guid}/TRelated")] Required in calling classes
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        protected async Task<ActionResult<TEntity>> GetSingleAsync<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
+        protected async Task<ActionResult<TRelated>> GetSingleAsync<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
         {
             using (SAEONLogs.MethodCall<TEntity, TRelated>(GetType()))
             {
@@ -197,7 +192,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
     }
 
-    public abstract class CodedApiController<TEntity> : IDEntityController<TEntity> where TEntity : CodedEntity
+    public abstract class CodedApiController<TEntity> : IDEntityApiController<TEntity> where TEntity : CodedEntity
     {
         protected override List<Expression<Func<TEntity, object>>> GetOrderBys()
         {

@@ -1,21 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     public class OrganisationsController : NamedApiController<Organisation>
     {
-        protected override IQueryable<Organisation> GetQuery(Expression<Func<Organisation, bool>> extraWhere = null)
-        {
-            return base.GetQuery(extraWhere)
-                .Include(i => i.Sites)
-                .Include(i => i.Stations)
-                .Include(i => i.Instruments);
-        }
+        //protected override IQueryable<Organisation> GetQuery(Expression<Func<Organisation, bool>> extraWhere = null)
+        //{
+        //    return base.GetQuery(extraWhere)
+        //        .Include(i => i.Sites).ThenInclude(i => i.Stations).ThenInclude(i => i.Instruments)
+        //        .Include(i => i.Stations).ThenInclude(i => i.Instruments)
+        //        .Include(i => i.Instruments);
+        //}
 
         /// <summary>
         /// All Organisations

@@ -64,7 +64,10 @@ namespace SAEON.Observations.WebAPI
         [NotMapped]
         public List<string> NavigationLinks { get; } = new List<string>();
 
-        protected abstract void UpdateRequest();
+        protected void UpdateRequest()
+        {
+            EntityConfig.BaseUrl = Request.GetUri().GetLeftPart(UriPartial.Authority) + "/Api";
+        }
 
         protected virtual List<Expression<Func<TEntity, object>>> GetOrderBys()
         {
@@ -173,7 +176,7 @@ namespace SAEON.Observations.WebAPI
         }
 
         [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
-        public virtual IQueryable<TEntity> Get()
+        public virtual IQueryable<TEntity> GetAll()
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType()))
             {

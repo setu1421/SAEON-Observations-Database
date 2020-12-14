@@ -30,6 +30,43 @@ namespace SAEON.Observations.WebAPI
                     using (var doc = SpreadsheetDocument.Open(stream, false))
                     {
                         var userId = new Guid("662E267D-4219-4229-BE96-F589100708AC");
+                        // Organisations
+                        await AddLineAsync("Adding Organisations");
+                        var OrganisationsData = ExcelHelper.GetNameValues(doc, "OrganisationsData");
+                        var OrganisationsList = ExcelHelper.GetTableValues(doc, "Table_Organisations");
+                        for (int rOrganisation = 0; rOrganisation < OrganisationsList.GetUpperBound(0) + 1; rOrganisation++)
+                        {
+                            var OrganisationCode = GetString(OrganisationsList, rOrganisation, 0);
+                            if (string.IsNullOrWhiteSpace(OrganisationCode)) continue;
+                            var OrganisationName = GetString(OrganisationsList, rOrganisation, 1);
+                            var Organisation = await dbContext.Organisations.FirstOrDefaultAsync(i => i.Code == OrganisationCode);
+                            if (Organisation != null)
+                                if (!UpdateData)
+                                {
+                                    SAEONLogs.Verbose("Ignoring Organisation {OrganisationCode}, {OrganisationName}", OrganisationCode, OrganisationName);
+                                }
+                                else
+                                {
+                                    await AddLineAsync($"Updating Organisation {OrganisationCode}, {OrganisationName}");
+                                    Organisation.Name = OrganisationName;
+                                    Organisation.Description = GetString(OrganisationsList, rOrganisation, 2);
+                                    Organisation.Url = GetString(OrganisationsData, rOrganisation, 3);
+                                    dbContext.SaveChanges();
+                                }
+                            else
+                            {
+                                await AddLineAsync($"Adding Organisation {OrganisationCode}, {OrganisationName}");
+                                Organisation = new Organisation
+                                {
+                                    Code = OrganisationCode,
+                                    Name = OrganisationName,
+                                    Description = GetString(OrganisationsList, rOrganisation, 2),
+                                    UserId = userId
+                                };
+                                dbContext.Organisations.Add(Organisation);
+                                await dbContext.SaveChangesAsync();
+                            }
+                        }
                         // Programmes
                         await AddLineAsync("Adding Programmes");
                         var programmesData = ExcelHelper.GetNameValues(doc, "ProgrammesData");
@@ -119,6 +156,7 @@ namespace SAEON.Observations.WebAPI
                         }
                         // Sites
                         await AddLineAsync("Adding Sites");
+                        var sitesOrganisations = ExcelHelper.GetNameValues(doc, "SitesOrganisations");
                         var sitesData = ExcelHelper.GetNameValues(doc, "SitesData");
                         var sitesList = ExcelHelper.GetTableValues(doc, "Table_Sites");
                         for (int rSite = 0; rSite < sitesList.GetUpperBound(0) + 1; rSite++)
@@ -156,8 +194,13 @@ namespace SAEON.Observations.WebAPI
                                     UserId = userId
                                 };
                                 dbContext.Sites.Add(site);
+                                var organisationId = (await dbContext.Organisations.FirstAsync(i => i.Code == "SAEON")).Id;
+                                var organisationCode = GetString(sitesOrganisations, rSite, 0);
+                                if (!string.IsNullOrEmpty(organisationCode))
+                                {
+                                    organisationId = (await dbContext.Organisations.FirstAsync(i => i.Code == organisationCode)).Id;
+                                }
                                 await dbContext.SaveChangesAsync();
-                                var saeonOrganisationId = (await dbContext.Organisations.FirstAsync(i => i.Code == "SAEON")).Id;
                                 var ownerRoleId = (await dbContext.OrganisationRoles.FirstAsync(i => i.Code == "Owner")).Id;
                                 var siteId = (await dbContext.Sites.FirstAsync(i => i.Code == siteCode)).Id;
                                 var sql =
@@ -166,7 +209,7 @@ namespace SAEON.Observations.WebAPI
                                     Insert Organisation_Site 
                                       (OrganisationID, SiteID, OrganisationRoleID, UserID) 
                                     Values 
-                                      ({saeonOrganisationId},{siteId},{ownerRoleId},{userId})");
+                                      ({organisationId},{siteId},{ownerRoleId},{userId})");
                             }
                         }
                         // Stations

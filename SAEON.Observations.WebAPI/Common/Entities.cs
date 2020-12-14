@@ -327,7 +327,6 @@ namespace SAEON.Observations.WebAPI
         {
             EntitySetName = "Offerings";
             Links.Add("Phenomena");
-
         }
     }
 
@@ -447,6 +446,7 @@ namespace SAEON.Observations.WebAPI
         /// <summary>
         /// DigitalObjectIdentifierID of the Programme
         /// </summary>
+        [JsonIgnore, SwaggerIgnore]
         public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
@@ -496,6 +496,7 @@ namespace SAEON.Observations.WebAPI
         /// <summary>
         /// DigitalObjectIdentifierID of the Project
         /// </summary>
+        [JsonIgnore, SwaggerIgnore]
         public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
@@ -564,11 +565,9 @@ namespace SAEON.Observations.WebAPI
         public Sensor() : base()
         {
             EntitySetName = "Sensors";
-            Links.Add("Site");
-            Links.Add("Organisations");
-            Links.Add("Projects");
+            Links.Add("Phenomena");
             Links.Add("Instruments");
-            Links.Add("Observations");
+            //Links.Add("Observations"); @@
         }
     }
 
@@ -684,6 +683,8 @@ namespace SAEON.Observations.WebAPI
             Links.Add("Organisations");
             Links.Add("Projects");
             Links.Add("Instruments");
+            //Links.Add("Datasets"); @@
+            //Links.Add("Observations"); @@
         }
     }
 
@@ -692,8 +693,14 @@ namespace SAEON.Observations.WebAPI
     /// Unit Entity
     /// </summary>
     [Table("UnitOfMeasure")]
-    public class Unit : NamedEntity
+    public class Unit : CodedEntity
     {
+        /// <summary>
+        /// Unit of the Unit 
+        /// </summary>
+        [Required, StringLength(100), Column("Unit")]
+        public string Name { get; set; }
+
         /// <summary>
         /// Symbol of the Unit
         /// </summary>
@@ -1410,6 +1417,17 @@ namespace SAEON.Observations.WebAPI
 
     #region ManyToManyTables
 
+    public class InstrumentSensor
+    {
+        public Guid InstrumentId { get; set; }
+        public Guid SensorId { get; set; }
+
+        // Navigation
+
+        public Instrument Instrument { get; set; }
+        public Sensor Sensor { get; set; }
+    }
+
     public class OrganisationInstrument
     {
         public Guid OrganisationId { get; set; }
@@ -1440,59 +1458,9 @@ namespace SAEON.Observations.WebAPI
         public Station Station { get; set; }
     }
 
-    /*
-    //> Remove once EFCore has many to many
-    //[ApiExplorerSettings(IgnoreApi = true)]
-    [Table("Instrument_Sensor")]
-    public class InstrumentSensor : IdedEntity
+    public class PhenomenonOffering
     {
-        public Guid InstrumentId { get; set; }
-        public Guid SensorId { get; set; }
-        // Navigation
-        public Instrument Instrument { get; set; }
-        public Sensor Sensor { get; set; }
-    }
-
-    //[ApiExplorerSettings(IgnoreApi = true)]
-    [Table("Organisation_Instrument")]
-    public class OrganisationInstrument : IdedEntity
-    {
-        public Guid OrganisationId { get; set; }
-        public Guid InstrumentId { get; set; }
-        // Navigation
-        public Organisation Organisation { get; set; }
-        public Instrument Instrument { get; set; }
-    }
-
-    //[ApiExplorerSettings(IgnoreApi = true)]
-    [Table("Organisation_Site")]
-    public class OrganisationSite : IdedEntity
-    {
-        public Guid OrganisationId { get; set; }
-        public Guid SiteId { get; set; }
-        // Navigation
-        public Organisation Organisation { get; set; }
-        public Site Site { get; set; }
-    }
-
-    //[ApiExplorerSettings(IgnoreApi = true)]
-    [Table("Organisation_Station")]
-    public class OrganisationStation : IdedEntity
-    {
-        public Guid OrganisationId { get; set; }
-        public Guid StationId { get; set; }
-        // Navigation
-        public Organisation Organisation { get; set; }
-        public Station Station { get; set; }
-    }
-
-    //[ApiExplorerSettings(IgnoreApi = true)]
-    [Table("PhenomenonOffering")]
-    public class PhenomenonOffering : IdedEntity
-    {
-        [Required]
         public Guid PhenomenonId { get; set; }
-        [Required]
         public Guid OfferingId { get; set; }
 
         // Navigation
@@ -1501,13 +1469,10 @@ namespace SAEON.Observations.WebAPI
         public Offering Offering { get; set; }
     }
 
-    //[ApiExplorerSettings(IgnoreApi = true)]
-    [Table("PhenomenonUOM")]
-    public class PhenomenonUnit : IdedEntity
+    public class PhenomenonUnit
     {
-        [Required]
         public Guid PhenomenonId { get; set; }
-        [Required, Column("UnitOfMeasureID")]
+        [Column("UnitOfMeasureID")]
         public Guid UnitId { get; set; }
 
         // Navigation
@@ -1516,31 +1481,26 @@ namespace SAEON.Observations.WebAPI
         public Unit Unit { get; set; }
     }
 
-    //[ApiExplorerSettings(IgnoreApi = true)]
-    [Table("Project_Station")]
-    public class ProjectStation : IdedEntity
+    public class ProjectStation
     {
         public Guid ProjectId { get; set; }
         public Guid StationId { get; set; }
+
         // Navigation
         public Project Project { get; set; }
         public Station Station { get; set; }
     }
 
-    //[ApiExplorerSettings(IgnoreApi = true)]
-    [Table("Station_Instrument")]
-    public class StationInstrument : IdedEntity
+    public class StationInstrument
     {
         public Guid StationId { get; set; }
         public Guid InstrumentId { get; set; }
+
         // Navigation
         public Station Station { get; set; }
         public Instrument Instrument { get; set; }
     }
-    //< Remove once EFCore has many to many
-    */
     #endregion
-
 
     public class ObservationsDbContext : DbContext
     {
@@ -1622,62 +1582,70 @@ namespace SAEON.Observations.WebAPI
             modelBuilder.Entity<DigitalObjectIdentifier>().Property("DOIType").HasConversion<byte>();
             modelBuilder.Entity<DigitalObjectIdentifier>().HasOne(i => i.Parent).WithMany(i => i.Children).HasForeignKey(i => i.ParentId);
             // Many to Many
-            modelBuilder
-                .Entity<Organisation>()
+            modelBuilder.Entity<Organisation>()
                 .HasMany(i => i.Instruments)
                 .WithMany(i => i.Organisations)
                 .UsingEntity<OrganisationInstrument>(
-                    os => os.HasOne<Instrument>().WithMany().HasForeignKey(i => i.InstrumentId),
-                    os => os.HasOne<Organisation>().WithMany().HasForeignKey(i => i.OrganisationId))
+                    oi => oi.HasOne<Instrument>().WithMany().HasForeignKey(i => i.InstrumentId),
+                    oi => oi.HasOne<Organisation>().WithMany().HasForeignKey(i => i.OrganisationId))
                 .ToTable("Organisation_Instrument")
-                .HasKey(os => new { os.OrganisationId, os.InstrumentId });
-            modelBuilder
-                .Entity<Organisation>()
+                .HasKey(i => new { i.OrganisationId, i.InstrumentId });
+            modelBuilder.Entity<Organisation>()
                 .HasMany(i => i.Sites)
                 .WithMany(i => i.Organisations)
                 .UsingEntity<OrganisationSite>(
                     os => os.HasOne<Site>().WithMany().HasForeignKey(i => i.SiteId),
                     os => os.HasOne<Organisation>().WithMany().HasForeignKey(i => i.OrganisationId))
                 .ToTable("Organisation_Site")
-                .HasKey(os => new { os.OrganisationId, os.SiteId });
-            modelBuilder
-                .Entity<Organisation>()
+                .HasKey(i => new { i.OrganisationId, i.SiteId });
+            modelBuilder.Entity<Organisation>()
                 .HasMany(i => i.Stations)
                 .WithMany(i => i.Organisations)
                 .UsingEntity<OrganisationStation>(
                     os => os.HasOne<Station>().WithMany().HasForeignKey(i => i.StationId),
                     os => os.HasOne<Organisation>().WithMany().HasForeignKey(i => i.OrganisationId))
                 .ToTable("Organisation_Station")
-                .HasKey(os => new { os.OrganisationId, os.StationId });
-
-            //> Remove once EFCore has many to many
-            /*
-            modelBuilder.Entity<InstrumentSensor>().HasKey(e => new { e.InstrumentId, e.SensorId });
-            modelBuilder.Entity<InstrumentSensor>().HasOne(i => i.Instrument).WithMany(i => i.InstrumentSensors).HasForeignKey(pt => pt.InstrumentId);
-            modelBuilder.Entity<InstrumentSensor>().HasOne(i => i.Sensor).WithMany(i => i.InstrumentSensors).HasForeignKey(pt => pt.SensorId);
-            modelBuilder.Entity<OrganisationInstrument>().HasKey(e => new { e.OrganisationId, e.InstrumentId });
-            modelBuilder.Entity<OrganisationInstrument>().HasOne(i => i.Organisation).WithMany(i => i.OrganisationInstruments).HasForeignKey(i => i.OrganisationId);
-            modelBuilder.Entity<OrganisationInstrument>().HasOne(i => i.Instrument).WithMany(i => i.OrganisationInstruments).HasForeignKey(i => i.InstrumentId);
-            modelBuilder.Entity<OrganisationSite>().HasKey(e => new { e.OrganisationId, e.SiteId });
-            modelBuilder.Entity<OrganisationSite>().HasOne(i => i.Organisation).WithMany(i => i.OrganisationSites).HasForeignKey(i => i.OrganisationId);
-            modelBuilder.Entity<OrganisationSite>().HasOne(i => i.Site).WithMany(i => i.OrganisationSites).HasForeignKey(i => i.SiteId);
-            modelBuilder.Entity<OrganisationStation>().HasKey(e => new { e.OrganisationId, e.StationId });
-            modelBuilder.Entity<OrganisationStation>().HasOne(i => i.Organisation).WithMany(i => i.OrganisationStations).HasForeignKey(i => i.OrganisationId);
-            modelBuilder.Entity<OrganisationStation>().HasOne(i => i.Station).WithMany(i => i.OrganisationStations).HasForeignKey(i => i.StationId);
-            modelBuilder.Entity<PhenomenonOffering>().HasKey(e => new { e.PhenomenonId, e.OfferingId });
-            modelBuilder.Entity<PhenomenonOffering>().HasOne(i => i.Phenomenon).WithMany(i => i.PhenomenonOfferings).HasForeignKey(i => i.PhenomenonId);
-            modelBuilder.Entity<PhenomenonOffering>().HasOne(i => i.Offering).WithMany(i => i.PhenomenonOfferings).HasForeignKey(i => i.OfferingId);
-            modelBuilder.Entity<PhenomenonUnit>().HasKey(e => new { e.PhenomenonId, e.UnitId });
-            modelBuilder.Entity<PhenomenonUnit>().HasOne(i => i.Phenomenon).WithMany(i => i.PhenomenonUnits).HasForeignKey(i => i.PhenomenonId);
-            modelBuilder.Entity<PhenomenonUnit>().HasOne(i => i.Unit).WithMany(i => i.PhenomenonUnits).HasForeignKey(i => i.UnitId);
-            modelBuilder.Entity<ProjectStation>().HasKey(e => new { e.ProjectId, e.StationId });
-            modelBuilder.Entity<ProjectStation>().HasOne(i => i.Project).WithMany(i => i.ProjectStations).HasForeignKey(i => i.ProjectId);
-            modelBuilder.Entity<ProjectStation>().HasOne(i => i.Station).WithMany(i => i.ProjectStations).HasForeignKey(i => i.StationId);
-            modelBuilder.Entity<StationInstrument>().HasKey(e => new { e.StationId, e.InstrumentId });
-            modelBuilder.Entity<StationInstrument>().HasOne(i => i.Station).WithMany(i => i.StationInstruments).HasForeignKey(i => i.StationId);
-            modelBuilder.Entity<StationInstrument>().HasOne(i => i.Instrument).WithMany(i => i.StationInstruments).HasForeignKey(i => i.InstrumentId);
-            //< Remove once EFCore has many to many
-            */
+                .HasKey(i => new { i.OrganisationId, i.StationId });
+            modelBuilder.Entity<Project>()
+                .HasMany(i => i.Stations)
+                .WithMany(i => i.Projects)
+                .UsingEntity<ProjectStation>(
+                    ps => ps.HasOne<Station>().WithMany().HasForeignKey(i => i.StationId),
+                    ps => ps.HasOne<Project>().WithMany().HasForeignKey(i => i.ProjectId))
+                .ToTable("Project_Station")
+                .HasKey(i => new { i.ProjectId, i.StationId });
+            modelBuilder.Entity<Station>()
+                .HasMany(i => i.Instruments)
+                .WithMany(i => i.Stations)
+                .UsingEntity<StationInstrument>(
+                    si => si.HasOne<Instrument>().WithMany().HasForeignKey(i => i.InstrumentId),
+                    si => si.HasOne<Station>().WithMany().HasForeignKey(i => i.StationId))
+                .ToTable("Station_Instrument")
+                .HasKey(i => new { i.StationId, i.InstrumentId });
+            modelBuilder.Entity<Instrument>()
+                .HasMany(i => i.Sensors)
+                .WithMany(i => i.Instruments)
+                .UsingEntity<InstrumentSensor>(
+                    si => si.HasOne<Sensor>().WithMany().HasForeignKey(i => i.SensorId),
+                    si => si.HasOne<Instrument>().WithMany().HasForeignKey(i => i.InstrumentId))
+                .ToTable("Instrument_Sensor")
+                .HasKey(i => new { i.InstrumentId, i.SensorId });
+            modelBuilder.Entity<Phenomenon>()
+                .HasMany(i => i.Offerings)
+                .WithMany(i => i.Phenomena)
+                .UsingEntity<PhenomenonOffering>(
+                    i => i.HasOne<Offering>().WithMany().HasForeignKey(i => i.OfferingId),
+                    i => i.HasOne<Phenomenon>().WithMany().HasForeignKey(i => i.PhenomenonId))
+                .ToTable("PhenomenonOffering")
+                .HasKey(i => new { i.PhenomenonId, i.OfferingId });
+            modelBuilder.Entity<Phenomenon>()
+                .HasMany(i => i.Units)
+                .WithMany(i => i.Phenomena)
+                .UsingEntity<PhenomenonUnit>(
+                    i => i.HasOne<Unit>().WithMany().HasForeignKey(i => i.UnitId),
+                    i => i.HasOne<Phenomenon>().WithMany().HasForeignKey(i => i.PhenomenonId))
+                .ToTable("PhenomenonUOM")
+                .HasKey(i => new { i.PhenomenonId, i.UnitId });
         }
     }
 }
