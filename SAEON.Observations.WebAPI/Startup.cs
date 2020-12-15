@@ -159,7 +159,7 @@ namespace SAEON.Observations.WebAPI
                             pattern: "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllers();
                         endpoints.MapHub<AdminHub>("/AdminHub").RequireCors(SAEONAuthenticationDefaults.CorsAllowSignalRPolicy);
-                        endpoints.Select().Filter().OrderBy().Count().Expand().MaxTop(500);
+                        endpoints.Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop);
                         endpoints.MapODataRoute("Internal", "Internal", GetInternalEdmModel());
                         endpoints.MapODataRoute("OData", "OData", GetODataEdmModel());
                     });
@@ -184,6 +184,15 @@ namespace SAEON.Observations.WebAPI
                 builder.EntitySet<InventoryDataset>("InventoryDatasets");
                 builder.EntitySet<InventorySensor>("InventorySensors");
                 builder.EntitySet<Organisation>("Organisations");
+                builder.EntitySet<Programme>("Programmes");
+                builder.EntitySet<Project>("Projects");
+                builder.EntitySet<Site>("Sites");
+                builder.EntitySet<Station>("Stations");
+                builder.EntitySet<Instrument>("Instruments");
+                builder.EntitySet<Sensor>("Sensors");
+                builder.EntitySet<Phenomenon>("Phenomena");
+                builder.EntitySet<Offering>("Offerings");
+                builder.EntitySet<Unit>("Units");
                 return builder.GetEdmModel();
             }
         }

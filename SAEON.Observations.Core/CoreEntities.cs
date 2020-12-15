@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.Serialization;
 #if NET5_0
 using System.Text.Json.Serialization;
 #endif
@@ -155,8 +156,10 @@ namespace SAEON.Observations.Core
     {
         [JsonIgnore, Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false)]
         //[HiddenInput]
+        [IgnoreDataMember]
         public byte[] RowVersion { get; set; }
         [JsonIgnore, Required]
+        [IgnoreDataMember]
         public Guid UserId { get; set; }
     }
 

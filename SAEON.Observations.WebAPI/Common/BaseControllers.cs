@@ -175,8 +175,9 @@ namespace SAEON.Observations.WebAPI
             Request.Headers.TryAdd("Prefer", "odata.include-annotations=*");
         }
 
+        [HttpGet]
         [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
-        public virtual IQueryable<TEntity> GetAll()
+        public virtual ActionResult<IQueryable<TEntity>> Get()
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType()))
             {
@@ -184,7 +185,7 @@ namespace SAEON.Observations.WebAPI
                 {
                     UpdateRequest();
                     SAEONLogs.Verbose("uri: {uri}", Request.GetUri());
-                    return GetQuery().Take(ODataDefaults.MaxAll);
+                    return Ok(GetQuery().Take(ODataDefaults.MaxAll));
                 }
                 catch (Exception ex)
                 {

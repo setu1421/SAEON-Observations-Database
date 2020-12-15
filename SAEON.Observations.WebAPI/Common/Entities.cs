@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
 namespace SAEON.Observations.WebAPI
@@ -222,6 +223,7 @@ namespace SAEON.Observations.WebAPI
         public Guid PhenomenonOfferingId { get; set; }
         [Column("PhenomenonUOMID")]
         public Guid PhenomenonUnitId { get; set; }
+        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
         public int? DigitalObjectIdentifierId { get; set; }
         public int Count { get; set; }
         public double? Minimum { get; set; }
@@ -246,6 +248,7 @@ namespace SAEON.Observations.WebAPI
         //public Site Site { get; set; }
         //public PhenomenonOffering PhenomenonOffering { get; set; }
         //public PhenomenonUnit PhenomenonUnit { get; set; }
+        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
         public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
     }
 
@@ -350,12 +353,12 @@ namespace SAEON.Observations.WebAPI
         /// <summary>
         /// DigitalObjectIdentifierID of the Organisation
         /// </summary>
-        [JsonIgnore, SwaggerIgnore]
+        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
         public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
 
-        [JsonIgnore, SwaggerIgnore]
+        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
         public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public List<Instrument> Instruments { get; set; }
@@ -446,12 +449,12 @@ namespace SAEON.Observations.WebAPI
         /// <summary>
         /// DigitalObjectIdentifierID of the Programme
         /// </summary>
-        [JsonIgnore, SwaggerIgnore]
+        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
         public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
 
-        [JsonIgnore, SwaggerIgnore]
+        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
         public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public List<Project> Projects { get; set; }
@@ -496,12 +499,12 @@ namespace SAEON.Observations.WebAPI
         /// <summary>
         /// DigitalObjectIdentifierID of the Project
         /// </summary>
-        [JsonIgnore, SwaggerIgnore]
+        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
         public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
 
-        [JsonIgnore, SwaggerIgnore]
+        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
         public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public Programme Programme { get; set; }
@@ -534,7 +537,7 @@ namespace SAEON.Observations.WebAPI
         /// </summary>
         [Url, StringLength(250)]
         public string Url { get; set; }
-        [Required]
+        [Required, IgnoreDataMember]
         public Guid DataSourceId { get; set; }
         /// <summary>
         /// PhenomenonId of the sensor
@@ -555,7 +558,7 @@ namespace SAEON.Observations.WebAPI
 
         // Navigation
 
-        [JsonIgnore, SwaggerIgnore]
+        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
         public DataSource DataSource { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public Phenomenon Phenomenon { get; set; }
@@ -599,12 +602,12 @@ namespace SAEON.Observations.WebAPI
         /// <summary>
         /// DigitalObjectIdentifierID of the Site
         /// </summary>
-        [JsonIgnore, SwaggerIgnore]
+        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
         public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
 
-        [JsonIgnore, SwaggerIgnore]
+        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
         public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public List<Organisation> Organisations { get; set; }
@@ -660,12 +663,12 @@ namespace SAEON.Observations.WebAPI
         /// Elevation of the Station, positive above sea level, negative below sea level
         /// </summary>
         public double? Elevation { get; set; }
-        [JsonIgnore, SwaggerIgnore]
+        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
         public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
 
-        [JsonIgnore, SwaggerIgnore]
+        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
         public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public Site Site { get; set; }
