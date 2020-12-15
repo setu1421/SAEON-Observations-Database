@@ -38,9 +38,7 @@ namespace SAEON.Observations.Auth
 
     public class ODPAuthenticationOptions : AuthenticationSchemeOptions
     {
-#pragma warning disable CA1056 // URI-like properties should not be strings
         public string IntrospectionUrl { get; set; }
-#pragma warning restore CA1056 // URI-like properties should not be strings
     }
 
     public class ODPAuthenticationPostConfigureOptions : IPostConfigureOptions<ODPAuthenticationOptions>

@@ -22,7 +22,7 @@
   </ItemGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
-    <PackageReference Include="SAEON.Logs.NetCore" Version="1.0.50" />
+    <PackageReference Include="SAEON.Logs.NetCore" Version="1.0.51" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.6.3" />
   </ItemGroup>
 </Project>

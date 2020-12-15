@@ -1,4 +1,4 @@
-﻿//#define ODPAuth
+﻿#define ODPAuth
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
