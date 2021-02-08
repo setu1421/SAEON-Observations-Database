@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
+using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace SAEON.Observations.WebAPI
 {
     public static class MetadataHelper
     {
-        public static DOIType[] DynamicDOITypes = { DOIType.ObservationsDb, DOIType.Organisation, DOIType.Programme, DOIType.Project, DOIType.Site, DOIType.Station, DOIType.Dataset };
+        public static DOIType[] DynamicDOITypes => new DOIType[] { DOIType.ObservationsDb, DOIType.Organisation, DOIType.Programme, DOIType.Project, DOIType.Site, DOIType.Station, DOIType.Dataset };
 
         public static async Task<string> CreateMetadata(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub)
         {
@@ -119,7 +120,7 @@ namespace SAEON.Observations.WebAPI
                                         metaDataset.ElevationMaximum = dataset.ElevationMaximum;
                                         metaDataset.Subjects.Add(new MetadataSubject { Name = dataset.StationName });
                                         metaDataset.Subjects.Add(new MetadataSubject { Name = dataset.PhenomenonName });
-                                        metaDataset.Subjects.Add(new MetadataSubject { Name = $"{dataset.OfferingName} {dataset.UnitName}" });
+                                        metaDataset.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName}" });
                                         //metaDataset.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName} {dataset.OfferingName} {dataset.UnitName}" });
                                         //foreach (var doiPeriodic in await dbContext
                                         //     .DigitalObjectIdentifiers

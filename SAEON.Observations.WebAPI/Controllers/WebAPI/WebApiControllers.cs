@@ -15,6 +15,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [Route("Api/[controller]")]
     [EnableCors(SAEONAuthenticationDefaults.CorsAllowAllPolicy)]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public abstract class WebApiController<TEntity> : BaseApiEntityController<TEntity> where TEntity : BaseEntity
     {
     }

@@ -294,21 +294,10 @@ namespace SAEON.Observations.Core
                    UnitId.Equals(variable.UnitId);
         }
 
-#if NET472
-        public override int GetHashCode()
-        {
-            var hashCode = 1825368645;
-            hashCode = hashCode * -1521134295 + PhenomenonId.GetHashCode();
-            hashCode = hashCode * -1521134295 + OfferingId.GetHashCode();
-            hashCode = hashCode * -1521134295 + UnitId.GetHashCode();
-            return hashCode;
-        }
-#else
         public override int GetHashCode()
         {
             return HashCode.Combine(PhenomenonId, OfferingId, UnitId);
         }
-#endif
     }
 
     public class DataWizardDataInput
@@ -326,24 +315,25 @@ namespace SAEON.Observations.Core
         public DataMatrix DataMatrix { get; } = new DataMatrix();
         public List<ChartSeries> ChartSeries { get; } = new List<ChartSeries>();
         public DateTime Date { get; } = DateTime.Now;
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public MetadataCore Metadata { get; private set; } = new MetadataCore();
+        //public string Title { get; set; }
+        //public string Description { get; set; }
         /// <summary>
         /// Semi-colon separated Name;Scheme;Uri
         /// </summary>
-        public List<string> Keywords { get; } = new List<string>();
+        //public List<string> Keywords { get; } = new List<string>();
         /// <summary>
         /// Lookup on GeoNames in format Name:Country:Lat:Lon
         /// </summary>
-        public List<string> Places { get; } = new List<string>();
-        public double? LatitudeNorth { get; set; } // + N to -S
-        public double? LatitudeSouth { get; set; } // + N to -S
-        public double? LongitudeWest { get; set; } // -W to +E
-        public double? LongitudeEast { get; set; } // -W to +E
-        public double? ElevationMinimum { get; set; } // m
-        public double? ElevationMaximum { get; set; } // m
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        //public List<string> Places { get; } = new List<string>();
+        //public double? LatitudeNorth { get; set; } // + N to -S
+        //public double? LatitudeSouth { get; set; } // + N to -S
+        //public double? LongitudeWest { get; set; } // -W to +E
+        //public double? LongitudeEast { get; set; } // -W to +E
+        //public double? ElevationMinimum { get; set; } // m
+        //public double? ElevationMaximum { get; set; } // m
+        //public DateTime? StartDate { get; set; }
+        //public DateTime? EndDate { get; set; }
     }
 
     public class DataWizardApproximation

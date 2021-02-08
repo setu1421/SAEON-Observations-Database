@@ -18,11 +18,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Humanizer.Core" Version="2.8.26" />
     <PackageReference Include="SAEON.Core" Version="1.0.31" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.0.0" />
   </ItemGroup>
-  
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
+  </ItemGroup>
+
   <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
     <PackageReference Include="SAEON.Logs.NetCore" Version="1.0.51" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.6.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.0.0" />
   </ItemGroup>
 </Project>

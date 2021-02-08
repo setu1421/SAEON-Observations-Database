@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
+using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.Data;

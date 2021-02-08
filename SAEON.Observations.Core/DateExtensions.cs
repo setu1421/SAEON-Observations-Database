@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SAEON.Observations.WebAPI
+namespace SAEON.Observations.Core
 {
     public static class DateExtensions
     {

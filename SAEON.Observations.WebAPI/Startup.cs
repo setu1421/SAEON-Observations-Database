@@ -52,10 +52,9 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     services.AddCors(o => o.AddSAEONCorsPolicies());
+                    services.AddResponseCompression(options => options.EnableForHttps = true);
                     services.AddResponseCaching();
-                    services.AddResponseCompression();
                     services.AddAutoMapper(typeof(Startup));
-                    services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
                     services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                         .AddCookie();
                     services
@@ -104,7 +103,9 @@ namespace SAEON.Observations.WebAPI
                     SetOutputFormatters(services);
 
                     services.AddSignalR();
+                    services.AddControllers();
                     services.AddControllersWithViews();
+                    services.AddApplicationInsightsTelemetry();
                 }
                 catch (Exception ex)
                 {
@@ -132,13 +133,13 @@ namespace SAEON.Observations.WebAPI
                         app.UseHsts();
                     }
                     app.UseHttpsRedirection();
+                    app.UseResponseCaching();
+                    app.UseResponseCompression();
                     app.UseStaticFiles();
 
                     app.UseRouting();
                     //app.UseCors(SAEONAuthenticationDefaults.CorsAllowAllPolicy);
                     app.UseCors();
-                    app.UseResponseCaching();
-                    app.UseResponseCompression();
                     app.UseAuthentication();
                     app.UseAuthorization();
                     app.UseSwagger();
@@ -154,9 +155,7 @@ namespace SAEON.Observations.WebAPI
                             Predicate = _ => true,
                             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                         });
-                        endpoints.MapControllerRoute(
-                            name: "default",
-                            pattern: "{controller=Home}/{action=Index}/{id?}");
+                        endpoints.MapDefaultControllerRoute();
                         endpoints.MapControllers();
                         endpoints.MapHub<AdminHub>("/AdminHub").RequireCors(SAEONAuthenticationDefaults.CorsAllowSignalRPolicy);
                         endpoints.Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop);

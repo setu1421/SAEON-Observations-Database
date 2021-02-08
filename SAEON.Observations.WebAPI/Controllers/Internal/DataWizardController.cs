@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
@@ -21,28 +23,44 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             //SAEONLogs.Verbose("Processed Input: {@Input}", input);
         }
 
-        private IQueryable<VImportBatchSummary> GetQuery(ref DataWizardDataInput input)
+        private IQueryable<VImportBatchSummary> GetSummaryQuery(ref DataWizardDataInput input)
         {
             CleanInput(ref input);
             SAEONLogs.Verbose("Input: {@Input}", input);
-            var stationIds = input.Locations.Select(i => i.StationId).ToList();
-            var phenomenonIds = input.Variables.Select(i => i.PhenomenonId).ToList();
-            var offeringIds = input.Variables.Select(i => i.OfferingId).ToList();
-            var unitIds = input.Variables.Select(i => i.UnitId).ToList();
             var startDate = input.StartDate;
             var endDate = input.EndDate;
             var elevationMinimum = input.ElevationMinimum;
             var elevationMaximum = input.ElevationMaximum;
-            var query = DbContext.VImportBatchSummary.Where(ibs =>
-                (ibs.Count > 0) && (ibs.LatitudeNorth != null) && (ibs.LatitudeSouth != null) && (ibs.LongitudeEast != null) && (ibs.LongitudeWest != null) &&
-                (!stationIds.Any() || stationIds.Contains(ibs.StationId)) &&
-                (!phenomenonIds.Any() || phenomenonIds.Contains(ibs.PhenomenonId)) &&
-                (!offeringIds.Any() || offeringIds.Contains(ibs.OfferingId)) &
-                (!unitIds.Any() || unitIds.Contains(ibs.UnitId)) &&
+            var result = DbContext.VImportBatchSummary
+                .AsNoTracking()
+                //.AsNoTrackingWithIdentityResolution()
+                .Where(ibs =>
+                (ibs.Count > 0) &&
+                ((ibs.LatitudeNorth != null) && (ibs.LatitudeSouth != null) && (ibs.LongitudeEast != null) && (ibs.LongitudeWest != null)) &&
                 ((ibs.StartDate >= startDate) && (ibs.EndDate < endDate)) &&
                 (!ibs.ElevationMinimum.HasValue || (ibs.ElevationMinimum >= elevationMinimum)) &&
                 (!ibs.ElevationMaximum.HasValue || (ibs.ElevationMaximum <= elevationMaximum)));
-            return query;
+            return result.AsQueryable();
+        }
+
+        private List<VImportBatchSummary> GetSummary(ref DataWizardDataInput input)
+        {
+            CleanInput(ref input);
+            SAEONLogs.Verbose("Input: {@Input}", input);
+            var locations = input.Locations;
+            var variables = input.Variables;
+            var result = GetSummaryQuery(ref input)
+                .AsEnumerable() // Force fetch from database
+                .Where(ibs =>
+                    (!locations.Any() || locations.Contains(new Location { StationId = ibs.StationId })) &&
+                    (!variables.Any() || variables.Contains(new Variable { PhenomenonId = ibs.PhenomenonId, OfferingId = ibs.OfferingId, UnitId = ibs.UnitId })))
+                .OrderBy(i => i.SiteName)
+                .ThenBy(i => i.StationName)
+                .ThenBy(i => i.InstrumentName)
+                .ThenBy(i => i.SensorName)
+                .ToList();
+            SAEONLogs.Verbose("Summaries: {Count}", result.Count);
+            return result;
         }
 
         private DataWizardApproximation CalculateApproximation(DataWizardDataInput input)
@@ -52,7 +70,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 try
                 {
                     SAEONLogs.Verbose("Input: {@Input}", input);
-                    var q = GetQuery(ref input);
+                    var q = GetSummary(ref input);
                     var rows = q.Sum(i => i.Count);
                     //var rows = q.Select(i => i.Count).ToList().Sum();
                     var result = new DataWizardApproximation
@@ -160,16 +178,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 return $"{sensorName.Replace(", ", "_")}, {phenomenonName.Replace(", ", "_")}, {offeringName.Replace(", ", "_")}, {unitName.Replace(", ", "_")}";
             }
 
-            CleanInput(ref input);
-            var stationIds = input.Locations.Select(i => i.StationId).ToList();
-            var phenomenonIds = input.Variables.Select(i => i.PhenomenonId).ToList();
-            var offeringIds = input.Variables.Select(i => i.OfferingId).ToList();
-            var unitIds = input.Variables.Select(i => i.UnitId).ToList();
-            var startDate = input.StartDate;
-            var endDate = input.EndDate;
-            var elevationMinimum = input.ElevationMinimum;
-            var elevationMaximum = input.ElevationMaximum;
-
+            var stopwatch = new Stopwatch();
+            var stageStopwatch = new Stopwatch();
+            stopwatch.Start();
+            stageStopwatch.Start();
             var result = new DataWizardDataOutput();
             result.DataMatrix.AddColumn("SiteName", "Site", MaxtixDataType.mdtString);
             result.DataMatrix.AddColumn("StationName", "Station", MaxtixDataType.mdtString);
@@ -178,8 +190,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             result.DataMatrix.AddColumn("Date", "Date", MaxtixDataType.mdtDate);
             result.DataMatrix.AddColumn("Elevation", "Elevation", MaxtixDataType.mdtDouble);
 
-            var q = GetQuery(ref input);
-            var qFeatures = q.Select(i => new { i.SensorId, i.SensorCode, i.SensorName, i.PhenomenonOfferingId, i.PhenomenonUnitId, i.PhenomenonCode, i.PhenomenonName, i.OfferingCode, i.OfferingName, i.UnitCode, i.UnitName, i.UnitSymbol }).Distinct();
+            var summaries = GetSummary(ref input);
+            SAEONLogs.Verbose("Summaries: Stage {Stage} Total {Total}", stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
+            stageStopwatch.Restart();
+            var qFeatures = summaries.Select(i => new { i.SensorId, i.SensorCode, i.SensorName, i.PhenomenonOfferingId, i.PhenomenonUnitId, i.PhenomenonCode, i.PhenomenonName, i.OfferingCode, i.OfferingName, i.UnitCode, i.UnitName, i.UnitSymbol }).Distinct();
             var features = qFeatures.ToList().Select(i => new DataFeature
             {
                 SensorID = i.SensorId,
@@ -199,25 +213,29 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
             var phenomenonOfferingIds = features.Select(f => f.PhenomenonOfferingId);
             var phenomenonUnitIds = features.Select(f => f.PhenomenonUnitId);
-            //var observations = q.Join(db.ObservationExpansions.Where(i => (i.StatusName == "Verified")), l => l.ImportBatchId, r => r.ImportBatchId, (l, r) => r)
-            var observations = q.Join(DbContext.VObservationExpansions.Where(i => (i.StatusId == null) || (i.StatusName == "Verified")), l => l.ImportBatchId, r => r.ImportBatchId, (l, r) => r)
-                .Where(obs =>
-                    (!stationIds.Any() || stationIds.Contains(obs.StationId)) &&
-                    (!phenomenonIds.Any() || phenomenonIds.Contains(obs.PhenomenonId)) &&
-                    (!offeringIds.Any() || offeringIds.Contains(obs.OfferingId)) &
-                    (!unitIds.Any() || unitIds.Contains(obs.UnitId)) &&
-                    ((obs.ValueDate >= startDate) && (obs.ValueDate < endDate)) &&
-                    (!obs.Elevation.HasValue || (obs.Elevation >= elevationMinimum)) &&
-                    (!obs.Elevation.HasValue || (obs.Elevation <= elevationMaximum)))
+            SAEONLogs.Verbose("Features: Stage {Stage} Total {Total}", stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
+            stageStopwatch.Restart();
+            var importBatchIDs = summaries.Select(i => i.ImportBatchId).Distinct();
+            var observations = DbContext.VObservationExpansions.AsNoTracking()
+                .Where(i =>
+                    importBatchIDs.Contains(i.ImportBatchId) &&
+                    ((i.StatusId == null) || (i.StatusName == "Verified")) &&
+                    ((i.ValueDate >= input.StartDate) && (i.ValueDate < input.EndDate)) &&
+                    (!i.Elevation.HasValue || (i.Elevation >= input.ElevationMinimum)) &&
+                    (!i.Elevation.HasValue || (i.Elevation <= input.ElevationMaximum)))
                 .OrderBy(obs => obs.SiteName)
                 .ThenBy(obs => obs.StationName)
                 .ThenBy(obs => obs.InstrumentName)
                 .ThenBy(obs => obs.SensorName)
                 .ThenBy(obs => obs.ValueDate)
                 .ThenBy(obs => obs.Elevation)
-                //.Take(1000)
+                .ToList() // Force to database query
+                .Where(ibs =>
+                    (!input.Locations.Any() || input.Locations.Contains(new Location { StationId = ibs.StationId })) &&
+                    (!input.Variables.Any() || input.Variables.Contains(new Variable { PhenomenonId = ibs.PhenomenonId, OfferingId = ibs.OfferingId, UnitId = ibs.UnitId })))
                 .ToList();
-            SAEONLogs.Verbose("Observations: {Observations}", observations.Count);
+            SAEONLogs.Verbose("Observations: {Observations} Stage {Stage} Total {Total}", observations.Count, stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
+            stageStopwatch.Restart();
             var siteId = new Guid();
             var stationId = new Guid();
             var instrumentId = new Guid();
@@ -225,11 +243,11 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var date = DateTime.MinValue;
             double? elevation = null;
             DataMatrixRow row = null;
-            var keywordsShort = new List<string>();
-            var keywordsLong = new List<string>();
-            var keywordsSiteShort = new List<string>();
-            var keywordsSiteLong = new List<string>();
-            var places = new List<string>();
+            //var keywordsShort = new List<string>();
+            //var keywordsLong = new List<string>();
+            //var keywordsSiteShort = new List<string>();
+            //var keywordsSiteLong = new List<string>();
+            //var places = new List<string>();
             // Data Matrix
             int nRow = 0;
             foreach (var obs in observations)
@@ -238,44 +256,44 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 {
                     SAEONLogs.Verbose("DataMatrix.Row: {Row}", nRow);
                 }
-                if (obs.SiteId != siteId)
-                {
-                    if (string.IsNullOrEmpty(result.Title))
-                    {
-                        result.Title = "Observations collected from";
-                        result.Description = "Observations collected from";
-                    }
-                    else
-                    {
-                        keywordsSiteShort = keywordsSiteShort.Distinct().ToList();
-                        keywordsSiteShort.Sort();
-                        keywordsSiteLong = keywordsSiteLong.Distinct().ToList();
-                        keywordsSiteLong.Sort();
-                        result.Title += " " + string.Join(", ", keywordsSiteShort) + ";";
-                        result.Description += " " + string.Join(", ", keywordsSiteLong) + ";";
-                    }
-                    result.Title += " " + obs.SiteName + " -";
-                    result.Description += " " + obs.SiteName + " -";
-                    keywordsSiteShort.Clear();
-                    keywordsSiteLong.Clear();
-                }
-                if (obs.StationId != stationId)
-                {
-                    var station = DbContext.Stations.First(i => i.Id == obs.StationId);
-                    if (station.Latitude.HasValue && station.Longitude.HasValue)
-                    {
-                        places.Add($"{station.Name}:South Africa:{station.Latitude}:{station.Longitude}");
-                    }
-                }
-                if ((obs.StationId != stationId) || (obs.InstrumentId != instrumentId) || (obs.SensorId != sensorId))
-                {
-                    //result.Title += $", {obs.PhenomenonName}";
-                    //result.Description += $", {obs.PhenomenonName} {obs.OfferingName} {obs.UnitName}";
-                    keywordsShort.Add(obs.PhenomenonName);
-                    keywordsLong.Add($"{obs.PhenomenonName} {obs.OfferingName} {obs.UnitName}");
-                    keywordsSiteShort.Add(obs.PhenomenonName);
-                    keywordsSiteLong.Add($"{obs.PhenomenonName} {obs.OfferingName} {obs.UnitName}");
-                }
+                //if (obs.SiteId != siteId)
+                //{
+                //    if (string.IsNullOrEmpty(result.Title))
+                //    {
+                //        result.Title = "Observations collected from";
+                //        result.Description = "Observations collected from";
+                //    }
+                //    else
+                //    {
+                //        keywordsSiteShort = keywordsSiteShort.Distinct().ToList();
+                //        keywordsSiteShort.Sort();
+                //        keywordsSiteLong = keywordsSiteLong.Distinct().ToList();
+                //        keywordsSiteLong.Sort();
+                //        result.Title += " " + string.Join(", ", keywordsSiteShort) + ";";
+                //        result.Description += " " + string.Join(", ", keywordsSiteLong) + ";";
+                //    }
+                //    result.Title += " " + obs.SiteName + " -";
+                //    result.Description += " " + obs.SiteName + " -";
+                //    keywordsSiteShort.Clear();
+                //    keywordsSiteLong.Clear();
+                //}
+                //if (obs.StationId != stationId)
+                //{
+                //    var station = DbContext.Stations.First(i => i.Id == obs.StationId);
+                //    if (station.Latitude.HasValue && station.Longitude.HasValue)
+                //    {
+                //        places.Add($"{station.Name}:South Africa:{station.Latitude}:{station.Longitude}");
+                //    }
+                //}
+                //if ((obs.StationId != stationId) || (obs.InstrumentId != instrumentId) || (obs.SensorId != sensorId))
+                //{
+                //    //result.Title += $", {obs.PhenomenonName}";
+                //    //result.Description += $", {obs.PhenomenonName} {obs.OfferingName} {obs.UnitName}";
+                //    keywordsShort.Add(obs.PhenomenonName);
+                //    keywordsLong.Add($"{obs.PhenomenonName} {obs.OfferingName} {obs.UnitName}");
+                //    keywordsSiteShort.Add(obs.PhenomenonName);
+                //    keywordsSiteLong.Add($"{obs.PhenomenonName} {obs.OfferingName} {obs.UnitName}");
+                //}
                 if ((row == null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.InstrumentId != instrumentId) || (obs.SensorId != sensorId) || (obs.ValueDate != date) || (obs.Elevation != elevation))
                 {
                     row = result.DataMatrix.AddRow();
@@ -295,89 +313,114 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 var name = GetCode(obs.SensorCode, obs.PhenomenonCode, obs.OfferingCode, obs.UnitCode);
                 //SAEONLogs.Verbose("Name: {Name}",name);
                 row[name] = obs.DataValue;
-                if (obs.ValueDate < (result.StartDate ?? DateTime.MaxValue))
-                {
-                    result.StartDate = obs.ValueDate;
-                }
+                //if (obs.ValueDate < (result.StartDate ?? DateTime.MaxValue))
+                //{
+                //    result.StartDate = obs.ValueDate;
+                //}
 
-                if (obs.ValueDate > (result.EndDate ?? DateTime.MinValue))
-                {
-                    result.EndDate = obs.ValueDate;
-                }
+                //if (obs.ValueDate > (result.EndDate ?? DateTime.MinValue))
+                //{
+                //    result.EndDate = obs.ValueDate;
+                //}
 
-                if (obs.Latitude.HasValue && (obs.Latitude.Value > (result.LatitudeNorth ?? double.MinValue)))
-                {
-                    result.LatitudeNorth = obs.Latitude;
-                }
+                //if (obs.Latitude.HasValue && (obs.Latitude.Value > (result.LatitudeNorth ?? double.MinValue)))
+                //{
+                //    result.LatitudeNorth = obs.Latitude;
+                //}
 
-                if (obs.Latitude.HasValue && (obs.Latitude.Value < (result.LatitudeSouth ?? double.MaxValue)))
-                {
-                    result.LatitudeSouth = obs.Latitude;
-                }
+                //if (obs.Latitude.HasValue && (obs.Latitude.Value < (result.LatitudeSouth ?? double.MaxValue)))
+                //{
+                //    result.LatitudeSouth = obs.Latitude;
+                //}
 
-                if (obs.Longitude.HasValue && (obs.Longitude.Value < (result.LongitudeWest ?? double.MaxValue)))
-                {
-                    result.LongitudeWest = obs.Longitude;
-                }
+                //if (obs.Longitude.HasValue && (obs.Longitude.Value < (result.LongitudeWest ?? double.MaxValue)))
+                //{
+                //    result.LongitudeWest = obs.Longitude;
+                //}
 
-                if (obs.Longitude.HasValue && (obs.Longitude.Value > (result.LongitudeEast ?? double.MinValue)))
-                {
-                    result.LongitudeEast = obs.Longitude;
-                }
+                //if (obs.Longitude.HasValue && (obs.Longitude.Value > (result.LongitudeEast ?? double.MinValue)))
+                //{
+                //    result.LongitudeEast = obs.Longitude;
+                //}
 
-                if (obs.Elevation.HasValue && (obs.Elevation.Value < (result.ElevationMinimum ?? double.MaxValue)))
-                {
-                    result.ElevationMinimum = obs.Elevation;
-                }
+                //if (obs.Elevation.HasValue && (obs.Elevation.Value < (result.ElevationMinimum ?? double.MaxValue)))
+                //{
+                //    result.ElevationMinimum = obs.Elevation;
+                //}
 
-                if (obs.Elevation.HasValue && (obs.Elevation.Value > (result.ElevationMaximum ?? double.MinValue)))
-                {
-                    result.ElevationMaximum = obs.Elevation;
-                }
+                //if (obs.Elevation.HasValue && (obs.Elevation.Value > (result.ElevationMaximum ?? double.MinValue)))
+                //{
+                //    result.ElevationMaximum = obs.Elevation;
+                //}
             }
-            SAEONLogs.Verbose("DataMatrix: Rows: {Rows} Cols: {Cols}", result.DataMatrix.Rows.Count, result.DataMatrix.Columns.Count);
-            SAEONLogs.Verbose("DataMatrix: {DataMatrix}", JsonConvert.SerializeObject(result.DataMatrix));
-            if (!string.IsNullOrEmpty(result.Title))
-            {
-                keywordsSiteShort = keywordsSiteShort.Distinct().ToList();
-                keywordsSiteShort.Sort();
-                keywordsSiteLong = keywordsSiteLong.Distinct().ToList();
-                keywordsSiteLong.Sort();
-                result.Title += " " + string.Join(", ", keywordsSiteShort) + ";";
-                result.Description += " " + string.Join(", ", keywordsSiteLong) + ";";
-            }
-            result.Title = result.Title.TrimEnd(";");
-            result.Description = result.Description.TrimEnd(";");
-            if (result.LatitudeNorth.HasValue && result.LatitudeSouth.HasValue && result.LongitudeWest.HasValue && result.LongitudeEast.HasValue)
-            {
-                result.Description += $" in area {result.LatitudeNorth:f5},{result.LongitudeWest:f5} (N,W) {result.LatitudeSouth:f5},{result.LongitudeEast:f5} (S,E)";
-            }
-            if (result.ElevationMinimum.HasValue && result.ElevationMaximum.HasValue)
-            {
-                if (result.ElevationMinimum.Value == result.ElevationMaximum.Value)
-                {
-                    result.Description += $" at {result.ElevationMaximum:f2}m above mean sea level";
-                }
-                else
-                {
-                    result.Description += $" between {result.ElevationMinimum:f2}m and {result.ElevationMaximum:f2}m above mean sea level";
-                }
-            }
-            if (result.StartDate.HasValue)
-            {
-                result.Title += $" from {result.StartDate.Value:yyyy-MM-dd}";
-                result.Description += $" from {result.StartDate.Value:yyyy-MM-dd HH:mm:ss}";
-            }
-            if (result.EndDate.HasValue)
-            {
-                result.Title += $" to {result.EndDate.Value:yyyy-MM-dd}";
-                result.Description += $" to {result.EndDate.Value:yyyy-MM-dd HH:mm:ss}";
-            }
-            result.Keywords.AddRange(keywordsShort.Distinct());
-            result.Keywords.AddRange(keywordsLong.Distinct());
-            result.Keywords.Sort();
-            result.Places.AddRange(places.Distinct());
-            result.Places.Sort();
+            //SAEONLogs.Verbose("DataMatrix: {DataMatrix}", JsonConvert.SerializeObject(result.DataMatrix));
+            //if (!string.IsNullOrEmpty(result.Title))
+            //{
+            //    keywordsSiteShort = keywordsSiteShort.Distinct().ToList();
+            //    keywordsSiteShort.Sort();
+            //    keywordsSiteLong = keywordsSiteLong.Distinct().ToList();
+            //    keywordsSiteLong.Sort();
+            //    result.Title += " " + string.Join(", ", keywordsSiteShort) + ";";
+            //    result.Description += " " + string.Join(", ", keywordsSiteLong) + ";";
+            //}
+            //result.Title = result.Title.TrimEnd(";");
+            //result.Description = result.Description.TrimEnd(";");
+            //if (result.LatitudeNorth.HasValue && result.LatitudeSouth.HasValue && result.LongitudeWest.HasValue && result.LongitudeEast.HasValue)
+            //{
+            //    result.Description += $" in area {result.LatitudeNorth:f5},{result.LongitudeWest:f5} (N,W) {result.LatitudeSouth:f5},{result.LongitudeEast:f5} (S,E)";
+            //}
+            //if (result.ElevationMinimum.HasValue && result.ElevationMaximum.HasValue)
+            //{
+            //    if (result.ElevationMinimum.Value == result.ElevationMaximum.Value)
+            //    {
+            //        result.Description += $" at {result.ElevationMaximum:f2}m above mean sea level";
+            //    }
+            //    else
+            //    {
+            //        result.Description += $" between {result.ElevationMinimum:f2}m and {result.ElevationMaximum:f2}m above mean sea level";
+            //    }
+            //}
+            //if (result.StartDate.HasValue)
+            //{
+            //    result.Title += $" from {result.StartDate.Value:yyyy-MM-dd}";
+            //    result.Description += $" from {result.StartDate.Value:yyyy-MM-dd HH:mm:ss}";
+            //}
+            //if (result.EndDate.HasValue)
+            //{
+            //    result.Title += $" to {result.EndDate.Value:yyyy-MM-dd}";
+            //    result.Description += $" to {result.EndDate.Value:yyyy-MM-dd HH:mm:ss}";
+            //}
+            //result.Keywords.AddRange(keywordsShort.Distinct());
+            //result.Keywords.AddRange(keywordsLong.Distinct());
+            //result.Keywords.Sort();
+            //result.Places.AddRange(places.Distinct());
+            //result.Places.Sort();
+            SAEONLogs.Verbose("DataMatrix: Rows: {Rows} Cols: {Cols} Stage {Stage} Total {Total}", result.DataMatrix.Rows.Count, result.DataMatrix.Columns.Count, stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
+            stageStopwatch.Restart();
+            // Metadata
+            result.Metadata.PublicationDate = result.Date;
+            result.Metadata.Title = "Observations in the SAEON Observations Database for " +
+                string.Join("; ", observations.Select(i => $"{i.SiteName} - {i.StationName} of {i.PhenomenonName}").Distinct().OrderBy(i => i));
+            result.Metadata.Description = "Observations in the SAEON Observations Database for " +
+                string.Join("; ", observations.Select(i => $"{i.SiteName} - {i.StationName} of {i.PhenomenonName}, {i.OfferingName}, {i.UnitName}").Distinct().OrderBy(i => i));
+            // Keywords
+            result.Metadata.Subjects.AddRange(observations.Select(i => i.SiteName).Distinct().Select(i => new MetadataSubject { Name = i }));
+            result.Metadata.Subjects.AddRange(observations.Select(i => i.StationName).Distinct().Select(i => new MetadataSubject { Name = i }));
+            result.Metadata.Subjects.AddRange(observations.Select(i => i.PhenomenonName).Distinct().Select(i => new MetadataSubject { Name = i }));
+            result.Metadata.Subjects.AddRange(observations.Select(i => $"{i.PhenomenonName}, {i.OfferingName}, {i.UnitName}").Distinct().Select(i => new MetadataSubject { Name = i }));
+            // Dates
+            result.Metadata.StartDate = observations.Min(i => i.ValueDate);
+            result.Metadata.EndDate = observations.Min(i => i.ValueDate);
+            // Bounding box
+            result.Metadata.LatitudeNorth = observations.Max(i => i.Latitude);
+            result.Metadata.LatitudeSouth = observations.Min(i => i.Latitude);
+            result.Metadata.LongitudeEast = observations.Max(i => i.Longitude);
+            result.Metadata.LongitudeWest = observations.Min(i => i.Longitude);
+            result.Metadata.ElevationMaximum = observations.Max(i => i.Elevation);
+            result.Metadata.ElevationMinimum = observations.Min(i => i.Elevation);
+            // Places - Might come later
+            SAEONLogs.Verbose("Metadata: {@Metadata}", result.Metadata);
+            SAEONLogs.Verbose("Metadata: Stage {Stage} Total {Total}", stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
             //Chart series
             if (includeChart)
             {
@@ -408,8 +451,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     }
                     series.Add(obs.ValueDate, obs.DataValue);
                 }
-                SAEONLogs.Verbose("ChartSeries: Count: {count}", result.ChartSeries.Count);
+                SAEONLogs.Verbose("ChartSeries: Count: {count} Stage {Stage} Total {Total}", result.ChartSeries.Count, stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
+                stageStopwatch.Restart();
             }
+            SAEONLogs.Verbose("GetData: {Total}", stopwatch.Elapsed.TimeStr());
             return result;
         }
 
