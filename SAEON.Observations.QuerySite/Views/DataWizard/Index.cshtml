@@ -11,13 +11,13 @@
                 {
                     tabs.Add().ID("LocationsTab").Text("Locations")
                         .ContentTemplate(
-                                        @<div class="row">
-                                            <div class="col-md-6" id="PartialLocations">
-                                                @Html.Partial("_Locations", Model)
-                                            </div>
-                                            <div class="col-md-6" id="PartialLocationsSelected">
-                                            </div>
-                                        </div>);
+                                @<div class="row">
+                                    <div class="col-md-6" id="PartialLocations">
+                                        @Html.Partial("_Locations", Model)
+                                    </div>
+                                    <div class="col-md-6" id="PartialLocationsSelected">
+                                    </div>
+                                </div>);
                         tabs.Add().ID("VariablesTab").Text("Variables").ContentTemplate(
                                 @<div class="row">
                                     <div class="col-md-6" id="PartialVariables">
@@ -82,7 +82,7 @@ tabs.Add().ID("ChartTab").Text("Chart").ContentTemplate(
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=@ConfigurationManager.AppSettings["GoogleMapsAPIKey"]">
     </script>
     @*<script async defer src="https://maps.googleapis.com/maps/api/js?key=@ConfigurationManager.AppSettings["GoogleMapsAPIKey"]&callback=DataWizard.InitMap">
-    </script>*@
+        </script>*@
 }
 <style type="text/css" class="cssStyles">
     #target {

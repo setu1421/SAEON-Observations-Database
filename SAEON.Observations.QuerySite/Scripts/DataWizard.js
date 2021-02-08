@@ -265,9 +265,9 @@ function UpdateVariablesSelected(isClick = false) {
             }
         }
     }
-    $.post("/DataWizard/UpdateVariablesSelected", { Variables: selected })
+    $.post("/DataWizard/UpdateVariablesSelected", { variables: selected })
         .done(function (data) {
-        $('#PartialvariablesSelected').html(data);
+        $('#PartialVariablesSelected').html(data);
         SetApproximation();
         if (isClick) {
             HideResults();

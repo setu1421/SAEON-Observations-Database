@@ -15,6 +15,8 @@ using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
+
+    [RoutePrefix("Query/Data")]
     public class DataWizardController : BaseController<DataWizardModel>
     {
         protected override async Task<DataWizardModel> LoadModelAsync(DataWizardModel model)
@@ -34,6 +36,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         // GET: Data
         [HttpGet]
+        [Route]
         public async Task<ActionResult> Index()
         {
             ViewBag.Authorization = await GetAuthorizationAsync();

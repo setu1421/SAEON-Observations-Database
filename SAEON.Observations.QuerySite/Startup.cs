@@ -28,7 +28,7 @@ namespace SAEON.Observations.QuerySite
                 try
                 {
                     SAEONLogs.Verbose("AuthenticationServer: {AuthenticationServer}", ConfigurationManager.AppSettings["AuthenticationServerUrl"]);
-                    SyncfusionLicenseProvider.RegisterLicense("MzI2MjUyQDMxMzgyZTMzMmUzMEFiaktXTEM2OXhmcG4rNUp6emdjSnVGV3dMQktLZDBzY2lRUXo3WlBYeUk9;MzI2MjUzQDMxMzgyZTMzMmUzMEFveWppWlNSTVQzRWo2RXFldnVDMU1UQVI5M0VyN3luRUpyY0dkZkRRMWc9");
+                    SyncfusionLicenseProvider.RegisterLicense("Mzk0Nzc2QDMxMzgyZTM0MmUzMGlPREwxWmJGV3Rtck5GVmNNNzdlbXhFUk1IemVBWGZSbnV4aEt6MDcyOG89;Mzk0Nzc3QDMxMzgyZTM0MmUzMGtGdFdiM2FSamVMK295eWsrVGNjRzdZL2VkZk43R3c0NnhRT3hGbTU5RmM9");
 
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {

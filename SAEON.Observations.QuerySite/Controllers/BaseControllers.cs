@@ -1,14 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
+﻿//#define ODPAuth
 using SAEON.Core;
 using SAEON.Logs;
-using SAEON.Observations.Auth;
 using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Net.Http;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -35,7 +33,8 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        private async Task<string> GetAccessTokenAsync(bool useSession = true)
+#if ODPAuth
+private async Task<string> GetAccessTokenAsync(bool useSession = true)
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -132,14 +131,17 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+#endif
 
         protected async Task<string> GetAuthorizationAsync()
         {
             var token = Session[Constants.SessionKeyIdToken]?.ToString();
+#if ODPAuth
             if (string.IsNullOrWhiteSpace(token))
             {
                 token = GetBearerTokenFromAccessToken(await GetAccessTokenAsync());
             }
+#endif
             return $"Bearer {token}";
         }
 
@@ -170,7 +172,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     var client = GetWebAPIClientBase();
+#if ODPAuth
                     client.SetBearerToken(GetBearerTokenFromAccessToken(await GetAccessTokenAsync(useSession)));
+#endif
                     return client;
                 }
                 catch (Exception ex)
@@ -188,7 +192,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     var client = GetWebAPIClientBase();
+#if ODPAuth
                     client.SetBearerToken(GetIdToken(useSession));
+#endif
                     return client;
                 }
                 catch (Exception ex)
@@ -202,6 +208,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         protected async Task<HttpClient> GetWebAPIClientAsync(bool useSession = true)
         {
             var client = GetWebAPIClientBase();
+#if ODPAuth
             var token = Session[Constants.SessionKeyIdToken]?.ToString();
             if (!string.IsNullOrWhiteSpace(token))
             {
@@ -212,6 +219,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 token = await GetAccessTokenAsync(useSession);
                 client.SetBearerToken(GetBearerTokenFromAccessToken(token));
             }
+#endif
             return client;
         }
     }
