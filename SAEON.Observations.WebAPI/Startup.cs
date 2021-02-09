@@ -158,9 +158,9 @@ namespace SAEON.Observations.WebAPI
                         endpoints.MapDefaultControllerRoute();
                         endpoints.MapControllers();
                         endpoints.MapHub<AdminHub>("/AdminHub").RequireCors(SAEONAuthenticationDefaults.CorsAllowSignalRPolicy);
-                        endpoints.Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop);
-                        endpoints.MapODataRoute("Internal", "Internal", GetInternalEdmModel());
-                        endpoints.MapODataRoute("OData", "OData", GetODataEdmModel());
+                        //endpoints.Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop);
+                        endpoints.MapODataRoute("Internal", "Internal", GetInternalEdmModel()).Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop);
+                        endpoints.MapODataRoute("OData", "OData", GetODataEdmModel()).Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop); ;
                     });
                 }
                 catch (Exception ex)
