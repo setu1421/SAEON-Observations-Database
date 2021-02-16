@@ -51,6 +51,42 @@ USE [$(DatabaseName)];
 
 
 GO
+/*
+The column [dbo].[UserDownloads].[Citation] is being dropped, data loss could occur.
+
+The column [dbo].[UserDownloads].[ElevationMaximum] is being dropped, data loss could occur.
+
+The column [dbo].[UserDownloads].[ElevationMinimum] is being dropped, data loss could occur.
+
+The column [dbo].[UserDownloads].[EndDate] is being dropped, data loss could occur.
+
+The column [dbo].[UserDownloads].[Keywords] is being dropped, data loss could occur.
+
+The column [dbo].[UserDownloads].[LatitudeNorth] is being dropped, data loss could occur.
+
+The column [dbo].[UserDownloads].[LatitudeSouth] is being dropped, data loss could occur.
+
+The column [dbo].[UserDownloads].[LongitudeEast] is being dropped, data loss could occur.
+
+The column [dbo].[UserDownloads].[LongitudeWest] is being dropped, data loss could occur.
+
+The column [dbo].[UserDownloads].[MetadataJson] is being dropped, data loss could occur.
+
+The column [dbo].[UserDownloads].[MetadataURL] is being dropped, data loss could occur.
+
+The column [dbo].[UserDownloads].[OpenDataPlatformID] is being dropped, data loss could occur.
+
+The column [dbo].[UserDownloads].[Places] is being dropped, data loss could occur.
+
+The column [dbo].[UserDownloads].[StartDate] is being dropped, data loss could occur.
+
+The column [dbo].[UserDownloads].[Title] is being dropped, data loss could occur.
+*/
+
+IF EXISTS (select top 1 1 from [dbo].[UserDownloads])
+    RAISERROR (N'Rows were detected. The schema update is terminating because data loss might occur.', 16, 127) WITH NOWAIT
+
+GO
 PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueDecade]...';
 
 
@@ -95,6 +131,24 @@ ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [UX_Observation];
 
 
 GO
+PRINT N'Altering [dbo].[DigitalObjectIdentifiers]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TABLE [dbo].[DigitalObjectIdentifiers]
+    ADD [CitationHtml] VARCHAR (5000) NULL,
+        [CitationText] VARCHAR (5000) NULL;
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
 PRINT N'Altering [dbo].[ImportBatchSummary]...';
 
 
@@ -109,6 +163,60 @@ ALTER TABLE [dbo].[ImportBatchSummary]
 
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ElevationMaximum]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_ElevationMaximum]
+    ON [dbo].[ImportBatchSummary]([ElevationMaximum] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ElevationMinimum]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_ElevationMinimum]
+    ON [dbo].[ImportBatchSummary]([ElevationMinimum] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LatitudeNorth]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_LatitudeNorth]
+    ON [dbo].[ImportBatchSummary]([LatitudeNorth] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LatitudeSouth]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_LatitudeSouth]
+    ON [dbo].[ImportBatchSummary]([LatitudeSouth] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LongitudeEast]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_LongitudeEast]
+    ON [dbo].[ImportBatchSummary]([LongitudeEast] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LongitudeWest]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_LongitudeWest]
+    ON [dbo].[ImportBatchSummary]([LongitudeWest] ASC);
 
 
 GO
@@ -174,6 +282,38 @@ CREATE NONCLUSTERED INDEX [IX_Observation_StatusID]
     ON [dbo].[Observation]([StatusID] ASC)
     INCLUDE([SensorID], [PhenomenonOfferingID], [PhenomenonUOMID], [ImportBatchID])
     ON [Observations];
+
+
+GO
+PRINT N'Altering [dbo].[UserDownloads]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TABLE [dbo].[UserDownloads] DROP COLUMN [Citation], COLUMN [ElevationMaximum], COLUMN [ElevationMinimum], COLUMN [EndDate], COLUMN [Keywords], COLUMN [LatitudeNorth], COLUMN [LatitudeSouth], COLUMN [LongitudeEast], COLUMN [LongitudeWest], COLUMN [MetadataJson], COLUMN [MetadataURL], COLUMN [OpenDataPlatformID], COLUMN [Places], COLUMN [StartDate], COLUMN [Title];
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing [dbo].[vUserDownloads]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vUserDownloads]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO

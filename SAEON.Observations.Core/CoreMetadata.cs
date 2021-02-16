@@ -248,8 +248,9 @@ namespace SAEON.Observations.Core
         public string Title { get; set; }
         public string Description { get; set; }
         public string DescriptionHtml { get; set; }
-        public string ItemDescription { get; set; }
-        public string ItemUrl { get; set; }
+        //public string ItemDescription { get; set; }
+        //public string ItemUrl { get; set; }
+
         public List<MetadataRights> Rights { get; } = new List<MetadataRights> {
             new MetadataRights {
                 Name = "Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)",
@@ -318,6 +319,7 @@ namespace SAEON.Observations.Core
                 }
             }
         };
+        public DateTimeOffset? Accessed { get; set; }
         private DateTimeOffset? startDate;
         public DateTimeOffset? StartDate
         {

@@ -86,5 +86,7 @@ The column [dbo].[UserDownloads].[OpenDataPlatformID] is being dropped, data los
 The column [dbo].[UserDownloads].[Places] is being dropped, data loss could occur.
 The column [dbo].[UserDownloads].[StartDate] is being dropped, data loss could occur.
 The column [dbo].[UserDownloads].[Title] is being dropped, data loss could occur.
+If this deployment is executed, changes to [dbo].[vImportBatchSummary] might introduce run-time errors in [dbo].[vInventoryDataStreams].
+If this deployment is executed, changes to [dbo].[vObservationExpansion] might introduce run-time errors in [dbo].[vObservationApi].
 If this deployment is executed, changes to [dbo].[vObservationExpansion] might introduce run-time errors in [dbo].[vSensorObservations].
 

@@ -2,14 +2,16 @@
 using Microsoft.OpenApi.Models;
 using SAEON.Logs;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.Linq;
+#endif
+using System;
 
 namespace SAEON.Observations.Core
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public class SwaggerIgnoreAttribute : Attribute { }
 
+#if NET5_0
     public class SwaggerIgnoreFilter : ISchemaFilter
     {
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)
@@ -29,6 +31,5 @@ namespace SAEON.Observations.Core
             }
         }
     }
-
-}
 #endif
+}

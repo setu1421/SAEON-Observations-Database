@@ -18,6 +18,10 @@ namespace SAEON.Observations.WebAPI
         public string GenerateTitle(string name) => $"Observations in the SAEON Observations Database for {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {name}";
         public string GenerateDescription() => GenerateDescription(DOI.Name);
         public string GenerateDescription(string name) => $"The observations in the SAEON Observations Database for {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {name}";
+        public string CitationHtml => $"{Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). <a href='{DOI.DOIUrl}'>{DOI.DOIUrl}</a>" +
+            (!Accessed.HasValue ? "" : $". Accessed {Accessed:yyyy-MM-dd HH:mm}");
+        public string CitationText => $"{Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). {DOI.DOIUrl}" +
+            (!Accessed.HasValue ? "" : $". Accessed {Accessed:yyyy-MM-dd HH:mm}");
 
         public Metadata() { }
         public Metadata(MetadataCore metadata) : this()
@@ -25,6 +29,7 @@ namespace SAEON.Observations.WebAPI
             PublicationDate = metadata.PublicationDate;
             Title = metadata.Title;
             Description = metadata.Description;
+            Accessed = metadata.Accessed;
             StartDate = metadata.StartDate;
             EndDate = metadata.EndDate;
             Subjects.AddRange(metadata.Subjects);
@@ -88,22 +93,22 @@ namespace SAEON.Observations.WebAPI
             sbHtml.AppendHtmlH3(title);
             sbText.AppendLine(description);
             sbHtml.AppendHtmlP(description);
-            if (!string.IsNullOrWhiteSpace(ItemDescription))
-            {
-                var itemDescription = ItemDescription;
-                if (!string.IsNullOrWhiteSpace(ItemUrl))
-                {
-                    if (ItemUrl.StartsWith("http", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        itemDescription += $" <a href='{ItemUrl}'>{ItemUrl}</a>";
-                    }
-                    else
-                    {
-                        itemDescription += $" {ItemUrl}";
-                    }
-                }
-                sbHtml.AppendHtmlP(itemDescription);
-            }
+            //if (!string.IsNullOrWhiteSpace(ItemDescription))
+            //{
+            //    var itemDescription = ItemDescription;
+            //    if (!string.IsNullOrWhiteSpace(ItemUrl))
+            //    {
+            //        if (ItemUrl.StartsWith("http", StringComparison.InvariantCultureIgnoreCase))
+            //        {
+            //            itemDescription += $" <a href='{ItemUrl}'>{ItemUrl}</a>";
+            //        }
+            //        else
+            //        {
+            //            itemDescription += $" {ItemUrl}";
+            //        }
+            //    }
+            //    sbHtml.AppendHtmlP(itemDescription);
+            //}
             if (DOI.Parent != null)
             {
                 sbText.AppendLine($"This collection is part of the {(DOI.Parent.DOIType == DOIType.ObservationsDb ? "" : DOI.Parent.DOIType.Humanize(LetterCasing.LowerCase))} {DOI.Parent.Name} doi:{DOI.Parent.DOI}");
@@ -166,7 +171,7 @@ namespace SAEON.Observations.WebAPI
             {
                 sbHtml.AppendHtmlP($"{"Query URL:".HtmlB()} <a href='{DOI.QueryUrl}'>{DOI.QueryUrl}</a>".Trim());
             }
-            sbHtml.AppendHtmlP($"{"Citation:".HtmlB()} {Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). <a href='{DOI.DOIUrl}'>{DOI.DOIUrl}</a>");
+            sbHtml.AppendHtmlP($"{"Citation:".HtmlB()} {CitationHtml}");
             Description = sbText.ToString().Replace(Environment.NewLine, " ").Replace("  ", " ").Trim(); //.Replace(Environment.NewLine,"<br>");
             DescriptionHtml = sbHtml.ToString();
         }

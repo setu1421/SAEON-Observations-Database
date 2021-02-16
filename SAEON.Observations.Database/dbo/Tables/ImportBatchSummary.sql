@@ -68,3 +68,21 @@ CREATE INDEX [IX_ImportBatchSummary_StartDate] ON [dbo].[ImportBatchSummary] ([S
 
 GO
 CREATE INDEX [IX_ImportBatchSummary_EndDate] ON [dbo].[ImportBatchSummary] ([EndDate])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_LatitudeSouth] ON [dbo].[ImportBatchSummary] ([LatitudeSouth])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_LatitudeNorth] ON [dbo].[ImportBatchSummary] ([LatitudeNorth])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_LongitudeWest] ON [dbo].[ImportBatchSummary] ([LongitudeWest])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_LongitudeEast] ON [dbo].[ImportBatchSummary] ([LongitudeEast])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_ElevationMinimum] ON [dbo].[ImportBatchSummary] ([ElevationMinimum])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_ElevationMaximum] ON [dbo].[ImportBatchSummary] ([ElevationMaximum])

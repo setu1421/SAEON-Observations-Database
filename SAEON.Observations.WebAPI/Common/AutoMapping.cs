@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SAEON.Observations.Core;
 
 namespace SAEON.Observations.WebAPI
 {

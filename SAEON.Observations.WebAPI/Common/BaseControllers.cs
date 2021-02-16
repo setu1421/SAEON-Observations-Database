@@ -2,6 +2,7 @@
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,6 +30,8 @@ namespace SAEON.Observations.WebAPI
         protected IConfiguration Config => config ??= HttpContext.RequestServices.GetRequiredService<IConfiguration>();
         private ObservationsDbContext dbContext;
         protected ObservationsDbContext DbContext => dbContext ??= HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
+        private IWebHostEnvironment hostEnvironment;
+        protected IWebHostEnvironment HostEnvironment => hostEnvironment ??= HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>();
     }
 
     public abstract class BaseApiListController<TObject> : BaseApiController where TObject : class
