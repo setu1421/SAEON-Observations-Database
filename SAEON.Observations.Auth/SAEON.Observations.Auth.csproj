@@ -9,7 +9,7 @@
     <Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <ApplicationIcon>SAEON.ico</ApplicationIcon>
-    <Version>1.0.19</Version>
+    <Version>1.0.20</Version>
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SAEON.Logs.NetCore" Version="1.0.51" />
+    <PackageReference Include="SAEON.Logs.NetCore" Version="1.0.52" />
   </ItemGroup>
 
 </Project>
