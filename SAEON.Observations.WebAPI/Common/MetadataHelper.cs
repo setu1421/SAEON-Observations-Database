@@ -22,8 +22,8 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     var doiObservations = await dbContext.DigitalObjectIdentifiers.Include(i => i.Children).SingleAsync(i => i.DOIType == DOIType.ObservationsDb);
-                    var metaObservations = await MetadataForDOIAsync(doiObservations, null);
-                    var metadata = await MetadataForDOIAsync(doi, metaObservations);
+                    var metaObservations = MetadataForDOIAsync(doiObservations, null);
+                    var metadata = MetadataForDOIAsync(doi, metaObservations);
                     return metadata;
                 }
                 catch (Exception ex)
@@ -33,7 +33,7 @@ namespace SAEON.Observations.WebAPI
                 }
             }
 
-            async Task<Metadata> MetadataForDOIAsync(DigitalObjectIdentifier doi, Metadata parent, string itemDescription = null, string itemUrl = null)
+            Metadata MetadataForDOIAsync(DigitalObjectIdentifier doi, Metadata parent/*, string itemDescription = null, string itemUrl = null*/)
             {
                 SAEONLogs.Information("{DOIType} {Code}, {Name}", doi.DOIType, doi.Code, doi.Name);
                 var metadata = new Metadata(metadataCore)

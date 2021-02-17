@@ -1,12 +1,21 @@
-﻿//#define ODPAuth
+﻿#define ODPAuth
+#if ODPAuth
+using Newtonsoft.Json.Linq;
+#endif
 using SAEON.Core;
 using SAEON.Logs;
+#if ODPAuth
+using SAEON.Observations.Auth;
+#endif
 using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Net.Http;
+#if ODPAuth
+using System.Security.Claims;
+#endif
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -34,7 +43,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
 #if ODPAuth
-private async Task<string> GetAccessTokenAsync(bool useSession = true)
+        private async Task<string> GetAccessTokenAsync(bool useSession = true)
         {
             using (SAEONLogs.MethodCall(GetType()))
             {

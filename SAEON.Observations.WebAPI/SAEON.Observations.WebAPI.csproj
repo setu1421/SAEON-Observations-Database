@@ -47,7 +47,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="SAEON.Observations.Auth" Version="1.0.20" />
-    <PackageReference Include="SAEON.OpenXML" Version="1.0.95" />
+    <PackageReference Include="SAEON.OpenXML" Version="1.0.96" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.0.5" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.0.5" />
   </ItemGroup>
