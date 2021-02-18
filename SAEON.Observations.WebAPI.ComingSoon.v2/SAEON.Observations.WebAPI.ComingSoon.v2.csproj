@@ -11,6 +11,7 @@
     <ApplicationIcon>SAEON.ico</ApplicationIcon>
     <ApplicationInsightsResourceId>/subscriptions/53cea979-29f9-43db-aa3d-8349a5bd3452/resourcegroups/SAEON.Observations/providers/microsoft.insights/components/SAEON.Observations.WebAPI</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/53cea979-29f9-43db-aa3d-8349a5bd3452/resourcegroups/SAEON.Observations/providers/microsoft.insights/components/SAEON.Observations.WebAPI</ApplicationInsightsAnnotationResourceId>
+    <UserSecretsId>40f3c408-e116-435d-b58c-41a3d1c7a390</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

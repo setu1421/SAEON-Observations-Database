@@ -9,6 +9,7 @@
     <Description>SAEON Observations - QuerySite</Description>
     <Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
     <ApplicationInsightsResourceId>/subscriptions/53cea979-29f9-43db-aa3d-8349a5bd3452/resourcegroups/SAEON.Observations/providers/microsoft.insights/components/SAEON.Observations.QuerySite</ApplicationInsightsResourceId>
+    <UserSecretsId>21bc45eb-cc86-4b09-85b2-a4373ca4b648</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
