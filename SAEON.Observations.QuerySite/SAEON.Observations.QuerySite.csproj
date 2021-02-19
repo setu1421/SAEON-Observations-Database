@@ -690,7 +690,6 @@
     <Content Include="Images\SAEON logo.png" />
     <Content Include="Images\SMCRI Booklet-map.jpg" />
     <Content Include="Properties\PublishProfiles\App03.pubxml.user" />
-    <Content Include="Properties\PublishProfiles\Local Folder.pubxml.user" />
     <Content Include="robots.txt" />
     <Content Include="SAEON.ico" />
     <Content Include="package.json" />
@@ -745,7 +744,6 @@
     <Content Include="Content\ej\mobile\images\ejmmobilefonts.ttf" />
     <Content Include="Content\ej\mobile\images\ejmmobilefonts.eot" />
     <None Include="Properties\PublishProfiles\App03.pubxml" />
-    <None Include="Properties\PublishProfiles\Local Folder.pubxml" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
     <Content Include="Scripts\Admin.js" />
     <Content Include="Scripts\Admin.min.js">

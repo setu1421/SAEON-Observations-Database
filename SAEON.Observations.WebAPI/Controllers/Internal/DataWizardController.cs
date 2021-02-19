@@ -237,7 +237,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 .ThenBy(obs => obs.SensorName)
                 .ThenBy(obs => obs.ValueDate)
                 .ThenBy(obs => obs.Elevation)
-                .ToList() // Force to database query
+                .AsEnumerable() // Force fetch from database
                 .Where(ibs =>
                     (!input.Locations.Any() || input.Locations.Contains(new Location { StationId = ibs.StationId })) &&
                     (!input.Variables.Any() || input.Variables.Contains(new Variable { PhenomenonId = ibs.PhenomenonId, OfferingId = ibs.OfferingId, UnitId = ibs.UnitId })))

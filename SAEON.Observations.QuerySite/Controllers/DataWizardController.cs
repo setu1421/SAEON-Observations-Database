@@ -60,7 +60,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         LoadEnabled = model.IsAuthenticated && model.UserQueries.Any(),
                         SaveEnabled = model.IsAuthenticated && model.LocationNodesSelected.Any() && model.VariableNodesSelected.Any(),
                         SearchEnabled = model.LocationNodesSelected.Any() && model.VariableNodesSelected.Any() && (model.Approximation.RowCount > 0),
-                        DownloadEnabled = model.IsAuthenticated && model.LocationNodesSelected.Any() && model.VariableNodesSelected.Any() && model.HaveSearched
+                        DownloadEnabled = model.IsAuthenticated && model.LocationNodesSelected.Any() && model.VariableNodesSelected.Any() && (model.Approximation.RowCount > 0) && model.HaveSearched
                     };
                     SAEONLogs.Verbose("State: {@State}", result);
                     return Json(result, JsonRequestBehavior.AllowGet);
@@ -72,11 +72,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-
         #endregion
 
         #region Locations
-
         [HttpGet]
         public JsonResult GetLocations()
         {
@@ -246,7 +244,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-
         #endregion Locations
 
         #region Variables
@@ -383,7 +380,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-
         #endregion Variables
 
         #region Filters
@@ -453,7 +449,6 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion Map
 
         #region Approximation
-
         [HttpGet]
         public async Task<PartialViewResult> SetApproximation()
         {
@@ -500,11 +495,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-
         #endregion Approximation
 
         #region Data
-
         [HttpGet]
         public async Task<EmptyResult> GetData()
         {
@@ -532,7 +525,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-
         #endregion Data
 
         #region Table
@@ -582,7 +574,6 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion Chart
 
         #region UserQueries
-
         //[Authorize]
         private async Task<List<UserQuery>> GetUserQueriesList()
         {
@@ -678,11 +669,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-
         #endregion UserQueries
 
         #region SaveQueryDialog
-
         [HttpPost]
         [Authorize]
         public async Task<EmptyResult> SaveQuery(SaveQueryModel input)
@@ -738,11 +727,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-
         #endregion SaveQueryDialog
 
         #region Download
-
         [HttpGet]
         public PartialViewResult GetDownloadDialog()
         {
@@ -852,7 +839,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-
         #endregion Download
     }
 }
