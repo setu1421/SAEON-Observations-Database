@@ -28,6 +28,8 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [HttpGet]
         [ODataRoute("({id})")]
         [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
+        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+
         public virtual SingleResult<TEntity> GetById(Guid id)
         {
             using (SAEONLogs.MethodCall<SingleResult<TEntity>>(GetType(), new MethodCallParameters { { "Id", id } }))
@@ -48,6 +50,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [HttpGet]
         [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
         //[ODataRoute("({id})/TRelated")] required on calling class
+        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
         protected TRelated GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
         {
             using (SAEONLogs.MethodCall<SingleResult<TRelated>>(GetType()))
@@ -70,6 +73,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [HttpGet]
         [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
         //[ODataRoute("({id})/TRelated")] required on calling class
+        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
         protected IQueryable<TRelated> GetManyWithGuidId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : GuidIdEntity
         {
             using (SAEONLogs.MethodCall<TRelated>(GetType()))
@@ -91,6 +95,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [HttpGet]
         [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
         //[ODataRoute("({id})/TRelated")] required on calling class
+        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
         protected IQueryable<TRelated> GetManyWithIntId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : IntIdEntity
         {
             using (SAEONLogs.MethodCall<TRelated>(GetType()))
@@ -112,6 +117,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [HttpGet]
         [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
         //[ODataRoute("({id})/TRelated")] required on calling class
+        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
         protected IQueryable<TRelated> GetManyWithLongId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : LongIdEntity
         {
             using (SAEONLogs.MethodCall<TRelated>(GetType()))

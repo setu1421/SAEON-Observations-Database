@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 #endif
 using SAEON.Core;
 using SAEON.Logs;
+using SAEON.Observations.Core;
 #if ODPAuth
 using SAEON.Observations.Auth;
 #endif
@@ -22,7 +23,8 @@ using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
-    public class BaseController : Controller
+    [OutputCache(Duration = Defaults.CacheDuration)]
+    public abstract class BaseController : Controller
     {
         protected string Tenant
         {
@@ -233,7 +235,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
     }
 
-    public class BaseController<TModel> : BaseController where TModel : BaseModel, new()
+    public abstract class BaseController<TModel> : BaseController where TModel : BaseModel, new()
     {
         //public List<string> ModelStateErrors
         //{

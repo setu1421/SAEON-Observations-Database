@@ -24,6 +24,8 @@ namespace SAEON.Observations.WebAPI
     [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
 #endif
     [ApiController]
+    [ResponseCache(Duration = Defaults.CacheDuration)]
+
     public abstract class BaseApiController : ControllerBase
     {
         private IConfiguration config;
@@ -114,6 +116,7 @@ namespace SAEON.Observations.WebAPI
 
     #region MvcControllers
     [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
+    [ResponseCache(Duration = Defaults.CacheDuration)]
     public abstract class BaseMvcController : Controller
     {
         private IConfiguration config;
@@ -129,6 +132,7 @@ namespace SAEON.Observations.WebAPI
     [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
 #endif
     [ApiExplorerSettings(IgnoreApi = true)]
+    [ResponseCache(Duration = Defaults.CacheDuration)]
     public abstract class BaseODataController<TEntity> : ODataController where TEntity : BaseEntity
     {
         public static string BaseUrl { get; set; }
