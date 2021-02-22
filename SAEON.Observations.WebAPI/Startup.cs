@@ -1,4 +1,3 @@
-using AutoMapper;
 using HealthChecks.UI.Client;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
@@ -31,7 +30,7 @@ namespace SAEON.Observations.WebAPI
             Configuration = configuration;
             try
             {
-                SAEONLogs.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName, SAEONLogs.Level);
+                SAEONLogs.Information("Starting {Application} LogLevel: {LogLevel} Test: {Test}", ApplicationHelper.ApplicationName, SAEONLogs.Level, configuration["Test"]);
                 SAEONLogs.Debug("AuthenticationServerUrl: {AuthenticationServerUrl} AuthenticationServerIntrospectionUrl: {AuthenticationServerIntrospectionUrl}",
                     Configuration["AuthenticationServerUrl"], Configuration["AuthenticationServerIntrospectionUrl"]);
             }
