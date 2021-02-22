@@ -724,7 +724,7 @@ namespace SAEON.Observations.Core
         // Navigation
         [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
         public DataSource DataSource { get; set; }
-        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
+        [JsonIgnore, SwaggerIgnore]
         public Phenomenon Phenomenon { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public List<Instrument> Instruments { get; set; }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using SAEON.Observations.Core;
+using System.Linq;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {

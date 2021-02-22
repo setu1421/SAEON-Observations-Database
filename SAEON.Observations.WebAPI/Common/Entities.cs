@@ -1,10 +1,9 @@
-﻿using SAEON.Observations.Core;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace SAEON.Observations.WebAPI
+namespace SAEON.Observations.Core
 {
     /// <summary>
     /// OrganisationRole entity

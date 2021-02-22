@@ -10,11 +10,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:SAEON.Observations.WebAPI.OrganisationRole">
-            <summary>
-            OrganisationRole entity
-            </summary>
-        </member>
         <member name="M:SAEON.Observations.WebAPI.Controllers.OData.IDEntityODataController`1.GetById(System.Guid)">
             <summary>
             Get a TEntity by Id
@@ -516,6 +511,11 @@
             </summary>
             <param name="name">The Name of the TEntity</param>
             <returns>TEntity</returns>
+        </member>
+        <member name="T:SAEON.Observations.Core.OrganisationRole">
+            <summary>
+            OrganisationRole entity
+            </summary>
         </member>
     </members>
 </doc>
