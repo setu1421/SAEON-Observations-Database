@@ -1,8 +1,10 @@
 ﻿using SAEON.Logs;
+using SAEON.Observations.Core;
 using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
+    [OutputCache(Duration = Defaults.CacheDuration)]
     public class HomeController : Controller
     {
         public ActionResult Index()
