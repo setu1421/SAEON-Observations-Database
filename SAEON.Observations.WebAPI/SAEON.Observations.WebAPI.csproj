@@ -62,27 +62,32 @@
       <IsTransformFile>true</IsTransformFile>
       <DependentUpon>appsettings.json</DependentUpon>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>false</CopyToPublishDirectory>
     </Content>
     <Content Update="appsettings.App03.json">
       <IsTransformFile>true</IsTransformFile>
       <DependentUpon>appsettings.json</DependentUpon>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>false</CopyToPublishDirectory>
     </Content>
     <Content Update="appsettings.Debug.json">
       <IsTransformFile>true</IsTransformFile>
       <DependentUpon>appsettings.json</DependentUpon>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>false</CopyToPublishDirectory>
     </Content>
     <Content Update="appsettings.Development.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Update="appsettings.json">
-      <TransformOnBuild>true</TransformOnBuild>
+      <CopyToPublishDirectory>false</CopyToPublishDirectory>
     </Content>
     <Content Update="appsettings.Release.json">
       <IsTransformFile>true</IsTransformFile>
       <DependentUpon>appsettings.json</DependentUpon>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>false</CopyToPublishDirectory>
+    </Content>
+    <Content Update="appsettings.json">
+      <TransformOnBuild>true</TransformOnBuild>
     </Content>
   </ItemGroup>
 
