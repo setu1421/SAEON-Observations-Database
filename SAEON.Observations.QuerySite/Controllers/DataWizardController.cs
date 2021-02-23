@@ -12,11 +12,13 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
 
     [RoutePrefix("Query/Data")]
+    [OutputCache(Duration = 0, Location = OutputCacheLocation.None, NoStore = true)]
     public class DataWizardController : BaseController<DataWizardModel>
     {
         protected override async Task<DataWizardModel> LoadModelAsync(DataWizardModel model)

@@ -9,6 +9,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     [EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public abstract class InternalApiController : BaseApiController
     {
     }
@@ -17,6 +18,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     [EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public abstract class InternalApiListController<TEntity> : BaseApiListController<TEntity> where TEntity : class
     {
     }
@@ -25,6 +27,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     [EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public abstract class InternalApiEntityController<TEntity> : BaseApiEntityController<TEntity> where TEntity : BaseEntity
     {
     }
@@ -33,6 +36,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     [EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public abstract class InternalMvcController : BaseMvcController
     {
     }
@@ -40,6 +44,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     [EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public abstract class InternalODataController<TEntity> : BaseODataController<TEntity> where TEntity : BaseEntity
     {
     }

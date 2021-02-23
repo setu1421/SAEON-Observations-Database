@@ -76,13 +76,20 @@ tabs.Add().ID("ChartTab").Text("Chart").ContentTemplate(
             $('[data-toggle="tooltip"]').tooltip();
             //DataWizard.Testing();
             DataWizard.HideResults();
-            DataWizard.InitMap();
         });
+        function waitForMap() {
+            if (typeof DataWizard !== "undefined") {
+                DataWizard.InitMap();
+            }
+            else {
+                setTimeout(waitForMap, 250);
+            }
+        }
+        window.InitMap = function () {
+            waitForMap();
+        }
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=@ConfigurationManager.AppSettings["GoogleMapsAPIKey"]">
-    </script>
-    @*<script async defer src="https://maps.googleapis.com/maps/api/js?key=@ConfigurationManager.AppSettings["GoogleMapsAPIKey"]&callback=DataWizard.InitMap">
-        </script>*@
+    <script async src="https://maps.googleapis.com/maps/api/js?key=@ConfigurationManager.AppSettings["GoogleMapsAPIKey"]&callback=InitMap"></script>
 }
 <style type="text/css" class="cssStyles">
     #target {
