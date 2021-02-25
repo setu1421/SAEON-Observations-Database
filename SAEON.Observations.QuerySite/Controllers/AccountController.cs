@@ -1,4 +1,7 @@
-﻿using System.Web;
+﻿using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.OpenIdConnect;
+using System.Web;
 using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
@@ -15,15 +18,25 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         public ActionResult LogOut()
         {
-            Request.GetOwinContext().Authentication.SignOut("Cookies");
-            //Request.GetOwinContext().Authentication.SignOut();
+
+            Request.GetOwinContext().Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
+            Request.GetOwinContext().Authentication.SignOut(OpenIdConnectAuthenticationDefaults.AuthenticationType);
+            Request.GetOwinContext().Authentication.SignOut();
             return Redirect("/");
         }
 
         public ActionResult Register()
         {
-            //SAEONLogs.Information("ReturnUrl: {returnUrl}", Properties.Settings.Default.IdentityServerUrl + $"/Account/Register?returnUrl={Properties.Settings.Default.QuerySiteUrl}");
-            //return Redirect(Properties.Settings.Default.IdentityServerUrl + $"/Account/Register?returnUrl={Properties.Settings.Default.QuerySiteUrl}");
+            if (!Request.IsAuthenticated)
+            {
+                Request.GetOwinContext().Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
+                Request.GetOwinContext().Authentication.SignOut(OpenIdConnectAuthenticationDefaults.AuthenticationType);
+                Request.GetOwinContext().Authentication.SignOut();
+                var properties = new AuthenticationProperties { RedirectUri = "/" };
+                properties.Dictionary.Add("ODPRegister", "true");
+                Request.GetOwinContext().Authentication.Challenge(properties, OpenIdConnectAuthenticationDefaults.AuthenticationType);
+                return new HttpUnauthorizedResult();
+            }
             return Redirect("/");
         }
 

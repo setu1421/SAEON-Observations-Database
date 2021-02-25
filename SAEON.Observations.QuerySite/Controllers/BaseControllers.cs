@@ -1,4 +1,4 @@
-﻿//#define ODPAuth
+﻿#define ODPAuth
 #if ODPAuth
 using Newtonsoft.Json.Linq;
 #endif
@@ -26,6 +26,15 @@ namespace SAEON.Observations.QuerySite.Controllers
     [OutputCache(Duration = Defaults.CacheDuration)]
     public abstract class BaseController : Controller
     {
+        public BaseController() : base()
+        {
+#if ODPAuth
+            ViewBag.ODPAuth = true;
+#else
+            ViewBag.ODPAuth = false;
+#endif
+        }
+
         protected string Tenant
         {
             get

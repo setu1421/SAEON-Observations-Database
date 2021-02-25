@@ -41,16 +41,16 @@ RAISERROR('Deleting SchemaColumn', 0, 1) WITH NOWAIT
 Delete SchemaColumn
 RAISERROR('Deleting DataSchema', 0, 1) WITH NOWAIT
 Delete DataSchema
-RAISERROR('Deleting PhenomenonOffering', 0, 1) WITH NOWAIT
-Delete PhenomenonOffering
-RAISERROR('Deleting PhenomenonUOM', 0, 1) WITH NOWAIT
-Delete PhenomenonUOM
-RAISERROR('Deleting Phenomenon', 0, 1) WITH NOWAIT
-Delete Phenomenon
-RAISERROR('Deleting Offering', 0, 1) WITH NOWAIT
-Delete Offering
-RAISERROR('Deleting UnitOfMeasure', 0, 1) WITH NOWAIT
-Delete UnitOfMeasure
+--RAISERROR('Deleting PhenomenonOffering', 0, 1) WITH NOWAIT
+--Delete PhenomenonOffering
+--RAISERROR('Deleting PhenomenonUOM', 0, 1) WITH NOWAIT
+--Delete PhenomenonUOM
+--RAISERROR('Deleting Phenomenon', 0, 1) WITH NOWAIT
+--Delete Phenomenon
+--RAISERROR('Deleting Offering', 0, 1) WITH NOWAIT
+--Delete Offering
+--RAISERROR('Deleting UnitOfMeasure', 0, 1) WITH NOWAIT
+--Delete UnitOfMeasure
 RAISERROR('Done', 0, 1) WITH NOWAIT
 
 

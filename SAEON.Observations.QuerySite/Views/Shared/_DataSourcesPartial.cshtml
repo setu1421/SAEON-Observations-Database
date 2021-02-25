@@ -8,7 +8,7 @@
         tenants.Add((split[0], split[1]));
     }
 }
-@if ((Session != null) &&tenants.Any())
+@if ((Session != null) && tenants.Any())
 {
     var sessionTenant = Session[Constants.SessionKeyTenant]?.ToString() ?? ConfigurationManager.AppSettings[Constants.ConfigKeyDefaultTenant] ?? "Fynbos";
     <li class="nav-item dropdown">

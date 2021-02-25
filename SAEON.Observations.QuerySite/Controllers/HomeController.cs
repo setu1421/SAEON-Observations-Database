@@ -1,12 +1,14 @@
 ﻿using SAEON.Logs;
 using SAEON.Observations.Core;
 using System.Web.Mvc;
+using System.Web.UI;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
     [OutputCache(Duration = Defaults.CacheDuration)]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
+        [OutputCache(Duration = 0, Location = OutputCacheLocation.None, NoStore = true)]
         public ActionResult Index()
         {
             return View();
@@ -31,6 +33,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [Route("SetTenant/{Name}")]
+        [OutputCache(Duration = 0, Location = OutputCacheLocation.None, NoStore = true)]
         public ActionResult SetTenant(string name)
         {
             using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Name", name } }))

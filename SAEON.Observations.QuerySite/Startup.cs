@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin;
+﻿using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Newtonsoft.Json.Linq;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 [assembly: OwinStartupAttribute(typeof(SAEON.Observations.QuerySite.Startup))]
 
@@ -92,7 +94,7 @@ namespace SAEON.Observations.QuerySite
                                             SAEONLogs.Debug("ODPAuthentication id token succeeded Claims: {@Claims}", claims.ToClaimsList());
                                             context.AuthenticationTicket.Identity.AddClaims(claims);
                                         }
-                                        else
+                                        else // Id token
                                         {
                                             var clientId = jObj.Value<string>("client_id");
                                             var userId = jObj["ext"].Value<string>("user_id");
@@ -119,11 +121,23 @@ namespace SAEON.Observations.QuerySite
                                     }
                                 }
                             },
-                            //RedirectToIdentityProvider = (context) =>
-                            //{
-                            //    SAEONLogs.Information("*** RedirectToIdentityProvider {@ProtocolMessage}", context.ProtocolMessage);
-                            //    return Task.FromResult(0);
-                            //},
+                            RedirectToIdentityProvider = (context) =>
+                            {
+                                SAEONLogs.Information("*** RedirectToIdentityProvider {@ProtocolMessage}", context.ProtocolMessage);
+                                if (context.ProtocolMessage.RequestType == OpenIdConnectRequestType.Authentication)
+                                {
+                                    if (context.OwinContext.Authentication.AuthenticationResponseChallenge.Properties.Dictionary.ContainsKey("ODPRegister"))
+                                        context.ProtocolMessage.SetParameter("mode", "signup");
+                                }
+                                else if (context.ProtocolMessage.RequestType == OpenIdConnectRequestType.Logout)
+                                {
+                                    SAEONLogs.Information("Claims: {claims}", context.OwinContext.Authentication.User.Claims.ToClaimsList());
+                                    var idTokenHint = context.OwinContext.Authentication.User.FindFirst(Constants.IdTokenClaim)?.Value;
+                                    context.ProtocolMessage.IdTokenHint = idTokenHint;
+                                }
+                                SAEONLogs.Information("*** RedirectToIdentityProvider {@ProtocolMessage}", context.ProtocolMessage);
+                                return Task.FromResult(0);
+                            },
                             //MessageReceived = (context) =>
                             //{
                             //    SAEONLogs.Information("*** MessageReceived {@ProtocolMessage}", context.ProtocolMessage);
@@ -151,6 +165,7 @@ namespace SAEON.Observations.QuerySite
                             //},
                         }
                     });
+                    // Make sure ODP is available
                     // Make sure WebAPI is available
                 }
                 catch (Exception ex)
