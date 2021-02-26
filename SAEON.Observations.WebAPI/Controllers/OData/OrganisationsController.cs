@@ -7,7 +7,7 @@ using System.Linq;
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     [ODataRoutePrefix("Organisations")]
-    public class OrganisationsController : NamedODataController<Organisation>
+    public class OrganisationsController : CodedNamedODataController<Organisation>
     {
         [ODataRoute("({id})/Sites")]
         public IQueryable<Site> GetSites(Guid id)

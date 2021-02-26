@@ -1,4 +1,5 @@
-﻿using SAEON.Logs;
+﻿using SAEON.Core;
+using SAEON.Logs;
 using System;
 using System.Configuration;
 using System.Web.Hosting;
@@ -19,8 +20,7 @@ namespace SAEON.Observations.QuerySite
             {
                 try
                 {
-                    SAEONLogs.Verbose("Starting application");
-                    SAEONLogs.Information("LogLevel: {LogLevel}", SAEONLogs.Level);
+                    SAEONLogs.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName);
                     AreaRegistration.RegisterAllAreas();
                     FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
                     RouteConfig.RegisterRoutes(RouteTable.Routes);

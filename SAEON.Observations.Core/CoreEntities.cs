@@ -167,8 +167,22 @@ namespace SAEON.Observations.Core
         public virtual string Code { get; set; }
     }
 
-    public abstract class NamedEntity : CodedEntity
+    public abstract class NamedEntity : IdedEntity
     {
+        /// <summary>
+        /// Name of the Entity
+        /// </summary>
+        [Required, StringLength(150)]
+        public string Name { get; set; }
+    }
+
+    public abstract class CodedNamedEntity : IdedEntity
+    {
+        /// <summary>
+        /// Code of the Entity
+        /// </summary>
+        [Required, StringLength(50)]
+        public virtual string Code { get; set; }
         /// <summary>
         /// Name of the Entity
         /// </summary>
@@ -180,7 +194,7 @@ namespace SAEON.Observations.Core
     /// Data Schema entity
     /// </summary>
     [Table("DataSchema")]
-    public class DataSchema : NamedEntity
+    public class DataSchema : CodedNamedEntity
     {
         /// <summary>
         /// DataSourceTypeId of the DataSchema
@@ -192,6 +206,11 @@ namespace SAEON.Observations.Core
         /// </summary>
         [StringLength(5000)]
         public string Description { get; set; }
+        /// <summary>
+        /// Delimiter of the DataSchema
+        /// </summary>
+        [StringLength(3)]
+        public string Delimiter { get; set; }
 
         // Navigation
         [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
@@ -202,7 +221,7 @@ namespace SAEON.Observations.Core
     /// Data Source entity
     /// </summary>
     [Table("DataSource")]
-    public class DataSource : NamedEntity
+    public class DataSource : CodedNamedEntity
     {
         public Guid DataSchemaId { get; set; }
         /// <summary>
@@ -437,7 +456,7 @@ namespace SAEON.Observations.Core
     /// Instrument entity
     /// </summary>
     [Table("Instrument")]
-    public class Instrument : NamedEntity
+    public class Instrument : CodedNamedEntity
     {
         /// <summary>
         /// Description of the Instrument
@@ -493,7 +512,7 @@ namespace SAEON.Observations.Core
     /// Offering entity
     /// </summary>
     [Table("Offering")]
-    public class Offering : NamedEntity
+    public class Offering : CodedNamedEntity
     {
         /// <summary>
         /// Description of the Offering
@@ -516,7 +535,7 @@ namespace SAEON.Observations.Core
     /// Organisation entity
     /// </summary>
     [Table("Organisation")]
-    public class Organisation : NamedEntity
+    public class Organisation : CodedNamedEntity
     {
         /// <summary>
         /// Description of the Organisation
@@ -558,7 +577,7 @@ namespace SAEON.Observations.Core
     /// Phenomenon entity
     /// </summary>
     [Table("Phenomenon")]
-    public class Phenomenon : NamedEntity
+    public class Phenomenon : CodedNamedEntity
     {
         /// <summary>
         /// Description of the Phenomenon
@@ -592,7 +611,7 @@ namespace SAEON.Observations.Core
     /// Programme entity
     /// </summary>
     [Table("Programme")]
-    public class Programme : NamedEntity
+    public class Programme : CodedNamedEntity
     {
         /// <summary>
         /// Description of the Programme
@@ -636,7 +655,7 @@ namespace SAEON.Observations.Core
     /// Project entity
     /// </summary>
     [Table("Project")]
-    public class Project : NamedEntity
+    public class Project : CodedNamedEntity
     {
         /// <summary>
         /// The Programme of the Project
@@ -688,7 +707,7 @@ namespace SAEON.Observations.Core
     /// Sensor entity
     /// </summary>
     [Table("Sensor")]
-    public class Sensor : NamedEntity
+    public class Sensor : CodedNamedEntity
     {
         [StringLength(75)]
         public override string Code { get => base.Code; set => base.Code = value; }
@@ -742,7 +761,7 @@ namespace SAEON.Observations.Core
     /// Site entity
     /// </summary>
     [Table("Site")]
-    public class Site : NamedEntity
+    public class Site : CodedNamedEntity
     {
         /// <summary>
         /// Description of the Site
@@ -789,7 +808,7 @@ namespace SAEON.Observations.Core
     /// Station entity
     /// </summary>
     [Table("Station")]
-    public class Station : NamedEntity
+    public class Station : CodedNamedEntity
     {
         /// <summary>
         /// Description of the Station

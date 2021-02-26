@@ -240,13 +240,88 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
     }
 
-    public abstract class NamedApiController<TEntity> : CodedApiController<TEntity> where TEntity : NamedEntity
+    public abstract class NamedApiController<TEntity> : IDEntityApiController<TEntity> where TEntity : NamedEntity
     {
         protected override List<Expression<Func<TEntity, object>>> GetOrderBys()
         {
             var result = base.GetOrderBys();
             result.Insert(0, i => i.Name);
             return result;
+        }
+
+        /// <summary>
+        /// Get a TEntity by Name
+        /// </summary>
+        /// <param name="name">The Name of the TEntity</param>
+        /// <returns>TEntity</returns>
+        [HttpGet("ByName/{name:required}")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "name" })]
+        public virtual async Task<ActionResult<TEntity>> GetByNameAsync(string name)
+        {
+            using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Name", name } }))
+            {
+                try
+                {
+                    UpdateRequest();
+                    TEntity item = await GetQuery(i => (i.Name == name)).FirstOrDefaultAsync();
+                    if (item == null)
+                    {
+                        SAEONLogs.Error("{name} not found", name);
+                        return NotFound();
+                    }
+                    return Ok(item);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex, "Unable to get {name}", name);
+                    throw;
+                }
+            }
+        }
+    }
+
+    public abstract class CodedNamedApiController<TEntity> : IDEntityApiController<TEntity> where TEntity : CodedNamedEntity
+    {
+        protected override List<Expression<Func<TEntity, object>>> GetOrderBys()
+        {
+            var result = base.GetOrderBys();
+            result.Insert(0, i => i.Code);
+            result.Insert(0, i => i.Name);
+            return result;
+        }
+
+        /// <summary>
+        /// Get a TEntity by Code
+        /// </summary>
+        /// <param name="code">The Code of the TEntity</param>
+        /// <returns>TEntity</returns>
+        [HttpGet("ByCode/{code:required}")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "code" })]
+        public virtual async Task<ActionResult<TEntity>> GetByCodeAsync(string code)
+        {
+            using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Code", code } }))
+            {
+                try
+                {
+                    UpdateRequest();
+                    TEntity item = await GetQuery(i => (i.Code == code)).FirstOrDefaultAsync();
+                    if (item == null)
+                    {
+                        SAEONLogs.Error("{code} not found", code);
+                        return NotFound();
+                    }
+                    return Ok(item);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex, "Unable to get {code}", code);
+                    throw;
+                }
+            }
         }
 
         /// <summary>

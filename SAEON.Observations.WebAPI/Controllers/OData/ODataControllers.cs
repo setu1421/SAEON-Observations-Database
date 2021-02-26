@@ -147,11 +147,22 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         }
     }
 
-    public abstract class NamedODataController<TEntity> : CodedODataController<TEntity> where TEntity : NamedEntity
+    public abstract class NamedODataController<TEntity> : IDEntityODataController<TEntity> where TEntity : NamedEntity
     {
         protected override List<Expression<Func<TEntity, object>>> GetOrderBys()
         {
             var result = base.GetOrderBys();
+            result.Insert(0, i => i.Name);
+            return result;
+        }
+    }
+
+    public abstract class CodedNamedODataController<TEntity> : IDEntityODataController<TEntity> where TEntity : CodedNamedEntity
+    {
+        protected override List<Expression<Func<TEntity, object>>> GetOrderBys()
+        {
+            var result = base.GetOrderBys();
+            result.Insert(0, i => i.Code);
             result.Insert(0, i => i.Name);
             return result;
         }

@@ -5,6 +5,10 @@ using SAEON.Logs;
 using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI
 {
@@ -18,6 +22,7 @@ namespace SAEON.Observations.WebAPI
             _config = config;
             _httpContectAccessor = httpContextAccessor;
             Database.SetCommandTimeout(30 * 60);
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         public DbSet<DataSchema> DataSchemas { get; set; }
@@ -152,6 +157,40 @@ namespace SAEON.Observations.WebAPI
                     i => i.HasOne<Phenomenon>().WithMany().HasForeignKey(i => i.PhenomenonId))
                 .ToTable("PhenomenonUOM")
                 .HasKey(i => new { i.PhenomenonId, i.UnitId });
+        }
+
+        private void ValidateChanges()
+        {
+            var entities = from e in ChangeTracker.Entries()
+                           where e.State == EntityState.Added
+                               || e.State == EntityState.Modified
+                           select e.Entity;
+            foreach (var entity in entities)
+            {
+                var validationContext = new ValidationContext(entity);
+                Validator.ValidateObject(
+                    entity,
+                    validationContext,
+                    validateAllProperties: true);
+            }
+        }
+
+        public override int SaveChanges()
+        {
+            ValidateChanges();
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            ValidateChanges();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            ValidateChanges();
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace SAEON.Observations.Core
     /// OrganisationRole entity
     /// </summary>
     [Table("OrganisationRole")]
-    public class OrganisationRole : NamedEntity
+    public class OrganisationRole : CodedNamedEntity
     {
         // Navigation
         //public List<Organisation> Organisations { get; set; }

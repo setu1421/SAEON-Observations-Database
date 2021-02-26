@@ -6,7 +6,7 @@ using System.Linq;
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     [ODataRoutePrefix("Phenomena")]
-    public class PhenomenaController : NamedODataController<Phenomenon>
+    public class PhenomenaController : CodedNamedODataController<Phenomenon>
     {
         [ODataRoute("({id})/Offerings")]
         public IQueryable<Offering> GetOfferings(Guid id)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    public class ProjectsController : NamedApiController<Project>
+    public class ProjectsController : CodedNamedApiController<Project>
     {
         //protected override IQueryable<Project> GetQuery(Expression<Func<Project, bool>> extraWhere = null)
         //{

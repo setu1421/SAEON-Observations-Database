@@ -357,6 +357,7 @@ namespace SAEON.Observations.WebAPI
                                     dataSchema.Name = dataSchemaName;
                                     dataSchema.Description = GetString(dataSchemasList, rInstrument, 2);
                                     dataSchema.DataSourceTypeId = CSVTypeId;
+                                    dataSchema.Delimiter = ",";
                                     await dbContext.SaveChangesAsync();
                                 }
                             else
@@ -368,6 +369,7 @@ namespace SAEON.Observations.WebAPI
                                     Name = dataSchemaName,
                                     Description = GetString(dataSchemasList, rInstrument, 2),
                                     DataSourceTypeId = CSVTypeId,
+                                    Delimiter = ",",
                                     UserId = userId
                                 };
                                 dbContext.DataSchemas.Add(dataSchema);

@@ -97,7 +97,8 @@ namespace SAEON.Observations.QuerySite
                                         else // Id token
                                         {
                                             var clientId = jObj.Value<string>("client_id");
-                                            var userId = jObj["ext"].Value<string>("user_id");
+                                            var userId = jObj.Value<string>("sub");
+                                            //var userId = jObj["ext"].Value<string>("user_id");
                                             var userEmail = jObj["ext"].Value<string>("email");
                                             var userRoles = from r in jObj["ext"]["access_rights"] select (string)r["role_name"];
                                             SAEONLogs.Debug("User Id: {Id} Email: {Email}, Roles: {Role}", userId, userEmail, userRoles);
@@ -105,7 +106,7 @@ namespace SAEON.Observations.QuerySite
                                                 new Claim(Constants.ClientIdClaim,clientId),
                                                 new Claim(Constants.IdTokenClaim, token),
                                                 new Claim(ClaimTypes.NameIdentifier,userId),
-                                                new Claim(ClaimTypes.Email,userId)
+                                                new Claim(ClaimTypes.Email,userEmail)
                                             };
                                             foreach (var userRole in userRoles)
                                             {
@@ -126,8 +127,11 @@ namespace SAEON.Observations.QuerySite
                                 SAEONLogs.Information("*** RedirectToIdentityProvider {@ProtocolMessage}", context.ProtocolMessage);
                                 if (context.ProtocolMessage.RequestType == OpenIdConnectRequestType.Authentication)
                                 {
-                                    if (context.OwinContext.Authentication.AuthenticationResponseChallenge.Properties.Dictionary.ContainsKey("ODPRegister"))
+                                    if (context.OwinContext.Authentication.AuthenticationResponseChallenge?.Properties.Dictionary.ContainsKey("ODPRegister") ?? false)
+                                    {
+                                        SAEONLogs.Information("Enabling registration");
                                         context.ProtocolMessage.SetParameter("mode", "signup");
+                                    }
                                 }
                                 else if (context.ProtocolMessage.RequestType == OpenIdConnectRequestType.Logout)
                                 {

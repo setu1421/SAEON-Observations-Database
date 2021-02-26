@@ -30,7 +30,7 @@ namespace SAEON.Observations.WebAPI
             Configuration = configuration;
             try
             {
-                SAEONLogs.Information("Starting {Application} LogLevel: {LogLevel} Test: {Test}", ApplicationHelper.ApplicationName, SAEONLogs.Level, configuration["Test"]);
+                SAEONLogs.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName);
                 SAEONLogs.Debug("AuthenticationServerUrl: {AuthenticationServerUrl} AuthenticationServerIntrospectionUrl: {AuthenticationServerIntrospectionUrl}",
                     Configuration["AuthenticationServerUrl"], Configuration["AuthenticationServerIntrospectionUrl"]);
             }
@@ -173,6 +173,19 @@ namespace SAEON.Observations.WebAPI
             {
                 var builder = new ODataConventionModelBuilder() { ContainerName = "Internal" };
                 builder.EntitySet<InventoryDataset>("InventoryDatasets");
+                builder.EntitySet<InventorySensor>("InventorySensors");
+                builder.EntitySet<Organisation>("Organisations");
+                builder.EntitySet<Programme>("Programmes");
+                builder.EntitySet<Project>("Projects");
+                builder.EntitySet<Site>("Sites");
+                builder.EntitySet<Station>("Stations");
+                builder.EntitySet<Instrument>("Instruments");
+                builder.EntitySet<Sensor>("Sensors");
+                builder.EntitySet<Phenomenon>("Phenomena");
+                builder.EntitySet<Offering>("Offerings");
+                builder.EntitySet<Unit>("Units");
+                builder.EntitySet<UserDownload>("UserDownloads");
+                builder.EntitySet<UserQuery>("UserQueries");
                 return builder.GetEdmModel();
             }
 

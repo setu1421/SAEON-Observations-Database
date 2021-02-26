@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
@@ -20,6 +21,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         public AdminController(IHubContext<AdminHub> webApiHub)
         {
             AdminHub = webApiHub;
+            DbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
         }
 
         [HttpPost("[action]")]

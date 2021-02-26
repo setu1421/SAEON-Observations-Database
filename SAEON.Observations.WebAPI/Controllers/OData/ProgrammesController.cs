@@ -7,7 +7,7 @@ using System.Linq;
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     [ODataRoutePrefix("Programmes")]
-    public class ProgrammesController : NamedODataController<Programme>
+    public class ProgrammesController : CodedNamedODataController<Programme>
     {
         [ODataRoute("({id})")]
         public override SingleResult<Programme> GetById(Guid id)

@@ -6,7 +6,7 @@ using System.Linq;
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     [ODataRoutePrefix("Sensors")]
-    public class SensorsController : NamedODataController<Sensor>
+    public class SensorsController : CodedNamedODataController<Sensor>
     {
         [ODataRoute("({id})/Phenomenon")]
         public Phenomenon GetPhenomenon(Guid id)

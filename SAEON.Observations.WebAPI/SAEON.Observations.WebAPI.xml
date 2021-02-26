@@ -512,6 +512,20 @@
             <param name="name">The Name of the TEntity</param>
             <returns>TEntity</returns>
         </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.CodedNamedApiController`1.GetByCodeAsync(System.String)">
+            <summary>
+            Get a TEntity by Code
+            </summary>
+            <param name="code">The Code of the TEntity</param>
+            <returns>TEntity</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.CodedNamedApiController`1.GetByNameAsync(System.String)">
+            <summary>
+            Get a TEntity by Name
+            </summary>
+            <param name="name">The Name of the TEntity</param>
+            <returns>TEntity</returns>
+        </member>
         <member name="T:SAEON.Observations.Core.OrganisationRole">
             <summary>
             OrganisationRole entity

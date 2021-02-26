@@ -41,6 +41,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     {
     }
 
+    [Route("Internal/[controller]")]
     [EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
