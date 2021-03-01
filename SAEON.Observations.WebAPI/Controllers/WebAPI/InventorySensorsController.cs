@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    public class InventorySensorsController : WebApiController<InventorySensor>
+    public class InventorySensorsController : ApiReadController<InventorySensor>
     {
         /// <summary>
         /// All Sensors

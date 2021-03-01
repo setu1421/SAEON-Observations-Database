@@ -1012,7 +1012,7 @@ namespace SAEON.Observations.Core
         [StringLength(128), ScaffoldColumn(false)]
         public string AddedBy { get; set; }
         /// <summary>
-        /// Time the UserDownload was added
+        /// Time the UserQuery was added
         /// </summary>
         [ScaffoldColumn(false)]
         public DateTime? AddedAt { get; set; }
@@ -1022,9 +1022,10 @@ namespace SAEON.Observations.Core
         [StringLength(128), ScaffoldColumn(false)]
         public string UpdatedBy { get; set; }
         /// <summary>
-        /// Time the UserDownload was updated
+        /// Time the UserQuery was updated
         /// </summary>
         [ScaffoldColumn(false)]
         public DateTime? UpdatedAt { get; set; }
     }
+
 }

@@ -1,8 +1,7 @@
-﻿#define ODPAuth
+﻿//#define ODPAuth
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -33,11 +32,9 @@ namespace SAEON.Observations.WebAPI
         protected IConfiguration Config => config ??= HttpContext.RequestServices.GetRequiredService<IConfiguration>();
         private ObservationsDbContext dbContext;
         protected ObservationsDbContext DbContext => dbContext ??= HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
-        private IWebHostEnvironment hostEnvironment;
-        protected IWebHostEnvironment HostEnvironment => hostEnvironment ??= HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>();
     }
 
-    public abstract class BaseApiListController<TObject> : BaseApiController where TObject : class
+    public abstract class BaseListController<TObject> : BaseApiController where TObject : class
     {
         protected virtual List<TObject> GetList()
         {
@@ -63,17 +60,18 @@ namespace SAEON.Observations.WebAPI
         }
     }
 
-    public abstract class BaseApiEntityController<TEntity> : BaseApiController where TEntity : BaseEntity
+    public abstract class BaseReadController<TEntity> : BaseApiController where TEntity : BaseEntity
     {
         [NotMapped]
         public string EntitySetName { get; protected set; }
         [NotMapped]
         public List<string> NavigationLinks { get; } = new List<string>();
 
-        protected void UpdateRequest()
-        {
-            EntityConfig.BaseUrl = Request.GetUri().GetLeftPart(UriPartial.Authority) + "/Api";
-        }
+        //protected void UpdateRequest()
+        //{
+        //    EntityConfig.BaseUrl = Request.GetUri().GetLeftPart(UriPartial.Authority) + "/Api";
+        //}
+        protected abstract void UpdateRequest();
 
         protected virtual List<Expression<Func<TEntity, object>>> GetOrderBys()
         {
@@ -361,19 +359,6 @@ namespace SAEON.Observations.WebAPI
     */
     #endregion
 
-    #region MvcControllers
-    [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
-    [ResponseCache(Duration = Defaults.CacheDuration)]
-    //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public abstract class BaseMvcController : Controller
-    {
-        private IConfiguration config;
-        protected IConfiguration Config => config ??= HttpContext.RequestServices.GetRequiredService<IConfiguration>();
-        private ObservationsDbContext dbContext;
-        protected ObservationsDbContext DbContext => dbContext ??= HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
-    }
-    #endregion
-
     #region ODataControllers
     [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
 #if ODPAuth
@@ -412,6 +397,7 @@ namespace SAEON.Observations.WebAPI
             return query;
         }
 
+        /*
         protected void UpdateRequest()
         {
             BaseUrl = Request.GetUri().GetLeftPart(UriPartial.Authority) + "/OData";
@@ -430,6 +416,9 @@ namespace SAEON.Observations.WebAPI
             //}
             Request.Headers.TryAdd("Prefer", "odata.include-annotations=*");
         }
+        */
+
+        protected abstract void UpdateRequest();
 
         [HttpGet]
         [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]

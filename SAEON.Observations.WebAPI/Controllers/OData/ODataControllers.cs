@@ -16,6 +16,10 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     [EnableCors(SAEONAuthenticationDefaults.CorsAllowAllPolicy)]
     public abstract class ODataController<TEntity> : BaseODataController<TEntity> where TEntity : BaseEntity
     {
+        protected override void UpdateRequest()
+        {
+            BaseUrl = Request.GetUri().GetLeftPart(UriPartial.Authority) + "/OData";
+        }
     }
 
     public abstract class IDEntityODataController<TEntity> : ODataController<TEntity> where TEntity : GuidIdEntity

@@ -1,7 +1,9 @@
 ﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SAEON.Core;
@@ -22,6 +24,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     public class DataWizardController : InternalApiController
     {
+        private IWebHostEnvironment hostEnvironment;
+        protected IWebHostEnvironment HostEnvironment => hostEnvironment ??= HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>();
 
         private void CleanInput(ref DataWizardDataInput input)
         {

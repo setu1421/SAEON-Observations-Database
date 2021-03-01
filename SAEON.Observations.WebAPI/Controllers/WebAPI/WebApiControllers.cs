@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SAEON.Logs;
@@ -15,11 +16,15 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [Route("Api/[controller]")]
     [EnableCors(SAEONAuthenticationDefaults.CorsAllowAllPolicy)]
     [ApiConventionType(typeof(DefaultApiConventions))]
-    public abstract class WebApiController<TEntity> : BaseApiEntityController<TEntity> where TEntity : BaseEntity
+    public abstract class ApiReadController<TEntity> : BaseReadController<TEntity> where TEntity : BaseEntity
     {
+        protected override void UpdateRequest()
+        {
+            EntityConfig.BaseUrl = Request.GetUri().GetLeftPart(UriPartial.Authority) + "/Api";
+        }
     }
 
-    public abstract class IDEntityApiController<TEntity> : WebApiController<TEntity> where TEntity : GuidIdEntity
+    public abstract class IDEntityApiController<TEntity> : ApiReadController<TEntity> where TEntity : GuidIdEntity
     {
         /// <summary>
         /// Get a TEntity by Id

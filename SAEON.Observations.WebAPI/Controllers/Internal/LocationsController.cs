@@ -5,7 +5,7 @@ using System.Linq;
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
 
-    public class LocationsController : InternalApiListController<LocationNode>
+    public class LocationsController : InternalListController<LocationNode>
     {
         protected override List<LocationNode> GetList()
         {

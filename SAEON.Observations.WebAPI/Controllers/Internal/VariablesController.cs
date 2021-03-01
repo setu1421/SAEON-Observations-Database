@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
-    public class VariablesController : InternalApiListController<VariableNode>
+    public class VariablesController : InternalListController<VariableNode>
     {
         protected override List<VariableNode> GetList()
         {

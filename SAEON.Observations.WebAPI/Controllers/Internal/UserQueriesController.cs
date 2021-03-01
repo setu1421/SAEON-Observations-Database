@@ -2,7 +2,7 @@
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
-    public class UserQueriesController : InternalODataController<UserQuery>
+    public class UserQueriesController : InternalReadController<UserQuery>
     {
     }
 }

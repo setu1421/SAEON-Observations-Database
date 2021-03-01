@@ -84,11 +84,11 @@ namespace SAEON.Observations.WebAPI
         {
             if (modelBuilder == null) throw new ArgumentNullException(nameof(modelBuilder));
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<VFeature>().HasNoKey().ToView("vFeatures");
-            modelBuilder.Entity<VLocation>().HasNoKey().ToView("vLocations");
-            modelBuilder.Entity<InventoryDataset>().HasNoKey().ToView("vInventoryDatasets");
-            modelBuilder.Entity<InventorySensor>().HasNoKey().ToView("vInventorySensors");
-            modelBuilder.Entity<Dataset>().HasNoKey().ToView("vStationDatasets");
+            //modelBuilder.Entity<VFeature>().HasNoKey().ToView("vFeatures");
+            //modelBuilder.Entity<VLocation>().HasNoKey().ToView("vLocations");
+            modelBuilder.Entity<InventoryDataset>().ToView("vInventoryDatasets");
+            modelBuilder.Entity<InventorySensor>().ToView("vInventorySensors");
+            modelBuilder.Entity<Dataset>().ToView("vStationDatasets");
             modelBuilder.Entity<VObservationExpansion>().ToView("vObservationExpansion");
             modelBuilder.Entity<DigitalObjectIdentifier>().Property("DOIType").HasConversion<byte>();
             modelBuilder.Entity<DigitalObjectIdentifier>().HasOne(i => i.Parent).WithMany(i => i.Children).HasForeignKey(i => i.ParentId);

@@ -1,7 +1,6 @@
 using HealthChecks.UI.Client;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
-using Microsoft.AspNet.OData.Formatter;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -9,7 +8,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Net.Http.Headers;
 using Microsoft.OData.Edm;
 using Microsoft.OpenApi.Models;
 using SAEON.Core;
@@ -99,7 +97,7 @@ namespace SAEON.Observations.WebAPI
                         options.IncludeXmlComments("SAEON.Observations.WebAPI.xml");
                         options.SchemaFilter<SwaggerIgnoreFilter>();
                     });
-                    SetOutputFormatters(services);
+                    //SetOutputFormatters(services);
 
                     services.AddSignalR();
                     services.AddControllers();
@@ -158,7 +156,7 @@ namespace SAEON.Observations.WebAPI
                         endpoints.MapControllers();
                         endpoints.MapHub<AdminHub>("/AdminHub").RequireCors(SAEONAuthenticationDefaults.CorsAllowSignalRPolicy);
                         //endpoints.Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop);
-                        endpoints.MapODataRoute("Internal", "Internal", GetInternalEdmModel()).Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop);
+                        //endpoints.MapODataRoute("Internal", "Internal", GetInternalEdmModel()).Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop);
                         endpoints.MapODataRoute("OData", "OData", GetODataEdmModel()).Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop); ;
                     });
                 }
@@ -169,25 +167,25 @@ namespace SAEON.Observations.WebAPI
                 }
             }
 
-            IEdmModel GetInternalEdmModel()
-            {
-                var builder = new ODataConventionModelBuilder() { ContainerName = "Internal" };
-                builder.EntitySet<InventoryDataset>("InventoryDatasets");
-                builder.EntitySet<InventorySensor>("InventorySensors");
-                builder.EntitySet<Organisation>("Organisations");
-                builder.EntitySet<Programme>("Programmes");
-                builder.EntitySet<Project>("Projects");
-                builder.EntitySet<Site>("Sites");
-                builder.EntitySet<Station>("Stations");
-                builder.EntitySet<Instrument>("Instruments");
-                builder.EntitySet<Sensor>("Sensors");
-                builder.EntitySet<Phenomenon>("Phenomena");
-                builder.EntitySet<Offering>("Offerings");
-                builder.EntitySet<Unit>("Units");
-                builder.EntitySet<UserDownload>("UserDownloads");
-                builder.EntitySet<UserQuery>("UserQueries");
-                return builder.GetEdmModel();
-            }
+            //IEdmModel GetInternalEdmModel()
+            //{
+            //    var builder = new ODataConventionModelBuilder() { ContainerName = "Internal" };
+            //    builder.EntitySet<InventoryDataset>("InventoryDatasets");
+            //    builder.EntitySet<InventorySensor>("InventorySensors");
+            //    builder.EntitySet<Organisation>("Organisations");
+            //    builder.EntitySet<Programme>("Programmes");
+            //    builder.EntitySet<Project>("Projects");
+            //    builder.EntitySet<Site>("Sites");
+            //    builder.EntitySet<Station>("Stations");
+            //    builder.EntitySet<Instrument>("Instruments");
+            //    builder.EntitySet<Sensor>("Sensors");
+            //    builder.EntitySet<Phenomenon>("Phenomena");
+            //    builder.EntitySet<Offering>("Offerings");
+            //    builder.EntitySet<Unit>("Units");
+            //    builder.EntitySet<UserDownload>("UserDownloads");
+            //    builder.EntitySet<UserQuery>("UserQueries");
+            //    return builder.GetEdmModel();
+            //}
 
             IEdmModel GetODataEdmModel()
             {
@@ -208,26 +206,26 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
-        private static void SetOutputFormatters(IServiceCollection services)
-        {
-            services.AddMvcCore(options =>
-            {
-                foreach (var formatter in options.OutputFormatters
-                    .OfType<ODataOutputFormatter>()
-                    .Where(it => !it.SupportedMediaTypes.Any()))
-                {
-                    formatter.SupportedMediaTypes.Add(
-                        new MediaTypeHeaderValue("application/odata"));
-                }
-                foreach (var formatter in options.InputFormatters
-                    .OfType<ODataInputFormatter>()
-                    .Where(it => !it.SupportedMediaTypes.Any()))
-                {
-                    formatter.SupportedMediaTypes.Add(
-                        new MediaTypeHeaderValue("application/odata"));
-                }
-            });
-        }
+        //private static void SetOutputFormatters(IServiceCollection services)
+        //{
+        //    services.AddMvcCore(options =>
+        //    {
+        //        foreach (var formatter in options.OutputFormatters
+        //            .OfType<ODataOutputFormatter>()
+        //            .Where(it => !it.SupportedMediaTypes.Any()))
+        //        {
+        //            formatter.SupportedMediaTypes.Add(
+        //                new MediaTypeHeaderValue("application/odata"));
+        //        }
+        //        foreach (var formatter in options.InputFormatters
+        //            .OfType<ODataInputFormatter>()
+        //            .Where(it => !it.SupportedMediaTypes.Any()))
+        //        {
+        //            formatter.SupportedMediaTypes.Add(
+        //                new MediaTypeHeaderValue("application/odata"));
+        //        }
+        //    });
+        //}
 
     }
 }

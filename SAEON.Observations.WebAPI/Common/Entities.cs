@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -95,11 +96,11 @@ namespace SAEON.Observations.Core
     }
 
     //[Table("vInventoryDatasets")]
-    //[Keyless]
+    [Keyless]
     public class InventoryDataset : BaseEntity
     {
         // Remove once OData allows Keyless views
-        [Key]
+        //[Key]
         public long Id { get; set; }
         public Guid OrganisationId { get; set; }
         public string OrganisationCode { get; set; }
@@ -143,7 +144,7 @@ namespace SAEON.Observations.Core
     }
 
     //[Table("vInventorySensors")]
-    //[Keyless]
+    [Keyless]
     public class InventorySensor : BaseEntity
     {
         // Remove once OData allows Keyless views
@@ -196,7 +197,7 @@ namespace SAEON.Observations.Core
         public DateTime? EndDate { get; set; }
     }
 
-    //[Keyless]
+    [Keyless]
     public class VLocation : BaseEntity
     {
         public Guid OrganisationID { get; set; }
@@ -219,7 +220,7 @@ namespace SAEON.Observations.Core
         public double? Elevation { get; set; }
     }
 
-    //[Keyless]
+    [Keyless]
     public class VFeature : BaseEntity
     {
         public Guid PhenomenonID { get; set; }
@@ -302,11 +303,11 @@ namespace SAEON.Observations.Core
     }
 
     //[Table("vStationDatasets")]
-    //[Keyless]
+    [Keyless]
     public class Dataset : BaseEntity
     {
         // Remove once OData allows Keyless views
-        [Key]
+        //[Key]
         public long Id { get; set; }
         public Guid StationId { get; set; }
         public string StationCode { get; set; }

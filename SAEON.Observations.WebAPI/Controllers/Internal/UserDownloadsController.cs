@@ -2,7 +2,7 @@
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
-    public class UserDownloadsController : InternalODataController<UserDownload>
+    public class UserDownloadsController : InternalReadController<UserDownload>
     {
     }
 }
