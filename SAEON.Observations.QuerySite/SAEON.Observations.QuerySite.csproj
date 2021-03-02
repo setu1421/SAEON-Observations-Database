@@ -266,6 +266,7 @@
     <Compile Include="Controllers\DOIController.cs" />
     <Compile Include="Controllers\HealthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserQueriesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -956,6 +957,10 @@
     <Content Include="Views\DataWizard\_Table.cshtml" />
     <Content Include="Views\DataWizard\_TableHtml.cshtml" />
     <Content Include="tsconfig.json" />
+    <Content Include="Views\UserQueries\Index.cshtml" />
+    <Content Include="Views\UserQueries\Delete.cshtml" />
+    <Content Include="Views\UserQueries\Details.cshtml" />
+    <Content Include="Views\UserQueries\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,4 +1,4 @@
-﻿//#define ODPAuth
+﻿#define ODPAuth
 #if ODPAuth
 using Newtonsoft.Json.Linq;
 #endif
@@ -20,6 +20,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Linq;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
@@ -50,6 +51,14 @@ namespace SAEON.Observations.QuerySite.Controllers
             set
             {
                 Session[Constants.SessionKeyTenant] = value;
+            }
+        }
+
+        protected List<string> ModelStateErrors
+        {
+            get
+            {
+                return ModelState.Values.SelectMany(v => v.Errors).Select(v => v.ErrorMessage + " " + v.Exception).ToList();
             }
         }
 
@@ -246,14 +255,6 @@ namespace SAEON.Observations.QuerySite.Controllers
 
     public abstract class BaseController<TModel> : BaseController where TModel : BaseModel, new()
     {
-        //public List<string> ModelStateErrors
-        //{
-        //    get
-        //    {
-        //        return ModelState.Values.SelectMany(v => v.Errors).Select(v => v.ErrorMessage + " " + v.Exception).ToList();
-        //    }
-        //}
-
         //public List<string> GetValidationErrors(DbEntityValidationException ex)
         //{
         //    return ex?.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList();
@@ -468,7 +469,181 @@ namespace SAEON.Observations.QuerySite.Controllers
             SessionModel = model;
             return model;
         }
-
     }
 
+    [Authorize]
+    public abstract class BaseRestController<TEntity> : BaseController where TEntity : NamedEntity, new()
+    {
+        protected string Resource { get; set; }
+
+
+        [HttpGet]
+        public async Task<ActionResult> Index()
+        {
+            using (SAEONLogs.MethodCall<TEntity>(GetType()))
+            {
+                try
+                {
+                    using (var client = GetWebAPIClientWithIdToken())
+                    {
+                        var response = await client.GetAsync($"{client.BaseAddress}{Resource}");
+                        SAEONLogs.Verbose("Response: {response}", response);
+                        response.EnsureSuccessStatusCode();
+                        var data = await response.Content.ReadAsAsync<IEnumerable<TEntity>>();
+                        //SAEONLogs.Verbose("Data: {data}", data);
+                        return View(data);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpGet]
+        [Route("{id:guid}")]
+        public virtual async Task<ActionResult> Details(Guid? id)
+        {
+            using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
+            {
+                try
+                {
+                    if (!id.HasValue) return RedirectToAction("Index");
+                    using (var client = GetWebAPIClientWithIdToken())
+                    {
+                        var response = await client.GetAsync($"{client.BaseAddress}{Resource}/{id.Value}");
+                        SAEONLogs.Verbose("Response: {response}", response);
+                        response.EnsureSuccessStatusCode();
+                        var data = await response.Content.ReadAsAsync<TEntity>();
+                        SAEONLogs.Verbose("Data: {data}", data);
+                        if (data == null) return RedirectToAction("Index");
+                        return View(data);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
+        }
+
+        [HttpGet]
+        [Route("{id:guid}")]
+        public virtual async Task<ActionResult> Edit(Guid? id)
+        {
+            using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
+            {
+                try
+                {
+                    if (!id.HasValue) return RedirectToAction("Index");
+                    using (var client = GetWebAPIClientWithIdToken())
+                    {
+                        var response = await client.GetAsync($"{client.BaseAddress}{Resource}/{id?.ToString()}");
+                        SAEONLogs.Verbose("Response: {response}", response);
+                        response.EnsureSuccessStatusCode();
+                        var data = await response.Content.ReadAsAsync<TEntity>();
+                        SAEONLogs.Verbose("Data: {data}", data);
+                        if (data == null) return RedirectToAction("Index");
+                        return View(data);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public virtual async Task<ActionResult> Edit(TEntity delta)
+        {
+            using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", delta?.Id }, { "Delta", delta } }))
+            {
+                try
+                {
+                    if (!ModelState.IsValid)
+                    {
+                        SAEONLogs.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);
+                        return View(delta);
+                    }
+                    else
+                    {
+                        using (var client = GetWebAPIClientWithIdToken())
+                        {
+                            var response = await client.PutAsJsonAsync<TEntity>($"{client.BaseAddress}{Resource}/{delta?.Id}", delta);
+                            SAEONLogs.Verbose("Response: {response}", response);
+                            response.EnsureSuccessStatusCode();
+                            return RedirectToAction("Index");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex, "Unable to edit {id}", delta?.Id);
+                    throw;
+                }
+            }
+
+        }
+
+        [HttpGet]
+        [Route("{id:guid}")]
+        [Authorize]
+        public virtual async Task<ActionResult> Delete(Guid? id)
+        {
+            using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
+            {
+                try
+                {
+                    if (!id.HasValue) return RedirectToAction("Index");
+                    using (var client = GetWebAPIClientWithIdToken())
+                    {
+                        var response = await client.GetAsync($"{client.BaseAddress}{Resource}/{id?.ToString()}");
+                        SAEONLogs.Verbose("Response: {response}", response);
+                        response.EnsureSuccessStatusCode();
+                        var data = await response.Content.ReadAsAsync<TEntity>();
+                        SAEONLogs.Verbose("Data: {data}", data);
+                        if (data == null) return RedirectToAction("Index");
+                        return View(data);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex, "Unable to delete {id}", id);
+                    throw;
+                }
+            }
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public virtual async Task<ActionResult> DeleteConfirmed(Guid id)
+        {
+            using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
+            {
+                try
+                {
+                    using (var client = GetWebAPIClientWithIdToken())
+                    {
+                        var response = await client.DeleteAsync($"{client.BaseAddress}{Resource}/{id}");
+                        SAEONLogs.Verbose("Response: {response}", response);
+                        response.EnsureSuccessStatusCode();
+                        return RedirectToAction("Index");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex, "Unable to delete {id}", id);
+                    throw;
+                }
+            }
+        }
+    }
 }

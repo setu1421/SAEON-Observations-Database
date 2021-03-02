@@ -205,10 +205,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
     public abstract class CodedApiController<TEntity> : IDEntityApiController<TEntity> where TEntity : CodedEntity
     {
-        protected override List<Expression<Func<TEntity, object>>> GetOrderBys()
+        protected override List<OrderBy<TEntity>> GetOrderBys()
         {
             var result = base.GetOrderBys();
-            result.Insert(0, i => i.Code);
+            result.Insert(0, new OrderBy<TEntity>(i => i.Code));
             return result;
         }
 
@@ -247,10 +247,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
     public abstract class NamedApiController<TEntity> : IDEntityApiController<TEntity> where TEntity : NamedEntity
     {
-        protected override List<Expression<Func<TEntity, object>>> GetOrderBys()
+        protected override List<OrderBy<TEntity>> GetOrderBys()
         {
             var result = base.GetOrderBys();
-            result.Insert(0, i => i.Name);
+            result.Insert(0, new OrderBy<TEntity>(i => i.Name));
             return result;
         }
 
@@ -289,11 +289,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
     public abstract class CodedNamedApiController<TEntity> : IDEntityApiController<TEntity> where TEntity : CodedNamedEntity
     {
-        protected override List<Expression<Func<TEntity, object>>> GetOrderBys()
+        protected override List<OrderBy<TEntity>> GetOrderBys()
         {
             var result = base.GetOrderBys();
-            result.Insert(0, i => i.Code);
-            result.Insert(0, i => i.Name);
+            result.Insert(0, new OrderBy<TEntity>(i => i.Code));
+            result.Insert(0, new OrderBy<TEntity>(i => i.Name));
             return result;
         }
 
