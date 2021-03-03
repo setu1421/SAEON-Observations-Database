@@ -442,7 +442,7 @@ export function LoadQuery() {
             $("#PartialLocations").load("/DataWizard/GetLocationsHtml", function () {
                 $("#PartialLocationsSelected").load("/DataWizard/GetLocationsSelectedHtml", function () {
                     $("#PartialVariables").load("/DataWizard/GetVariablesHtml", function () {
-                        $("#PartialvariablesSelected").load("/DataWizard/GetvariablesSelectedHtml", function () {
+                        $("#PartialVariablesSelected").load("/DataWizard/GetVariablesSelectedHtml", function () {
                             $("#PartialFilters").load("/DataWizard/GetFiltersHtml", function () {
                                 //UpdateMap();
                                 $("PartialTable").text("");
@@ -455,6 +455,7 @@ export function LoadQuery() {
                                 loading = false;
                                 ExpandLocationsSelected();
                                 ExpandVariablesSelected();
+                                HideWaiting();
                             });
                         });
                     });

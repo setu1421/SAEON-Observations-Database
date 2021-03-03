@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -148,7 +147,7 @@ namespace SAEON.Observations.Core
     public class InventorySensor : BaseEntity
     {
         // Remove once OData allows Keyless views
-        [Key]
+        //[Key]
         public long Id { get; set; }
         public Guid OrganisationId { get; set; }
         public string OrganisationCode { get; set; }

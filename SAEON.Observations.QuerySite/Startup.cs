@@ -16,6 +16,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 
 [assembly: OwinStartupAttribute(typeof(SAEON.Observations.QuerySite.Startup))]
 
@@ -31,6 +32,9 @@ namespace SAEON.Observations.QuerySite
                 {
                     SAEONLogs.Verbose("AuthenticationServer: {AuthenticationServer}", ConfigurationManager.AppSettings["AuthenticationServerUrl"]);
                     SyncfusionLicenseProvider.RegisterLicense("Mzk0Nzc2QDMxMzgyZTM0MmUzMGlPREwxWmJGV3Rtck5GVmNNNzdlbXhFUk1IemVBWGZSbnV4aEt6MDcyOG89;Mzk0Nzc3QDMxMzgyZTM0MmUzMGtGdFdiM2FSamVMK295eWsrVGNjRzdZL2VkZk43R3c0NnhRT3hGbTU5RmM9");
+                    AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.AntiForgeryClaim;
+                    //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
 
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
@@ -116,7 +120,14 @@ namespace SAEON.Observations.QuerySite
                                             {
                                                 claims.Add(new Claim(Constants.AdminTokenClaim, true.ToString()));
                                             }
-                                            context.AuthenticationTicket.Identity.AddClaims(claims);
+                                            foreach (var claim in claims)
+                                            {
+                                                if (!context.AuthenticationTicket.Identity.HasClaim(i => (i.Type == claim.Type) && (i.Value == claim.Value)))
+                                                {
+                                                    context.AuthenticationTicket.Identity.AddClaim(claim);
+                                                }
+                                            }
+                                            //context.AuthenticationTicket.Identity.AddClaims(claims);
                                             SAEONLogs.Debug("ODPAuthentication id token succeeded Claims: {@Claims}", claims.ToClaimsList());
                                         }
                                     }

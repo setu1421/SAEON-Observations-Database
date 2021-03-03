@@ -477,7 +477,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     var model = SessionModel;
-                    SAEONLogs.Verbose("Model: {@Model}", model);
+                    //SAEONLogs.Verbose("Model: {@Model}", model);
                     var input = new DataWizardDataInput();
                     input.Locations.AddRange(model.Locations);
                     input.Variables.AddRange(model.Variables);
@@ -576,12 +576,11 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion Chart
 
         #region UserQueries
-        //[Authorize]
         private async Task<List<UserQuery>> GetUserQueriesList()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User?.Identity?.IsAuthenticated ?? false)
             {
-                return (await GetListAsync<UserQuery>("Internal/UserQueries"));
+                return (await GetListAsync<UserQuery>("Internal/UserQueries", true));
             }
             else
             {
@@ -590,7 +589,6 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public JsonResult GetUserQueries()
         {
             using (SAEONLogs.MethodCall(GetType()))
@@ -624,19 +622,20 @@ namespace SAEON.Observations.QuerySite.Controllers
                     {
                         throw new HttpException((int)HttpStatusCode.NotFound, $"UserQuery not found {input?.Name}");
                     }
-
                     var wizardInput = JsonConvert.DeserializeObject<DataWizardDataInput>(userQuery.QueryInput);
                     // Locations
                     List<string> locations = new List<string>();
-                    //locations.AddRange(model.LocationNodes.Where(i => wizardInput.Organisations.Contains(i.Id)).Select(i => i.Key));
-                    //locations.AddRange(model.LocationNodes.Where(i => wizardInput.Sites.Contains(i.Id)).Select(i => i.Key));
-                    //locations.AddRange(model.LocationNodes.Where(i => wizardInput.Stations.Contains(i.Id)).Select(i => i.Key));
+                    foreach (var location in wizardInput.Locations)
+                    {
+                        locations.AddRange(model.LocationNodes.Where(i => i.Key.StartsWith($"STA~{location.StationId}")).Select(i => i.Key));
+                    }
                     UpdateLocationsSelected(locations);
                     // Variables
                     List<string> variables = new List<string>();
-                    //variables.AddRange(model.VariableNodes.Where(i => wizardInput.Phenomena.Contains(i.Id)).Select(i => i.Key));
-                    //variables.AddRange(model.VariableNodes.Where(i => wizardInput.Offerings.Contains(i.Id)).Select(i => i.Key));
-                    //variables.AddRange(model.VariableNodes.Where(i => wizardInput.Units.Contains(i.Id)).Select(i => i.Key));
+                    foreach (var variable in wizardInput.Variables)
+                    {
+                        variables.AddRange(model.VariableNodes.Where(i => i.Key == $"UNI~{variable.UnitId}|OFF~{variable.OfferingId}|PHE~{variable.PhenomenonId}").Select(i => i.Key));
+                    }
                     UpdateVariablesSelected(variables);
                     // Filters
                     model.StartDate = wizardInput.StartDate;

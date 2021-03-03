@@ -17,7 +17,7 @@
     <DocumentationFile>SAEON.Observations.WebAPI.xml</DocumentationFile>
     <!--<NoWarn>1701;1702;1591</NoWarn>-->
     <NoWarn>1591</NoWarn>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;ODPAuth</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

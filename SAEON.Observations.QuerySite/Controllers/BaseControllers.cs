@@ -1,5 +1,4 @@
-﻿#define ODPAuth
-#if ODPAuth
+﻿#if ODPAuth
 using Newtonsoft.Json.Linq;
 #endif
 using SAEON.Core;
@@ -326,13 +325,13 @@ namespace SAEON.Observations.QuerySite.Controllers
         //    }
         //}
 
-        protected async Task<List<TEntity>> GetListAsync<TEntity>(string resource)// where TEntity : BaseEntity
+        protected async Task<List<TEntity>> GetListAsync<TEntity>(string resource, bool requireIdToken = false)// where TEntity : BaseEntity
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Resource", resource } }))
             {
                 try
                 {
-                    using (var client = await GetWebAPIClientAsync())
+                    using (var client = requireIdToken ? GetWebAPIClientWithIdToken() : await GetWebAPIClientAsync())
                     {
                         var url = $"{client.BaseAddress}{resource}";
                         SAEONLogs.Verbose("Calling: {url}", url);
@@ -538,6 +537,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
+                    SAEONLogs.Information("Claims: {Claims}", ((ClaimsPrincipal)User).Claims.ToClaimsList());
                     if (!id.HasValue) return RedirectToAction("Index");
                     using (var client = GetWebAPIClientWithIdToken())
                     {
@@ -560,7 +560,6 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public virtual async Task<ActionResult> Edit(TEntity delta)
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", delta?.Id }, { "Delta", delta } }))
@@ -594,7 +593,6 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
-        [Authorize]
         public virtual async Task<ActionResult> Delete(Guid? id)
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
@@ -623,7 +621,6 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public virtual async Task<ActionResult> DeleteConfirmed(Guid id)
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))

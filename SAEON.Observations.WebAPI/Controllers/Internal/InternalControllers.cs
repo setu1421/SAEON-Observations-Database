@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+#if ODPAuth
 using Microsoft.AspNetCore.Authorization;
+#endif
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -63,7 +65,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    [Authorize]
+#if ODPAuth
+    [Authorize(Policy = ODPAuthenticationDefaults.IdTokenPolicy)]
+#endif
     public abstract class InternalWriteController<TEntity> : BaseIdedReadController<TEntity> where TEntity : NamedEntity
     {
         protected IMapper Mapper { get; private set; }
@@ -87,6 +91,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         protected override void UpdateRequest()
         {
             EntityConfig.BaseUrl = Request.GetUri().GetLeftPart(UriPartial.Authority) + "/Internal";
+            DbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
         }
 
         protected abstract bool IsEntityOk(TEntity item, bool isPost);
@@ -108,6 +113,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
+                    UpdateRequest();
                     if (item == null)
                     {
                         SAEONLogs.Error("item cannot be null");
@@ -164,13 +170,15 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
-        [HttpPut("id:guid")]
+        [HttpPut("{id:guid}")]
         public async Task<ActionResult> PutById(Guid id, [FromBody] TEntity delta)
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "id", id }, { "delta", delta } }))
             {
                 try
                 {
+                    UpdateRequest();
+                    SAEONLogs.Information("Put: {id}", id);
                     if (delta == null)
                     {
                         SAEONLogs.Error("delta cannot be null");
@@ -222,13 +230,14 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
-        [HttpDelete("id:guid")]
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult> DeleteById(Guid id)
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
+                    UpdateRequest();
                     SAEONLogs.Verbose("Deleting {id}", id);
                     var item = await GetQuery().Where(i => i.Id == id).FirstOrDefaultAsync();
                     if (item == null)

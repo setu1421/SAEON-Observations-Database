@@ -431,8 +431,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    SAEONLogs.Verbose("UserId: {userId}", User.UserId());
-                    SAEONLogs.Verbose("Claims: {claims}", User.Claims.ToClaimsList());
+                    SAEONLogs.Verbose("UserId: {userId} Claims: {claims}", User.UserId(), User.Claims.ToClaimsList());
                     // Get Data
                     var output = GetData(input, false);
                     // Create Download

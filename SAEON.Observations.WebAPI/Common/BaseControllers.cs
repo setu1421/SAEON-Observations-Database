@@ -1,5 +1,4 @@
-﻿#define ODPAuth
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,13 +19,12 @@ namespace SAEON.Observations.WebAPI
 {
     #region ApiControllers
     [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
-#if ODPAuth
-    [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
-#endif
     [ApiController]
     [ResponseCache(Duration = Defaults.CacheDuration)]
     //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-
+#if ODPAuth
+    [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+#endif
     public abstract class BaseApiController : ControllerBase
     {
         private IConfiguration config;
@@ -99,7 +97,7 @@ namespace SAEON.Observations.WebAPI
 
         protected virtual IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
-            var query = DbContext.Set<TEntity>().AsNoTracking().AsQueryable();
+            var query = DbContext.Set<TEntity>()/*.AsNoTracking()*/.AsQueryable();
             foreach (var where in GetWheres())
             {
                 query = query.Where(where);
@@ -109,23 +107,23 @@ namespace SAEON.Observations.WebAPI
                 query = query.Where(extraWhere);
             }
             var orderBys = GetOrderBys();
-            SAEONLogs.Verbose("OrderBys: {orderBys}", orderBys?.Count);
+            //SAEONLogs.Verbose("OrderBys: {orderBys}", orderBys?.Count);
             var orderBy = orderBys.FirstOrDefault();
             if (orderBy != null)
             {
-                IOrderedQueryable<TEntity> oq;
+                IOrderedQueryable<TEntity> orderedQuery;
                 if (orderBy.Ascending)
-                    oq = query.OrderBy(orderBy.Expression);
+                    orderedQuery = query.OrderBy(orderBy.Expression);
                 else
-                    oq = query.OrderByDescending(orderBy.Expression);
+                    orderedQuery = query.OrderByDescending(orderBy.Expression);
                 foreach (var thenBy in orderBys.Skip(1))
                 {
                     if (thenBy.Ascending)
-                        oq = oq.ThenBy(orderBy.Expression);
+                        orderedQuery = orderedQuery.ThenBy(orderBy.Expression);
                     else
-                        oq = oq.ThenByDescending(orderBy.Expression);
+                        orderedQuery = orderedQuery.ThenByDescending(orderBy.Expression);
                 }
-                query = oq;
+                query = orderedQuery;
             }
             return query;
         }
@@ -180,12 +178,12 @@ namespace SAEON.Observations.WebAPI
 
     #region ODataControllers
     [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
-#if ODPAuth
-    [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
-#endif
     [ApiExplorerSettings(IgnoreApi = true)]
     [ResponseCache(Duration = Defaults.CacheDuration)]
     //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+#if ODPAuth
+    [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+#endif
     public abstract class BaseODataController<TEntity> : ODataController where TEntity : BaseEntity
     {
         public static string BaseUrl { get; set; }
@@ -204,7 +202,7 @@ namespace SAEON.Observations.WebAPI
         /// <returns></returns>
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
-            var query = DbContext.Set<TEntity>().AsNoTracking().AsQueryable();
+            var query = DbContext.Set<TEntity>()/*.AsNoTracking()*/.AsQueryable();
             if (extraWhere != null)
             {
                 query = query.Where(extraWhere);

@@ -4,6 +4,7 @@
     {
         public const string AccessTokenClaim = "ODPAccessToken";
         public const string AdminTokenClaim = "ODPAdminToken";
+        public const string AntiForgeryClaim = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
         public const string ApplicationJson = "application/json";
         public const string ClientIdClaim = "ClientId";
         public const string ConfigKeyTenants = "Tenants";

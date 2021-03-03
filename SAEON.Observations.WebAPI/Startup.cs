@@ -1,6 +1,7 @@
 using HealthChecks.UI.Client;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNet.OData.Formatter;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OData.Edm;
 using Microsoft.OpenApi.Models;
 using SAEON.Core;
@@ -97,7 +99,7 @@ namespace SAEON.Observations.WebAPI
                         options.IncludeXmlComments("SAEON.Observations.WebAPI.xml");
                         options.SchemaFilter<SwaggerIgnoreFilter>();
                     });
-                    //SetOutputFormatters(services);
+                    SetOutputFormatters(services);
 
                     services.AddSignalR();
                     services.AddControllers();
@@ -206,27 +208,26 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
-        //private static void SetOutputFormatters(IServiceCollection services)
-        //{
-        //    services.AddMvcCore(options =>
-        //    {
-        //        foreach (var formatter in options.OutputFormatters
-        //            .OfType<ODataOutputFormatter>()
-        //            .Where(it => !it.SupportedMediaTypes.Any()))
-        //        {
-        //            formatter.SupportedMediaTypes.Add(
-        //                new MediaTypeHeaderValue("application/odata"));
-        //        }
-        //        foreach (var formatter in options.InputFormatters
-        //            .OfType<ODataInputFormatter>()
-        //            .Where(it => !it.SupportedMediaTypes.Any()))
-        //        {
-        //            formatter.SupportedMediaTypes.Add(
-        //                new MediaTypeHeaderValue("application/odata"));
-        //        }
-        //    });
-        //}
-
+        private static void SetOutputFormatters(IServiceCollection services)
+        {
+            services.AddMvcCore(options =>
+            {
+                foreach (var formatter in options.OutputFormatters
+                    .OfType<ODataOutputFormatter>()
+                    .Where(it => !it.SupportedMediaTypes.Any()))
+                {
+                    formatter.SupportedMediaTypes.Add(
+                        new MediaTypeHeaderValue("application/odata"));
+                }
+                foreach (var formatter in options.InputFormatters
+                    .OfType<ODataInputFormatter>()
+                    .Where(it => !it.SupportedMediaTypes.Any()))
+                {
+                    formatter.SupportedMediaTypes.Add(
+                        new MediaTypeHeaderValue("application/odata"));
+                }
+            });
+        }
     }
 }
 
