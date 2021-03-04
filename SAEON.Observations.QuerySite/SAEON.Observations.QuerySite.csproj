@@ -266,6 +266,7 @@
     <Compile Include="Controllers\DOIController.cs" />
     <Compile Include="Controllers\HealthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserDownloadsController.cs" />
     <Compile Include="Controllers\UserQueriesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -961,6 +962,10 @@
     <Content Include="Views\UserQueries\Delete.cshtml" />
     <Content Include="Views\UserQueries\Details.cshtml" />
     <Content Include="Views\UserQueries\Edit.cshtml" />
+    <Content Include="Views\UserDownloads\Delete.cshtml" />
+    <Content Include="Views\UserDownloads\Details.cshtml" />
+    <Content Include="Views\UserDownloads\Edit.cshtml" />
+    <Content Include="Views\UserDownloads\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

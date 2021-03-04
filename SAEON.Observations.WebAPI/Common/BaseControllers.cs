@@ -93,11 +93,20 @@ namespace SAEON.Observations.WebAPI
             return new List<OrderBy<TEntity>>();
         }
 
+        protected virtual List<Expression<Func<TEntity, object>>> GetIncludes()
+        {
+            return new List<Expression<Func<TEntity, object>>>();
+        }
+
         protected abstract void UpdateRequest();
 
         protected virtual IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
             var query = DbContext.Set<TEntity>()/*.AsNoTracking()*/.AsQueryable();
+            foreach (var include in GetIncludes())
+            {
+                query = query.Include(include);
+            }
             foreach (var where in GetWheres())
             {
                 query = query.Where(where);
@@ -173,7 +182,6 @@ namespace SAEON.Observations.WebAPI
             }
         }
     }
-
     #endregion
 
     #region ODataControllers

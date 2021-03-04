@@ -446,7 +446,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 durationStopwatch.Start();
                 var stageStopwatch = new Stopwatch();
                 stageStopwatch.Start();
-                SAEONLogs.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.57, batch.DataSource.Name, batch.FileName);
+                SAEONLogs.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.58, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
                 stageStopwatch.Stop();
                 SAEONLogs.Information("Imported {count:N0} observations in {elapsed}", values.Count, stageStopwatch.Elapsed.TimeStr());
