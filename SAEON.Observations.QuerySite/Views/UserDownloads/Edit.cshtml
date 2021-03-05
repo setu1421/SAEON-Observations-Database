@@ -39,9 +39,9 @@
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(model => model.Citation, htmlAttributes: new { @class = "col-md-2" })
+                @Html.LabelFor(model => model.DigitalObjectIdentifier.CitationHtml, htmlAttributes: new { @class = "col-md-2" })
                 <div class="col-md-10">
-                    @Html.DisplayFor(model => model.Citation)
+                    @Html.DisplayFor(model => model.DigitalObjectIdentifier.CitationHtml)
                 </div>
             </div>
             <div class="form-group">
@@ -51,9 +51,9 @@
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(model => model.MetadataUrl, htmlAttributes: new { @class = "col-md-2" })
+                @Html.LabelFor(model => model.DigitalObjectIdentifier.MetadataUrl, htmlAttributes: new { @class = "col-md-2" })
                 <div class="col-md-10">
-                    <a href="@Model.MetadataUrl">@Html.DisplayFor(model => model.MetadataUrl)</a>
+                    <a href="@Model.DigitalObjectIdentifier.MetadataUrl">@Html.DisplayFor(model => model.DigitalObjectIdentifier.MetadataUrl)</a>
                 </div>
             </div>
             <div class="form-group">

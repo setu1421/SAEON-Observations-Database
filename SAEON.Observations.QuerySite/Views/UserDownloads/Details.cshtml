@@ -31,10 +31,10 @@
                     @Html.DisplayFor(model => model.Description)
                 </dd>
                 <dt>
-                    @Html.DisplayNameFor(model => model.Citation)
+                    @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.CitationHtml)
                 </dt>
                 <dd>
-                    @Html.DisplayFor(model => model.Citation)
+                    @Html.DisplayFor(model => model.DigitalObjectIdentifier.CitationHtml)
                 </dd>
                 <dt>
                     @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.DOI)
@@ -43,10 +43,10 @@
                     <a href="@Model.DigitalObjectIdentifier.DOIUrl">@Html.DisplayFor(model => model.DigitalObjectIdentifier.DOIUrl)</a>
                 </dd>
                 <dt>
-                    @Html.DisplayNameFor(model => model.MetadataUrl)
+                    @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.MetadataUrl)
                 </dt>
                 <dd>
-                    <a href="@Model.MetadataUrl">@Html.DisplayFor(model => model.MetadataUrl)</a>
+                    <a href="@Model.DigitalObjectIdentifier.MetadataUrl">@Html.DisplayFor(model => model.DigitalObjectIdentifier.MetadataUrl)</a>
                 </dd>
                 <dt>
                     @Html.DisplayNameFor(model => model.DownloadUrl)

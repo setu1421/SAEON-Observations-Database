@@ -329,10 +329,12 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Citation of the DigitalObjectIdentifier as Html 
         /// </summary>
+        [DisplayName("Citation")]
         public string CitationHtml { get; set; }
         /// <summary>
         /// Citation of the DigitalObjectIdentifier as Text 
         /// </summary>
+        [DisplayName("Citation")]
         public string CitationText { get; set; }
         /// <summary>
         /// Object Store Url of the DigitalObjectIdentifier
