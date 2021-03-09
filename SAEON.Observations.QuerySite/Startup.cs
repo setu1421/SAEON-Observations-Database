@@ -47,29 +47,40 @@ namespace SAEON.Observations.QuerySite
                         ClientSecret = ConfigurationManager.AppSettings["QuerySiteClientSecret"],
                         Scope = $"openid {ConfigurationManager.AppSettings["WebAPIClientId"]}",
                         RedirectUri = ConfigurationManager.AppSettings["QuerySiteUrl"] + "/signin-oidc",
-                        PostLogoutRedirectUri = ConfigurationManager.AppSettings["QuerySiteUrl"] + "/signout-callback-oidc",
+                        PostLogoutRedirectUri = ConfigurationManager.AppSettings["QuerySiteUrl"] + "/",
                         ResponseType = "code",
                         SignInAsAuthenticationType = "Cookies",
                         SaveTokens = true,
                         RedeemCode = true,
                         Notifications = new OpenIdConnectAuthenticationNotifications
                         {
+                            SecurityTokenReceived = (context) =>
+                            {
+                                SAEONLogs.Information("*** SecurityTokenReceived {@ProtocolMessage}", context.ProtocolMessage);
+                                return Task.FromResult(0);
+                            },
                             SecurityTokenValidated = async (context) =>
                             {
-                                //SAEONLogs.Information("*** SecurityTokenValidated {@ProtocolMessage}", context.ProtocolMessage);
-                                var token = context.ProtocolMessage.AccessToken;
-                                if (string.IsNullOrWhiteSpace(token))
+                                SAEONLogs.Information("*** SecurityTokenValidated {@ProtocolMessage}", context.ProtocolMessage);
+                                var accessToken = context.ProtocolMessage.AccessToken;
+                                var idToken = context.ProtocolMessage.IdToken;
+                                if (string.IsNullOrWhiteSpace(accessToken))
                                 {
-                                    SAEONLogs.Error("ODPAuthorization Failed, no token");
-                                    throw new SecurityTokenValidationException("ODPAuthorization Failed, no token");
+                                    SAEONLogs.Error("ODPAuthorization Failed, no access token");
+                                    throw new SecurityTokenValidationException("ODPAuthorization Failed, no acess token");
                                 }
-                                SAEONLogs.Debug("Token: {Token}", token);
+                                //if (string.IsNullOrWhiteSpace(idToken))
+                                //{
+                                //    SAEONLogs.Error("ODPAuthorization Failed, no id token");
+                                //    throw new SecurityTokenValidationException("ODPAuthorization Failed, no id token");
+                                //}
+                                SAEONLogs.Debug("AccessToken: {AccessToken} IdToken: {IdToken}", accessToken, idToken);
                                 // Validate token
                                 using (var client = new HttpClient())
                                 {
-                                    client.SetBearerToken(token);
+                                    client.SetBearerToken(accessToken);
                                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
-                                    using (var formContent = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("token", token) }))
+                                    using (var formContent = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("token", accessToken) }))
                                     {
                                         var response = await client.PostAsync(new Uri(ConfigurationManager.AppSettings["AuthenticationServerIntrospectionUrl"]), formContent).ConfigureAwait(false);
                                         if (!response.IsSuccessStatusCode)
@@ -85,7 +96,7 @@ namespace SAEON.Observations.QuerySite
                                         var isActive = jObj.Value<bool>("active");
                                         if (!isActive)
                                         {
-                                            SAEONLogs.Error("ODPAuthorization, invalid token {Token}", token);
+                                            SAEONLogs.Error("ODPAuthorization, invalid token {Token}", accessToken);
                                             throw new SecurityTokenValidationException("Invalid token");
                                         }
                                         if (jObj["ext"] == null)
@@ -93,7 +104,7 @@ namespace SAEON.Observations.QuerySite
                                             var clientId = jObj.Value<string>("client_id");
                                             var claims = new List<Claim> {
                                                 new Claim(Constants.ClientIdClaim, clientId),
-                                                new Claim(Constants.AccessTokenClaim, token)
+                                                new Claim(Constants.AccessTokenClaim, accessToken)
                                             };
                                             SAEONLogs.Debug("ODPAuthentication id token succeeded Claims: {@Claims}", claims.ToClaimsList());
                                             context.AuthenticationTicket.Identity.AddClaims(claims);
@@ -108,7 +119,8 @@ namespace SAEON.Observations.QuerySite
                                             SAEONLogs.Debug("User Id: {Id} Email: {Email}, Roles: {Role}", userId, userEmail, userRoles);
                                             var claims = new List<Claim> {
                                                 new Claim(Constants.ClientIdClaim,clientId),
-                                                new Claim(Constants.IdTokenClaim, token),
+                                                new Claim(Constants.AccessTokenClaim, accessToken),
+                                                new Claim(Constants.IdTokenClaim, idToken),
                                                 new Claim(ClaimTypes.NameIdentifier,userId),
                                                 new Claim(ClaimTypes.Email,userEmail)
                                             };
@@ -158,21 +170,11 @@ namespace SAEON.Observations.QuerySite
                             //    SAEONLogs.Information("*** MessageReceived {@ProtocolMessage}", context.ProtocolMessage);
                             //    return Task.FromResult(0);
                             //},
-                            //SecurityTokenReceived = (context) =>
-                            //{
-                            //    SAEONLogs.Information("*** SecurityTokenReceived {@ProtocolMessage}", context.ProtocolMessage);
-                            //    return Task.FromResult(0);
-                            //},
-                            //SecurityTokenValidated = (context) =>
-                            //{
-                            //    SAEONLogs.Information("*** SecurityTokenValidated {@ProtocolMessage}", context.ProtocolMessage);
-                            //    return Task.FromResult(0);
-                            //},
-                            //AuthorizationCodeReceived = (context) =>
-                            //{
-                            //    SAEONLogs.Information("*** AuthorizationCodeReceived {@ProtocolMessage}", context.ProtocolMessage);
-                            //    return Task.FromResult(0);
-                            //},
+                            AuthorizationCodeReceived = (context) =>
+                            {
+                                SAEONLogs.Information("*** AuthorizationCodeReceived {@ProtocolMessage}", context.ProtocolMessage);
+                                return Task.FromResult(0);
+                            },
                             //AuthenticationFailed = (context) =>
                             //{
                             //    SAEONLogs.Information("*** AuthenticationFailed {@ProtocolMessage}", context.ProtocolMessage);

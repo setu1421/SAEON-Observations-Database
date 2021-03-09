@@ -19,9 +19,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         public ActionResult LogOut()
         {
 
-            Request.GetOwinContext().Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
-            Request.GetOwinContext().Authentication.SignOut(OpenIdConnectAuthenticationDefaults.AuthenticationType);
-            Request.GetOwinContext().Authentication.SignOut();
+            Request.GetOwinContext().Authentication.SignOut(OpenIdConnectAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
             return Redirect("/");
         }
 
@@ -29,9 +27,6 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             if (!Request.IsAuthenticated)
             {
-                Request.GetOwinContext().Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
-                Request.GetOwinContext().Authentication.SignOut(OpenIdConnectAuthenticationDefaults.AuthenticationType);
-                Request.GetOwinContext().Authentication.SignOut();
                 var properties = new AuthenticationProperties { RedirectUri = "/" };
                 properties.Dictionary.Add("ODPRegister", "true");
                 Request.GetOwinContext().Authentication.Challenge(properties, OpenIdConnectAuthenticationDefaults.AuthenticationType);

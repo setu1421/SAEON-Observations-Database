@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OData.Edm;
@@ -18,6 +19,7 @@ using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
+using System.IO;
 using System.Linq;
 
 
@@ -98,6 +100,29 @@ namespace SAEON.Observations.WebAPI
                         });
                         options.IncludeXmlComments("SAEON.Observations.WebAPI.xml");
                         options.SchemaFilter<SwaggerIgnoreFilter>();
+                        //options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                        //{
+                        //    Name = "Authorization",
+                        //    Type = SecuritySchemeType.ApiKey,
+                        //    Scheme = "Bearer",
+                        //    In = ParameterLocation.Header,
+                        //    Description = "Authorization header using the Bearer scheme. \r\n\r\n Enter 'bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"bearer 12345abcdef\"",
+                        //});
+                        //options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                        //{
+                        //    {
+                        //          new OpenApiSecurityScheme
+                        //            {
+                        //                Reference = new OpenApiReference
+                        //                {
+                        //                    Type = ReferenceType.SecurityScheme,
+                        //                    Id = "Bearer"
+                        //                }
+                        //            },
+                        //            new string[] {}
+
+                        //    }
+                        //});
                     });
                     SetOutputFormatters(services);
 
@@ -105,6 +130,8 @@ namespace SAEON.Observations.WebAPI
                     services.AddControllers();
                     services.AddControllersWithViews();
                     services.AddApplicationInsightsTelemetry();
+                    IFileProvider physicalProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
+                    services.AddSingleton<IFileProvider>(physicalProvider);
                 }
                 catch (Exception ex)
                 {
@@ -135,6 +162,11 @@ namespace SAEON.Observations.WebAPI
                     app.UseResponseCaching();
                     app.UseResponseCompression();
                     app.UseStaticFiles();
+                    app.UseStaticFiles(new StaticFileOptions
+                    {
+                        FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "node_modules")),
+                        RequestPath = "/node_modules",
+                    });
 
                     app.UseRouting();
                     //app.UseCors(SAEONAuthenticationDefaults.CorsAllowAllPolicy);
@@ -157,7 +189,6 @@ namespace SAEON.Observations.WebAPI
                         endpoints.MapDefaultControllerRoute();
                         endpoints.MapControllers();
                         endpoints.MapHub<AdminHub>("/AdminHub").RequireCors(SAEONAuthenticationDefaults.CorsAllowSignalRPolicy);
-                        //endpoints.Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop);
                         //endpoints.MapODataRoute("Internal", "Internal", GetInternalEdmModel()).Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop);
                         endpoints.MapODataRoute("OData", "OData", GetODataEdmModel()).Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop); ;
                     });

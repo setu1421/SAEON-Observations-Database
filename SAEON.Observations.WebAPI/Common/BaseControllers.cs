@@ -1,6 +1,7 @@
 ﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -42,6 +43,10 @@ namespace SAEON.Observations.WebAPI
         }
 
         [HttpGet]
+#if ODPAuth
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+#endif
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public virtual List<TObject> GetAll()
         {
             using (SAEONLogs.MethodCall<TObject>(GetType()))
@@ -138,6 +143,10 @@ namespace SAEON.Observations.WebAPI
         }
 
         [HttpGet]
+#if ODPAuth
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+#endif
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public virtual IQueryable<TEntity> GetAll()
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType()))
@@ -160,6 +169,10 @@ namespace SAEON.Observations.WebAPI
     public abstract class BaseIdedReadController<TEntity> : BaseReadController<TEntity> where TEntity : IdedEntity
     {
         [HttpGet("{id:guid}")]
+#if ODPAuth
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+#endif
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public virtual async Task<ActionResult> GetById(Guid id)
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))

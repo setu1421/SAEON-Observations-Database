@@ -32,9 +32,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the TEntity</param>
         /// <returns>TEntity</returns>
         [HttpGet("{id:guid}")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+#if ODPAuth
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+#endif
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public virtual async Task<ActionResult<TEntity>> GetByIdAsync(Guid id)
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
@@ -66,9 +68,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="select">Lambda to select TRelated</param>
         /// <returns>TaskOf(IHttpActionResult)</returns>
         //[HttpGet("{id:guid}/TRelated")] Required in calling classes
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+#if ODPAuth
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+#endif
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         protected async Task<ActionResult<TRelated>> GetSingleAsync<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
         {
             using (SAEONLogs.MethodCall<TEntity, TRelated>(GetType()))
@@ -100,6 +104,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>TaskOf(IHttpActionResult)</returns>
         //[HttpGet("{id:guid}/TRelated")] Required in calling classes
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+#if ODPAuth
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+#endif
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         protected TRelated GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
         {
             using (SAEONLogs.MethodCall<TEntity, TRelated>(GetType()))
@@ -132,6 +140,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         //[HttpGet]
         //[Route("{id:guid}/TRelated")] Required in derived classes
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+#if ODPAuth
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+#endif
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         protected IQueryable<TRelated> GetManyWithGuidId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : GuidIdEntity
         {
             using (SAEONLogs.MethodCall<TEntity, TRelated>(GetType()))
@@ -158,6 +170,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>IQueryableOf(TRelated)</returns>
         //[HttpGet("{id:guid}/TRelated")] Required in calling classes
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+#if ODPAuth
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+#endif
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         protected IQueryable<TRelated> GetManyWithIntId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : IntIdEntity
         {
             using (SAEONLogs.MethodCall<TEntity, TRelated>(GetType()))
@@ -184,6 +200,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>IQueryableOf(TRelated)</returns>
         //[HttpGet("{id:guid}/TRelated")] Required in calling classes
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+#if ODPAuth
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+#endif
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         protected IQueryable<TRelated> GetManyWithLongId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : LongIdEntity
         {
             using (SAEONLogs.MethodCall<TEntity, TRelated>(GetType()))
@@ -218,9 +238,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="code">The Code of the TEntity</param>
         /// <returns>TEntity</returns>
         [HttpGet("ByCode/{code:required}")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "code" })]
+#if ODPAuth
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+#endif
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public virtual async Task<ActionResult<TEntity>> GetByCodeAsync(string code)
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Code", code } }))
@@ -260,9 +282,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the TEntity</param>
         /// <returns>TEntity</returns>
         [HttpGet("ByName/{name:required}")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "name" })]
+#if ODPAuth
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+#endif
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public virtual async Task<ActionResult<TEntity>> GetByNameAsync(string name)
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Name", name } }))
@@ -303,9 +327,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="code">The Code of the TEntity</param>
         /// <returns>TEntity</returns>
         [HttpGet("ByCode/{code:required}")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "code" })]
+#if ODPAuth
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+#endif
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public virtual async Task<ActionResult<TEntity>> GetByCodeAsync(string code)
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Code", code } }))
@@ -335,9 +361,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the TEntity</param>
         /// <returns>TEntity</returns>
         [HttpGet("ByName/{name:required}")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "name" })]
+#if ODPAuth
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+#endif
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public virtual async Task<ActionResult<TEntity>> GetByNameAsync(string name)
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Name", name } }))
