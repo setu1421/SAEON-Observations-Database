@@ -32,7 +32,7 @@ namespace SAEON.Observations.WebAPI
             Configuration = configuration;
             try
             {
-                SAEONLogs.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName);
+                SAEONLogs.Information("Starting {Application} LogLevel: {LogLevel} Testing: {Testing}", ApplicationHelper.ApplicationName, SAEONLogs.Level, Configuration["Testing"]);
                 SAEONLogs.Debug("AuthenticationServerUrl: {AuthenticationServerUrl} AuthenticationServerIntrospectionUrl: {AuthenticationServerIntrospectionUrl}",
                     Configuration["AuthenticationServerUrl"], Configuration["AuthenticationServerIntrospectionUrl"]);
             }

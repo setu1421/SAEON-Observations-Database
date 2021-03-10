@@ -28,11 +28,11 @@ namespace SAEON.Observations.WebAPI
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseSAEONLogs()
                 .ConfigureAppConfiguration((hostContext, config) =>
                 {
                     config.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
                 })
+                .UseSAEONLogs()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

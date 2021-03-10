@@ -580,7 +580,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             if (User?.Identity?.IsAuthenticated ?? false)
             {
-                return (await GetListAsync<UserQuery>("Internal/UserQueries", true));
+                return (await GetListAsync<UserQuery>("Internal/UserQueries"));
             }
             else
             {

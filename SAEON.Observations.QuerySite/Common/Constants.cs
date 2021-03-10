@@ -11,8 +11,7 @@
         public const string ConfigKeyDefaultTenant = "DefaultTenant";
         public const string HeaderKeyTenant = "Tenant";
         public const string IdTokenClaim = "ODPIdToken";
-        public const string SessionKeyAccessToken = "ODPAccessToken";
-        public const string SessionKeyIdToken = "ODPIdToken";
+        public const string SessionKeyODPAccessToken = "ODPAccessToken";
         public const string SessionKeyTenant = "Tenant";
     }
 }

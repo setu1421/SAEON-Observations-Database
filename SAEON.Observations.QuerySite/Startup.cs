@@ -54,11 +54,11 @@ namespace SAEON.Observations.QuerySite
                         RedeemCode = true,
                         Notifications = new OpenIdConnectAuthenticationNotifications
                         {
-                            SecurityTokenReceived = (context) =>
-                            {
-                                SAEONLogs.Information("*** SecurityTokenReceived {@ProtocolMessage}", context.ProtocolMessage);
-                                return Task.FromResult(0);
-                            },
+                            //SecurityTokenReceived = (context) =>
+                            //{
+                            //    SAEONLogs.Information("*** SecurityTokenReceived {@ProtocolMessage}", context.ProtocolMessage);
+                            //    return Task.FromResult(0);
+                            //},
                             SecurityTokenValidated = async (context) =>
                             {
                                 SAEONLogs.Information("*** SecurityTokenValidated {@ProtocolMessage}", context.ProtocolMessage);
@@ -107,7 +107,14 @@ namespace SAEON.Observations.QuerySite
                                                 new Claim(Constants.AccessTokenClaim, accessToken)
                                             };
                                             SAEONLogs.Debug("ODPAuthentication id token succeeded Claims: {@Claims}", claims.ToClaimsList());
-                                            context.AuthenticationTicket.Identity.AddClaims(claims);
+                                            foreach (var claim in claims)
+                                            {
+                                                if (!context.AuthenticationTicket.Identity.HasClaim(i => (i.Type == claim.Type) && (i.Value == claim.Value)))
+                                                {
+                                                    context.AuthenticationTicket.Identity.AddClaim(claim);
+                                                }
+                                            }
+                                            //context.AuthenticationTicket.Identity.AddClaims(claims);
                                         }
                                         else // Id token
                                         {
@@ -170,11 +177,11 @@ namespace SAEON.Observations.QuerySite
                             //    SAEONLogs.Information("*** MessageReceived {@ProtocolMessage}", context.ProtocolMessage);
                             //    return Task.FromResult(0);
                             //},
-                            AuthorizationCodeReceived = (context) =>
-                            {
-                                SAEONLogs.Information("*** AuthorizationCodeReceived {@ProtocolMessage}", context.ProtocolMessage);
-                                return Task.FromResult(0);
-                            },
+                            //AuthorizationCodeReceived = (context) =>
+                            //{
+                            //    SAEONLogs.Information("*** AuthorizationCodeReceived {@ProtocolMessage}", context.ProtocolMessage);
+                            //    return Task.FromResult(0);
+                            //},
                             //AuthenticationFailed = (context) =>
                             //{
                             //    SAEONLogs.Information("*** AuthenticationFailed {@ProtocolMessage}", context.ProtocolMessage);

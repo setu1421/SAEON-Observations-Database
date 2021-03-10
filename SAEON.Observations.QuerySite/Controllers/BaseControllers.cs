@@ -1,40 +1,25 @@
-﻿#if ODPAuth
-using Newtonsoft.Json.Linq;
-#endif
+﻿using Newtonsoft.Json.Linq;
 using SAEON.Core;
 using SAEON.Logs;
-using SAEON.Observations.Core;
-#if ODPAuth
 using SAEON.Observations.Auth;
-#endif
+using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
-#if ODPAuth
 using System.Security.Claims;
-#endif
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Linq;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
     [OutputCache(Duration = Defaults.CacheDuration)]
     public abstract class BaseController : Controller
     {
-        public BaseController() : base()
-        {
-#if ODPAuth
-            ViewBag.ODPAuth = true;
-#else
-            ViewBag.ODPAuth = false;
-#endif
-        }
-
         protected string Tenant
         {
             get
@@ -61,46 +46,60 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-#if ODPAuth
-        private async Task<string> GetAccessTokenAsync(bool useSession = true)
+        private async Task<string> GetAccessTokenAsync()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    var token = useSession ? Session[Constants.SessionKeyAccessToken]?.ToString() : null;
-                    if (string.IsNullOrWhiteSpace(token))
+                    string token = null;
+                    var idToken = (User as ClaimsPrincipal)?.FindFirst(Constants.IdTokenClaim)?.Value;
+                    if (!string.IsNullOrEmpty(idToken))
                     {
-                        using (var client = new HttpClient() { BaseAddress = new Uri(ConfigurationManager.AppSettings["AuthenticationServerUrl"].AddTrailingForwardSlash()) })
+                        token = (User as ClaimsPrincipal)?.FindFirst(Constants.AccessTokenClaim)?.Value;
+                        if (string.IsNullOrWhiteSpace(token))
                         {
-                            using (var formContent = new FormUrlEncodedContent(new[] {
+                            SAEONLogs.Error("AccessTokenClaim is invalid");
+                            throw new InvalidOperationException("AccessTokenClaim is invalid");
+                        }
+                        Session[Constants.SessionKeyODPAccessToken] = token;
+                    }
+                    else
+                    {
+                        token = Session[Constants.SessionKeyODPAccessToken]?.ToString();
+                        if (string.IsNullOrWhiteSpace(token))
+                        {
+                            using (var client = new HttpClient() { BaseAddress = new Uri(ConfigurationManager.AppSettings["AuthenticationServerUrl"].AddTrailingForwardSlash()) })
+                            {
+                                using (var formContent = new FormUrlEncodedContent(new[] {
                                 new KeyValuePair<string, string>("grant_type", "client_credentials"),
                                 new KeyValuePair<string, string>("scope", ConfigurationManager.AppSettings["WebAPIClientId"]),
                                 new KeyValuePair<string, string>("client_id", ConfigurationManager.AppSettings["QuerySiteClientId"]),
                                 new KeyValuePair<string, string>("client_secret", ConfigurationManager.AppSettings["QuerySiteClientSecret"]),
                                 }))
-                            {
-                                //SAEONLogs.Information("scope: {scope} client_id: {client_id} client_secret: {client_secret}", ODPAuthenticationDefaults.WebAPIClientId, ODPAuthenticationDefaults.QuerySiteClientId), config["QuerySiteClientSecret"]);
-                                SAEONLogs.Verbose("Requesting access token");
-                                var response = await client.PostAsync("oauth2/token", formContent);
-                                if (!response.IsSuccessStatusCode)
                                 {
-                                    SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
-                                    SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
-                                }
-                                response.EnsureSuccessStatusCode();
-                                token = await response.Content.ReadAsStringAsync();
-                                if (!string.IsNullOrWhiteSpace(token))
-                                {
-                                    Session[Constants.SessionKeyAccessToken] = token;
+                                    //SAEONLogs.Information("scope: {scope} client_id: {client_id} client_secret: {client_secret}", ODPAuthenticationDefaults.WebAPIClientId, ODPAuthenticationDefaults.QuerySiteClientId), config["QuerySiteClientSecret"]);
+                                    SAEONLogs.Verbose("Requesting ODP token");
+                                    var response = await client.PostAsync("oauth2/token", formContent);
+                                    if (!response.IsSuccessStatusCode)
+                                    {
+                                        SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                                        SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                                    }
+                                    response.EnsureSuccessStatusCode();
+                                    var odpToken = await response.Content.ReadAsStringAsync();
+                                    SAEONLogs.Verbose("ODPToken: {ODPToken}", odpToken);
+                                    if (string.IsNullOrWhiteSpace(odpToken))
+                                    {
+                                        SAEONLogs.Error("ODPToken is invalid");
+                                        throw new InvalidOperationException("ODPToken is invalid");
+                                    }
+                                    var jObj = JObject.Parse(odpToken);
+                                    token = jObj.Value<string>("access_token");
+                                    Session[Constants.SessionKeyODPAccessToken] = token;
                                 }
                             }
                         }
-                    }
-                    if (string.IsNullOrWhiteSpace(token))
-                    {
-                        SAEONLogs.Error("AccessToken is invalid");
-                        if (string.IsNullOrWhiteSpace(token)) throw new InvalidOperationException("AccessToken is invalid");
                     }
                     SAEONLogs.Verbose("AccessToken: {AccessToken}", token);
                     return token;
@@ -113,67 +112,13 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        private string GetBearerTokenFromAccessToken(string accessToken)
-        {
-            using (SAEONLogs.MethodCall(GetType()))
-            {
-                try
-                {
-                    var jObj = JObject.Parse(accessToken);
-                    var token = jObj.Value<string>("access_token");
-                    SAEONLogs.Verbose("BearerToken: {BearerToken}", token);
-                    return token;
-                }
-                catch (Exception ex)
-                {
-                    SAEONLogs.Exception(ex);
-                    throw;
-                }
-            }
-        }
-
-        private string GetIdToken(bool useSession = true)
-        {
-            using (SAEONLogs.MethodCall(GetType()))
-            {
-                try
-                {
-                    var token = useSession ? Session[Constants.SessionKeyIdToken]?.ToString() : null;
-                    if (string.IsNullOrWhiteSpace(token))
-                    {
-                        token = (User as ClaimsPrincipal)?.FindFirst(Constants.IdTokenClaim)?.Value;
-                    }
-                    if (string.IsNullOrEmpty(token))
-                    {
-                        SAEONLogs.Error("The access token cannot be found in the authentication ticket. Make sure that SaveTokens is set to true in the OIDC options.");
-                        throw new InvalidOperationException("The access token cannot be found in the authentication ticket. Make sure that SaveTokens is set to true in the OIDC options.");
-                    }
-                    Session[Constants.SessionKeyIdToken] = token;
-                    SAEONLogs.Verbose("IdToken: {IdToken}", token);
-                    return token;
-                }
-                catch (Exception ex)
-                {
-                    SAEONLogs.Exception(ex);
-                    throw;
-                }
-            }
-        }
-#endif
-
         protected async Task<string> GetAuthorizationAsync()
         {
-            var token = Session[Constants.SessionKeyIdToken]?.ToString();
-#if ODPAuth
-            if (string.IsNullOrWhiteSpace(token))
-            {
-                token = GetBearerTokenFromAccessToken(await GetAccessTokenAsync());
-            }
-#endif
+            var token = await GetAccessTokenAsync();
             return $"Bearer {token}";
         }
 
-        protected HttpClient GetWebAPIClientBase()
+        private HttpClient GetWebAPIClientBase()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -193,16 +138,15 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        protected async Task<HttpClient> GetWebAPIClientWithAccessTokenAsync(bool useSession = true)
+        protected async Task<HttpClient> GetWebAPIClientAsync()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
                     var client = GetWebAPIClientBase();
-#if ODPAuth
-                    client.SetBearerToken(GetBearerTokenFromAccessToken(await GetAccessTokenAsync(useSession)));
-#endif
+                    var token = await GetAccessTokenAsync();
+                    client.SetBearerToken(token);
                     return client;
                 }
                 catch (Exception ex)
@@ -213,43 +157,39 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        protected HttpClient GetWebAPIClientWithIdToken(bool useSession = true)
-        {
-            using (SAEONLogs.MethodCall(GetType()))
-            {
-                try
-                {
-                    var client = GetWebAPIClientBase();
-#if ODPAuth
-                    client.SetBearerToken(GetIdToken(useSession));
-#endif
-                    return client;
-                }
-                catch (Exception ex)
-                {
-                    SAEONLogs.Exception(ex);
-                    throw;
-                }
-            }
-        }
+        //        protected HttpClient GetWebAPIClientWithIdToken(bool useSession = true)
+        //        {
+        //            using (SAEONLogs.MethodCall(GetType()))
+        //            {
+        //                try
+        //                {
+        //                    var client = GetWebAPIClientBase();
+        //                    client.SetBearerToken(GetIdToken(useSession));
+        //                    return client;
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    SAEONLogs.Exception(ex);
+        //                    throw;
+        //                }
+        //            }
+        //        }
 
-        protected async Task<HttpClient> GetWebAPIClientAsync(bool useSession = true)
-        {
-            var client = GetWebAPIClientBase();
-#if ODPAuth
-            var token = Session[Constants.SessionKeyIdToken]?.ToString();
-            if (!string.IsNullOrWhiteSpace(token))
-            {
-                client.SetBearerToken(token);
-            }
-            else
-            {
-                token = await GetAccessTokenAsync(useSession);
-                client.SetBearerToken(GetBearerTokenFromAccessToken(token));
-            }
-#endif
-            return client;
-        }
+        //protected async Task<HttpClient> GetWebAPIClientAsync(bool useSession = true)
+        //{
+        //    var client = GetWebAPIClientBase();
+        //    var token = Session[Constants.SessionKeyIdToken]?.ToString();
+        //    if (!string.IsNullOrWhiteSpace(token))
+        //    {
+        //        client.SetBearerToken(token);
+        //    }
+        //    else
+        //    {
+        //        token = await GetODPAccessTokenAsync(useSession);
+        //        client.SetBearerToken(GetBearerTokenFromAccessToken(token));
+        //    }
+        //    return client;
+        //}
     }
 
     public abstract class BaseController<TModel> : BaseController where TModel : BaseModel, new()
@@ -325,13 +265,13 @@ namespace SAEON.Observations.QuerySite.Controllers
         //    }
         //}
 
-        protected async Task<List<TEntity>> GetListAsync<TEntity>(string resource, bool requireIdToken = false)// where TEntity : BaseEntity
+        protected async Task<List<TEntity>> GetListAsync<TEntity>(string resource)// where TEntity : BaseEntity
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Resource", resource } }))
             {
                 try
                 {
-                    using (var client = requireIdToken ? GetWebAPIClientWithIdToken() : await GetWebAPIClientAsync())
+                    using (var client = await GetWebAPIClientAsync())
                     {
                         var url = $"{client.BaseAddress}{resource}";
                         SAEONLogs.Verbose("Calling: {url}", url);
@@ -483,7 +423,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    using (var client = GetWebAPIClientWithIdToken())
+                    using (var client = await GetWebAPIClientAsync())
                     {
                         var response = await client.GetAsync($"{client.BaseAddress}{Resource}");
                         SAEONLogs.Verbose("Response: {response}", response);
@@ -510,7 +450,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     if (!id.HasValue) return RedirectToAction("Index");
-                    using (var client = GetWebAPIClientWithIdToken())
+                    using (var client = await GetWebAPIClientAsync())
                     {
                         var response = await client.GetAsync($"{client.BaseAddress}{Resource}/{id.Value}");
                         SAEONLogs.Verbose("Response: {response}", response);
@@ -539,7 +479,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     SAEONLogs.Information("Claims: {Claims}", ((ClaimsPrincipal)User).Claims.ToClaimsList());
                     if (!id.HasValue) return RedirectToAction("Index");
-                    using (var client = GetWebAPIClientWithIdToken())
+                    using (var client = await GetWebAPIClientAsync())
                     {
                         var response = await client.GetAsync($"{client.BaseAddress}{Resource}/{id?.ToString()}");
                         SAEONLogs.Verbose("Response: {response}", response);
@@ -573,7 +513,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     }
                     else
                     {
-                        using (var client = GetWebAPIClientWithIdToken())
+                        using (var client = await GetWebAPIClientAsync())
                         {
                             var response = await client.PutAsJsonAsync<TEntity>($"{client.BaseAddress}{Resource}/{delta?.Id}", delta);
                             SAEONLogs.Verbose("Response: {response}", response);
@@ -600,7 +540,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     if (!id.HasValue) return RedirectToAction("Index");
-                    using (var client = GetWebAPIClientWithIdToken())
+                    using (var client = await GetWebAPIClientAsync())
                     {
                         var response = await client.GetAsync($"{client.BaseAddress}{Resource}/{id?.ToString()}");
                         SAEONLogs.Verbose("Response: {response}", response);
@@ -627,7 +567,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    using (var client = GetWebAPIClientWithIdToken())
+                    using (var client = await GetWebAPIClientAsync())
                     {
                         var response = await client.DeleteAsync($"{client.BaseAddress}{Resource}/{id}");
                         SAEONLogs.Verbose("Response: {response}", response);

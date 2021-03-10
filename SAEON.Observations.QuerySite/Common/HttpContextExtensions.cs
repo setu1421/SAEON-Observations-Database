@@ -12,9 +12,7 @@ namespace SAEON.Observations.QuerySite
             {
                 TenantFromHeader = context.Request.Headers[Constants.HeaderKeyTenant],
                 TenantFromSession = context.Session[Constants.SessionKeyTenant],
-                SessionAccessToken = context.Session[Constants.SessionKeyAccessToken],
-                SessionIdToken = context.Session[Constants.SessionKeyIdToken],
-                //BearerToken = context.Request.GetBearerToken(), 
+                SessionODPAccessToken = context.Session[Constants.SessionKeyODPAccessToken],
                 context.User.Identity.IsAuthenticated,
                 UserIsAdmin = context.UserIsAdmin(),
                 UserId = context.UserId(),

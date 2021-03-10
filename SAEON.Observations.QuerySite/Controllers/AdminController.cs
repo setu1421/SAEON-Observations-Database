@@ -27,7 +27,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     SAEONLogs.Information("Calling WebAPI");
-                    using (var client = GetWebAPIClientWithIdToken())
+                    using (var client = await GetWebAPIClientAsync())
                     {
                         var response = await client.PostAsync("/Internal/Admin/CreateDOIs", null);
                         response.EnsureSuccessStatusCode();
@@ -54,7 +54,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    using (var client = GetWebAPIClientWithIdToken())
+                    using (var client = await GetWebAPIClientAsync())
                     {
                         var response = await client.PostAsync("/Internal/Admin/CreateMetadata", null);
                         response.EnsureSuccessStatusCode();
@@ -81,7 +81,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    using (var client = GetWebAPIClientWithIdToken())
+                    using (var client = await GetWebAPIClientAsync())
                     {
                         var response = await client.PostAsync("/Internal/Admin/CreateODPMetadata", null);
                         response.EnsureSuccessStatusCode();
@@ -113,7 +113,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var ext = Path.GetExtension(formFile.FileName).ToLowerInvariant();
                     if (!(ext == ".xls" || ext == ".xlsx")) throw new ArgumentOutOfRangeException(nameof(formFile.FileName), "Invalid file extension");
                     SAEONLogs.Information("Uploading {FileName} Size: {Size} Type: {Type}", formFile.FileName, formFile.ContentLength.Bytes().Humanize("MB"), formFile.ContentType);
-                    using (var client = GetWebAPIClientWithIdToken())
+                    using (var client = await GetWebAPIClientAsync())
                     {
                         using (var content = new MultipartFormDataContent())
                         {
