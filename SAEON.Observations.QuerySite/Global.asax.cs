@@ -13,6 +13,7 @@ namespace SAEON.Observations.QuerySite
     {
         protected void Application_Start()
         {
+            ApplicationHelper.ApplicationName = "SAEON.Observations.QuerySite";
             SAEONLogs
                  .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.QuerySite-.log"))
                  .Initialize();
@@ -20,7 +21,7 @@ namespace SAEON.Observations.QuerySite
             {
                 try
                 {
-                    SAEONLogs.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName);
+                    SAEONLogs.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName, SAEONLogs.Level);
                     AreaRegistration.RegisterAllAreas();
                     FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
                     RouteConfig.RegisterRoutes(RouteTable.Routes);

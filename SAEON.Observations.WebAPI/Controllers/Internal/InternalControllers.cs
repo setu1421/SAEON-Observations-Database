@@ -86,12 +86,12 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
             });
             Mapper = config.CreateMapper();
+            TrackChanges = true;
         }
 
         protected override void UpdateRequest()
         {
             EntityConfig.BaseUrl = Request.GetUri().GetLeftPart(UriPartial.Authority) + "/Internal";
-            DbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
         }
 
         protected abstract bool IsEntityOk(TEntity item, bool isPost);

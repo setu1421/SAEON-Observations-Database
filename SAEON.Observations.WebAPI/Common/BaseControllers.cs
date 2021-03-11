@@ -30,8 +30,23 @@ namespace SAEON.Observations.WebAPI
     {
         private IConfiguration config;
         protected IConfiguration Config => config ??= HttpContext.RequestServices.GetRequiredService<IConfiguration>();
+        protected bool TrackChanges { get; set; } = false;
         private ObservationsDbContext dbContext;
-        protected ObservationsDbContext DbContext => dbContext ??= HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
+        protected ObservationsDbContext DbContext
+        {
+            get
+            {
+                if (dbContext == null)
+                {
+                    dbContext = HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
+                    if (TrackChanges)
+                    {
+                        dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
+                    }
+                }
+                return dbContext;
+            }
+        }
     }
 
     public abstract class BaseListController<TObject> : BaseApiController where TObject : class
