@@ -35,6 +35,7 @@
        [dbo].[vImportBatchSummary] (View)
        [dbo].[vFeatures] (View)
        [dbo].[vLocations] (View)
+       [dbo].[vObservationExpansion] (View)
      Create
        [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ElevationMaximum] (Index)
        [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ElevationMinimum] (Index)
@@ -45,6 +46,7 @@
        [dbo].[UX_Observation] (Unique Constraint)
        [dbo].[Observation].[IX_Observation_SensorID] (Index)
        [dbo].[Observation].[IX_Observation_StatusID] (Index)
+       [dbo].[vInventoryDatasets] (View)
 
 ** Supporting actions
      Drop
@@ -55,7 +57,6 @@
        [dbo].[Observation].[IX_Observation_ValueYear] (Index)
      Refresh
        [dbo].[vUserDownloads] (View)
-       [dbo].[vInventoryDatasets] (View)
        [dbo].[vInventorySensors] (View)
        [dbo].[vStationDatasets] (View)
        [dbo].[vSensorThingsAPIDatastreams] (View)
@@ -65,7 +66,6 @@
        [dbo].[vSensorThingsAPIThings] (View)
        [dbo].[vSensorThingsAPIFeaturesOfInterest] (View)
        [dbo].[vSensorThingsAPIHistoricalLocations] (View)
-       [dbo].[vObservationExpansion] (View)
        [dbo].[vSensorThingsAPIObservations] (View)
        [dbo].[vObservation] (View)
        [dbo].[vObservationJSON] (View)

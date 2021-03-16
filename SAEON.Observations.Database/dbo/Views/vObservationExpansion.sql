@@ -1,6 +1,6 @@
 ﻿CREATE VIEW [dbo].[vObservationExpansion]
 AS
-Select
+Select distinct
   Observation.ID, Observation.ImportBatchID, ImportBatch.Code ImportBatchCode, ImportBatch.ImportDate ImportBatchDate, 
   Observation.ValueDate, Observation.ValueDay, Observation.ValueYear, Observation.ValueDecade, 
   Observation.RawValue, Observation.DataValue, Observation.TextValue, 
