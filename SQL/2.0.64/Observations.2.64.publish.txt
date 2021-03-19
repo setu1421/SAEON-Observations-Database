@@ -36,6 +36,7 @@
        [dbo].[vFeatures] (View)
        [dbo].[vLocations] (View)
        [dbo].[vObservationExpansion] (View)
+       [dbo].[vDataLog] (View)
      Create
        [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ElevationMaximum] (Index)
        [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ElevationMinimum] (Index)

@@ -87,7 +87,7 @@ IF EXISTS (select top 1 1 from [dbo].[UserDownloads])
     RAISERROR (N'Rows were detected. The schema update is terminating because data loss might occur.', 16, 127) WITH NOWAIT
 
 GO
-PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueDecade]...';
+PRINT N'Dropping Index [dbo].[Observation].[IX_Observation_ValueDecade]...';
 
 
 GO
@@ -96,7 +96,7 @@ DROP INDEX [IX_Observation_ValueDecade]
 
 
 GO
-PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueYear]...';
+PRINT N'Dropping Index [dbo].[Observation].[IX_Observation_ValueYear]...';
 
 
 GO
@@ -105,7 +105,7 @@ DROP INDEX [IX_Observation_ValueYear]
 
 
 GO
-PRINT N'Dropping [dbo].[Observation].[IX_Observation_SensorID]...';
+PRINT N'Dropping Index [dbo].[Observation].[IX_Observation_SensorID]...';
 
 
 GO
@@ -114,7 +114,7 @@ DROP INDEX [IX_Observation_SensorID]
 
 
 GO
-PRINT N'Dropping [dbo].[Observation].[IX_Observation_StatusID]...';
+PRINT N'Dropping Index [dbo].[Observation].[IX_Observation_StatusID]...';
 
 
 GO
@@ -123,7 +123,7 @@ DROP INDEX [IX_Observation_StatusID]
 
 
 GO
-PRINT N'Dropping [dbo].[UX_Observation]...';
+PRINT N'Dropping Unique Constraint [dbo].[UX_Observation]...';
 
 
 GO
@@ -131,7 +131,7 @@ ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [UX_Observation];
 
 
 GO
-PRINT N'Altering [dbo].[DigitalObjectIdentifiers]...';
+PRINT N'Altering Table [dbo].[DigitalObjectIdentifiers]...';
 
 
 GO
@@ -149,7 +149,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Altering [dbo].[ImportBatchSummary]...';
+PRINT N'Altering Table [dbo].[ImportBatchSummary]...';
 
 
 GO
@@ -166,7 +166,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ElevationMaximum]...';
+PRINT N'Creating Index [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ElevationMaximum]...';
 
 
 GO
@@ -175,7 +175,7 @@ CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_ElevationMaximum]
 
 
 GO
-PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ElevationMinimum]...';
+PRINT N'Creating Index [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ElevationMinimum]...';
 
 
 GO
@@ -184,7 +184,7 @@ CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_ElevationMinimum]
 
 
 GO
-PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LatitudeNorth]...';
+PRINT N'Creating Index [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LatitudeNorth]...';
 
 
 GO
@@ -193,7 +193,7 @@ CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_LatitudeNorth]
 
 
 GO
-PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LatitudeSouth]...';
+PRINT N'Creating Index [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LatitudeSouth]...';
 
 
 GO
@@ -202,7 +202,7 @@ CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_LatitudeSouth]
 
 
 GO
-PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LongitudeEast]...';
+PRINT N'Creating Index [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LongitudeEast]...';
 
 
 GO
@@ -211,7 +211,7 @@ CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_LongitudeEast]
 
 
 GO
-PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LongitudeWest]...';
+PRINT N'Creating Index [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LongitudeWest]...';
 
 
 GO
@@ -220,7 +220,7 @@ CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_LongitudeWest]
 
 
 GO
-PRINT N'Altering [dbo].[Observation]...';
+PRINT N'Altering Table [dbo].[Observation]...';
 
 
 GO
@@ -234,7 +234,7 @@ ALTER TABLE [dbo].[Observation]
 
 
 GO
-PRINT N'Creating [dbo].[UX_Observation]...';
+PRINT N'Creating Unique Constraint [dbo].[UX_Observation]...';
 
 
 GO
@@ -243,7 +243,7 @@ ALTER TABLE [dbo].[Observation]
 
 
 GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDecade]...';
+PRINT N'Creating Index [dbo].[Observation].[IX_Observation_ValueDecade]...';
 
 
 GO
@@ -253,7 +253,7 @@ CREATE NONCLUSTERED INDEX [IX_Observation_ValueDecade]
 
 
 GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueYear]...';
+PRINT N'Creating Index [dbo].[Observation].[IX_Observation_ValueYear]...';
 
 
 GO
@@ -263,7 +263,7 @@ CREATE NONCLUSTERED INDEX [IX_Observation_ValueYear]
 
 
 GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID]...';
+PRINT N'Creating Index [dbo].[Observation].[IX_Observation_SensorID]...';
 
 
 GO
@@ -274,7 +274,7 @@ CREATE NONCLUSTERED INDEX [IX_Observation_SensorID]
 
 
 GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_StatusID]...';
+PRINT N'Creating Index [dbo].[Observation].[IX_Observation_StatusID]...';
 
 
 GO
@@ -285,7 +285,7 @@ CREATE NONCLUSTERED INDEX [IX_Observation_StatusID]
 
 
 GO
-PRINT N'Altering [dbo].[UserDownloads]...';
+PRINT N'Altering Table [dbo].[UserDownloads]...';
 
 
 GO
@@ -301,7 +301,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vUserDownloads]...';
+PRINT N'Refreshing View [dbo].[vUserDownloads]...';
 
 
 GO
@@ -317,7 +317,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Altering [dbo].[vImportBatchSummary]...';
+PRINT N'Altering View [dbo].[vImportBatchSummary]...';
 
 
 GO
@@ -374,7 +374,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Altering [dbo].[vFeatures]...';
+PRINT N'Altering View [dbo].[vFeatures]...';
 
 
 GO
@@ -399,7 +399,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vInventorySensors]...';
+PRINT N'Refreshing View [dbo].[vInventorySensors]...';
 
 
 GO
@@ -407,7 +407,7 @@ EXECUTE sp_refreshsqlmodule N'[dbo].[vInventorySensors]';
 
 
 GO
-PRINT N'Altering [dbo].[vLocations]...';
+PRINT N'Altering View [dbo].[vLocations]...';
 
 
 GO
@@ -438,7 +438,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vStationDatasets]...';
+PRINT N'Refreshing View [dbo].[vStationDatasets]...';
 
 
 GO
@@ -454,7 +454,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPIDatastreams]...';
+PRINT N'Refreshing View [dbo].[vSensorThingsAPIDatastreams]...';
 
 
 GO
@@ -470,7 +470,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPILocations]...';
+PRINT N'Refreshing View [dbo].[vSensorThingsAPILocations]...';
 
 
 GO
@@ -486,7 +486,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPIObservedProperties]...';
+PRINT N'Refreshing View [dbo].[vSensorThingsAPIObservedProperties]...';
 
 
 GO
@@ -502,7 +502,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPISensors]...';
+PRINT N'Refreshing View [dbo].[vSensorThingsAPISensors]...';
 
 
 GO
@@ -518,7 +518,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPIThings]...';
+PRINT N'Refreshing View [dbo].[vSensorThingsAPIThings]...';
 
 
 GO
@@ -534,7 +534,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPIFeaturesOfInterest]...';
+PRINT N'Refreshing View [dbo].[vSensorThingsAPIFeaturesOfInterest]...';
 
 
 GO
@@ -550,7 +550,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPIHistoricalLocations]...';
+PRINT N'Refreshing View [dbo].[vSensorThingsAPIHistoricalLocations]...';
 
 
 GO
@@ -566,7 +566,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Altering [dbo].[vObservationExpansion]...';
+PRINT N'Altering View [dbo].[vObservationExpansion]...';
 
 
 GO
@@ -640,7 +640,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPIObservations]...';
+PRINT N'Refreshing View [dbo].[vSensorThingsAPIObservations]...';
 
 
 GO
@@ -656,7 +656,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vObservation]...';
+PRINT N'Refreshing View [dbo].[vObservation]...';
 
 
 GO
@@ -672,7 +672,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vObservationJSON]...';
+PRINT N'Refreshing View [dbo].[vObservationJSON]...';
 
 
 GO
@@ -688,7 +688,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vStationObservations]...';
+PRINT N'Refreshing View [dbo].[vStationObservations]...';
 
 
 GO
@@ -704,7 +704,126 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Creating [dbo].[vInventoryDatasets]...';
+PRINT N'Altering View [dbo].[vDataLog]...';
+
+
+GO
+ALTER VIEW [dbo].[vDataLog]
+AS
+
+SELECT 
+d.ID, 
+d.ImportDate,
+Site.Name SiteName,
+Station.Name StationName,
+Instrument.Name InstrumentName,
+d.SensorID,
+Sensor.Name SensorName,
+CASE 
+    WHEN d.SensorID is null then 1
+    ELSE 0
+END SensorInvalid,
+
+d.ValueDate,
+d.InvalidDateValue, 
+CASE 
+    WHEN ValueDate is null then 1
+    ELSE 0
+END DateValueInvalid,
+
+d.InvalidTimeValue, 
+CASE 
+    WHEN InvalidTimeValue is not null then 1
+    ELSE 0
+END TimeValueInvalid,
+
+CASE 
+    WHEN InvalidDateValue is null AND InvalidTimeValue IS NULL Then ValueDate
+    WHEN ValueTime is not null then ValueTime 
+END ValueTime,
+
+
+d.RawValue,
+d.ValueText,
+CASE
+    WHEN d.RawValue is null then 1
+    ELSE 0
+END RawValueInvalid,	
+
+d.DataValue,
+d.TransformValueText, 
+CASE
+    WHEN d.DataValue is null then 1
+    ELSE 0
+END DataValueInvalid,
+
+d.PhenomenonOfferingID, 
+CASE
+    WHEN d.PhenomenonOfferingID is null then 1
+    ELSE 0
+END OfferingInvalid,
+
+d.PhenomenonUOMID, 
+CASE
+    WHEN d.PhenomenonUOMID is null then 1
+    ELSE 0
+END UOMInvalid,
+
+p.Name PhenomenonName,
+o.Name OfferingName,
+uom.Unit,
+
+d.DataSourceTransformationID,
+tt.Name Transformation,
+d.StatusID,
+s.Name [Status],
+d.ImportBatchID,
+d.RawFieldValue,
+d.Comment
+
+FROM DataLog d
+  left join Sensor 
+    on (d.SensorID = Sensor.ID) 
+  left join Instrument_Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID) 
+  left join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) 
+  left join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID) 
+  left join Station 
+    on (Station_Instrument.StationID = Station.ID) 
+  left join Site
+    on (Station.SiteID = Site.ID) 
+  LEFT JOIN PhenomenonOffering po
+    ON d.PhenomenonOfferingID = po.ID
+  LEFT JOIN Phenomenon p
+    on po.PhenomenonID = p.ID
+  LEFT JOIN Offering o
+    on po.OfferingID = o.ID
+  LEFT JOIN PhenomenonUOM pu
+    on d.PhenomenonUOMID = pu.ID
+  LEFT JOIN UnitOfMeasure uom
+    on pu.UnitOfMeasureID = uom.ID
+  LEFT JOIN DataSourceTransformation ds
+    on d.DataSourceTransformationID = ds.ID
+  LEFT JOIN TransformationType tt
+    on ds.TransformationTypeID = tt.ID
+  INNER JOIN [Status] s
+    on d.StatusID = s.ID
+-- Need out of date observations in datalog
+--WHERE
+--  ((Instrument_Sensor.StartDate is null) or (d.ValueDate >= Instrument_Sensor.StartDate)) and
+--  ((Instrument_Sensor.EndDate is null) or (d.ValueDate <= Instrument_Sensor.EndDate)) and
+--  ((Instrument.StartDate is null) or (d.ValueDay >= Instrument.StartDate )) and
+--  ((Instrument.EndDate is null) or (d.ValueDay <= Instrument.EndDate)) and
+--  ((Station_Instrument.StartDate is null) or (d.ValueDay >= Station_Instrument.StartDate)) and
+--  ((Station_Instrument.EndDate is null) or (d.ValueDay <= Station_Instrument.EndDate)) and
+--  ((Station.StartDate is null) or (d.ValueDay >= Station.StartDate)) and
+--  ((Station.EndDate is null) or (d.ValueDay <= Station.EndDate)) and
+--  ((Site.StartDate is null) or  (d.ValueDay >= Site.StartDate)) and
+--  ((Site.EndDate is null) or  (d.ValueDay <= Site.EndDate))
+GO
+PRINT N'Creating View [dbo].[vInventoryDatasets]...';
 
 
 GO
