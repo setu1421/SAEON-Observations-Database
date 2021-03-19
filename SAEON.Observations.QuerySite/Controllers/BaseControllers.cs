@@ -17,7 +17,9 @@ using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
+#if ResponseCaching
     [OutputCache(Duration = Defaults.CacheDuration)]
+#endif
     public abstract class BaseController : Controller
     {
         protected string Tenant

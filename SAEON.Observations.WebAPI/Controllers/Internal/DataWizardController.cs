@@ -156,38 +156,37 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         private class DataFeature
         {
-            public Guid SensorID { get; set; }
+            public Guid StationId { get; set; }
             public Guid PhenomenonOfferingId { get; set; }
             public Guid PhenomenonUnitId { get; set; }
-            public string Phenomenon { get; set; }
-            public string Offering { get; set; }
-            public string Unit { get; set; }
-            public string Symbol { get; set; }
             public string Name { get; set; }
             public string Caption { get; set; }
 
             public override bool Equals(object obj)
             {
                 return obj is DataFeature feature &&
-                       Name == feature.Name;
+                       StationId.Equals(feature.StationId) &&
+                       PhenomenonOfferingId.Equals(feature.PhenomenonOfferingId) &&
+                       PhenomenonUnitId.Equals(feature.PhenomenonUnitId);
             }
 
             public override int GetHashCode()
             {
-                return HashCode.Combine(Name);
+                return HashCode.Combine(StationId, PhenomenonOfferingId, PhenomenonUnitId);
             }
+
         }
 
         private DataWizardDataOutput GetData(DataWizardDataInput input, bool includeChart)
         {
-            string GetCode(string sensorCode, string phenomenonCode, string offeringCode, string unitCode)
+            string GetCode(string stationCode, string phenomenonCode, string offeringCode, string unitCode)
             {
-                return $"{sensorCode.Replace("_", string.Empty)}_{phenomenonCode.Replace("_", string.Empty)}_{offeringCode.Replace("_", string.Empty)}_{unitCode.Replace("_", string.Empty)}".Replace(" ", string.Empty);
+                return $"{stationCode.Replace("_", string.Empty)}_{phenomenonCode.Replace("_", string.Empty)}_{offeringCode.Replace("_", string.Empty)}_{unitCode.Replace("_", string.Empty)}".Replace(" ", string.Empty);
             }
 
-            string GetName(string sensorName, string phenomenonName, string offeringName, string unitName)
+            string GetName(string stationName, string phenomenonName, string offeringName, string unitName)
             {
-                return $"{sensorName.Replace(", ", "_")}, {phenomenonName.Replace(", ", "_")}, {offeringName.Replace(", ", "_")}, {unitName.Replace(", ", "_")}";
+                return $"{stationName.Replace(", ", "_")}, {phenomenonName.Replace(", ", "_")}, {offeringName.Replace(", ", "_")}, {unitName.Replace(", ", "_")}";
             }
 
             var stopwatch = new Stopwatch();
@@ -205,26 +204,19 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var summaries = GetSummary(ref input);
             SAEONLogs.Verbose("Summaries: Stage {Stage} Total {Total}", stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
             stageStopwatch.Restart();
-            var qFeatures = summaries.Select(i => new { i.SensorId, i.SensorCode, i.SensorName, i.PhenomenonOfferingId, i.PhenomenonUnitId, i.PhenomenonCode, i.PhenomenonName, i.OfferingCode, i.OfferingName, i.UnitCode, i.UnitName, i.UnitSymbol }).Distinct();
-            var features = qFeatures.ToList().Select(i => new DataFeature
+            var features = summaries.Select(i => new DataFeature
             {
-                SensorID = i.SensorId,
+                StationId = i.StationId,
                 PhenomenonOfferingId = i.PhenomenonOfferingId,
                 PhenomenonUnitId = i.PhenomenonUnitId,
-                Phenomenon = i.PhenomenonName,
-                Offering = i.OfferingName,
-                Unit = i.UnitName,
-                Symbol = i.UnitSymbol,
-                Name = GetCode(i.SensorCode, i.PhenomenonCode, i.OfferingCode, i.UnitCode),
-                Caption = GetName(i.SensorName, i.PhenomenonName, i.OfferingName, i.UnitName)
-            });
+                Name = GetCode(i.StationCode, i.PhenomenonCode, i.OfferingCode, i.UnitCode),
+                Caption = GetName(i.StationName, i.PhenomenonName, i.OfferingName, i.UnitName)
+            }).Distinct().ToList();
             foreach (var feature in features)
             {
                 result.DataMatrix.AddColumn(feature.Name, feature.Caption, MaxtixDataType.mdtDouble);
                 SAEONLogs.Verbose("Feature: {@Feature}", feature);
             }
-            var phenomenonOfferingIds = features.Select(f => f.PhenomenonOfferingId);
-            var phenomenonUnitIds = features.Select(f => f.PhenomenonUnitId);
             SAEONLogs.Verbose("Features: Stage {Stage} Total {Total}", stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
             stageStopwatch.Restart();
             var importBatchIDs = summaries.Select(i => i.ImportBatchId).Distinct();
@@ -279,7 +271,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     date = obs.ValueDate;
                     elevation = obs.Elevation;
                 }
-                var name = GetCode(obs.SensorCode, obs.PhenomenonCode, obs.OfferingCode, obs.UnitCode);
+                var name = GetCode(obs.StationCode, obs.PhenomenonCode, obs.OfferingCode, obs.UnitCode);
                 //SAEONLogs.Verbose("Name: {Name}",name);
                 row[name] = obs.DataValue;
             }
@@ -315,30 +307,27 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 ChartSeries series = null;
                 siteId = new Guid();
                 stationId = new Guid();
-                instrumentId = new Guid();
-                sensorId = new Guid();
                 nRow = 0;
-                foreach (var obs in observations)
+                foreach (var obs in observations.OrderBy(i => i.SiteName).ThenBy(i => i.StationName).ThenBy(i => i.ValueDate))
                 {
                     if (++nRow % 10000 == 0)
                     {
                         SAEONLogs.Verbose("Chart.Row: {Row}", nRow);
                     }
-                    if ((series == null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.InstrumentId != instrumentId) || (obs.SensorId != sensorId))
+                    if ((series == null) || (obs.SiteId != siteId) || (obs.StationId != stationId))
                     {
                         series = new ChartSeries
                         {
-                            Name = GetCode(obs.SensorCode, obs.PhenomenonCode, obs.OfferingCode, obs.UnitCode),
-                            Caption = GetName(obs.SensorName, obs.PhenomenonName, obs.OfferingName, obs.UnitName)
+                            Name = GetCode(obs.StationCode, obs.PhenomenonCode, obs.OfferingCode, obs.UnitCode),
+                            Caption = GetName(obs.StationName, obs.PhenomenonName, obs.OfferingName, obs.UnitName)
                         };
                         result.ChartSeries.Add(series);
                         siteId = obs.SiteId;
                         stationId = obs.StationId;
-                        instrumentId = obs.InstrumentId;
-                        sensorId = obs.SensorId;
                     }
                     series.Add(obs.ValueDate, obs.DataValue);
                 }
+                //SAEONLogs.Verbose("ChartSeries: Count: {count} Stage {Stage} Total {Total} Series: {@Series}", result.ChartSeries.Count, stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr(), result.ChartSeries);
                 SAEONLogs.Verbose("ChartSeries: Count: {count} Stage {Stage} Total {Total}", result.ChartSeries.Count, stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
                 stageStopwatch.Restart();
             }

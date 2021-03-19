@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -19,6 +20,7 @@ using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -54,7 +56,9 @@ namespace SAEON.Observations.WebAPI
                 {
                     services.AddCors(o => o.AddSAEONCorsPolicies());
                     services.AddResponseCompression(options => options.EnableForHttps = true);
+#if ResponseCaching
                     services.AddResponseCaching();
+#endif
                     services.AddAutoMapper(typeof(Startup));
                     services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                         .AddCookie();
@@ -161,11 +165,31 @@ namespace SAEON.Observations.WebAPI
                     app.UseHttpsRedirection();
                     app.UseResponseCaching();
                     app.UseResponseCompression();
-                    app.UseStaticFiles();
+                    app.UseStaticFiles(new StaticFileOptions
+                    {
+                        OnPrepareResponse = ctx =>
+                        {
+                            ctx.Context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.CacheControl] = $"public,max-age={Defaults.CacheDuration}";
+                        }
+                    });
                     app.UseStaticFiles(new StaticFileOptions
                     {
                         FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "node_modules")),
                         RequestPath = "/node_modules",
+                    });
+
+                    var supportedCultures = new[]
+                    {
+                        new CultureInfo("en-GB")
+                    };
+
+                    app.UseRequestLocalization(new RequestLocalizationOptions
+                    {
+                        DefaultRequestCulture = new RequestCulture("en-GB"),
+                        // Formatting numbers, dates, etc.
+                        SupportedCultures = supportedCultures,
+                        // UI strings that we have localized.
+                        SupportedUICultures = supportedCultures
                     });
 
                     app.UseRouting();

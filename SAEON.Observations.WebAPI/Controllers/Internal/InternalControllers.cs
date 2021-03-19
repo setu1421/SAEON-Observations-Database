@@ -47,19 +47,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
     }
 
-    //[Route("Internal/[controller]")]
-    //[EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
-    ////[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
-    //[ApiExplorerSettings(IgnoreApi = true)]
-    //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    //public abstract class InternalODataController<TEntity> : BaseODataController<TEntity> where TEntity : BaseEntity
-    //{
-    //    protected override void UpdateRequest()
-    //    {
-    //        BaseUrl = Request.GetUri().GetLeftPart(UriPartial.Authority) + "/Internal";
-    //    }
-    //}
-
     [Route("Internal/[controller]")]
     [EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]

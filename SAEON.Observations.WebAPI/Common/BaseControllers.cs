@@ -21,8 +21,10 @@ namespace SAEON.Observations.WebAPI
     #region ApiControllers
     [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
     [ApiController]
+#if ResponseCaching
     [ResponseCache(Duration = Defaults.CacheDuration)]
     //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+#endif
 #if ODPAuth
     [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
 #endif
@@ -215,8 +217,10 @@ namespace SAEON.Observations.WebAPI
     #region ODataControllers
     [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
+#if ResponseCaching
     [ResponseCache(Duration = Defaults.CacheDuration)]
     //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+#endif
 #if ODPAuth
     [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
 #endif

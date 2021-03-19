@@ -633,7 +633,7 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="StationLinkWindow" runat="server" Width="450" Height="400" Closable="true"
+    <ext:Window ID="StationLinkWindow" runat="server" Width="800" Height="400" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Station" Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
             <Hide Fn="ClearStationLinkForm" />

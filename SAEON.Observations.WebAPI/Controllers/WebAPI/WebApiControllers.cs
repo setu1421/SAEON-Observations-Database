@@ -32,7 +32,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the TEntity</param>
         /// <returns>TEntity</returns>
         [HttpGet("{id:guid}")]
+#if ResponseCaching
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+#endif
 #if ODPAuth
         //[ProducesResponseType(StatusCodes.Status403Forbidden)]
 #endif
@@ -67,8 +69,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select TRelated</param>
         /// <returns>TaskOf(IHttpActionResult)</returns>
-        //[HttpGet("{id:guid}/TRelated")] Required in calling classes
+//[HttpGet("{id:guid}/TRelated")] Required in calling classes
+#if ResponseCaching
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+#endif
 #if ODPAuth
         //[ProducesResponseType(StatusCodes.Status403Forbidden)]
 #endif
@@ -102,8 +106,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select TRelated</param>
         /// <returns>TaskOf(IHttpActionResult)</returns>
-        //[HttpGet("{id:guid}/TRelated")] Required in calling classes
+//[HttpGet("{id:guid}/TRelated")] Required in calling classes
+#if ResponseCaching
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+#endif
 #if ODPAuth
         //[ProducesResponseType(StatusCodes.Status403Forbidden)]
 #endif
@@ -139,7 +145,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>IQueryableOf(TRelated)</returns>
         //[HttpGet]
         //[Route("{id:guid}/TRelated")] Required in derived classes
+#if ResponseCaching
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+#endif
 #if ODPAuth
         //[ProducesResponseType(StatusCodes.Status403Forbidden)]
 #endif
@@ -168,8 +176,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select ListOf(TRelated)</param>
         /// <returns>IQueryableOf(TRelated)</returns>
-        //[HttpGet("{id:guid}/TRelated")] Required in calling classes
+//[HttpGet("{id:guid}/TRelated")] Required in calling classes
+#if ResponseCaching
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+#endif
 #if ODPAuth
         //[ProducesResponseType(StatusCodes.Status403Forbidden)]
 #endif
@@ -198,8 +208,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select ListOf(TRelated)</param>
         /// <returns>IQueryableOf(TRelated)</returns>
-        //[HttpGet("{id:guid}/TRelated")] Required in calling classes
+//[HttpGet("{id:guid}/TRelated")] Required in calling classes
+#if ResponseCaching
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+#endif
 #if ODPAuth
         //[ProducesResponseType(StatusCodes.Status403Forbidden)]
 #endif
@@ -238,7 +250,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="code">The Code of the TEntity</param>
         /// <returns>TEntity</returns>
         [HttpGet("ByCode/{code:required}")]
+#if ResponseCaching
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "code" })]
+#endif
 #if ODPAuth
         //[ProducesResponseType(StatusCodes.Status403Forbidden)]
 #endif
@@ -282,7 +296,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the TEntity</param>
         /// <returns>TEntity</returns>
         [HttpGet("ByName/{name:required}")]
+#if ResponseCaching
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "name" })]
+#endif
 #if ODPAuth
         //[ProducesResponseType(StatusCodes.Status403Forbidden)]
 #endif
@@ -327,7 +343,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="code">The Code of the TEntity</param>
         /// <returns>TEntity</returns>
         [HttpGet("ByCode/{code:required}")]
+#if ResponseCaching
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "code" })]
+#endif
 #if ODPAuth
         //[ProducesResponseType(StatusCodes.Status403Forbidden)]
 #endif
@@ -361,7 +379,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the TEntity</param>
         /// <returns>TEntity</returns>
         [HttpGet("ByName/{name:required}")]
+#if ResponseCaching
         [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "name" })]
+#endif
 #if ODPAuth
         //[ProducesResponseType(StatusCodes.Status403Forbidden)]
 #endif

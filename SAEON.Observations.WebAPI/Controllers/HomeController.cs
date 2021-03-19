@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Models;
 using System.Diagnostics;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
+#if ResponseCaching
     [ResponseCache(Duration = Defaults.CacheDuration)]
+#endif
     public class HomeController : Controller
     {
         [Route("About")]

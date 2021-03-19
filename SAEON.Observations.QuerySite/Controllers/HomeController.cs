@@ -1,11 +1,12 @@
 ﻿using SAEON.Logs;
-using SAEON.Observations.Core;
 using System.Web.Mvc;
 using System.Web.UI;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
+#if ResponseCaching
     [OutputCache(Duration = Defaults.CacheDuration)]
+#endif
     public class HomeController : BaseController
     {
         [OutputCache(Duration = 0, Location = OutputCacheLocation.None, NoStore = true)]
