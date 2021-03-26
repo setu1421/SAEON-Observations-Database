@@ -7,10 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Delete Duplicate Observations.sql = Delete Duplicate Observations.sql
 		Fix SACTN null ProjectIDs.sql = Fix SACTN null ProjectIDs.sql
+		..\Data cleanup\ImportBatchesSummary create.sql = ..\Data cleanup\ImportBatchesSummary create.sql
 		Observations.2.64.publish.sql = Observations.2.64.publish.sql
 		Observations.2.64.publish.txt = Observations.2.64.publish.txt
-		ObservationsElwandle.2.64.publish.sql = ObservationsElwandle.2.64.publish.sql
-		ObservationsElwandle.2.64.publish.txt = ObservationsElwandle.2.64.publish.txt
 		ObservationsFynbos.2.64..publish.sql = ObservationsFynbos.2.64..publish.sql
 		ObservationsFynbos.2.64..publish.txt = ObservationsFynbos.2.64..publish.txt
 		ObservationsSACTN.2.64..publish.sql = ObservationsSACTN.2.64..publish.sql
@@ -22,7 +21,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{88ADA65C-53A7-4C21-BEE8-15E452F32514}.Default|Default.ActiveCfg = Default
+		{373D4664-B632-4A91-9AC1-9F8342CFA12C}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

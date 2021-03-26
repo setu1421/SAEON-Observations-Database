@@ -52,5 +52,5 @@ Delete DataSchema
 --RAISERROR('Deleting UnitOfMeasure', 0, 1) WITH NOWAIT
 --Delete UnitOfMeasure
 RAISERROR('Done', 0, 1) WITH NOWAIT
-
+CheckPoint;
 
