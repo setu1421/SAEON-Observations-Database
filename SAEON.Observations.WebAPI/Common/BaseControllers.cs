@@ -25,9 +25,7 @@ namespace SAEON.Observations.WebAPI
     [ResponseCache(Duration = Defaults.CacheDuration)]
     //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 #endif
-#if ODPAuth
     [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
-#endif
     public abstract class BaseApiController : ControllerBase
     {
         private IConfiguration config;
@@ -60,17 +58,14 @@ namespace SAEON.Observations.WebAPI
         }
 
         [HttpGet]
-#if ODPAuth
-        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
-#endif
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public virtual List<TObject> GetAll()
+        public virtual ActionResult<IEnumerable<TObject>> GetAll()
         {
             using (SAEONLogs.MethodCall<TObject>(GetType()))
             {
                 try
                 {
-                    return GetList();
+                    return Ok(GetList().AsEnumerable());
                 }
                 catch (Exception ex)
                 {
@@ -160,11 +155,8 @@ namespace SAEON.Observations.WebAPI
         }
 
         [HttpGet]
-#if ODPAuth
-        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
-#endif
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public virtual IQueryable<TEntity> GetAll()
+        public async virtual Task<IEnumerable<TEntity>> GetAll()
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType()))
             {
@@ -172,7 +164,7 @@ namespace SAEON.Observations.WebAPI
                 {
                     UpdateRequest();
                     SAEONLogs.Verbose("Uri: {Uri}", Request.GetUri());
-                    return GetQuery();
+                    return await GetQuery().ToListAsync();
                 }
                 catch (Exception ex)
                 {
@@ -186,11 +178,8 @@ namespace SAEON.Observations.WebAPI
     public abstract class BaseIdedReadController<TEntity> : BaseReadController<TEntity> where TEntity : IdedEntity
     {
         [HttpGet("{id:guid}")]
-#if ODPAuth
-        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
-#endif
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public virtual async Task<ActionResult> GetById(Guid id)
+        public virtual async Task<ActionResult<TEntity>> GetById(Guid id)
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
@@ -221,9 +210,7 @@ namespace SAEON.Observations.WebAPI
     [ResponseCache(Duration = Defaults.CacheDuration)]
     //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 #endif
-#if ODPAuth
     [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
-#endif
     public abstract class BaseODataController<TEntity> : ODataController where TEntity : BaseEntity
     {
         public static string BaseUrl { get; set; }

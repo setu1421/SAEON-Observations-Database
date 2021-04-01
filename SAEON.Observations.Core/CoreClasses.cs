@@ -3,11 +3,16 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 #endif
 using SAEON.Core;
+using SAEON.OpenXML;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
+#if NET5_0_OR_GREATER
+using System.Text.Json.Serialization;
+#endif
 
 namespace SAEON.Observations.Core
 {
@@ -165,6 +170,11 @@ namespace SAEON.Observations.Core
             return result;
         }
 
+        public DataMatrixColumn AddColumn(string name, MaxtixDataType dataType)
+        {
+            return AddColumn(name, name, dataType);
+        }
+
         public DataMatrixRow AddRow(params object[] values)
 
         {
@@ -185,7 +195,7 @@ namespace SAEON.Observations.Core
             return result;
         }
 
-        public DataTable AsDataTable()
+        public DataTable ToDataTable()
         {
             var result = new DataTable();
             foreach (var dmCol in Columns)
@@ -208,7 +218,20 @@ namespace SAEON.Observations.Core
             return result;
         }
 
-        public String AsCSV()
+        public byte[] ToExcel()
+        {
+            using (var ms = new MemoryStream())
+            {
+                using (var doc = ExcelSaxHelper.CreateSpreadsheet(ms, ToDataTable()))
+                {
+                    doc.Save();
+                }
+                return ms.ToArray();
+            }
+
+        }
+
+        public String ToCSV()
         {
             var sb = new StringBuilder();
             var isFirst = true;
@@ -312,6 +335,23 @@ namespace SAEON.Observations.Core
 
     public class DataWizardDataOutput
     {
+        //public DataWizardDataOutput()
+        //{
+        //    DataTable = new DataTable("DataDownload");
+        //    DataTable.Columns.Add("Site", typeof(string));
+        //    DataTable.Columns.Add("Station", typeof(string));
+        //    DataTable.Columns.Add("Elevation", typeof(double));
+        //    DataTable.Columns.Add("Phenomenon", typeof(string));
+        //    DataTable.Columns.Add("Offering", typeof(string));
+        //    DataTable.Columns.Add("Unit", typeof(string));
+        //    DataTable.Columns.Add("Variable", typeof(string));
+        //    DataTable.Columns.Add("Date", typeof(DateTime));
+        //    DataTable.Columns.Add("Value", typeof(double));
+        //    DataTable.Columns.Add("Instrument", typeof(string));
+        //    DataTable.Columns.Add("Sensor", typeof(string));
+        //}
+
+        //public DataTable DataTable { get; private set; }
         public DataMatrix DataMatrix { get; } = new DataMatrix();
         public List<ChartSeries> ChartSeries { get; } = new List<ChartSeries>();
         public DateTime Date { get; } = DateTime.Now;
@@ -348,6 +388,8 @@ namespace SAEON.Observations.Core
     {
 #if NET472
         [JsonConverter(typeof(StringEnumConverter))]
+#elif NET5_0_OR_GREATER
+        [JsonConverter(typeof(JsonStringEnumConverter))]
 #endif
         public DownloadFormat DownloadFormat { get; set; } = DownloadFormat.CSV;
     }

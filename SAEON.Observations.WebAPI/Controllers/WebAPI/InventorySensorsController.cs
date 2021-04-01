@@ -1,5 +1,6 @@
 ﻿using SAEON.Observations.Core;
-using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
@@ -9,7 +10,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// All Sensors
         /// </summary>
         /// <returns></returns>
-        public override IQueryable<InventorySensor> GetAll()
+        public override Task<IEnumerable<InventorySensor>> GetAll()
         {
             return base.GetAll();
         }

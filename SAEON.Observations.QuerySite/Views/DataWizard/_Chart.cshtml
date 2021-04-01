@@ -3,7 +3,7 @@
 @using System.Data
 @model DataWizardModel
 @(Html.EJ().Chart("chartResults")
-    .PrimaryXAxis(px => px.ValueType(AxisValueType.Datetime).LabelFormat("MMM yyyy"))
+    .PrimaryXAxis(px => px.ValueType(AxisValueType.Datetime).LabelFormat("dd MMM yyyy"))
     .PrimaryYAxis(py => py.ValueType(AxisValueType.Double))
     .Series( sr =>
     {
@@ -18,8 +18,8 @@
                 .Add();
         }
     })
-    .Legend(lgn => lgn.Visible(true).ColumnCount(1))
     .Size(sz => sz.Width("1600").Height("1200"))
+    .Legend(lgn => lgn.Visible(true))
     .EnableCanvasRendering(true)
     .IsResponsive(true)
     .Zooming(zm => zm

@@ -10,8 +10,10 @@ using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
+using Serilog.Events;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -24,6 +26,11 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     public class DataWizardController : InternalApiController
     {
+        public DataWizardController()
+        {
+            TrackChanges = true;
+        }
+
         private IWebHostEnvironment hostEnvironment;
         protected IWebHostEnvironment HostEnvironment => hostEnvironment ??= HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>();
 
@@ -174,7 +181,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 return HashCode.Combine(StationId, PhenomenonOfferingId, PhenomenonUnitId);
             }
-
         }
 
         private DataWizardDataOutput GetData(DataWizardDataInput input, bool includeChart)
@@ -189,18 +195,16 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 return $"{stationName.Replace(", ", "_")}, {phenomenonName.Replace(", ", "_")}, {offeringName.Replace(", ", "_")}, {unitName.Replace(", ", "_")}";
             }
 
+            string GetVariableName(string phenomenonName, string offeringName, string unitName)
+            {
+                return $"{phenomenonName.Replace(", ", "_")}, {offeringName.Replace(", ", "_")}, {unitName.Replace(", ", "_")}";
+            }
+
             var stopwatch = new Stopwatch();
             var stageStopwatch = new Stopwatch();
             stopwatch.Start();
             stageStopwatch.Start();
             var result = new DataWizardDataOutput();
-            result.DataMatrix.AddColumn("SiteName", "Site", MaxtixDataType.mdtString);
-            result.DataMatrix.AddColumn("StationName", "Station", MaxtixDataType.mdtString);
-            result.DataMatrix.AddColumn("InstrumentName", "Instrument", MaxtixDataType.mdtString);
-            result.DataMatrix.AddColumn("SensorName", "Sensor", MaxtixDataType.mdtString);
-            result.DataMatrix.AddColumn("Date", "Date", MaxtixDataType.mdtDate);
-            result.DataMatrix.AddColumn("Elevation", "Elevation", MaxtixDataType.mdtDouble);
-
             var summaries = GetSummary(ref input);
             SAEONLogs.Verbose("Summaries: Stage {Stage} Total {Total}", stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
             stageStopwatch.Restart();
@@ -212,11 +216,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 Name = GetCode(i.StationCode, i.PhenomenonCode, i.OfferingCode, i.UnitCode),
                 Caption = GetName(i.StationName, i.PhenomenonName, i.OfferingName, i.UnitName)
             }).Distinct().ToList();
-            foreach (var feature in features)
-            {
-                result.DataMatrix.AddColumn(feature.Name, feature.Caption, MaxtixDataType.mdtDouble);
-                SAEONLogs.Verbose("Feature: {@Feature}", feature);
-            }
             SAEONLogs.Verbose("Features: Stage {Stage} Total {Total}", stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
             stageStopwatch.Restart();
             var importBatchIDs = summaries.Select(i => i.ImportBatchId).Distinct();
@@ -229,10 +228,11 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     (!i.Elevation.HasValue || (i.Elevation <= input.ElevationMaximum)))
                 .OrderBy(obs => obs.SiteName)
                 .ThenBy(obs => obs.StationName)
-                .ThenBy(obs => obs.InstrumentName)
-                .ThenBy(obs => obs.SensorName)
-                .ThenBy(obs => obs.ValueDate)
                 .ThenBy(obs => obs.Elevation)
+                .ThenBy(obs => obs.PhenomenonName)
+                .ThenBy(obs => obs.OfferingName)
+                .ThenBy(obs => obs.UnitName)
+                .ThenBy(obs => obs.ValueDate)
                 .AsEnumerable() // Force fetch from database
                 .Where(ibs =>
                     (!input.Locations.Any() || input.Locations.Contains(new Location { StationId = ibs.StationId })) &&
@@ -242,12 +242,24 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             stageStopwatch.Restart();
             var siteId = new Guid();
             var stationId = new Guid();
-            var instrumentId = new Guid();
-            var sensorId = new Guid();
-            var date = DateTime.MinValue;
             double? elevation = null;
+            var phenomenonId = new Guid();
+            var offeringId = new Guid();
+            var unitId = new Guid();
+            var date = DateTime.MinValue;
             DataMatrixRow row = null;
             // Data Matrix
+            result.DataMatrix.AddColumn("Site", MaxtixDataType.mdtString);
+            result.DataMatrix.AddColumn("Station", MaxtixDataType.mdtString);
+            result.DataMatrix.AddColumn("Elevation", MaxtixDataType.mdtDouble);
+            result.DataMatrix.AddColumn("Phenomenon", MaxtixDataType.mdtString);
+            result.DataMatrix.AddColumn("Offering", MaxtixDataType.mdtString);
+            result.DataMatrix.AddColumn("Unit", MaxtixDataType.mdtString);
+            result.DataMatrix.AddColumn("Variable", MaxtixDataType.mdtString);
+            result.DataMatrix.AddColumn("Date", MaxtixDataType.mdtDate);
+            result.DataMatrix.AddColumn("Value", MaxtixDataType.mdtDouble);
+            result.DataMatrix.AddColumn("Instrument", MaxtixDataType.mdtString);
+            result.DataMatrix.AddColumn("Sensor", MaxtixDataType.mdtString);
             int nRow = 0;
             foreach (var obs in observations)
             {
@@ -255,25 +267,34 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 {
                     SAEONLogs.Verbose("DataMatrix.Row: {Row}", nRow);
                 }
-                if ((row == null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.InstrumentId != instrumentId) || (obs.SensorId != sensorId) || (obs.ValueDate != date) || (obs.Elevation != elevation))
+                if ((row == null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.Elevation != elevation) || (obs.PhenomenonId != phenomenonId) || (obs.OfferingId != offeringId) || (obs.UnitId != unitId) || (obs.ValueDate != date))
                 {
                     row = result.DataMatrix.AddRow();
-                    row["SiteName"] = obs.SiteName;
-                    row["StationName"] = obs.StationName;
-                    row["InstrumentName"] = obs.InstrumentName;
-                    row["SensorName"] = obs.SensorName;
+                    row["Site"] = obs.SiteName;
+                    row["Station"] = obs.StationName;
+                    row["Phenomenon"] = obs.PhenomenonName;
+                    row["Offering"] = obs.OfferingName;
+                    row["Unit"] = obs.UnitName;
+                    row["Variable"] = GetVariableName(obs.PhenomenonName, obs.OfferingName, obs.UnitName);
                     row["Date"] = obs.ValueDate;
                     row["Elevation"] = obs.Elevation;
+                    row["Instrument"] = obs.InstrumentName;
+                    row["Sensor"] = obs.SensorName;
                     siteId = obs.SiteId;
                     stationId = obs.StationId;
-                    instrumentId = obs.InstrumentId;
-                    sensorId = obs.SensorId;
+                    phenomenonId = obs.PhenomenonId;
+                    offeringId = obs.OfferingId;
+                    unitId = obs.UnitId;
                     date = obs.ValueDate;
                     elevation = obs.Elevation;
                 }
-                var name = GetCode(obs.StationCode, obs.PhenomenonCode, obs.OfferingCode, obs.UnitCode);
-                //SAEONLogs.Verbose("Name: {Name}",name);
-                row[name] = obs.DataValue;
+                row["Value"] = obs.DataValue;
+            }
+            if (SAEONLogs.Level == LogEventLevel.Verbose)
+            {
+                var folder = $"{HostEnvironment.ContentRootPath.AddTrailingForwardSlash()}Searches/{result.Date:yyyyMM}";
+                Directory.CreateDirectory(folder);
+                System.IO.File.WriteAllText(Path.Combine(folder, $"{result.Date:yyyyMMdd HHmmss}.csv"), result.DataMatrix.ToCSV());
             }
             SAEONLogs.Verbose("DataMatrix: Rows: {Rows} Cols: {Cols} Stage {Stage} Total {Total}", result.DataMatrix.Rows.Count, result.DataMatrix.Columns.Count, stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
             stageStopwatch.Restart();
@@ -290,7 +311,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             result.Metadata.Subjects.AddRange(observations.Select(i => $"{i.PhenomenonName}, {i.OfferingName}, {i.UnitName}").Distinct().Select(i => new MetadataSubject { Name = i }));
             // Dates
             result.Metadata.StartDate = observations.Min(i => i.ValueDate);
-            result.Metadata.EndDate = observations.Min(i => i.ValueDate);
+            result.Metadata.EndDate = observations.Max(i => i.ValueDate);
             // Bounding box
             result.Metadata.LatitudeNorth = observations.Max(i => i.Latitude);
             result.Metadata.LatitudeSouth = observations.Min(i => i.Latitude);
@@ -416,100 +437,112 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 }
             }
 
-            using (var transaction = DbContext.Database.BeginTransaction())
+            var executionStrategy = DbContext.Database.CreateExecutionStrategy();
+            return await executionStrategy.ExecuteAsync(async () =>
             {
-                try
+                using (var transaction = DbContext.Database.BeginTransaction())
                 {
-                    SAEONLogs.Verbose("UserId: {userId} Claims: {claims}", User.UserId(), User.Claims.ToClaimsList());
-                    // Get Data
-                    var output = GetData(input, false);
-                    // Create Download
-                    var doiCode = $"Data download on {output.Date:yyyy-MM-dd HH:mm:ss.fff}";
-                    // Get a DOI
-                    SAEONLogs.Verbose("Minting DOI");
-                    var doi = await DOIHelper.CreateAdHocDOI(DbContext, HttpContext, doiCode, output.Metadata.Title);
-                    SAEONLogs.Verbose("DOI: {@DOI}", doi);
-                    var metadata = await MetadataHelper.CreateAddHocMetadata(DbContext, doi, output.Metadata);
-                    metadata.Accessed = output.Date;
-                    metadata.Generate(metadata.Title, metadata.Description);
-                    SAEONLogs.Verbose("Metadata: {@Metadata}", metadata);
-                    SAEONLogs.Verbose("Adding UserDownload");
-                    var baseUrl = $"{Config["QuerySiteUrl"].AddTrailingForwardSlash()}DataWizard";
-                    var result = new UserDownload
-                    {
-                        UserId = User.UserId(),
-                        Name = doiCode,
-                        Description = metadata.Title,
-                        Date = output.Date,
-                        DigitalObjectIdentifierId = doi.Id,
-                        Input = JsonConvert.SerializeObject(input),
-                        RequeryUrl = $"{baseUrl}/Requery",
-                        DownloadUrl = $"{baseUrl}/ViewDownload",
-                        ZipFullName = $"{HostEnvironment.ContentRootPath.AddTrailingForwardSlash()}Downloads/{output.Date:yyyyMM}",
-                        ZipCheckSum = "ABCD",
-                        ZipUrl = $"{baseUrl}/DownloadZip",
-                        AddedBy = User.UserId(),
-                        UpdatedBy = User.UserId()
-                    };
-                    SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
-                    DbContext.UserDownloads.Add(result);
-                    await SaveChangesAsync();
-                    result = await DbContext.UserDownloads.Include(i => i.DigitalObjectIdentifier).FirstOrDefaultAsync(i => i.Name == doiCode);
-                    if (result == null)
-                    {
-                        throw new InvalidOperationException($"Unable to find UserDownload {doiCode}");
-                    }
-                    SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
-                    result.ZipCheckSum = null;
-                    result.Description += Environment.NewLine + "Please cite as follows:" + Environment.NewLine + metadata.CitationText;
-                    result.RequeryUrl = $"{baseUrl}/Requery/{result.Id}";
-                    result.DownloadUrl = $"{baseUrl}/ViewDownload/{result.Id}";
-                    var folder = $"{HostEnvironment.ContentRootPath.AddTrailingForwardSlash()}Downloads/{output.Date:yyyyMM}";
-                    var dirInfo = Directory.CreateDirectory(Path.Combine(folder, result.Id.ToString()));
-                    result.ZipFullName = Path.Combine(folder, $"{result.Id}.zip");
-                    result.ZipUrl = $"{baseUrl}/DownloadZip/{result.Id}";
-                    // Create files
-                    SAEONLogs.Verbose("Creating files");
-                    System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input, Formatting.Indented));
-                    System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), metadata.ToJson());
-                    switch (input.DownloadFormat)
-                    {
-                        case DownloadFormat.CSV:
-                            System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Data.csv"), output.DataMatrix.AsCSV());
-                            break;
-                        case DownloadFormat.Excel:
-                            break;
-                        case DownloadFormat.NetCDF:
-                            break;
-                    }
-                    // Create Zip
-                    System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Download.json"),
-                        JsonConvert.SerializeObject(result, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
-                    ZipFile.CreateFromDirectory(dirInfo.FullName, Path.Combine(folder, $"{result.Id}.zip"));
-                    dirInfo.Delete(true);
-                    // Generate Checksum
-                    result.ZipCheckSum = GetChecksum(result.ZipFullName);
-                    var jChecksum = new JObject(new JProperty("Checksum", result.ZipCheckSum));
-                    System.IO.File.WriteAllText(Path.Combine(folder, $"{result.Id} Checksum.json"), jChecksum.ToString());
-                    SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
-                    await SaveChangesAsync();
-                    transaction.Commit();
-                    return result;
-                }
-                catch (Exception ex)
-                {
-                    SAEONLogs.Exception(ex);
                     try
                     {
-                        transaction.Rollback();
+                        SAEONLogs.Verbose("UserId: {userId} Claims: {claims}", User.UserId(), User.Claims.ToClaimsList());
+                        // Get Data
+                        var output = GetData(input, false);
+                        // Create Download
+                        var doiCode = $"Data download for {User.UserId()} on {output.Date:yyyy-MM-dd HH:mm:ss.fff}";
+                        // Get a DOI
+                        SAEONLogs.Verbose("Minting DOI");
+                        var doi = await DOIHelper.CreateAdHocDOI(DbContext, HttpContext, doiCode, doiCode);
+                        SAEONLogs.Verbose("DOI: {@DOI}", doi);
+                        var metadata = await MetadataHelper.CreateAddHocMetadata(DbContext, doi, output.Metadata);
+                        metadata.Accessed = output.Date;
+                        metadata.Generate(metadata.Title, metadata.Description);
+                        doi.MetadataJson = metadata.ToJson();
+                        var oldSha256 = doi.MetadataJsonSha256;
+                        doi.MetadataJsonSha256 = doi.MetadataJson.Sha256();
+                        doi.ODPMetadataNeedsUpdate = oldSha256 != doi.MetadataJsonSha256 || (!doi.ODPMetadataIsValid ?? true); ;
+                        doi.MetadataHtml = metadata.ToHtml();
+                        doi.CitationHtml = metadata.CitationHtml;
+                        doi.CitationText = metadata.CitationText;
+                        SAEONLogs.Verbose("Metadata: {@Metadata}", metadata);
+                        SAEONLogs.Verbose("Adding UserDownload");
+                        var baseUrl = $"{Config["QuerySiteUrl"].AddTrailingForwardSlash()}Query/Data";
+                        var result = new UserDownload
+                        {
+                            UserId = User.UserId(),
+                            Name = doiCode,
+                            Description = metadata.Title,
+                            Date = output.Date,
+                            DigitalObjectIdentifierId = doi.Id,
+                            Input = JsonConvert.SerializeObject(input),
+                            RequeryUrl = $"{baseUrl}/Requery",
+                            DownloadUrl = $"{baseUrl}/ViewDownload",
+                            ZipFullName = $"{HostEnvironment.ContentRootPath.AddTrailingForwardSlash()}Downloads/{output.Date:yyyyMM}",
+                            ZipCheckSum = "ABCD",
+                            ZipUrl = $"{baseUrl}/DownloadZip",
+                            AddedBy = User.UserId(),
+                            UpdatedBy = User.UserId()
+                        };
+                        SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
+                        DbContext.UserDownloads.Add(result);
+                        await SaveChangesAsync();
+                        result = await DbContext.UserDownloads.Include(i => i.DigitalObjectIdentifier).FirstOrDefaultAsync(i => i.Name == doiCode);
+                        if (result == null)
+                        {
+                            throw new InvalidOperationException($"Unable to find UserDownload {doiCode}");
+                        }
+                        SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
+                        result.ZipCheckSum = null;
+                        result.Description += Environment.NewLine + "Please cite as follows:" + Environment.NewLine + metadata.CitationText;
+                        result.RequeryUrl = $"{baseUrl}/Requery/{result.Id}";
+                        result.DownloadUrl = $"{baseUrl}/ViewDownload/{result.Id}";
+                        var folder = $"{HostEnvironment.ContentRootPath.AddTrailingBackSlash()}Downloads\\{output.Date:yyyyMM}";
+                        var dirInfo = Directory.CreateDirectory(Path.Combine(folder, result.Id.ToString()));
+                        result.ZipFullName = Path.Combine(folder, $"{result.Id}.zip");
+                        result.ZipUrl = $"{baseUrl}/DownloadZip/{result.Id}";
+                        // Create files
+                        SAEONLogs.Verbose("Creating files");
+                        System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input, Formatting.Indented));
+                        System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), metadata.ToJson());
+                        switch (input.DownloadFormat)
+                        {
+                            case DownloadFormat.CSV:
+                                System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Data.csv"), output.DataMatrix.ToCSV());
+                                break;
+                            case DownloadFormat.Excel:
+                                System.IO.File.WriteAllBytes(Path.Combine(dirInfo.FullName, "Data.xlsx"), output.DataMatrix.ToExcel());
+                                break;
+                            case DownloadFormat.NetCDF:
+                                break;
+                        }
+                        // Create Zip
+                        System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Download.json"),
+                            JsonConvert.SerializeObject(result, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
+                        ZipFile.CreateFromDirectory(dirInfo.FullName, Path.Combine(folder, $"{result.Id}.zip"));
+                        dirInfo.Delete(true);
+                        // Generate Checksum
+                        result.ZipCheckSum = GetChecksum(result.ZipFullName);
+                        var jChecksum = new JObject(new JProperty("Checksum", result.ZipCheckSum));
+                        System.IO.File.WriteAllText(Path.Combine(folder, $"{result.Id} Checksum.json"), jChecksum.ToString());
+                        SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
+                        await SaveChangesAsync();
+                        transaction.Commit();
+                        return result;
                     }
-                    catch (Exception rex)
+                    catch (Exception ex)
                     {
-                        SAEONLogs.Exception(rex);
+                        SAEONLogs.Exception(ex);
+                        try
+                        {
+                            transaction.Rollback();
+                        }
+                        catch (Exception rex)
+                        {
+                            SAEONLogs.Exception(rex);
+                        }
+                        throw;
                     }
-                    throw;
                 }
-            }
+            });
         }
 
         [HttpGet("GetDownload/{input}")]

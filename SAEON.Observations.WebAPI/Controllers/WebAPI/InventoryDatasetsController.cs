@@ -1,5 +1,6 @@
 ﻿using SAEON.Observations.Core;
-using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
@@ -9,7 +10,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// All Datasets
         /// </summary>
         /// <returns></returns>
-        public override IQueryable<InventoryDataset> GetAll()
+        public override Task<IEnumerable<InventoryDataset>> GetAll()
         {
             return base.GetAll();
         }

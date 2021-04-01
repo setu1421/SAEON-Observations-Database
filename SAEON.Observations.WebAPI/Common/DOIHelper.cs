@@ -16,7 +16,7 @@ namespace SAEON.Observations.WebAPI
     public static class DOIHelper
     {
         private static readonly string blankJson = "{}";
-        private static readonly string blankHtml = "";
+        private static readonly string blankHtml = "<>";
 
         public static async Task<DigitalObjectIdentifier> CreateAdHocDOI(ObservationsDbContext dbContext, HttpContext httpContext, string code, string name)
         {
@@ -24,7 +24,7 @@ namespace SAEON.Observations.WebAPI
             {
                 try
                 {
-                    var doiObservations = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.ObservationsDb);
+                    var doiObservations = await EnsureObservationsDbDOI();
                     var doi = await AddDOI(DOIType.AdHoc, code, name, doiObservations);
                     return doi;
                 }
@@ -33,6 +33,17 @@ namespace SAEON.Observations.WebAPI
                     SAEONLogs.Exception(ex);
                     throw;
                 }
+            }
+
+            async Task<DigitalObjectIdentifier> EnsureObservationsDbDOI()
+            {
+                var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.ObservationsDb);
+                if (doi == null)
+                {
+                    doi = await AddDOI(DOIType.ObservationsDb, "ObservationsDB", "Observations Database", null);
+                    await dbContext.SaveChangesAsync();
+                }
+                return doi;
             }
 
             async Task<DigitalObjectIdentifier> AddDOI(DOIType doiType, string code, string name, DigitalObjectIdentifier parent)
@@ -63,6 +74,7 @@ namespace SAEON.Observations.WebAPI
                     doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Periodic/{doi.DOI}";
                 else
                     doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Dynamic/{doi.DOI}";
+                SAEONLogs.Verbose("DOI: {@DOI}", doi);
                 await dbContext.SaveChangesAsync();
                 return doi;
             }

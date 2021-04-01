@@ -787,11 +787,13 @@ public class ImportSchemaHelper : IDisposable
                             rec.InvalidStatuses.Add(Status.UOMInvalid);
                         }
 
+#if VeryDetailedSAEONLogs
                         if (SAEONLogs.Level == LogEventLevel.Verbose)
                         {
                             SAEONLogs.Verbose("Row#: {row} Index: {Index} Column: {Column} Phenomenon: {Phenomenon} Offering: {Offering} Phenomenon: {Phenomenon} UnitOfMeasure: {UnitOfMeasure}",
                                 rowNum, def.Index, def.FieldName, def.PhenomenonOffering?.Phenomenon?.Name, def.PhenomenonOffering?.Offering?.Name, def.PhenomenonOUM?.Phenomenon?.Name, def.PhenomenonOUM?.UnitOfMeasure?.Unit);
                         }
+#endif
                         if (ErrorInTime)
                         {
                             rec.TimeValueInvalid = true;

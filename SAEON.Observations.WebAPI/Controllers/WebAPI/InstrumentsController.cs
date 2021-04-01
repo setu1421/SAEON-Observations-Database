@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SAEON.Observations.Core;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,7 +24,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// All Instruments
         /// </summary>
         /// <returns>ListOf(Instrument)</returns>
-        public override IQueryable<Instrument> GetAll()
+        //public override Task<ActionResult<IQueryable<Instrument>>> GetAll()
+        //{
+        //    return base.GetAll();
+        //}
+        public override Task<IEnumerable<Instrument>> GetAll()
         {
             return base.GetAll();
         }

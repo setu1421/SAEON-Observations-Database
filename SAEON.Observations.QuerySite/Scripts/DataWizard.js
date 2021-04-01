@@ -11,9 +11,6 @@ export function Testing() {
     alert("Testing");
 }
 // Variables
-const variablesExpand = false;
-let variablesReady = false;
-let variablesSelected = false;
 const locationsExpand = true;
 let locationsLoaded = false;
 let locationsReady = false;
@@ -21,6 +18,9 @@ let locationsSelected = false;
 let loading = false;
 //let searched = false;
 let selectedTab = -1;
+const variablesExpand = true;
+let variablesReady = false;
+let variablesSelected = false;
 // Results
 export function ShowResults() {
     $("#TableTab").removeClass("d-none");

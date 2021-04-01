@@ -120,16 +120,19 @@ namespace SAEON.Observations.WebAPI
                 }
             }
             // Dynamic children
-            var dynamicChildren = DOI.Children.Where(i => MetadataHelper.DynamicDOITypes.Contains(i.DOIType)).OrderBy(i => i.Name).ToList();
-            if (dynamicChildren.Count > 0)
+            if (MetadataHelper.DynamicDOITypes.Contains(DOI.DOIType))
             {
-                sbText.AppendLine($"This collection includes observations from the following {((DOI.DOIType + 1).Humanize(LetterCasing.LowerCase).ToQuantity(dynamicChildren.Count, ShowQuantityAs.None))}: " +
-                    string.Join(", ", dynamicChildren.Select(i => $"{i.Name} doi:{i.DOI}")));
-                sbHtml.AppendHtmlP($"This collection includes observations from the following {((DOI.DOIType + 1).Humanize(LetterCasing.LowerCase).ToQuantity(dynamicChildren.Count, ShowQuantityAs.None))}:");
-                sbHtml.AppendHtmlUL(dynamicChildren.Select(i => $"{i.Name} <a href='{i.DOIUrl}'>{i.DOI}</a>"));
-                foreach (var child in dynamicChildren)
+                var dynamicChildren = DOI.Children.Where(i => MetadataHelper.DynamicDOITypes.Contains(i.DOIType)).OrderBy(i => i.Name).ToList();
+                if (dynamicChildren.Count > 0)
                 {
-                    RelatedIdentifiers.Add(new MetadataRelatedIdentifier { Name = "HasPart", Identifier = child.DOI, Type = "DOI" });
+                    sbText.AppendLine($"This collection includes observations from the following {((DOI.DOIType + 1).Humanize(LetterCasing.LowerCase).ToQuantity(dynamicChildren.Count, ShowQuantityAs.None))}: " +
+                        string.Join(", ", dynamicChildren.Select(i => $"{i.Name} doi:{i.DOI}")));
+                    sbHtml.AppendHtmlP($"This collection includes observations from the following {((DOI.DOIType + 1).Humanize(LetterCasing.LowerCase).ToQuantity(dynamicChildren.Count, ShowQuantityAs.None))}:");
+                    sbHtml.AppendHtmlUL(dynamicChildren.Select(i => $"{i.Name} <a href='{i.DOIUrl}'>{i.DOI}</a>"));
+                    foreach (var child in dynamicChildren)
+                    {
+                        RelatedIdentifiers.Add(new MetadataRelatedIdentifier { Name = "HasPart", Identifier = child.DOI, Type = "DOI" });
+                    }
                 }
             }
             // Periodic children

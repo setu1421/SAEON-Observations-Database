@@ -190,6 +190,14 @@ namespace SAEON.Observations.QuerySite
                     });
                     // Make sure ODP is available
                     // Make sure WebAPI is available
+                    //var client = new HttpClient();
+                    //client.DefaultRequestHeaders.Accept.Clear();
+                    //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
+                    //var url = ConfigurationManager.AppSettings["QuerySiteHealthCheckUrl"];
+                    //SAEONLogs.Verbose("Calling: {url}", url);
+                    //var response = await client.GetAsync(url);
+                    //SAEONLogs.Verbose("Response: {response}", response);
+                    //response.EnsureSuccessStatusCode();
                 }
                 catch (Exception ex)
                 {

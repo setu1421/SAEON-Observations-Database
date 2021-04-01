@@ -1,6 +1,8 @@
 ﻿using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
+using SAEON.Logs;
+using System;
 using System.Web;
 using System.Web.Mvc;
 
@@ -97,8 +99,9 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
 
         }
+        */
 
-        public ActionResult ClaimsQuerySite()
+        public ActionResult Claims()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -117,7 +120,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [Authorize]
-        public ActionResult ClaimsQuerySiteUser()
+        public ActionResult ClaimsAuthorized()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -135,6 +138,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
+        /*
         public async Task<ActionResult> ClaimsWebAPI()
         {
             using (SAEONLogs.MethodCall(GetType()))

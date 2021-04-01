@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SAEON.Observations.Core;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// All Phenomena
         /// </summary>
         /// <returns>ListOf(Phenomenon)</returns>
-        public override IQueryable<Phenomenon> GetAll()
+        public override Task<IEnumerable<Phenomenon>> GetAll()
         {
             return base.GetAll();
         }

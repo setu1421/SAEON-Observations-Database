@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
-#if ODPAuth
 using Microsoft.AspNetCore.Authorization;
-#endif
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -52,9 +50,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-#if ODPAuth
     [Authorize(Policy = ODPAuthenticationDefaults.IdTokenPolicy)]
-#endif
     public abstract class InternalWriteController<TEntity> : BaseIdedReadController<TEntity> where TEntity : NamedEntity
     {
         protected IMapper Mapper { get; private set; }
@@ -94,7 +90,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] TEntity item)
+        public async Task<ActionResult<TEntity>> Post([FromBody] TEntity item)
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "item", item } }))
             {
@@ -142,12 +138,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         SAEONLogs.Exception(ex, "Unable to add {Name}", item.Name);
                         return BadRequest($"Unable to add {item.Name}");
                     }
-                    //var attr = (RoutePrefixAttribute)GetType().GetCustomAttributes(typeof(RoutePrefixAttribute), true)?[0];
-                    //var location = $"{attr?.Prefix ?? typeof(TEntity).Name}/{item.Id}";
                     var location = $"{typeof(TEntity).Name}/{item.Id}";
                     SAEONLogs.Verbose("Location: {location} Id: {Id} Item: {@item}", location, item.Id, item);
-                    return Created(location, item);
-                    //return CreatedAtRoute(name, new { id = item.Id }, item);
+                    return CreatedAtAction(nameof(GetById), new { id = item.Id }, item);
                 }
                 catch (Exception ex)
                 {
