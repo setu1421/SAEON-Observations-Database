@@ -1,9 +1,10 @@
-﻿@using SAEON.Observations.QuerySite.Models
+﻿@using SAEON.Observations.Core
+@using SAEON.Observations.QuerySite.Models
 @using System.Data
 @model DataWizardModel
 @(Html.EJ().Grid<object>
     ("TableGrid")
-    .Datasource(@Model.DataOutput.DataMatrix.AsDataTable())
+    .Datasource(@Model.DataOutput.DataMatrix.ToDataTable())
     .IsResponsive()
     .AllowPaging()
     .PageSettings(p => p.PageSize(25))
@@ -17,7 +18,8 @@
     {
         foreach(var column in Model.DataOutput.DataMatrix.Columns)
         {
-            if (column.Name.Contains("_"))
+            //if (column.Name.Contains("_"))
+            if (column.Name == "Value")
                 col.Field(column.Name).TextAlign(TextAlign.Right).Format("{0:N6}").HeaderText(column.Caption).Add();
             else if (column.Name == "Date")
                 col.Field(column.Name).Format("{0:dd MMM yyyy hh:mm}").HeaderText(column.Caption).Add();

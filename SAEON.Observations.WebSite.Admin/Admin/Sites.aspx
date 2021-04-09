@@ -364,7 +364,7 @@
                     </ext:Panel>
                     <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
-                            <ext:TextField ID="tfUrl" DataIndex="Url" MaxLength="150" runat="server"
+                            <ext:TextField ID="tfUrl" DataIndex="Url" MaxLength="5000" runat="server"
                                 FieldLabel="Url" AnchorHorizontal="96%">
                             </ext:TextField>
                         </Items>

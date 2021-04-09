@@ -476,7 +476,7 @@
                     </ext:Container>
                     <ext:Container ID="Panel4" runat="server" Layout="Form">
                         <Items>
-                            <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" 
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" MaxLength="5000"
                                 AllowBlank="false" BlankText="Description is required" MsgTarget="Side" FieldLabel="Description"
                                 AnchorHorizontal="96%" ClientIDMode="Static">
                             </ext:TextArea>

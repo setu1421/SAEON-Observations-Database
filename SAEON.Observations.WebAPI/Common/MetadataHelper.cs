@@ -88,11 +88,12 @@ namespace SAEON.Observations.WebAPI
                         byte[] oldSha256;
                         var doiObservations = await dbContext.DigitalObjectIdentifiers.Include(i => i.Children).SingleAsync(i => i.DOIType == DOIType.ObservationsDb);
                         var metaObservations = await MetadataForDOIAsync(doiObservations, null);
+                        var orgCodes = new string[] { "SAEON", "SMCRI", "EFTEON" };
                         foreach (var doiOrganisation in await dbContext
                             .DigitalObjectIdentifiers
                             .Include(i => i.Parent)
                             .Include(i => i.Children)
-                            .Where(i => i.DOIType == DOIType.Organisation && i.Code == "SAEON")
+                            .Where(i => i.DOIType == DOIType.Organisation && orgCodes.Contains(i.Code))
                             .ToListAsync())
                         {
                             var organisation = await dbContext.Organisations.SingleAsync(i => i.Code == doiOrganisation.Code);

@@ -16,7 +16,7 @@ namespace SAEON.Observations.WebAPI
     public static class DOIHelper
     {
         private static readonly string blankJson = "{}";
-        private static readonly string blankHtml = "<>";
+        private static readonly string blankHtml = "";
 
         public static async Task<DigitalObjectIdentifier> CreateAdHocDOI(ObservationsDbContext dbContext, HttpContext httpContext, string code, string name)
         {
@@ -253,7 +253,8 @@ namespace SAEON.Observations.WebAPI
 
                         await AddLineAsync("Generating DOIs");
                         var doiObservations = await EnsureObservationsDbDOI();
-                        foreach (var organisation in await dbContext.Organisations.Where(i => i.Code == "SAEON").OrderBy(i => i.Name).ToListAsync())
+                        var orgCodes = new string[] { "SAEON", "SMCRI", "EFTEON" };
+                        foreach (var organisation in await dbContext.Organisations.Where(i => orgCodes.Contains(i.Code)).OrderBy(i => i.Name).ToListAsync())
                         {
                             var doiOrganisation = await EnsureOrganisationDOI(doiObservations, organisation);
                             var programmeCodes = GetImportBatches()
@@ -261,7 +262,6 @@ namespace SAEON.Observations.WebAPI
                                 .Select(i => i.ProgrammeCode)
                                 .Distinct();
                             foreach (var programme in await dbContext.Programmes
-                                //.Where(i => i.Code == "SAEON" || i.Code == "SACTN") // Remove once live
                                 .Where(i => programmeCodes.Contains(i.Code))
                                 .ToListAsync())
                             {
@@ -273,7 +273,6 @@ namespace SAEON.Observations.WebAPI
                                     .Select(i => i.ProjectCode)
                                     .Distinct();
                                 foreach (var project in await dbContext.Projects
-                                    //.Where(i => i.Code == "SAEON" || i.Code == "SACTN") // Remove once live
                                     .Where(i => projectCodes.Contains(i.Code))
                                     .ToListAsync())
                                 {
@@ -286,7 +285,6 @@ namespace SAEON.Observations.WebAPI
                                         .Select(i => i.SiteCode)
                                         .Distinct();
                                     foreach (var site in await dbContext.Sites
-                                        //.Where(i => i.Code == "HSB" || i.Code == "CNSP" || i.Code == "JNHK" || i.Code == "CDBG" || i.Code.StartsWith("SACTN")) // Remove once live
                                         .Where(i => siteCodes.Contains(i.Code))
                                        .ToListAsync())
                                     {

@@ -320,7 +320,7 @@
                     </ext:Panel>
                     <ext:Container ID="Container4" runat="server" Layout="Form">
                         <Items>
-                            <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" AllowBlank="false" AnchorHorizontal="96%" ClientIDMode="Static"
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" AllowBlank="false" AnchorHorizontal="96%" ClientIDMode="Static" MaxLength="5000"
                                 BlankText="Description is required" MsgTarget="Side" FieldLabel="Description">
                             </ext:TextArea>
                         </Items>
