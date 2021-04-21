@@ -5,11 +5,16 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{11B4C3E1-2591-4794-8119-FB9A9182C370}"
 	ProjectSection(SolutionItems) = preProject
+		Clear out DOIs.sql = Clear out DOIs.sql
 		Delete Duplicate Observations.sql = Delete Duplicate Observations.sql
+		..\Digital Object Identifiers.sql = ..\Digital Object Identifiers.sql
 		Fix SACTN null ProjectIDs.sql = Fix SACTN null ProjectIDs.sql
 		..\Data cleanup\ImportBatchesSummary create.sql = ..\Data cleanup\ImportBatchesSummary create.sql
 		Observations.2.64.publish.sql = Observations.2.64.publish.sql
 		Observations.2.64.publish.txt = Observations.2.64.publish.txt
+		ObservationsElwandle.2.0.64-1.publish.sql = ObservationsElwandle.2.0.64-1.publish.sql
+		ObservationsElwandle.2.0.64.publish.sql = ObservationsElwandle.2.0.64.publish.sql
+		ObservationsElwandle.2.0.64.publish.txt = ObservationsElwandle.2.0.64.publish.txt
 		ObservationsFynbos.2.64..publish.sql = ObservationsFynbos.2.64..publish.sql
 		ObservationsFynbos.2.64..publish.txt = ObservationsFynbos.2.64..publish.txt
 		ObservationsSACTN.2.64..publish.sql = ObservationsSACTN.2.64..publish.sql
@@ -21,7 +26,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{373D4664-B632-4A91-9AC1-9F8342CFA12C}.Default|Default.ActiveCfg = Default
+		{35C33AD6-9DC9-4FA0-A623-DEB7BEA5FCE8}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,6 +6,10 @@
      Clustered indexes that will be created
        None
      Possible data issues
+       The column [dbo].[DigitalObjectIdentifiers].[Title] on table [dbo].[DigitalObjectIdentifiers] must be added, but the
+         column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work.
+         To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the
+         generation of smart-defaults as a deployment option.
        The column [dbo].[UserDownloads].[Citation] is being dropped, data loss could occur.
        The column [dbo].[UserDownloads].[ElevationMaximum] is being dropped, data loss could occur.
        The column [dbo].[UserDownloads].[ElevationMinimum] is being dropped, data loss could occur.
@@ -72,6 +76,7 @@
        [dbo].[vObservationJSON] (View)
        [dbo].[vStationObservations] (View)
 
+The column [dbo].[DigitalObjectIdentifiers].[Title] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
 The column [dbo].[UserDownloads].[Citation] is being dropped, data loss could occur.
 The column [dbo].[UserDownloads].[ElevationMaximum] is being dropped, data loss could occur.
 The column [dbo].[UserDownloads].[ElevationMinimum] is being dropped, data loss could occur.

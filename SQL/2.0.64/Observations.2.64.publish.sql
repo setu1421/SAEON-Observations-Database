@@ -52,6 +52,14 @@ USE [$(DatabaseName)];
 
 GO
 /*
+The column [dbo].[DigitalObjectIdentifiers].[Title] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+*/
+
+IF EXISTS (select top 1 1 from [dbo].[DigitalObjectIdentifiers])
+    RAISERROR (N'Rows were detected. The schema update is terminating because data loss might occur.', 16, 127) WITH NOWAIT
+
+GO
+/*
 The column [dbo].[UserDownloads].[Citation] is being dropped, data loss could occur.
 
 The column [dbo].[UserDownloads].[ElevationMaximum] is being dropped, data loss could occur.
@@ -140,7 +148,8 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 ALTER TABLE [dbo].[DigitalObjectIdentifiers]
-    ADD [CitationHtml] VARCHAR (5000) NULL,
+    ADD [Title]        VARCHAR (5000) NOT NULL,
+        [CitationHtml] VARCHAR (5000) NULL,
         [CitationText] VARCHAR (5000) NULL;
 
 
@@ -294,6 +303,11 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 ALTER TABLE [dbo].[UserDownloads] DROP COLUMN [Citation], COLUMN [ElevationMaximum], COLUMN [ElevationMinimum], COLUMN [EndDate], COLUMN [Keywords], COLUMN [LatitudeNorth], COLUMN [LatitudeSouth], COLUMN [LongitudeEast], COLUMN [LongitudeWest], COLUMN [MetadataJson], COLUMN [MetadataURL], COLUMN [OpenDataPlatformID], COLUMN [Places], COLUMN [StartDate], COLUMN [Title];
+
+
+GO
+ALTER TABLE [dbo].[UserDownloads]
+    ADD [IsDeleted] BIT NULL;
 
 
 GO
