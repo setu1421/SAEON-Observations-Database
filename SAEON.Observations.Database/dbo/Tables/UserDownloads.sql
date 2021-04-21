@@ -3,6 +3,7 @@
     [ID] UniqueIdentifier Constraint [DF_UserDownloads_ID] DEFAULT (newid()), 
     [Name] VarChar(150) not Null, 
     [Description] VarChar(5000) not Null,
+    [IsDeleted] Bit Null,
     --[Title] VarChar(5000) not Null,
     --[Keywords] VarChar(1000) not Null,
 	[Date] DateTime not null,

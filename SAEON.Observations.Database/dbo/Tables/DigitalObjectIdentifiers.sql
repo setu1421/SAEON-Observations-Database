@@ -8,6 +8,7 @@
 	[DOIUrl] as 'https://doi.org/10.15493/obsdb.'+Stuff(Convert(VarChar(20),Convert(VarBinary(4),ID),2),5,0,'.'),
 	[Code] VARCHAR(200) not null,
 	[Name] VARCHAR(500) not null,
+    [Title] VARCHAR(5000) not null,
     [MetadataJson] VARCHAR(MAX) not null,
     [MetadataJsonSha256] Binary(32) not null,
     [MetadataHtml] VARCHAR(MAX) not null,
