@@ -778,6 +778,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
+        [Route("ViewDownload/{id:guid}")]
         public async Task<ActionResult> ViewDownload(Guid? id)
         {
             using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Id", id } }))
@@ -807,6 +808,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
+        [Route("DownloadZip/{id:guid}")]
         public async Task<FileResult> DownloadZip(Guid? id)
         {
             using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Id", id } }))

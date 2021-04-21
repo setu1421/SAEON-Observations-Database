@@ -7,22 +7,10 @@
         <div>
             <dl class="dl-horizontal">
                 <dt>
-                    @Html.DisplayNameFor(model => model.Id)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.Id)
-                </dd>
-                <dt>
                     @Html.DisplayNameFor(model => model.Name)
                 </dt>
                 <dd>
                     @Html.DisplayFor(model => model.Name)
-                </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.Title)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.Title)
                 </dd>
                 <dt>
                     @Html.DisplayNameFor(model => model.Description)
@@ -31,10 +19,16 @@
                     @Html.DisplayFor(model => model.Description)
                 </dd>
                 <dt>
-                    @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.CitationHtml)
+                    @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.Title)
                 </dt>
                 <dd>
-                    @Html.DisplayFor(model => model.DigitalObjectIdentifier.CitationHtml)
+                    @Html.DisplayFor(model => model.DigitalObjectIdentifier.Title)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.CitationText)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.DigitalObjectIdentifier.CitationText)
                 </dd>
                 <dt>
                     @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.DOI)
@@ -68,9 +62,9 @@
                 </dd>
             </dl>
         </div>
-        <p>
+        <div>
             @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
             @Html.ActionLink("Back to List", "Index")
-        </p>
+        </div>
     </div>
 </div>

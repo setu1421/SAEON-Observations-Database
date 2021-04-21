@@ -1,70 +1,35 @@
 ﻿@model SAEON.Observations.Core.UserDownload
-@{
-    ViewBag.Title = "User Download";
-}
+@{ ViewBag.Title = "User Download"; }
 <div class="row">
     <div class="col-md">
         <h3>Are you sure you want to delete this?</h3>
-        <div>
-            <dl class="dl-horizontal">
-                <dt>
-                    @Html.DisplayNameFor(model => model.Name)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.Name)
-                </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.Description)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.Description)
-                </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.Input)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.Input)
-                </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.RequeryUrl)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.RequeryUrl)
-                </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.DOI)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.DigitalObjectIdentifier.DOI)
-                </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.MetadataUrl)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.DigitalObjectIdentifier.MetadataUrl)
-                </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.DownloadUrl)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.DownloadUrl)
-                </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.CitationHtml)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.DigitalObjectIdentifier.CitationHtml)
-                </dd>
-            </dl>
-            @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.Title)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DigitalObjectIdentifier.Title)
+            </dd>
+        </dl>
+        @using (Html.BeginForm())
+        {
+@Html.AntiForgeryToken()
 
-                <div class="form-actions no-color">
-                    <input type="submit" value="Delete" class="btn btn-default" /> |
-                    @Html.ActionLink("Back to List", "Index")
-                </div>
-            }
+                <button type="submit" class="btn btn-primary">Delete</button>}
+        <div>
+            @Html.ActionLink("Back to List", "Index")
         </div>
     </div>
 </div>

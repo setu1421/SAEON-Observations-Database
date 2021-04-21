@@ -23,15 +23,19 @@
   <ItemGroup>
     <Compile Remove="Downloads\**" />
     <Compile Remove="Logs\**" />
+    <Compile Remove="Searches\**" />
     <Compile Remove="wwwroot\lib\**" />
     <Content Remove="Downloads\**" />
     <Content Remove="Logs\**" />
+    <Content Remove="Searches\**" />
     <Content Remove="wwwroot\lib\**" />
     <EmbeddedResource Remove="Downloads\**" />
     <EmbeddedResource Remove="Logs\**" />
+    <EmbeddedResource Remove="Searches\**" />
     <EmbeddedResource Remove="wwwroot\lib\**" />
     <None Remove="Downloads\**" />
     <None Remove="Logs\**" />
+    <None Remove="Searches\**" />
     <None Remove="wwwroot\lib\**" />
   </ItemGroup>
 

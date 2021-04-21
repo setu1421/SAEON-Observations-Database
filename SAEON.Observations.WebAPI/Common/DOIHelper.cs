@@ -16,7 +16,13 @@ namespace SAEON.Observations.WebAPI
     public static class DOIHelper
     {
         private static readonly string blankJson = "{}";
-        private static readonly string blankHtml = "";
+        private static readonly string blankHtml = "<>";
+        private static readonly string blankTitle = "Title";
+
+        public static readonly string ObservationsDbCode = "ObservationsDB";
+        public static readonly string DynamicDOIsCode = "DynamicDOIs";
+        public static readonly string PeriodicDOIsCode = "PeriodicDOIs";
+        public static readonly string AdHocDOIsCode = "AddHocDOIs";
 
         public static async Task<DigitalObjectIdentifier> CreateAdHocDOI(ObservationsDbContext dbContext, HttpContext httpContext, string code, string name)
         {
@@ -24,8 +30,8 @@ namespace SAEON.Observations.WebAPI
             {
                 try
                 {
-                    var doiObservations = await EnsureObservationsDbDOI();
-                    var doi = await AddDOI(DOIType.AdHoc, code, name, doiObservations);
+                    var doiAdHocs = await dbContext.DigitalObjectIdentifiers.SingleAsync(i => i.DOIType == DOIType.Collection && i.Code == AdHocDOIsCode);
+                    var doi = await AddDOI(DOIType.AdHoc, code, name, doiAdHocs);
                     return doi;
                 }
                 catch (Exception ex)
@@ -33,17 +39,6 @@ namespace SAEON.Observations.WebAPI
                     SAEONLogs.Exception(ex);
                     throw;
                 }
-            }
-
-            async Task<DigitalObjectIdentifier> EnsureObservationsDbDOI()
-            {
-                var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.ObservationsDb);
-                if (doi == null)
-                {
-                    doi = await AddDOI(DOIType.ObservationsDb, "ObservationsDB", "Observations Database", null);
-                    await dbContext.SaveChangesAsync();
-                }
-                return doi;
             }
 
             async Task<DigitalObjectIdentifier> AddDOI(DOIType doiType, string code, string name, DigitalObjectIdentifier parent)
@@ -54,6 +49,7 @@ namespace SAEON.Observations.WebAPI
                     DOIType = doiType,
                     Code = code,
                     Name = name ?? code,
+                    Title = blankTitle,
                     MetadataJson = blankJson,
                     MetadataJsonSha256 = blankJson.Sha256(),
                     MetadataUrl = "https://catalogue.saeon.ac.za/records/",
@@ -67,13 +63,15 @@ namespace SAEON.Observations.WebAPI
                     doi.Parent = parent;
                 }
                 await dbContext.DigitalObjectIdentifiers.AddAsync(doi);
+                await dbContext.SaveChangesAsync();
                 doi.MetadataUrl = $"https://catalogue.saeon.ac.za/records/{doi.DOI}";
-                if (doi.DOIType == DOIType.AdHoc)
-                    doi.QueryUrl = $"https://observations.saeon.ac.za/Download/AdHoc/{doi.DOI}";
-                else if (doi.DOIType == DOIType.Periodic)
-                    doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Periodic/{doi.DOI}";
-                else
-                    doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Dynamic/{doi.DOI}";
+                doi.QueryUrl = $"https://observations.saeon.ac.za/Download/{doi.DOI}";
+                //if (doi.DOIType == DOIType.AdHoc)
+                //    doi.QueryUrl = $"https://observations.saeon.ac.za/Download/AdHoc/{doi.DOI}";
+                //else if (doi.DOIType == DOIType.Periodic)
+                //    doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Periodic/{doi.DOI}";
+                //else
+                //    doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Dynamic/{doi.DOI}";
                 SAEONLogs.Verbose("DOI: {@DOI}", doi);
                 await dbContext.SaveChangesAsync();
                 return doi;
@@ -108,6 +106,7 @@ namespace SAEON.Observations.WebAPI
                                 DOIType = doiType,
                                 Code = code,
                                 Name = name ?? code,
+                                Title = blankTitle,
                                 MetadataJson = blankJson,
                                 MetadataJsonSha256 = blankJson.Sha256(),
                                 MetadataUrl = "https://catalogue.saeon.ac.za/records/",
@@ -121,34 +120,54 @@ namespace SAEON.Observations.WebAPI
                                 doi.Parent = parent;
                             }
                             await dbContext.DigitalObjectIdentifiers.AddAsync(doi);
+                            await dbContext.SaveChangesAsync();
                             doi.MetadataUrl = $"https://catalogue.saeon.ac.za/records/{doi.DOI}";
-                            if (doi.DOIType == DOIType.AdHoc)
-                                doi.QueryUrl = $"https://observations.saeon.ac.za/Download/AdHoc/{doi.DOI}";
-                            else if (doi.DOIType == DOIType.Periodic)
-                                doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Periodic/{doi.DOI}";
-                            else
-                                doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Dynamic/{doi.DOI}";
+                            doi.QueryUrl = $"https://observations.saeon.ac.za/Download/{doi.DOI}";
+                            //if (doi.DOIType == DOIType.AdHoc)
+                            //    doi.QueryUrl = $"https://observations.saeon.ac.za/Download/AdHoc/{doi.DOI}";
+                            //else if (doi.DOIType == DOIType.Periodic)
+                            //    doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Periodic/{doi.DOI}";
+                            //else
+                            //    doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Dynamic/{doi.DOI}";
                             await dbContext.SaveChangesAsync();
                             return doi;
                         }
 
-                        async Task<DigitalObjectIdentifier> EnsureObservationsDbDOI()
+                        async Task<DigitalObjectIdentifier> EnsureCollectionsDOIs()
                         {
-                            var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.ObservationsDb);
-                            if (doi == null)
+                            var doiObservations = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.ObservationsDb);
+                            if (doiObservations == null)
                             {
-                                doi = await AddDOI(DOIType.ObservationsDb, "ObservationsDB", "Observations Database", null);
+                                doiObservations = await AddDOI(DOIType.ObservationsDb, "ObservationsDB", "Observations Database", null);
                                 await dbContext.SaveChangesAsync();
                             }
-                            return doi;
+                            var doiDynamicDOIs = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => (i.DOIType == DOIType.Collection) && (i.Code == DynamicDOIsCode));
+                            if (doiDynamicDOIs == null)
+                            {
+                                doiDynamicDOIs = await AddDOI(DOIType.Collection, DynamicDOIsCode, "Observations Database Dynamic DOIs", doiObservations);
+                                await dbContext.SaveChangesAsync();
+                            }
+                            var doiPeriodicDOIs = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => (i.DOIType == DOIType.Collection) && (i.Code == PeriodicDOIsCode));
+                            if (doiPeriodicDOIs == null)
+                            {
+                                doiPeriodicDOIs = await AddDOI(DOIType.Collection, PeriodicDOIsCode, "Observations Database Periodic DOIs", doiObservations);
+                                await dbContext.SaveChangesAsync();
+                            }
+                            var doiAdHocDOIs = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => (i.DOIType == DOIType.Collection) && (i.Code == AdHocDOIsCode));
+                            if (doiAdHocDOIs == null)
+                            {
+                                doiAdHocDOIs = await AddDOI(DOIType.Collection, AdHocDOIsCode, "Observations Database AdHoc DOIs", doiObservations);
+                                await dbContext.SaveChangesAsync();
+                            }
+                            return doiDynamicDOIs;
                         }
 
-                        async Task<DigitalObjectIdentifier> EnsureOrganisationDOI(DigitalObjectIdentifier doiObservations, Organisation organisation)
+                        async Task<DigitalObjectIdentifier> EnsureOrganisationDOI(DigitalObjectIdentifier doiDynamicDOIs, Organisation organisation)
                         {
                             var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Organisation && i.Code == organisation.Code);
                             if (doi == null)
                             {
-                                doi = await AddDOI(DOIType.Organisation, organisation.Code, organisation.Name, doiObservations);
+                                doi = await AddDOI(DOIType.Organisation, organisation.Code, organisation.Name, doiDynamicDOIs);
                                 organisation.DigitalObjectIdentifier = doi;
                                 await dbContext.SaveChangesAsync();
                             }
@@ -252,11 +271,19 @@ namespace SAEON.Observations.WebAPI
                         //}
 
                         await AddLineAsync("Generating DOIs");
-                        var doiObservations = await EnsureObservationsDbDOI();
+                        // Ensure Collection DOIs exists
+                        var doiDynamicDOIs = await EnsureCollectionsDOIs();
+                        // Ensure SAEON DOI exists
+                        var orgSAEON = await dbContext.Organisations.Where(i => i.Code == "SAEON").FirstOrDefaultAsync();
+                        if (orgSAEON != null)
+                        {
+                            await EnsureOrganisationDOI(doiDynamicDOIs, orgSAEON);
+                        }
+                        // We only create DOIs for SAEON, SMCRI and EFTEON
                         var orgCodes = new string[] { "SAEON", "SMCRI", "EFTEON" };
                         foreach (var organisation in await dbContext.Organisations.Where(i => orgCodes.Contains(i.Code)).OrderBy(i => i.Name).ToListAsync())
                         {
-                            var doiOrganisation = await EnsureOrganisationDOI(doiObservations, organisation);
+                            var doiOrganisation = await EnsureOrganisationDOI(doiDynamicDOIs, organisation);
                             var programmeCodes = GetImportBatches()
                                 .Where(i => i.OrganisationCode == organisation.Code)
                                 .Select(i => i.ProgrammeCode)
@@ -334,12 +361,13 @@ namespace SAEON.Observations.WebAPI
                         {
                             await AddLineAsync($"{doi.DOIType} {doi.Name}");
                             doi.MetadataUrl = $"https://catalogue.saeon.ac.za/records/{doi.DOI}";
-                            if (doi.DOIType == DOIType.AdHoc)
-                                doi.QueryUrl = $"https://observations.saeon.ac.za/Download/AdHoc/{doi.DOI}";
-                            else if (doi.DOIType == DOIType.Periodic)
-                                doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Periodic/{doi.DOI}";
-                            else
-                                doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Dynamic/{doi.DOI}";
+                            doi.QueryUrl = $"https://observations.saeon.ac.za/Download/{doi.DOI}";
+                            //if (doi.DOIType == DOIType.AdHoc)
+                            //    doi.QueryUrl = $"https://observations.saeon.ac.za/Download/AdHoc/{doi.DOI}";
+                            //else if (doi.DOIType == DOIType.Periodic)
+                            //    doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Periodic/{doi.DOI}";
+                            //else
+                            //    doi.QueryUrl = $"https://observations.saeon.ac.za/Download/Dynamic/{doi.DOI}";
                         }
                         await dbContext.SaveChangesAsync();
                     }

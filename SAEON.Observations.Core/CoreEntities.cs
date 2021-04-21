@@ -277,7 +277,7 @@ namespace SAEON.Observations.Core
         public List<DataSchema> DataSchemas { get; set; }
     }
 
-    public enum DOIType { ObservationsDb, Organisation, Programme, Project, Site, Station, Dataset, Periodic, AdHoc }
+    public enum DOIType { ObservationsDb, Collection, Organisation, Programme, Project, Site, Station, Dataset, Periodic, AdHoc }
 
     /// <summary>
     /// DigitalObjectIdentifiers entity
@@ -294,7 +294,7 @@ namespace SAEON.Observations.Core
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public string DOI { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        [Display(Name = "DOI Url")]
+        [Display(Name = "DOI Url"), Url]
         public string DOIUrl { get; set; }
         /// <summary>
         /// Code of the DigitalObjectIdentifier
@@ -306,6 +306,11 @@ namespace SAEON.Observations.Core
         /// </summary>
         [Required, StringLength(500)]
         public string Name { get; set; }
+        /// <summary>
+        /// Title of the DigitalObjectIdentifier
+        /// </summary>
+        [Required, StringLength(5000)]
+        public string Title { get; set; }
         /// <summary>
         /// MetadataJson of the DigitalObjectIdentifier
         /// </summary>
@@ -324,7 +329,7 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Url of the ODP metadata record of the DigitalObjectIdentifier
         /// </summary>
-        [Required, StringLength(250)]
+        [Required, StringLength(250), Url]
         public string MetadataUrl { get; set; }
         /// <summary>
         /// Citation of the DigitalObjectIdentifier as Html 
@@ -339,12 +344,12 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Object Store Url of the DigitalObjectIdentifier
         /// </summary>
-        [StringLength(250)]
+        [StringLength(250), Url]
         public string ObjectStoreUrl { get; set; }
         /// <summary>
         /// Query Url of the DigitalObjectIdentifier
         /// </summary>
-        [StringLength(250)]
+        [StringLength(250), Url]
         public string QueryUrl { get; set; }
         /// <summary>
         /// ODP Id for the DigitalObjectIdentifier
@@ -908,9 +913,10 @@ namespace SAEON.Observations.Core
     /// </summary>
     public class UserDownload : NamedEntity
     {
+        [SwaggerIgnore]
+        public bool IsDeleted { get; set; }
         /// <summary>
         /// Description of the UserDownload
-        /// DataCite Abstracts, should include citation format
         /// </summary>
         [StringLength(5000)]
         public string Description { get; set; }
@@ -927,18 +933,18 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Requery Url for download
         /// </summary>
-        [Required, StringLength(2000), Display(Name = "Requery Url")]
+        [Required, StringLength(2000), Display(Name = "Requery Url"), Url]
         public string RequeryUrl { get; set; }
         /// <summary>
         /// DigitalObjectIdentifierID of the download
         /// </summary>
         [Required, Display(Name = "Digital Object Identifier (DOI)")]
-        [JsonIgnore, IgnoreDataMember, SwaggerIgnore]
+        //[JsonIgnore, SwaggerIgnore]
         public int DigitalObjectIdentifierId { get; set; }
         /// <summary>
         /// Url to view the download
         /// </summary>
-        [Required, StringLength(2000), Display(Name = "Download Url")]
+        [Required, StringLength(2000), Display(Name = "Download Url"), Url]
         public string DownloadUrl { get; set; }
         /// <summary>
         /// Full file name of Zip on server
@@ -953,7 +959,7 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Url to Zip of the download
         /// </summary>
-        [Required, StringLength(2000), Display(Name = "Zip Url")]
+        [Required, StringLength(2000), Display(Name = "Zip Url"), Url]
         public string ZipUrl { get; set; }
         ///// <summary>
         ///// UserId of the UserDownload
@@ -983,7 +989,7 @@ namespace SAEON.Observations.Core
         public DateTime? UpdatedAt { get; set; }
 
         // Navigation
-        [JsonIgnore, IgnoreDataMember, SwaggerIgnore]
+        //[JsonIgnore, SwaggerIgnore]
         public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
     }
 

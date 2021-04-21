@@ -2,7 +2,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SAEON.Core;
+using SAEON.Logs;
 using SAEON.Observations.Core;
+using SAEON.Observations.WebAPI.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,15 +17,16 @@ namespace SAEON.Observations.WebAPI
         public DigitalObjectIdentifier DOI { get; set; }
         public MetadataIdentifier Identifier => DOI == null ? null : new MetadataIdentifier { Name = DOI.DOI, Type = "DOI" };
         public string GenerateTitle() => GenerateTitle(DOI.Name);
-        public string GenerateTitle(string name) => $"Observations in the SAEON Observations Database for {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {name}";
+        public string GenerateTitle(string name) => $"Observations in the SAEON Observations Database for {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {MetadataHelper.CleanPrefixes(name)}";
         public string GenerateDescription() => GenerateDescription(DOI.Name);
-        public string GenerateDescription(string name) => $"The observations in the SAEON Observations Database for {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {name}";
+        public string GenerateDescription(string name) => $"The observations in the SAEON Observations Database for {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {MetadataHelper.CleanPrefixes(name)}";
         public string CitationHtml => $"{Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). <a href='{DOI.DOIUrl}'>{DOI.DOIUrl}</a>" +
             (!Accessed.HasValue ? "" : $". Accessed {Accessed:yyyy-MM-dd HH:mm}");
         public string CitationText => $"{Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). {DOI.DOIUrl}" +
             (!Accessed.HasValue ? "" : $". Accessed {Accessed:yyyy-MM-dd HH:mm}");
 
         public Metadata() { }
+
         public Metadata(MetadataCore metadata) : this()
         {
             PublicationDate = metadata.PublicationDate;
@@ -88,31 +91,18 @@ namespace SAEON.Observations.WebAPI
                     description += $" between {ElevationMinimum:f2}m and {ElevationMaximum:f2}m above mean sea level";
                 }
             }
+            // Build Description as Text and Html
             var sbText = new StringBuilder();
             var sbHtml = new StringBuilder();
-            sbHtml.AppendHtmlH3(title);
-            sbText.AppendLine(description);
-            sbHtml.AppendHtmlP(description);
-            //if (!string.IsNullOrWhiteSpace(ItemDescription))
-            //{
-            //    var itemDescription = ItemDescription;
-            //    if (!string.IsNullOrWhiteSpace(ItemUrl))
-            //    {
-            //        if (ItemUrl.StartsWith("http", StringComparison.InvariantCultureIgnoreCase))
-            //        {
-            //            itemDescription += $" <a href='{ItemUrl}'>{ItemUrl}</a>";
-            //        }
-            //        else
-            //        {
-            //            itemDescription += $" {ItemUrl}";
-            //        }
-            //    }
-            //    sbHtml.AppendHtmlP(itemDescription);
-            //}
+            sbText.AppendLine(description.AddTrailing("."));
+            sbHtml.AppendDLStart();
+            sbHtml.AppendDTDD("Title", title);
+            sbHtml.AppendDT("Description");
+            sbHtml.AppendDDStart().AppendHtmlP(description);
             if (DOI.Parent != null)
             {
-                sbText.AppendLine($"This collection is part of the {(DOI.Parent.DOIType == DOIType.ObservationsDb ? "" : DOI.Parent.DOIType.Humanize(LetterCasing.LowerCase))} {DOI.Parent.Name} doi:{DOI.Parent.DOI}");
-                sbHtml.AppendHtmlP($"This collection is part of the {(DOI.Parent.DOIType == DOIType.ObservationsDb ? "" : DOI.Parent.DOIType.Humanize(LetterCasing.LowerCase))} {DOI.Parent.Name} <a href='{DOI.Parent.DOIUrl}'>{DOI.Parent.DOI}</a>");
+                sbText.AppendLine($"This collection is part of the {(DOI.Parent.DOIType == DOIType.ObservationsDb ? "" : DOI.Parent.DOIType.Humanize(LetterCasing.LowerCase))} {MetadataHelper.CleanPrefixes(DOI.Parent.Name)} {DOI.Parent.DOIUrl}.");
+                sbHtml.AppendHtmlP($"This collection is part of the {(DOI.Parent.DOIType == DOIType.ObservationsDb ? "" : DOI.Parent.DOIType.Humanize(LetterCasing.LowerCase))} {MetadataHelper.CleanPrefixes(DOI.Parent.Name)} <a href='{DOI.Parent.DOIUrl}'>{DOI.Parent.DOI}</a>");
                 RelatedIdentifiers.Add(new MetadataRelatedIdentifier { Name = "IsPartOf", Identifier = DOI.Parent.DOI, Type = "DOI" });
                 foreach (var subject in Subjects.Distinct())
                 {
@@ -122,14 +112,14 @@ namespace SAEON.Observations.WebAPI
             // Dynamic children
             if (MetadataHelper.DynamicDOITypes.Contains(DOI.DOIType))
             {
-                var dynamicChildren = DOI.Children.Where(i => MetadataHelper.DynamicDOITypes.Contains(i.DOIType)).OrderBy(i => i.Name).ToList();
-                if (dynamicChildren.Count > 0)
+                var children = DOI.Children.Where(i => MetadataHelper.DynamicDOITypes.Contains(i.DOIType)).OrderBy(i => i.Name).ToList();
+                if (children.Any())
                 {
-                    sbText.AppendLine($"This collection includes observations from the following {((DOI.DOIType + 1).Humanize(LetterCasing.LowerCase).ToQuantity(dynamicChildren.Count, ShowQuantityAs.None))}: " +
-                        string.Join(", ", dynamicChildren.Select(i => $"{i.Name} doi:{i.DOI}")));
-                    sbHtml.AppendHtmlP($"This collection includes observations from the following {((DOI.DOIType + 1).Humanize(LetterCasing.LowerCase).ToQuantity(dynamicChildren.Count, ShowQuantityAs.None))}:");
-                    sbHtml.AppendHtmlUL(dynamicChildren.Select(i => $"{i.Name} <a href='{i.DOIUrl}'>{i.DOI}</a>"));
-                    foreach (var child in dynamicChildren)
+                    sbText.AppendLine($"This collection includes observations from the following {((DOI.DOIType + 1).Humanize(LetterCasing.LowerCase).ToQuantity(children.Count, ShowQuantityAs.None))}: " +
+                        string.Join(", ", children.Select(i => $"{MetadataHelper.CleanPrefixes(i.Name)} {i.DOIUrl}")));
+                    sbHtml.AppendHtmlP($"This collection includes observations from the following {((DOI.DOIType + 1).Humanize(LetterCasing.LowerCase).ToQuantity(children.Count, ShowQuantityAs.None))}:");
+                    sbHtml.AppendHtmlUL(children.Select(i => $"{MetadataHelper.CleanPrefixes(i.Name)} <a href='{i.DOIUrl}'>{i.DOI}</a>"));
+                    foreach (var child in children)
                     {
                         RelatedIdentifiers.Add(new MetadataRelatedIdentifier { Name = "HasPart", Identifier = child.DOI, Type = "DOI" });
                     }
@@ -137,11 +127,20 @@ namespace SAEON.Observations.WebAPI
             }
             // Periodic children
             // Ad-Hoc children
+            if (DOI.DOIType == DOIType.Collection && DOI.Code == DOIHelper.AdHocDOIsCode)
+            {
+                var children = DOI.Children.Where(i => i.DOIType == DOIType.AdHoc).OrderBy(i => i.Name).ToList();
+                foreach (var child in children)
+                {
+                    RelatedIdentifiers.Add(new MetadataRelatedIdentifier { Name = "HasPart", Identifier = child.DOI, Type = "DOI" });
+                }
+            }
+            sbHtml.AppendDDEnd();
 
-            sbHtml.AppendHtmlP($"{"Publisher:".HtmlB()} {Publisher} {PublicationYear}");
+            sbHtml.AppendDTDD("Publisher", $"{Publisher} {PublicationYear}");
             if (StartDate.HasValue || EndDate.HasValue)
             {
-                var dates = "Dates: ".HtmlB();
+                var dates = string.Empty;
                 if (StartDate.HasValue)
                 {
                     dates += $" Created: {StartDate:yyyy-MM-dd}";
@@ -154,28 +153,31 @@ namespace SAEON.Observations.WebAPI
                 {
                     dates += $" Collected:  {StartDate.ToJsonDate()}";
                 }
-                sbHtml.AppendHtmlP(dates);
+                sbHtml.AppendDTDD("Dates", dates.Trim());
             }
             if (Rights.Any())
             {
-                sbHtml.AppendHtmlP($"{"License:".HtmlB()} {Rights[0].Name}");
+                sbHtml.AppendDTDD("License", Rights[0].Name);
             }
             // Keyword cleanup
             var cleanSubjects = Subjects.Where(i => !i.Name.StartsWith("http")).Distinct().ToList();
             var excludes = new List<string> { "South African Environmental Observation Network", "Observations Database" };
             cleanSubjects.RemoveAll(i => excludes.Contains(i.Name));
-            cleanSubjects.ForEach(i => i.Name = i.Name.Replace(",", "").Replace("  ", " "));
-            sbHtml.AppendHtmlP($"{"Keywords:".HtmlB()} {string.Join(", ", cleanSubjects.OrderBy(i => i.Name).Select(i => i.Name))}");
+            cleanSubjects.ForEach(i => i.Name = i.Name/*.Replace(",", "")*/.Replace("  ", " "));
+            sbHtml.AppendDTDD("Keywords", $"{string.Join("; ", cleanSubjects.OrderBy(i => i.Name).Select(i => i.Name))}");
             if (!string.IsNullOrWhiteSpace(DOI.MetadataUrl))
             {
-                sbHtml.AppendHtmlP($"{"Metadata URL:".HtmlB()} <a href='{DOI.MetadataUrl}'>{DOI.MetadataUrl}</a>".Trim());
+                sbHtml.AppendDTDD("Metadata URL", $"<a href='{DOI.MetadataUrl}'>{DOI.MetadataUrl}</a>");
             }
             if (!string.IsNullOrWhiteSpace(DOI.QueryUrl))
             {
-                sbHtml.AppendHtmlP($"{"Query URL:".HtmlB()} <a href='{DOI.QueryUrl}'>{DOI.QueryUrl}</a>".Trim());
+                sbHtml.AppendDTDD("Query URL", $"<a href='{DOI.QueryUrl}'>{DOI.QueryUrl}</a>");
             }
-            sbHtml.AppendHtmlP($"{"Citation:".HtmlB()} {CitationHtml}");
-            Description = sbText.ToString().Replace(Environment.NewLine, " ").Replace("  ", " ").Trim(); //.Replace(Environment.NewLine,"<br>");
+            sbHtml.AppendDTDD("Citation", CitationHtml);
+            sbHtml.AppendDLEnd();
+            var desc = sbText.ToString().TrimEnd(Environment.NewLine).Replace(Environment.NewLine, " ").Replace("  ", " ").TrimEnd("."); //.Replace(Environment.NewLine,"<br>");
+            SAEONLogs.Verbose("Desc: {Desc}", desc);
+            Description = desc;
             DescriptionHtml = sbHtml.ToString();
         }
 
@@ -290,7 +292,7 @@ namespace SAEON.Observations.WebAPI
                     //new JProperty("alternateIdentifiers", new JArray(AlternateIdentifiers.Select(i => i.AsJson()))),
                     new JProperty("relatedIdentifiers", new JArray(RelatedIdentifiers.Select(i => i.AsJson()))),
                     // Pre Schema 4.3
-                    //new JProperty("schemaVersion", "http://datacite.org/schema/kernel-4"),
+                    //new JProperty("schemaVersion", "https://datacite.org/schema/kernel-4"),
                     new JProperty("immutableResource", new JObject(
                         new JProperty("resourceDescription", Title),
                         new JProperty("resourceData", new JObject(

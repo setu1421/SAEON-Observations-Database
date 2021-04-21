@@ -277,6 +277,22 @@ namespace SAEON.Observations.Core
         public List<MetadataContributor> Contributors { get; set; } = new List<MetadataContributor>() {
             new MetadataContributor
             {
+                Name = "South African Environmental Observation Network (SAEON)",
+                Type = "Organizational",
+                ContributorType = "Distributor",
+                Affiliations = new List<MetadataAffiliation>
+                {
+                    new MetadataAffiliation
+                    {
+                        Name = "South African Environmental Observation Network (SAEON)",
+                        Identifier = "https://ror.org/041j42q70",
+                        Scheme = "ROR",
+                        SchemeUri = "https://ror.org"
+                    }
+                }
+            },
+            new MetadataContributor
+            {
                 Name = "South African Environmental Observation Network (SAEON), uLwazi node",
                 Type = "Organizational",
                 ContributorType = "DataCurator",

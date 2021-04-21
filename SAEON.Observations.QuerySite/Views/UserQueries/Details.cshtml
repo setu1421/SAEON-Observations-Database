@@ -1,8 +1,5 @@
 ﻿@model SAEON.Observations.Core.UserQuery
-
-@{
-    ViewBag.Title = "User Query";
-}
+@{ ViewBag.Title = "User Query"; }
 <div class="row">
     <div class="col-md">
         <div>
@@ -25,17 +22,17 @@
                 <dd>
                     @Html.DisplayFor(model => model.Description)
                 </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.QueryInput)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.QueryInput)
-                </dd>
+                @*<dt>
+                        @Html.DisplayNameFor(model => model.QueryInput)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.QueryInput)
+                    </dd>*@
             </dl>
         </div>
-        <p>
+        <div>
             @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
             @Html.ActionLink("Back to List", "Index")
-        </p>
+        </div>
     </div>
 </div>
