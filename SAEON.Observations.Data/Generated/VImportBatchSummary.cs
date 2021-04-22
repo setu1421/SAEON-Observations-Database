@@ -333,6 +333,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarDigitalObjectIdentifierID);
                 
+                TableSchema.TableColumn colvarVerifiedCount = new TableSchema.TableColumn(schema);
+                colvarVerifiedCount.ColumnName = "VerifiedCount";
+                colvarVerifiedCount.DataType = DbType.Int32;
+                colvarVerifiedCount.MaxLength = 0;
+                colvarVerifiedCount.AutoIncrement = false;
+                colvarVerifiedCount.IsNullable = true;
+                colvarVerifiedCount.IsPrimaryKey = false;
+                colvarVerifiedCount.IsForeignKey = false;
+                colvarVerifiedCount.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarVerifiedCount);
+                
                 TableSchema.TableColumn colvarPhenomenonID = new TableSchema.TableColumn(schema);
                 colvarPhenomenonID.ColumnName = "PhenomenonID";
                 colvarPhenomenonID.DataType = DbType.Guid;
@@ -1233,6 +1245,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("VerifiedCount")]
+        [Bindable(true)]
+        public int? VerifiedCount 
+	    {
+		    get
+		    {
+			    return GetColumnValue<int?>("VerifiedCount");
+		    }
+            set 
+		    {
+			    SetColumnValue("VerifiedCount", value);
+            }
+        }
+	      
         [XmlAttribute("PhenomenonID")]
         [Bindable(true)]
         public Guid PhenomenonID 
@@ -1901,6 +1927,8 @@ namespace SAEON.Observations.Data{
             public static string EndDate = @"EndDate";
             
             public static string DigitalObjectIdentifierID = @"DigitalObjectIdentifierID";
+            
+            public static string VerifiedCount = @"VerifiedCount";
             
             public static string PhenomenonID = @"PhenomenonID";
             

@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(string Doi,string DOIUrl,string Name,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion,Guid? AlternateID,int? ParentID,byte DOIType,string Code,string MetadataJson,byte[] MetadataJsonSha256,string MetadataHtml,string MetadataUrl,string ObjectStoreUrl,string QueryUrl,Guid? ODPMetadataID,bool? ODPMetadataNeedsUpdate,bool? ODPMetadataIsValid,string ODPMetadataErrors)
+	    public void Insert(string Doi,string DOIUrl,string Name,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion,Guid? AlternateID,int? ParentID,byte DOIType,string Code,string MetadataJson,byte[] MetadataJsonSha256,string MetadataHtml,string MetadataUrl,string ObjectStoreUrl,string QueryUrl,Guid? ODPMetadataID,bool? ODPMetadataNeedsUpdate,bool? ODPMetadataIsValid,string ODPMetadataErrors,string Title,string CitationHtml,string CitationText)
 	    {
 		    DigitalObjectIdentifier item = new DigitalObjectIdentifier();
 		    
@@ -128,6 +128,12 @@ namespace SAEON.Observations.Data
             
             item.ODPMetadataErrors = ODPMetadataErrors;
             
+            item.Title = Title;
+            
+            item.CitationHtml = CitationHtml;
+            
+            item.CitationText = CitationText;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -136,7 +142,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(int Id,string Doi,string DOIUrl,string Name,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion,Guid? AlternateID,int? ParentID,byte DOIType,string Code,string MetadataJson,byte[] MetadataJsonSha256,string MetadataHtml,string MetadataUrl,string ObjectStoreUrl,string QueryUrl,Guid? ODPMetadataID,bool? ODPMetadataNeedsUpdate,bool? ODPMetadataIsValid,string ODPMetadataErrors)
+	    public void Update(int Id,string Doi,string DOIUrl,string Name,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion,Guid? AlternateID,int? ParentID,byte DOIType,string Code,string MetadataJson,byte[] MetadataJsonSha256,string MetadataHtml,string MetadataUrl,string ObjectStoreUrl,string QueryUrl,Guid? ODPMetadataID,bool? ODPMetadataNeedsUpdate,bool? ODPMetadataIsValid,string ODPMetadataErrors,string Title,string CitationHtml,string CitationText)
 	    {
 		    DigitalObjectIdentifier item = new DigitalObjectIdentifier();
 	        item.MarkOld();
@@ -187,6 +193,12 @@ namespace SAEON.Observations.Data
 			item.ODPMetadataIsValid = ODPMetadataIsValid;
 				
 			item.ODPMetadataErrors = ODPMetadataErrors;
+				
+			item.Title = Title;
+				
+			item.CitationHtml = CitationHtml;
+				
+			item.CitationText = CitationText;
 				
 	        item.Save(UserName);
 	    }

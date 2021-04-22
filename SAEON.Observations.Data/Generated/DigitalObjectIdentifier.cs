@@ -429,6 +429,45 @@ namespace SAEON.Observations.Data
 				colvarODPMetadataErrors.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarODPMetadataErrors);
 				
+				TableSchema.TableColumn colvarTitle = new TableSchema.TableColumn(schema);
+				colvarTitle.ColumnName = "Title";
+				colvarTitle.DataType = DbType.AnsiString;
+				colvarTitle.MaxLength = 5000;
+				colvarTitle.AutoIncrement = false;
+				colvarTitle.IsNullable = false;
+				colvarTitle.IsPrimaryKey = false;
+				colvarTitle.IsForeignKey = false;
+				colvarTitle.IsReadOnly = false;
+				colvarTitle.DefaultSetting = @"";
+				colvarTitle.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarTitle);
+				
+				TableSchema.TableColumn colvarCitationHtml = new TableSchema.TableColumn(schema);
+				colvarCitationHtml.ColumnName = "CitationHtml";
+				colvarCitationHtml.DataType = DbType.AnsiString;
+				colvarCitationHtml.MaxLength = 5000;
+				colvarCitationHtml.AutoIncrement = false;
+				colvarCitationHtml.IsNullable = true;
+				colvarCitationHtml.IsPrimaryKey = false;
+				colvarCitationHtml.IsForeignKey = false;
+				colvarCitationHtml.IsReadOnly = false;
+				colvarCitationHtml.DefaultSetting = @"";
+				colvarCitationHtml.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarCitationHtml);
+				
+				TableSchema.TableColumn colvarCitationText = new TableSchema.TableColumn(schema);
+				colvarCitationText.ColumnName = "CitationText";
+				colvarCitationText.DataType = DbType.AnsiString;
+				colvarCitationText.MaxLength = 5000;
+				colvarCitationText.AutoIncrement = false;
+				colvarCitationText.IsNullable = true;
+				colvarCitationText.IsPrimaryKey = false;
+				colvarCitationText.IsForeignKey = false;
+				colvarCitationText.IsReadOnly = false;
+				colvarCitationText.DefaultSetting = @"";
+				colvarCitationText.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarCitationText);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -622,6 +661,30 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<string>(Columns.ODPMetadataErrors); }
 			set { SetColumnValue(Columns.ODPMetadataErrors, value); }
 		}
+		  
+		[XmlAttribute("Title")]
+		[Bindable(true)]
+		public string Title 
+		{
+			get { return GetColumnValue<string>(Columns.Title); }
+			set { SetColumnValue(Columns.Title, value); }
+		}
+		  
+		[XmlAttribute("CitationHtml")]
+		[Bindable(true)]
+		public string CitationHtml 
+		{
+			get { return GetColumnValue<string>(Columns.CitationHtml); }
+			set { SetColumnValue(Columns.CitationHtml, value); }
+		}
+		  
+		[XmlAttribute("CitationText")]
+		[Bindable(true)]
+		public string CitationText 
+		{
+			get { return GetColumnValue<string>(Columns.CitationText); }
+			set { SetColumnValue(Columns.CitationText, value); }
+		}
 		
 		#endregion
 		
@@ -697,7 +760,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,Guid? varAlternateID,int? varParentID,byte varDOIType,string varCode,string varMetadataJson,byte[] varMetadataJsonSha256,string varMetadataHtml,string varMetadataUrl,string varObjectStoreUrl,string varQueryUrl,Guid? varODPMetadataID,bool? varODPMetadataNeedsUpdate,bool? varODPMetadataIsValid,string varODPMetadataErrors)
+		public static void Insert(string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,Guid? varAlternateID,int? varParentID,byte varDOIType,string varCode,string varMetadataJson,byte[] varMetadataJsonSha256,string varMetadataHtml,string varMetadataUrl,string varObjectStoreUrl,string varQueryUrl,Guid? varODPMetadataID,bool? varODPMetadataNeedsUpdate,bool? varODPMetadataIsValid,string varODPMetadataErrors,string varTitle,string varCitationHtml,string varCitationText)
 		{
 			DigitalObjectIdentifier item = new DigitalObjectIdentifier();
 			
@@ -745,6 +808,12 @@ namespace SAEON.Observations.Data
 			
 			item.ODPMetadataErrors = varODPMetadataErrors;
 			
+			item.Title = varTitle;
+			
+			item.CitationHtml = varCitationHtml;
+			
+			item.CitationText = varCitationText;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -755,7 +824,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(int varId,string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,Guid? varAlternateID,int? varParentID,byte varDOIType,string varCode,string varMetadataJson,byte[] varMetadataJsonSha256,string varMetadataHtml,string varMetadataUrl,string varObjectStoreUrl,string varQueryUrl,Guid? varODPMetadataID,bool? varODPMetadataNeedsUpdate,bool? varODPMetadataIsValid,string varODPMetadataErrors)
+		public static void Update(int varId,string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,Guid? varAlternateID,int? varParentID,byte varDOIType,string varCode,string varMetadataJson,byte[] varMetadataJsonSha256,string varMetadataHtml,string varMetadataUrl,string varObjectStoreUrl,string varQueryUrl,Guid? varODPMetadataID,bool? varODPMetadataNeedsUpdate,bool? varODPMetadataIsValid,string varODPMetadataErrors,string varTitle,string varCitationHtml,string varCitationText)
 		{
 			DigitalObjectIdentifier item = new DigitalObjectIdentifier();
 			
@@ -804,6 +873,12 @@ namespace SAEON.Observations.Data
 				item.ODPMetadataIsValid = varODPMetadataIsValid;
 			
 				item.ODPMetadataErrors = varODPMetadataErrors;
+			
+				item.Title = varTitle;
+			
+				item.CitationHtml = varCitationHtml;
+			
+				item.CitationText = varCitationText;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -979,6 +1054,27 @@ namespace SAEON.Observations.Data
         
         
         
+        public static TableSchema.TableColumn TitleColumn
+        {
+            get { return Schema.Columns[23]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn CitationHtmlColumn
+        {
+            get { return Schema.Columns[24]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn CitationTextColumn
+        {
+            get { return Schema.Columns[25]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -1006,6 +1102,9 @@ namespace SAEON.Observations.Data
 			 public static string ODPMetadataNeedsUpdate = @"ODPMetadataNeedsUpdate";
 			 public static string ODPMetadataIsValid = @"ODPMetadataIsValid";
 			 public static string ODPMetadataErrors = @"ODPMetadataErrors";
+			 public static string Title = @"Title";
+			 public static string CitationHtml = @"CitationHtml";
+			 public static string CitationText = @"CitationText";
 						
 		}
 		#endregion
