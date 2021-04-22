@@ -14,7 +14,7 @@ having
 Update
   Sensor
 set
-  Name = Sensor.Name + '-1'
+  Name = Sensor.Name + '~1'
 from
   NameDups
   inner join Sensor

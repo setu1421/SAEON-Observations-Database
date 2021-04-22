@@ -55,7 +55,7 @@ public class SchemaDefinition
 
     //public Guid? SensorID { get; set; }
     public List<Sensor> Sensors { get; set; } = new List<Sensor>();
-    public List<VSensorDate> SensorDates { get; set; } = new List<VSensorDate>();
+    public List<List<VSensorDate>> SensorDates { get; set; } = new List<List<VSensorDate>>();
     public bool SensorNotFound { get; set; }
 }
 
@@ -477,7 +477,7 @@ public class ImportSchemaHelper : IDisposable
                                 def.Sensors.Clear();
                                 def.Sensors.Add(Sensor);
                                 def.SensorDates.Clear();
-                                def.SensorDates.Add(new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, Sensor.Id).Load().FirstOrDefault());
+                                def.SensorDates.Add(new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, Sensor.Id).Load().ToList());
                             }
                             else
                             {
@@ -498,7 +498,7 @@ public class ImportSchemaHelper : IDisposable
                                     def.SensorDates.Clear();
                                     foreach (var sensor in def.Sensors)
                                     {
-                                        def.SensorDates.Add(new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, sensor.Id).Load().FirstOrDefault());
+                                        def.SensorDates.Add(new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, sensor.Id).Load().ToList());
                                     }
                                 }
                             }
@@ -660,9 +660,9 @@ public class ImportSchemaHelper : IDisposable
                 SAEONLogs.Information("ProcessRow({RowNum})", rowNum);
 #endif
                 //SAEONLogs.Verbose(dr.Dump());
-                DateTime dttme = DateTime.MinValue,
-                dt = DateTime.MinValue,
-                tm = DateTime.MinValue;
+                var datetimeValue = DateTime.MinValue;
+                var dateValue = DateTime.MinValue;
+                var timeValue = DateTime.MinValue;
                 bool ErrorInDate = false;
                 bool ErrorInTime = false;
 
@@ -680,13 +680,13 @@ public class ImportSchemaHelper : IDisposable
                     //CultureInfo ci = new CultureInfo(CultureInfo.CurrentCulture.LCID);
                     //ci.Calendar.TwoDigitYearMax = 2000;
                     string sDateValue = dr[dtdef.Index].ToString();
-                    if (String.IsNullOrEmpty(sDateValue) || !DateTime.TryParseExact(sDateValue.ToUpper().Trim(), dtdef.Dateformat, null, DateTimeStyles.None, out dt))
+                    if (String.IsNullOrEmpty(sDateValue) || !DateTime.TryParseExact(sDateValue.ToUpper().Trim(), dtdef.Dateformat, null, DateTimeStyles.None, out dateValue))
                     {
                         ErrorInDate = true;
                         InvalidDateValue = sDateValue;
                         try
                         {
-                            dt = DateTime.ParseExact(sDateValue.ToUpper().Trim(), dtdef.Dateformat, null, DateTimeStyles.None);
+                            dateValue = DateTime.ParseExact(sDateValue.ToUpper().Trim(), dtdef.Dateformat, null, DateTimeStyles.None);
                         }
                         catch (Exception ex)
                         {
@@ -695,6 +695,7 @@ public class ImportSchemaHelper : IDisposable
                             throw exc;
                         }
                     }
+                    dateValue = dateValue.Date; // Clear out time
                 }
 
                 if (tmdef != null)
@@ -702,13 +703,13 @@ public class ImportSchemaHelper : IDisposable
                     if (tmdef.IsTime)
                     {
                         string sTimeValue = dr[tmdef.Index].ToString();
-                        if (String.IsNullOrEmpty(sTimeValue) || !DateTime.TryParseExact(sTimeValue.ToUpper().Trim(), tmdef.Timeformat, null, DateTimeStyles.None, out tm))
+                        if (String.IsNullOrEmpty(sTimeValue) || !DateTime.TryParseExact(sTimeValue.ToUpper().Trim(), tmdef.Timeformat, null, DateTimeStyles.None, out timeValue))
                         {
                             ErrorInTime = true;
                             InvalidTimeValue = sTimeValue;
                             try
                             {
-                                tm = DateTime.ParseExact(sTimeValue.ToUpper().Trim(), tmdef.Timeformat, null, DateTimeStyles.None);
+                                timeValue = DateTime.ParseExact(sTimeValue.ToUpper().Trim(), tmdef.Timeformat, null, DateTimeStyles.None);
                             }
                             catch (Exception ex)
                             {
@@ -720,7 +721,7 @@ public class ImportSchemaHelper : IDisposable
                     }
                     else if (tmdef.IsFixedTime)
                     {
-                        tm = DateTime.Now.Date.AddMilliseconds(tmdef.FixedTimeValue.TotalMilliseconds);
+                        timeValue = DateTime.Now.Date.Add(tmdef.FixedTimeValue);
                     }
                 }
 
@@ -728,7 +729,7 @@ public class ImportSchemaHelper : IDisposable
                    !ErrorInDate &&
                    !ErrorInTime)
                 {
-                    dttme = dt.Date.AddMilliseconds(tm.TimeOfDay.TotalMilliseconds);
+                    datetimeValue = dateValue.Date.Add(timeValue.TimeOfDay);
                 }
 
                 //Add Row Comment
@@ -786,11 +787,13 @@ public class ImportSchemaHelper : IDisposable
                             rec.InvalidStatuses.Add(Status.UOMInvalid);
                         }
 
+#if VeryDetailedSAEONLogs
                         if (SAEONLogs.Level == LogEventLevel.Verbose)
                         {
                             SAEONLogs.Verbose("Row#: {row} Index: {Index} Column: {Column} Phenomenon: {Phenomenon} Offering: {Offering} Phenomenon: {Phenomenon} UnitOfMeasure: {UnitOfMeasure}",
                                 rowNum, def.Index, def.FieldName, def.PhenomenonOffering?.Phenomenon?.Name, def.PhenomenonOffering?.Offering?.Name, def.PhenomenonOUM?.Phenomenon?.Name, def.PhenomenonOUM?.UnitOfMeasure?.Unit);
                         }
+#endif
                         if (ErrorInTime)
                         {
                             rec.TimeValueInvalid = true;
@@ -811,16 +814,16 @@ public class ImportSchemaHelper : IDisposable
 
                         if (concatedatetime && !ErrorInDate && !ErrorInTime)
                         {
-                            rec.DateValue = dttme;
+                            rec.DateValue = datetimeValue;
                         }
                         else if (!ErrorInDate)
                         {
-                            rec.DateValue = dt;
+                            rec.DateValue = dateValue;
                         }
 
                         if (!ErrorInTime)
                         {
-                            rec.TimeValue = tm;
+                            rec.TimeValue = timeValue;
                         }
 
                         if (!ErrorInDate)
@@ -831,8 +834,7 @@ public class ImportSchemaHelper : IDisposable
 #endif
                             // Find sensor based on DateValue
                             bool found = false;
-                            bool foundTooEarly = false;
-                            bool foundTooLate = false;
+                            var dateOk = false;
                             if (def.Sensors.Count > 0)
                             {
                                 SAEONLogs.Verbose("Row#: {row} Sensors: {sensors}", rowNum, def.Sensors.Select(s => s.Name).ToList());
@@ -842,22 +844,42 @@ public class ImportSchemaHelper : IDisposable
                                 // Sensor x Instrument_Sensor x Instrument x Station_Instrument x Station x Site
                                 var index = def.Sensors.IndexOf(sensor);
                                 var dates = def.SensorDates.ElementAt(index);
-                                //var dates = new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, sensor.Id).Load().FirstOrDefault();
-                                if (dates == null)
+                                SAEONLogs.Verbose("Date: {recDate} Dates: {Dates}", rec.DateValue, string.Join("; ", dates.Select(d => $"{d.StartDate} {d.EndDate}")));
+                                if (!dates?.Any() ?? true)
                                 {
-                                    continue;
+                                    dateOk = true;
                                 }
-
-                                if (dates.StartDate.HasValue && (rec.DateValue < dates.StartDate.Value))
+                                else
+                                    foreach (var date in dates)
+                                    {
+                                        if (date.StartDate.HasValue && date.EndDate.HasValue)
+                                        {
+                                            if ((rec.DateValue.Date >= date.StartDate.Value.Date) && (rec.DateValue.Date <= date.EndDate.Value.Date))
+                                            {
+                                                dateOk = true;
+                                                break;
+                                            }
+                                        }
+                                        else if (date.StartDate.HasValue)
+                                        {
+                                            if (rec.DateValue.Date >= date.StartDate.Value.Date)
+                                            {
+                                                dateOk = true;
+                                                break;
+                                            }
+                                        }
+                                        else if (date.EndDate.HasValue)
+                                        {
+                                            if (rec.DateValue.Date <= date.EndDate.Value.Date)
+                                            {
+                                                dateOk = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                if (!dateOk)
                                 {
-                                    SAEONLogs.Error("Row#: {row} Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", rowNum, sensor.Name, dates.StartDate, rec.DateValue, rec);
-                                    foundTooEarly = true;
-                                    continue;
-                                }
-                                if (dates.EndDate.HasValue && (rec.DateValue > dates.EndDate.Value))
-                                {
-                                    SAEONLogs.Error("Row#: {row} Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", rowNum, sensor.Name, dates.EndDate, rec.DateValue, rec);
-                                    foundTooLate = true;
+                                    SAEONLogs.Error("Row#: {row} Date out of bounds, ignoring! Sensor: {sensor} Date: {recDate} Dates: {Dates} Rec: {@rec}", rowNum, sensor.Name, rec.DateValue, string.Join("; ", dates.Select(d => $"{d.StartDate} {d.EndDate}")), rec);
                                     continue;
                                 }
                                 rec.SensorID = sensor.Id;
@@ -866,11 +888,7 @@ public class ImportSchemaHelper : IDisposable
                             }
                             if (!found)
                             {
-                                if (foundTooEarly || foundTooLate)
-                                {
-                                    continue; // Ignore
-                                }
-
+                                //if (!dateOk) continue; // Ignore
                                 if (LogBadValues)
                                 {
                                     SAEONLogs.Error("Row#: {row} Index: {Index} FieldName: {FieldName} Sensor not found Sensors: {sensors}", rowNum, def.Index, def.FieldName, def.Sensors.Select(s => s.Name).ToList());

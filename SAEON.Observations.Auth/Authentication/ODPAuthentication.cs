@@ -24,14 +24,11 @@ namespace SAEON.Observations.Auth
         public const string AccessTokenPolicy = "ODPAccessToken";
         public const string AdminTokenClaim = "ODPAdminToken";
         public const string AdminTokenPolicy = "ODPAdminPolicy";
-        public const string AllowedClientsPolicy = "ODPAllowedClients";
         public const string ClientIdClaim = "ClientId";
         public const string ConfigKeyIntrospectionUrl = "AuthenticationServerIntrospectionUrl";
-        public const string DeniedClientsPolicy = "ODPDeniedClients";
         public const string IdTokenClaim = "ODPIdToken";
         public const string IdTokenPolicy = "ODPIdToken";
-        public const string SessionAccessToken = "ODPAccessToken";
-        public const string SessionIdToken = "ODPIdToken";
+        public const string SessionKeyODPAccessToken = "ODPAccessToken";
         public const string QuerySiteClientId = "SAEON.Observations.QuerySite";
         public const string WebAPIClientId = "SAEON.Observations.WebAPI";
         public const string WebAPIPostmanClientId = "SAEON.Observations.WebAPI.Postman";
@@ -40,9 +37,7 @@ namespace SAEON.Observations.Auth
 
     public class ODPAuthenticationOptions : AuthenticationSchemeOptions
     {
-#pragma warning disable CA1056 // URI-like properties should not be strings
         public string IntrospectionUrl { get; set; }
-#pragma warning restore CA1056 // URI-like properties should not be strings
     }
 
     public class ODPAuthenticationPostConfigureOptions : IPostConfigureOptions<ODPAuthenticationOptions>
@@ -136,7 +131,7 @@ namespace SAEON.Observations.Auth
                                 {
                                     claims.Add(new Claim(ClaimTypes.Role, userRole));
                                 }
-                                if (userRoles.Contains("admin"))
+                                if (userRoles.Contains("admin") || userRoles.Contains("Admin"))
                                 {
                                     claims.Add(new Claim(ODPAuthenticationDefaults.AdminTokenClaim, true.ToString()));
                                 }
@@ -188,7 +183,10 @@ namespace SAEON.Observations.Auth
             {
                 policy.AddAuthenticationSchemes(ODPAuthenticationDefaults.AuthenticationScheme);
                 policy.RequireAuthenticatedUser();
-                policy.RequireClaim(ODPAuthenticationDefaults.AccessTokenClaim);
+                //policy.RequireClaim(ODPAuthenticationDefaults.AccessTokenClaim); 
+                policy.RequireAssertion(context =>
+                    context.User.HasClaim(c => c.Type == ODPAuthenticationDefaults.AccessTokenClaim) ||
+                    context.User.HasClaim(c => c.Type == ODPAuthenticationDefaults.IdTokenClaim));
             });
         }
 
@@ -213,35 +211,11 @@ namespace SAEON.Observations.Auth
             });
         }
 
-        public static void AddODPAllowedClientsPolicy(this AuthorizationOptions options)
-        {
-            options.AddPolicy(ODPAuthenticationDefaults.AllowedClientsPolicy, policy =>
-            {
-                policy.AddAuthenticationSchemes(ODPAuthenticationDefaults.AuthenticationScheme);
-                policy.RequireAuthenticatedUser();
-                policy.RequireClaim(ODPAuthenticationDefaults.ClientIdClaim, ODPAuthenticationDefaults.QuerySiteClientId);
-            });
-        }
-
-        public static void AddODPDeniedClientsPolicy(this AuthorizationOptions options)
-        {
-            options.AddPolicy(ODPAuthenticationDefaults.DeniedClientsPolicy, policy =>
-            {
-                policy.AddAuthenticationSchemes(ODPAuthenticationDefaults.AuthenticationScheme);
-                policy.RequireAuthenticatedUser();
-                policy.RequireAssertion(context =>
-                    !context.User.HasClaim(ODPAuthenticationDefaults.ClientIdClaim, ODPAuthenticationDefaults.WebAPIPostmanClientId) &&
-                    !context.User.HasClaim(ODPAuthenticationDefaults.ClientIdClaim, ODPAuthenticationDefaults.WebAPISwaggerClientId));
-            });
-        }
-
         public static void AddODPPolicies(this AuthorizationOptions options)
         {
             options.AddODPAccessTokenPolicy();
             options.AddODPIdTokenPolicy();
             options.AddODPAdminPolicy();
-            options.AddODPAllowedClientsPolicy();
-            options.AddODPDeniedClientsPolicy();
         }
     }
 }

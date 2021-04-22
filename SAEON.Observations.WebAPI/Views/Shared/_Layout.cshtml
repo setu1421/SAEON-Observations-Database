@@ -11,6 +11,17 @@
         gtag('js', new Date());
         gtag('config', 'UA-128063984-6');
     </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NBVJ0F9CEY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-NBVJ0F9CEY');
+    </script>
+    <!-- Clarity tracking code for http://observationsapi-test.saeon.ac.za/ -->
+    <script>(function (c, l, a, r, i, t, y) { c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) }; t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt"; y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y); })(window, document, "clarity", "script", "6de2irdzig");</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @RenderSection("MetaTags", required: false)
     @if (!string.IsNullOrWhiteSpace(ViewBag.MetaDescription))
@@ -24,27 +35,14 @@
     <title>@(ViewBag.Title == "Observations Database WebAPI" || string.IsNullOrEmpty(ViewBag.Title) ? "Observations Database WebAPI" : @ViewBag.Title + " - Observations Database WebAPI")</title>
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link href="~/node_modules/mdbootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/node_modules/mdbootstrap/css/mdb.min.css" rel="stylesheet">
     <environment include="Development">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-        <!-- Google Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-        <!-- Bootstrap core CSS -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Material Design Bootstrap -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/SAEON.css" />
     </environment>
     <environment exclude="Development">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-        <!-- Google Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-        <!-- Bootstrap core CSS -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Material Design Bootstrap -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
         <link rel="stylesheet" href="~/css/site.min.css" />
         <link rel="stylesheet" href="~/css/SAEON.min.css" />
     </environment>
@@ -74,11 +72,11 @@
                             <a class="nav-link" asp-area="" asp-controller="OData" asp-action="$metadata">OData</a>
                         </li>
                         @*<li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="SensorThings" asp-action="Index">SensorThings</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="GraphQL">GraphQL</a>
-                        </li>*@
+                                <a class="nav-link" asp-area="" asp-controller="SensorThings" asp-action="Index">SensorThings</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="GraphQL">GraphQL</a>
+                            </li>*@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
                         </li>
@@ -105,10 +103,10 @@
         </header>
 
         @*<div id="Body" class="container">
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
-        </div>*@
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>*@
 
         <div id="Body">
             @RenderBody()
@@ -138,28 +136,17 @@
             </div>
         </footer>
     </div>
-
+    <script type="text/javascript" src="~/node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="~/node_modules/jquery-validation/dist/jquery.validate.js"></script>
+    <script type="text/javascript" src="~/node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript" src="~/node_modules/mdbootstrap/js/popper.min.js"></script>
+    <script type="text/javascript" src="~/node_modules/mdbootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/node_modules/mdbootstrap/js/mdb.min.js"></script>
     <environment names="Development">
-        <!-- JQuery -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <!-- Bootstrap tooltips -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-        <!-- Bootstrap core JavaScript -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
-        <!-- MDB core JavaScript -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/site.js"></script>
     </environment>
     <environment names="Staging,Production">
-        <!-- JQuery -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <!-- Bootstrap tooltips -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-        <!-- Bootstrap core JavaScript -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
-        <!-- MDB core JavaScript -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/js/site.min.js"></script>
     </environment>
     @RenderSection("Scripts", required: false)
 </body>

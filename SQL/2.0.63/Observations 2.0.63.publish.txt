@@ -44,21 +44,26 @@
        [dbo].[Organisation] (Table)
        [dbo].[Programme] (Table)
        [dbo].[Project] (Table)
+       [dbo].[Sensor] (Table)
        [dbo].[Site] (Table)
        [dbo].[Station] (Table)
        [dbo].[vImportBatchSummary] (View)
+       [dbo].[vLocations] (View)
+       [dbo].[vInventorySensors] (View)
+       [dbo].[vFeatures] (View)
      Create
        [dbo].[UX_DigitalObjectIdentifiers_DOIType_Code] (Unique Constraint)
        [dbo].[UX_DigitalObjectIdentifiers_DOIType_Name] (Unique Constraint)
        [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_DOIType] (Index)
        [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_ParentID] (Index)
        [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_DigitalObjectIdentifierID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_PhenomenonOfferingID_PhenomenonUOMID_ImportBatchID] (Index)
        [dbo].[Organisation].[IX_Organisation_DigitalObjectIdentifierID] (Index)
        [dbo].[Programme].[IX_Programme_DigitalObjectIdentifierID] (Index)
        [dbo].[Project].[IX_Project_DigitalObjectIdentifierID] (Index)
+       [dbo].[UX_Sensor_Name] (Unique Constraint)
        [dbo].[Site].[IX_Site_DigitalObjectIdentifierID] (Index)
        [dbo].[Station].[IX_Station_DigitalObjectIdentifierID] (Index)
-       [dbo].[UX_Sensor_Name] (Unique Constraint)
        [dbo].[FK_DigitalObjectIdentifiers_ParentID] (Foreign Key)
        [dbo].[FK_ImportBatchSummary_DigitalObjectIdentifierID] (Foreign Key)
        [dbo].[FK_Organisation_DigitalObjectIdentifierID] (Foreign Key)
@@ -66,19 +71,22 @@
        [dbo].[FK_Project_DigitalObjectIdentifierID] (Foreign Key)
        [dbo].[FK_Site_DigitalObjectIdentifierID] (Foreign Key)
        [dbo].[FK_Station_DigitalObjectIdentifierID] (Foreign Key)
+       [dbo].[vInventoryDatasets] (View)
        [dbo].[vStationDatasets] (View)
 
 ** Supporting actions
      Drop
        [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
        [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[Sensor].[IX_Sensor_CodeName] (Index)
+       [dbo].[UX_Sensor_Code] (Unique Constraint)
      Create
        [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
        [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[UX_Sensor_Code] (Unique Constraint)
+       [dbo].[Sensor].[IX_Sensor_CodeName] (Index)
      Refresh
        [dbo].[vUserDownloads] (View)
-       [dbo].[vFeatures] (View)
-       [dbo].[vLocations] (View)
        [dbo].[vObservationExpansion] (View)
        [dbo].[vSensorThingsAPIObservations] (View)
        [dbo].[vObservation] (View)
@@ -93,15 +101,14 @@
        [dbo].[vProject] (View)
        [dbo].[vProjectStation] (View)
        [dbo].[vDataLog] (View)
+       [dbo].[vInstrumentSensor] (View)
        [dbo].[vSensor] (View)
        [dbo].[vSensorDates] (View)
-       [dbo].[vStation] (View)
        [dbo].[vSensorLocation] (View)
+       [dbo].[vStation] (View)
        [dbo].[vSensorThingsAPIInstrumentDates] (View)
        [dbo].[vSensorThingsAPIStationDates] (View)
        [dbo].[vStationInstrument] (View)
-       [dbo].[vInventoryDatasets] (View)
-       [dbo].[vInventorySensors] (View)
        [dbo].[vSensorThingsAPIDatastreams] (View)
        [dbo].[vSensorThingsAPILocations] (View)
        [dbo].[vSensorThingsAPIObservedProperties] (View)
@@ -118,6 +125,7 @@ The column [dbo].[DigitalObjectIdentifiers].[MetadataJsonSha256] on table [dbo].
 The column [dbo].[DigitalObjectIdentifiers].[MetadataUrl] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
 The column Name on table [dbo].[DigitalObjectIdentifiers] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
 The type for column Name in table [dbo].[DigitalObjectIdentifiers] is currently  VARCHAR (1000) NULL but is being changed to  VARCHAR (500) NOT NULL. Data loss could occur.
+If this deployment is executed, changes to [dbo].[Sensor] might introduce run-time errors in [dbo].[vDataQuery].
 If this deployment is executed, changes to [dbo].[Site] might introduce run-time errors in [dbo].[vDataQuery].
 If this deployment is executed, changes to [dbo].[Station] might introduce run-time errors in [dbo].[vDataQuery].
 If this deployment is executed, changes to [dbo].[vObservationExpansion] might introduce run-time errors in [dbo].[vSensorObservations].

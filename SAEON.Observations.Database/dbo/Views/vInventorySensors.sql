@@ -5,6 +5,9 @@ Select
 from
 (
 Select
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
   SiteID, SiteCode, SiteName, SiteDescription, SiteUrl,
   StationID, StationCode, StationName, StationDescription, StationUrl,
   InstrumentID, InstrumentCode, InstrumentName, InstrumentDescription, InstrumentUrl,
@@ -18,6 +21,9 @@ Select
 from
   vImportBatchSummary
 group by
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
   SiteID, SiteCode, SiteName, SiteDescription, SiteUrl,
   StationID, StationCode, StationName, StationDescription, StationUrl,
   InstrumentID, InstrumentCode, InstrumentName, InstrumentDescription, InstrumentUrl,

@@ -74,7 +74,7 @@ namespace SAEON.Observations.Data{
                 colvarProgrammeID.DataType = DbType.Guid;
                 colvarProgrammeID.MaxLength = 0;
                 colvarProgrammeID.AutoIncrement = false;
-                colvarProgrammeID.IsNullable = true;
+                colvarProgrammeID.IsNullable = false;
                 colvarProgrammeID.IsPrimaryKey = false;
                 colvarProgrammeID.IsForeignKey = false;
                 colvarProgrammeID.IsReadOnly = false;
@@ -201,6 +201,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarRowVersion);
                 
+                TableSchema.TableColumn colvarDigitalObjectIdentifierID = new TableSchema.TableColumn(schema);
+                colvarDigitalObjectIdentifierID.ColumnName = "DigitalObjectIdentifierID";
+                colvarDigitalObjectIdentifierID.DataType = DbType.Int32;
+                colvarDigitalObjectIdentifierID.MaxLength = 0;
+                colvarDigitalObjectIdentifierID.AutoIncrement = false;
+                colvarDigitalObjectIdentifierID.IsNullable = true;
+                colvarDigitalObjectIdentifierID.IsPrimaryKey = false;
+                colvarDigitalObjectIdentifierID.IsForeignKey = false;
+                colvarDigitalObjectIdentifierID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarDigitalObjectIdentifierID);
+                
                 TableSchema.TableColumn colvarProgrammeCode = new TableSchema.TableColumn(schema);
                 colvarProgrammeCode.ColumnName = "ProgrammeCode";
                 colvarProgrammeCode.DataType = DbType.AnsiString;
@@ -291,11 +303,11 @@ namespace SAEON.Observations.Data{
 	      
         [XmlAttribute("ProgrammeID")]
         [Bindable(true)]
-        public Guid? ProgrammeID 
+        public Guid ProgrammeID 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid?>("ProgrammeID");
+			    return GetColumnValue<Guid>("ProgrammeID");
 		    }
             set 
 		    {
@@ -443,6 +455,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("DigitalObjectIdentifierID")]
+        [Bindable(true)]
+        public int? DigitalObjectIdentifierID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<int?>("DigitalObjectIdentifierID");
+		    }
+            set 
+		    {
+			    SetColumnValue("DigitalObjectIdentifierID", value);
+            }
+        }
+	      
         [XmlAttribute("ProgrammeCode")]
         [Bindable(true)]
         public string ProgrammeCode 
@@ -501,6 +527,8 @@ namespace SAEON.Observations.Data{
             public static string UpdatedAt = @"UpdatedAt";
             
             public static string RowVersion = @"RowVersion";
+            
+            public static string DigitalObjectIdentifierID = @"DigitalObjectIdentifierID";
             
             public static string ProgrammeCode = @"ProgrammeCode";
             

@@ -168,9 +168,9 @@ namespace SAEON.Observations.Data
 				TableSchema.TableColumn colvarName = new TableSchema.TableColumn(schema);
 				colvarName.ColumnName = "Name";
 				colvarName.DataType = DbType.AnsiString;
-				colvarName.MaxLength = 1000;
+				colvarName.MaxLength = 500;
 				colvarName.AutoIncrement = false;
-				colvarName.IsNullable = true;
+				colvarName.IsNullable = false;
 				colvarName.IsPrimaryKey = false;
 				colvarName.IsForeignKey = false;
 				colvarName.IsReadOnly = false;
@@ -244,6 +244,229 @@ namespace SAEON.Observations.Data
 				colvarRowVersion.DefaultSetting = @"";
 				colvarRowVersion.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarRowVersion);
+				
+				TableSchema.TableColumn colvarAlternateID = new TableSchema.TableColumn(schema);
+				colvarAlternateID.ColumnName = "AlternateID";
+				colvarAlternateID.DataType = DbType.Guid;
+				colvarAlternateID.MaxLength = 0;
+				colvarAlternateID.AutoIncrement = false;
+				colvarAlternateID.IsNullable = true;
+				colvarAlternateID.IsPrimaryKey = false;
+				colvarAlternateID.IsForeignKey = false;
+				colvarAlternateID.IsReadOnly = false;
+				
+						colvarAlternateID.DefaultSetting = @"(newid())";
+				colvarAlternateID.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarAlternateID);
+				
+				TableSchema.TableColumn colvarParentID = new TableSchema.TableColumn(schema);
+				colvarParentID.ColumnName = "ParentID";
+				colvarParentID.DataType = DbType.Int32;
+				colvarParentID.MaxLength = 0;
+				colvarParentID.AutoIncrement = false;
+				colvarParentID.IsNullable = true;
+				colvarParentID.IsPrimaryKey = false;
+				colvarParentID.IsForeignKey = true;
+				colvarParentID.IsReadOnly = false;
+				colvarParentID.DefaultSetting = @"";
+				
+					colvarParentID.ForeignKeyTableName = "DigitalObjectIdentifiers";
+				schema.Columns.Add(colvarParentID);
+				
+				TableSchema.TableColumn colvarDOIType = new TableSchema.TableColumn(schema);
+				colvarDOIType.ColumnName = "DOIType";
+				colvarDOIType.DataType = DbType.Byte;
+				colvarDOIType.MaxLength = 0;
+				colvarDOIType.AutoIncrement = false;
+				colvarDOIType.IsNullable = false;
+				colvarDOIType.IsPrimaryKey = false;
+				colvarDOIType.IsForeignKey = false;
+				colvarDOIType.IsReadOnly = false;
+				colvarDOIType.DefaultSetting = @"";
+				colvarDOIType.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarDOIType);
+				
+				TableSchema.TableColumn colvarCode = new TableSchema.TableColumn(schema);
+				colvarCode.ColumnName = "Code";
+				colvarCode.DataType = DbType.AnsiString;
+				colvarCode.MaxLength = 200;
+				colvarCode.AutoIncrement = false;
+				colvarCode.IsNullable = false;
+				colvarCode.IsPrimaryKey = false;
+				colvarCode.IsForeignKey = false;
+				colvarCode.IsReadOnly = false;
+				colvarCode.DefaultSetting = @"";
+				colvarCode.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarCode);
+				
+				TableSchema.TableColumn colvarMetadataJson = new TableSchema.TableColumn(schema);
+				colvarMetadataJson.ColumnName = "MetadataJson";
+				colvarMetadataJson.DataType = DbType.AnsiString;
+				colvarMetadataJson.MaxLength = -1;
+				colvarMetadataJson.AutoIncrement = false;
+				colvarMetadataJson.IsNullable = false;
+				colvarMetadataJson.IsPrimaryKey = false;
+				colvarMetadataJson.IsForeignKey = false;
+				colvarMetadataJson.IsReadOnly = false;
+				colvarMetadataJson.DefaultSetting = @"";
+				colvarMetadataJson.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarMetadataJson);
+				
+				TableSchema.TableColumn colvarMetadataJsonSha256 = new TableSchema.TableColumn(schema);
+				colvarMetadataJsonSha256.ColumnName = "MetadataJsonSha256";
+				colvarMetadataJsonSha256.DataType = DbType.Binary;
+				colvarMetadataJsonSha256.MaxLength = 32;
+				colvarMetadataJsonSha256.AutoIncrement = false;
+				colvarMetadataJsonSha256.IsNullable = false;
+				colvarMetadataJsonSha256.IsPrimaryKey = false;
+				colvarMetadataJsonSha256.IsForeignKey = false;
+				colvarMetadataJsonSha256.IsReadOnly = false;
+				colvarMetadataJsonSha256.DefaultSetting = @"";
+				colvarMetadataJsonSha256.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarMetadataJsonSha256);
+				
+				TableSchema.TableColumn colvarMetadataHtml = new TableSchema.TableColumn(schema);
+				colvarMetadataHtml.ColumnName = "MetadataHtml";
+				colvarMetadataHtml.DataType = DbType.AnsiString;
+				colvarMetadataHtml.MaxLength = -1;
+				colvarMetadataHtml.AutoIncrement = false;
+				colvarMetadataHtml.IsNullable = false;
+				colvarMetadataHtml.IsPrimaryKey = false;
+				colvarMetadataHtml.IsForeignKey = false;
+				colvarMetadataHtml.IsReadOnly = false;
+				colvarMetadataHtml.DefaultSetting = @"";
+				colvarMetadataHtml.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarMetadataHtml);
+				
+				TableSchema.TableColumn colvarMetadataUrl = new TableSchema.TableColumn(schema);
+				colvarMetadataUrl.ColumnName = "MetadataUrl";
+				colvarMetadataUrl.DataType = DbType.AnsiString;
+				colvarMetadataUrl.MaxLength = 250;
+				colvarMetadataUrl.AutoIncrement = false;
+				colvarMetadataUrl.IsNullable = false;
+				colvarMetadataUrl.IsPrimaryKey = false;
+				colvarMetadataUrl.IsForeignKey = false;
+				colvarMetadataUrl.IsReadOnly = false;
+				colvarMetadataUrl.DefaultSetting = @"";
+				colvarMetadataUrl.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarMetadataUrl);
+				
+				TableSchema.TableColumn colvarObjectStoreUrl = new TableSchema.TableColumn(schema);
+				colvarObjectStoreUrl.ColumnName = "ObjectStoreUrl";
+				colvarObjectStoreUrl.DataType = DbType.AnsiString;
+				colvarObjectStoreUrl.MaxLength = 250;
+				colvarObjectStoreUrl.AutoIncrement = false;
+				colvarObjectStoreUrl.IsNullable = true;
+				colvarObjectStoreUrl.IsPrimaryKey = false;
+				colvarObjectStoreUrl.IsForeignKey = false;
+				colvarObjectStoreUrl.IsReadOnly = false;
+				colvarObjectStoreUrl.DefaultSetting = @"";
+				colvarObjectStoreUrl.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarObjectStoreUrl);
+				
+				TableSchema.TableColumn colvarQueryUrl = new TableSchema.TableColumn(schema);
+				colvarQueryUrl.ColumnName = "QueryUrl";
+				colvarQueryUrl.DataType = DbType.AnsiString;
+				colvarQueryUrl.MaxLength = 250;
+				colvarQueryUrl.AutoIncrement = false;
+				colvarQueryUrl.IsNullable = true;
+				colvarQueryUrl.IsPrimaryKey = false;
+				colvarQueryUrl.IsForeignKey = false;
+				colvarQueryUrl.IsReadOnly = false;
+				colvarQueryUrl.DefaultSetting = @"";
+				colvarQueryUrl.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarQueryUrl);
+				
+				TableSchema.TableColumn colvarODPMetadataID = new TableSchema.TableColumn(schema);
+				colvarODPMetadataID.ColumnName = "ODPMetadataID";
+				colvarODPMetadataID.DataType = DbType.Guid;
+				colvarODPMetadataID.MaxLength = 0;
+				colvarODPMetadataID.AutoIncrement = false;
+				colvarODPMetadataID.IsNullable = true;
+				colvarODPMetadataID.IsPrimaryKey = false;
+				colvarODPMetadataID.IsForeignKey = false;
+				colvarODPMetadataID.IsReadOnly = false;
+				colvarODPMetadataID.DefaultSetting = @"";
+				colvarODPMetadataID.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarODPMetadataID);
+				
+				TableSchema.TableColumn colvarODPMetadataNeedsUpdate = new TableSchema.TableColumn(schema);
+				colvarODPMetadataNeedsUpdate.ColumnName = "ODPMetadataNeedsUpdate";
+				colvarODPMetadataNeedsUpdate.DataType = DbType.Boolean;
+				colvarODPMetadataNeedsUpdate.MaxLength = 0;
+				colvarODPMetadataNeedsUpdate.AutoIncrement = false;
+				colvarODPMetadataNeedsUpdate.IsNullable = true;
+				colvarODPMetadataNeedsUpdate.IsPrimaryKey = false;
+				colvarODPMetadataNeedsUpdate.IsForeignKey = false;
+				colvarODPMetadataNeedsUpdate.IsReadOnly = false;
+				colvarODPMetadataNeedsUpdate.DefaultSetting = @"";
+				colvarODPMetadataNeedsUpdate.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarODPMetadataNeedsUpdate);
+				
+				TableSchema.TableColumn colvarODPMetadataIsValid = new TableSchema.TableColumn(schema);
+				colvarODPMetadataIsValid.ColumnName = "ODPMetadataIsValid";
+				colvarODPMetadataIsValid.DataType = DbType.Boolean;
+				colvarODPMetadataIsValid.MaxLength = 0;
+				colvarODPMetadataIsValid.AutoIncrement = false;
+				colvarODPMetadataIsValid.IsNullable = true;
+				colvarODPMetadataIsValid.IsPrimaryKey = false;
+				colvarODPMetadataIsValid.IsForeignKey = false;
+				colvarODPMetadataIsValid.IsReadOnly = false;
+				colvarODPMetadataIsValid.DefaultSetting = @"";
+				colvarODPMetadataIsValid.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarODPMetadataIsValid);
+				
+				TableSchema.TableColumn colvarODPMetadataErrors = new TableSchema.TableColumn(schema);
+				colvarODPMetadataErrors.ColumnName = "ODPMetadataErrors";
+				colvarODPMetadataErrors.DataType = DbType.AnsiString;
+				colvarODPMetadataErrors.MaxLength = -1;
+				colvarODPMetadataErrors.AutoIncrement = false;
+				colvarODPMetadataErrors.IsNullable = true;
+				colvarODPMetadataErrors.IsPrimaryKey = false;
+				colvarODPMetadataErrors.IsForeignKey = false;
+				colvarODPMetadataErrors.IsReadOnly = false;
+				colvarODPMetadataErrors.DefaultSetting = @"";
+				colvarODPMetadataErrors.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarODPMetadataErrors);
+				
+				TableSchema.TableColumn colvarTitle = new TableSchema.TableColumn(schema);
+				colvarTitle.ColumnName = "Title";
+				colvarTitle.DataType = DbType.AnsiString;
+				colvarTitle.MaxLength = 5000;
+				colvarTitle.AutoIncrement = false;
+				colvarTitle.IsNullable = false;
+				colvarTitle.IsPrimaryKey = false;
+				colvarTitle.IsForeignKey = false;
+				colvarTitle.IsReadOnly = false;
+				colvarTitle.DefaultSetting = @"";
+				colvarTitle.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarTitle);
+				
+				TableSchema.TableColumn colvarCitationHtml = new TableSchema.TableColumn(schema);
+				colvarCitationHtml.ColumnName = "CitationHtml";
+				colvarCitationHtml.DataType = DbType.AnsiString;
+				colvarCitationHtml.MaxLength = 5000;
+				colvarCitationHtml.AutoIncrement = false;
+				colvarCitationHtml.IsNullable = true;
+				colvarCitationHtml.IsPrimaryKey = false;
+				colvarCitationHtml.IsForeignKey = false;
+				colvarCitationHtml.IsReadOnly = false;
+				colvarCitationHtml.DefaultSetting = @"";
+				colvarCitationHtml.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarCitationHtml);
+				
+				TableSchema.TableColumn colvarCitationText = new TableSchema.TableColumn(schema);
+				colvarCitationText.ColumnName = "CitationText";
+				colvarCitationText.DataType = DbType.AnsiString;
+				colvarCitationText.MaxLength = 5000;
+				colvarCitationText.AutoIncrement = false;
+				colvarCitationText.IsNullable = true;
+				colvarCitationText.IsPrimaryKey = false;
+				colvarCitationText.IsForeignKey = false;
+				colvarCitationText.IsReadOnly = false;
+				colvarCitationText.DefaultSetting = @"";
+				colvarCitationText.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarCitationText);
 				
 				BaseSchema = schema;
 				//add this schema to the provider
@@ -326,6 +549,142 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<byte[]>(Columns.RowVersion); }
 			set { SetColumnValue(Columns.RowVersion, value); }
 		}
+		  
+		[XmlAttribute("AlternateID")]
+		[Bindable(true)]
+		public Guid? AlternateID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.AlternateID); }
+			set { SetColumnValue(Columns.AlternateID, value); }
+		}
+		  
+		[XmlAttribute("ParentID")]
+		[Bindable(true)]
+		public int? ParentID 
+		{
+			get { return GetColumnValue<int?>(Columns.ParentID); }
+			set { SetColumnValue(Columns.ParentID, value); }
+		}
+		  
+		[XmlAttribute("DOIType")]
+		[Bindable(true)]
+		public byte DOIType 
+		{
+			get { return GetColumnValue<byte>(Columns.DOIType); }
+			set { SetColumnValue(Columns.DOIType, value); }
+		}
+		  
+		[XmlAttribute("Code")]
+		[Bindable(true)]
+		public string Code 
+		{
+			get { return GetColumnValue<string>(Columns.Code); }
+			set { SetColumnValue(Columns.Code, value); }
+		}
+		  
+		[XmlAttribute("MetadataJson")]
+		[Bindable(true)]
+		public string MetadataJson 
+		{
+			get { return GetColumnValue<string>(Columns.MetadataJson); }
+			set { SetColumnValue(Columns.MetadataJson, value); }
+		}
+		  
+		[XmlAttribute("MetadataJsonSha256")]
+		[Bindable(true)]
+		public byte[] MetadataJsonSha256 
+		{
+			get { return GetColumnValue<byte[]>(Columns.MetadataJsonSha256); }
+			set { SetColumnValue(Columns.MetadataJsonSha256, value); }
+		}
+		  
+		[XmlAttribute("MetadataHtml")]
+		[Bindable(true)]
+		public string MetadataHtml 
+		{
+			get { return GetColumnValue<string>(Columns.MetadataHtml); }
+			set { SetColumnValue(Columns.MetadataHtml, value); }
+		}
+		  
+		[XmlAttribute("MetadataUrl")]
+		[Bindable(true)]
+		public string MetadataUrl 
+		{
+			get { return GetColumnValue<string>(Columns.MetadataUrl); }
+			set { SetColumnValue(Columns.MetadataUrl, value); }
+		}
+		  
+		[XmlAttribute("ObjectStoreUrl")]
+		[Bindable(true)]
+		public string ObjectStoreUrl 
+		{
+			get { return GetColumnValue<string>(Columns.ObjectStoreUrl); }
+			set { SetColumnValue(Columns.ObjectStoreUrl, value); }
+		}
+		  
+		[XmlAttribute("QueryUrl")]
+		[Bindable(true)]
+		public string QueryUrl 
+		{
+			get { return GetColumnValue<string>(Columns.QueryUrl); }
+			set { SetColumnValue(Columns.QueryUrl, value); }
+		}
+		  
+		[XmlAttribute("ODPMetadataID")]
+		[Bindable(true)]
+		public Guid? ODPMetadataID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.ODPMetadataID); }
+			set { SetColumnValue(Columns.ODPMetadataID, value); }
+		}
+		  
+		[XmlAttribute("ODPMetadataNeedsUpdate")]
+		[Bindable(true)]
+		public bool? ODPMetadataNeedsUpdate 
+		{
+			get { return GetColumnValue<bool?>(Columns.ODPMetadataNeedsUpdate); }
+			set { SetColumnValue(Columns.ODPMetadataNeedsUpdate, value); }
+		}
+		  
+		[XmlAttribute("ODPMetadataIsValid")]
+		[Bindable(true)]
+		public bool? ODPMetadataIsValid 
+		{
+			get { return GetColumnValue<bool?>(Columns.ODPMetadataIsValid); }
+			set { SetColumnValue(Columns.ODPMetadataIsValid, value); }
+		}
+		  
+		[XmlAttribute("ODPMetadataErrors")]
+		[Bindable(true)]
+		public string ODPMetadataErrors 
+		{
+			get { return GetColumnValue<string>(Columns.ODPMetadataErrors); }
+			set { SetColumnValue(Columns.ODPMetadataErrors, value); }
+		}
+		  
+		[XmlAttribute("Title")]
+		[Bindable(true)]
+		public string Title 
+		{
+			get { return GetColumnValue<string>(Columns.Title); }
+			set { SetColumnValue(Columns.Title, value); }
+		}
+		  
+		[XmlAttribute("CitationHtml")]
+		[Bindable(true)]
+		public string CitationHtml 
+		{
+			get { return GetColumnValue<string>(Columns.CitationHtml); }
+			set { SetColumnValue(Columns.CitationHtml, value); }
+		}
+		  
+		[XmlAttribute("CitationText")]
+		[Bindable(true)]
+		public string CitationText 
+		{
+			get { return GetColumnValue<string>(Columns.CitationText); }
+			set { SetColumnValue(Columns.CitationText, value); }
+		}
 		
 		#endregion
 		
@@ -340,11 +699,54 @@ namespace SAEON.Observations.Data
         }
         
 		
+		public SAEON.Observations.Data.DigitalObjectIdentifierCollection ChildDigitalObjectIdentifiers()
+		{
+			return new SAEON.Observations.Data.DigitalObjectIdentifierCollection().Where(DigitalObjectIdentifier.Columns.ParentID, Id).Load();
+		}
+		public SAEON.Observations.Data.ImportBatchSummaryCollection ImportBatchSummaryRecords()
+		{
+			return new SAEON.Observations.Data.ImportBatchSummaryCollection().Where(ImportBatchSummary.Columns.DigitalObjectIdentifierID, Id).Load();
+		}
+		public SAEON.Observations.Data.OrganisationCollection OrganisationRecords()
+		{
+			return new SAEON.Observations.Data.OrganisationCollection().Where(Organisation.Columns.DigitalObjectIdentifierID, Id).Load();
+		}
+		public SAEON.Observations.Data.ProgrammeCollection ProgrammeRecords()
+		{
+			return new SAEON.Observations.Data.ProgrammeCollection().Where(Programme.Columns.DigitalObjectIdentifierID, Id).Load();
+		}
+		public SAEON.Observations.Data.ProjectCollection ProjectRecords()
+		{
+			return new SAEON.Observations.Data.ProjectCollection().Where(Project.Columns.DigitalObjectIdentifierID, Id).Load();
+		}
+		public SAEON.Observations.Data.SiteCollection SiteRecords()
+		{
+			return new SAEON.Observations.Data.SiteCollection().Where(Site.Columns.DigitalObjectIdentifierID, Id).Load();
+		}
+		public SAEON.Observations.Data.StationCollection StationRecords()
+		{
+			return new SAEON.Observations.Data.StationCollection().Where(Station.Columns.DigitalObjectIdentifierID, Id).Load();
+		}
 		#endregion
 		
 			
 		
-		//no foreign key tables defined (0)
+		#region ForeignKey Properties
+		
+        private SAEON.Observations.Data.DigitalObjectIdentifier _ParentDigitalObjectIdentifier = null;
+		/// <summary>
+		/// Returns a DigitalObjectIdentifier ActiveRecord object related to this DigitalObjectIdentifier
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.DigitalObjectIdentifier ParentDigitalObjectIdentifier
+		{
+//			get { return SAEON.Observations.Data.DigitalObjectIdentifier.FetchByID(this.ParentID); }  
+			get { return _ParentDigitalObjectIdentifier ?? (_ParentDigitalObjectIdentifier = SAEON.Observations.Data.DigitalObjectIdentifier.FetchByID(this.ParentID)); }
+			set { SetColumnValue("ParentID", value.Id); }
+		}
+		
+		
+		#endregion
 		
 		
 		
@@ -358,7 +760,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion)
+		public static void Insert(string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,Guid? varAlternateID,int? varParentID,byte varDOIType,string varCode,string varMetadataJson,byte[] varMetadataJsonSha256,string varMetadataHtml,string varMetadataUrl,string varObjectStoreUrl,string varQueryUrl,Guid? varODPMetadataID,bool? varODPMetadataNeedsUpdate,bool? varODPMetadataIsValid,string varODPMetadataErrors,string varTitle,string varCitationHtml,string varCitationText)
 		{
 			DigitalObjectIdentifier item = new DigitalObjectIdentifier();
 			
@@ -378,6 +780,40 @@ namespace SAEON.Observations.Data
 			
 			item.RowVersion = varRowVersion;
 			
+			item.AlternateID = varAlternateID;
+			
+			item.ParentID = varParentID;
+			
+			item.DOIType = varDOIType;
+			
+			item.Code = varCode;
+			
+			item.MetadataJson = varMetadataJson;
+			
+			item.MetadataJsonSha256 = varMetadataJsonSha256;
+			
+			item.MetadataHtml = varMetadataHtml;
+			
+			item.MetadataUrl = varMetadataUrl;
+			
+			item.ObjectStoreUrl = varObjectStoreUrl;
+			
+			item.QueryUrl = varQueryUrl;
+			
+			item.ODPMetadataID = varODPMetadataID;
+			
+			item.ODPMetadataNeedsUpdate = varODPMetadataNeedsUpdate;
+			
+			item.ODPMetadataIsValid = varODPMetadataIsValid;
+			
+			item.ODPMetadataErrors = varODPMetadataErrors;
+			
+			item.Title = varTitle;
+			
+			item.CitationHtml = varCitationHtml;
+			
+			item.CitationText = varCitationText;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -388,7 +824,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(int varId,string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion)
+		public static void Update(int varId,string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,Guid? varAlternateID,int? varParentID,byte varDOIType,string varCode,string varMetadataJson,byte[] varMetadataJsonSha256,string varMetadataHtml,string varMetadataUrl,string varObjectStoreUrl,string varQueryUrl,Guid? varODPMetadataID,bool? varODPMetadataNeedsUpdate,bool? varODPMetadataIsValid,string varODPMetadataErrors,string varTitle,string varCitationHtml,string varCitationText)
 		{
 			DigitalObjectIdentifier item = new DigitalObjectIdentifier();
 			
@@ -409,6 +845,40 @@ namespace SAEON.Observations.Data
 				item.UpdatedBy = varUpdatedBy;
 			
 				item.RowVersion = varRowVersion;
+			
+				item.AlternateID = varAlternateID;
+			
+				item.ParentID = varParentID;
+			
+				item.DOIType = varDOIType;
+			
+				item.Code = varCode;
+			
+				item.MetadataJson = varMetadataJson;
+			
+				item.MetadataJsonSha256 = varMetadataJsonSha256;
+			
+				item.MetadataHtml = varMetadataHtml;
+			
+				item.MetadataUrl = varMetadataUrl;
+			
+				item.ObjectStoreUrl = varObjectStoreUrl;
+			
+				item.QueryUrl = varQueryUrl;
+			
+				item.ODPMetadataID = varODPMetadataID;
+			
+				item.ODPMetadataNeedsUpdate = varODPMetadataNeedsUpdate;
+			
+				item.ODPMetadataIsValid = varODPMetadataIsValid;
+			
+				item.ODPMetadataErrors = varODPMetadataErrors;
+			
+				item.Title = varTitle;
+			
+				item.CitationHtml = varCitationHtml;
+			
+				item.CitationText = varCitationText;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -486,6 +956,125 @@ namespace SAEON.Observations.Data
         
         
         
+        public static TableSchema.TableColumn AlternateIDColumn
+        {
+            get { return Schema.Columns[9]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParentIDColumn
+        {
+            get { return Schema.Columns[10]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn DOITypeColumn
+        {
+            get { return Schema.Columns[11]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn CodeColumn
+        {
+            get { return Schema.Columns[12]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn MetadataJsonColumn
+        {
+            get { return Schema.Columns[13]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn MetadataJsonSha256Column
+        {
+            get { return Schema.Columns[14]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn MetadataHtmlColumn
+        {
+            get { return Schema.Columns[15]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn MetadataUrlColumn
+        {
+            get { return Schema.Columns[16]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ObjectStoreUrlColumn
+        {
+            get { return Schema.Columns[17]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn QueryUrlColumn
+        {
+            get { return Schema.Columns[18]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ODPMetadataIDColumn
+        {
+            get { return Schema.Columns[19]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ODPMetadataNeedsUpdateColumn
+        {
+            get { return Schema.Columns[20]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ODPMetadataIsValidColumn
+        {
+            get { return Schema.Columns[21]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ODPMetadataErrorsColumn
+        {
+            get { return Schema.Columns[22]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn TitleColumn
+        {
+            get { return Schema.Columns[23]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn CitationHtmlColumn
+        {
+            get { return Schema.Columns[24]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn CitationTextColumn
+        {
+            get { return Schema.Columns[25]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -499,6 +1088,23 @@ namespace SAEON.Observations.Data
 			 public static string UpdatedAt = @"UpdatedAt";
 			 public static string UpdatedBy = @"UpdatedBy";
 			 public static string RowVersion = @"RowVersion";
+			 public static string AlternateID = @"AlternateID";
+			 public static string ParentID = @"ParentID";
+			 public static string DOIType = @"DOIType";
+			 public static string Code = @"Code";
+			 public static string MetadataJson = @"MetadataJson";
+			 public static string MetadataJsonSha256 = @"MetadataJsonSha256";
+			 public static string MetadataHtml = @"MetadataHtml";
+			 public static string MetadataUrl = @"MetadataUrl";
+			 public static string ObjectStoreUrl = @"ObjectStoreUrl";
+			 public static string QueryUrl = @"QueryUrl";
+			 public static string ODPMetadataID = @"ODPMetadataID";
+			 public static string ODPMetadataNeedsUpdate = @"ODPMetadataNeedsUpdate";
+			 public static string ODPMetadataIsValid = @"ODPMetadataIsValid";
+			 public static string ODPMetadataErrors = @"ODPMetadataErrors";
+			 public static string Title = @"Title";
+			 public static string CitationHtml = @"CitationHtml";
+			 public static string CitationText = @"CitationText";
 						
 		}
 		#endregion

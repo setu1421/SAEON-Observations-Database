@@ -1,35 +1,27 @@
-﻿using Microsoft.OpenApi.Models;
+﻿#if NET5_0
+using Microsoft.OpenApi.Models;
 using SAEON.Logs;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.Linq;
+#endif
+using System;
 
 namespace SAEON.Observations.Core
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    public class SwaggerIgnoreAttribute : Attribute
-    {
-    }
+    public class SwaggerIgnoreAttribute : Attribute { }
 
-    internal static class StringExtensions
-    {
-        internal static string ToCamelCase(this string value)
-        {
-            if (string.IsNullOrEmpty(value)) return value;
-            return char.ToLowerInvariant(value[0]) + value.Substring(1);
-        }
-    }
-
+#if NET5_0
     public class SwaggerIgnoreFilter : ISchemaFilter
     {
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)
         {
             if (schema == null) throw new ArgumentNullException(nameof(schema));
             if (context == null) throw new ArgumentNullException(nameof(context));
-            SAEONLogs.Verbose("Schema: {Schema}", schema.Title);
+            //SAEONLogs.Verbose("Schema: {Schema}", schema.Title);
             if (schema?.Properties.Count == 0) return;
             var excludedProperties = context.Type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SwaggerIgnoreAttribute)));
-            SAEONLogs.Information("Excluded: {Names}", string.Join("; ", excludedProperties.Select(p => p.Name)).OrderBy(p => p));
+            //SAEONLogs.Information("Excluded: {Names}", string.Join("; ", excludedProperties.Select(p => p.Name)).OrderBy(p => p));
             foreach (var excludedProperty in excludedProperties)
             {
                 if (schema.Properties.ContainsKey(excludedProperty.Name.ToCamelCase()))
@@ -39,4 +31,5 @@ namespace SAEON.Observations.Core
             }
         }
     }
+#endif
 }

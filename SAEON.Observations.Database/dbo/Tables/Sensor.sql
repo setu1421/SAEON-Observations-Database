@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Sensor] (
     [ID]           UNIQUEIDENTIFIER CONSTRAINT [DF_Sensor_ID] DEFAULT (newid()) NOT NULL,
-    [Code]         VARCHAR (50)     NOT NULL,
+    [Code]         VARCHAR (75)     NOT NULL,
     [Name]         VARCHAR (150)    NOT NULL,
     [Description]  VARCHAR (5000)   NULL,
     [Url]          VARCHAR (250)    NULL,

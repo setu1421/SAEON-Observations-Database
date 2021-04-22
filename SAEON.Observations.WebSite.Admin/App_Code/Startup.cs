@@ -1,4 +1,5 @@
 ﻿//#define UseCosmosDb
+using SAEON.Core;
 using SAEON.Logs;
 #if UseCosmosDb
 using SAEON.Observations.Azure;
@@ -15,8 +16,10 @@ public static class Startup
     public static void Run()
     {
         SAEONLogs
-            .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebSite.Admin {Date}.txt"))
+            .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebSite.Admin-.txt"))
             .Initialize();
+        ApplicationHelper.ApplicationName = "SAEON.Observations.WebSite.Admin";
+        SAEONLogs.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName, SAEONLogs.Level);
         string docPath = ConfigurationManager.AppSettings["DocumentsPath"];
         if (!string.IsNullOrEmpty(docPath))
         {

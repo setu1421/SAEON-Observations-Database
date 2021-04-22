@@ -1,4 +1,3 @@
-use Observations;
 with Duplicates
 as
 (
@@ -29,6 +28,6 @@ from
 	   (o.SensorID = vImportBatchSummary.SensorID) and
 	   (o.PhenomenonOfferingID = vImportBatchSummary.PhenomenonOfferingID) and
 	   (o.PhenomenonUOMID = vImportBatchSummary.PhenomenonUOMID)
---order by 
---  Code, SiteName, StationName, InstrumentName, SensorName, ValueDate, DataValue, OfferingName, UnitOfMeasureUnit, Elevation
-OPTION(RECOMPILE)
+order by 
+  Code, SiteName, StationName, InstrumentName, SensorName, ValueDate, DataValue, OfferingName, UnitOfMeasureUnit, Elevation
+--OPTION(RECOMPILE)

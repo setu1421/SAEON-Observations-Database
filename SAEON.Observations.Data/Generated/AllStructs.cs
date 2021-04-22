@@ -332,6 +332,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VInventoryDataset = @"vInventoryDatasets";
         
+		public static readonly string VInventoryDataStream = @"vInventoryDataStreams";
+        
 		public static readonly string VInventorySensor = @"vInventorySensors";
         
 		public static readonly string VLocation = @"vLocations";
@@ -340,9 +342,13 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VObservation = @"vObservation";
         
+		public static readonly string VObservationApi = @"vObservationApi";
+        
 		public static readonly string VObservationExpansion = @"vObservationExpansion";
         
 		public static readonly string VObservationJSON = @"vObservationJSON";
+        
+		public static readonly string VObservationODatum = @"vObservationOData";
         
 		public static readonly string VOfferingPhenomena = @"vOfferingPhenomena";
         
@@ -367,6 +373,8 @@ namespace SAEON.Observations.Data
 		public static readonly string VSiteOrganisation = @"vSiteOrganisation";
         
 		public static readonly string VStation = @"vStation";
+        
+		public static readonly string VStationDataset = @"vStationDatasets";
         
 		public static readonly string VStationInstrument = @"vStationInstrument";
         

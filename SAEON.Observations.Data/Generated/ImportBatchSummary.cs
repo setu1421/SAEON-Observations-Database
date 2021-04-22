@@ -420,6 +420,33 @@ namespace SAEON.Observations.Data
 				colvarEndDate.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarEndDate);
 				
+				TableSchema.TableColumn colvarDigitalObjectIdentifierID = new TableSchema.TableColumn(schema);
+				colvarDigitalObjectIdentifierID.ColumnName = "DigitalObjectIdentifierID";
+				colvarDigitalObjectIdentifierID.DataType = DbType.Int32;
+				colvarDigitalObjectIdentifierID.MaxLength = 0;
+				colvarDigitalObjectIdentifierID.AutoIncrement = false;
+				colvarDigitalObjectIdentifierID.IsNullable = true;
+				colvarDigitalObjectIdentifierID.IsPrimaryKey = false;
+				colvarDigitalObjectIdentifierID.IsForeignKey = true;
+				colvarDigitalObjectIdentifierID.IsReadOnly = false;
+				colvarDigitalObjectIdentifierID.DefaultSetting = @"";
+				
+					colvarDigitalObjectIdentifierID.ForeignKeyTableName = "DigitalObjectIdentifiers";
+				schema.Columns.Add(colvarDigitalObjectIdentifierID);
+				
+				TableSchema.TableColumn colvarVerifiedCount = new TableSchema.TableColumn(schema);
+				colvarVerifiedCount.ColumnName = "VerifiedCount";
+				colvarVerifiedCount.DataType = DbType.Int32;
+				colvarVerifiedCount.MaxLength = 0;
+				colvarVerifiedCount.AutoIncrement = false;
+				colvarVerifiedCount.IsNullable = true;
+				colvarVerifiedCount.IsPrimaryKey = false;
+				colvarVerifiedCount.IsForeignKey = false;
+				colvarVerifiedCount.IsReadOnly = false;
+				colvarVerifiedCount.DefaultSetting = @"";
+				colvarVerifiedCount.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarVerifiedCount);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -605,6 +632,22 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<DateTime?>(Columns.EndDate); }
 			set { SetColumnValue(Columns.EndDate, value); }
 		}
+		  
+		[XmlAttribute("DigitalObjectIdentifierID")]
+		[Bindable(true)]
+		public int? DigitalObjectIdentifierID 
+		{
+			get { return GetColumnValue<int?>(Columns.DigitalObjectIdentifierID); }
+			set { SetColumnValue(Columns.DigitalObjectIdentifierID, value); }
+		}
+		  
+		[XmlAttribute("VerifiedCount")]
+		[Bindable(true)]
+		public int? VerifiedCount 
+		{
+			get { return GetColumnValue<int?>(Columns.VerifiedCount); }
+			set { SetColumnValue(Columns.VerifiedCount, value); }
+		}
 		
 		#endregion
 		
@@ -612,6 +655,19 @@ namespace SAEON.Observations.Data
 			
 		
 		#region ForeignKey Properties
+		
+        private SAEON.Observations.Data.DigitalObjectIdentifier _DigitalObjectIdentifier = null;
+		/// <summary>
+		/// Returns a DigitalObjectIdentifier ActiveRecord object related to this ImportBatchSummary
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.DigitalObjectIdentifier DigitalObjectIdentifier
+		{
+//			get { return SAEON.Observations.Data.DigitalObjectIdentifier.FetchByID(this.DigitalObjectIdentifierID); }  
+			get { return _DigitalObjectIdentifier ?? (_DigitalObjectIdentifier = SAEON.Observations.Data.DigitalObjectIdentifier.FetchByID(this.DigitalObjectIdentifierID)); }
+			set { SetColumnValue("DigitalObjectIdentifierID", value.Id); }
+		}
+		
 		
         private SAEON.Observations.Data.ImportBatch _ImportBatch = null;
 		/// <summary>
@@ -718,7 +774,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate)
+		public static void Insert(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate,int? varDigitalObjectIdentifierID,int? varVerifiedCount)
 		{
 			ImportBatchSummary item = new ImportBatchSummary();
 			
@@ -766,6 +822,10 @@ namespace SAEON.Observations.Data
 			
 			item.EndDate = varEndDate;
 			
+			item.DigitalObjectIdentifierID = varDigitalObjectIdentifierID;
+			
+			item.VerifiedCount = varVerifiedCount;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -776,7 +836,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate)
+		public static void Update(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate,int? varDigitalObjectIdentifierID,int? varVerifiedCount)
 		{
 			ImportBatchSummary item = new ImportBatchSummary();
 			
@@ -823,6 +883,10 @@ namespace SAEON.Observations.Data
 				item.StartDate = varStartDate;
 			
 				item.EndDate = varEndDate;
+			
+				item.DigitalObjectIdentifierID = varDigitalObjectIdentifierID;
+			
+				item.VerifiedCount = varVerifiedCount;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -991,6 +1055,20 @@ namespace SAEON.Observations.Data
         
         
         
+        public static TableSchema.TableColumn DigitalObjectIdentifierIDColumn
+        {
+            get { return Schema.Columns[22]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn VerifiedCountColumn
+        {
+            get { return Schema.Columns[23]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -1017,6 +1095,8 @@ namespace SAEON.Observations.Data
 			 public static string ElevationMaximum = @"ElevationMaximum";
 			 public static string StartDate = @"StartDate";
 			 public static string EndDate = @"EndDate";
+			 public static string DigitalObjectIdentifierID = @"DigitalObjectIdentifierID";
+			 public static string VerifiedCount = @"VerifiedCount";
 						
 		}
 		#endregion

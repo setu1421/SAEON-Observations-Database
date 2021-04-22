@@ -1,13 +1,10 @@
-﻿namespace SAEON.Observations.QuerySite.Common
+﻿namespace SAEON.Observations.QuerySite
 {
     public static class StringExtensions
     {
-        public static string AddTrailingSlash(this string aString)
+        public static string RemoveHttp(this string source)
         {
-            if (aString.EndsWith("/"))
-                return aString;
-            else
-                return aString + "/";
+            return source.Replace("https://", string.Empty).Replace("http://", string.Empty);
         }
     }
 }

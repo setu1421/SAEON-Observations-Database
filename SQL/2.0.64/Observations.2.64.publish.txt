@@ -1,0 +1,98 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[DigitalObjectIdentifiers].[Title] on table [dbo].[DigitalObjectIdentifiers] must be added, but the
+         column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work.
+         To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the
+         generation of smart-defaults as a deployment option.
+       The column [dbo].[UserDownloads].[Citation] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[ElevationMaximum] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[ElevationMinimum] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[EndDate] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[Keywords] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[LatitudeNorth] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[LatitudeSouth] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[LongitudeEast] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[LongitudeWest] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[MetadataJson] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[MetadataURL] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[OpenDataPlatformID] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[Places] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[StartDate] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[Title] is being dropped, data loss could occur.
+
+** User actions
+     Drop
+       [dbo].[Observation].[IX_Observation_SensorID] (Index)
+       [dbo].[Observation].[IX_Observation_StatusID] (Index)
+       [dbo].[UX_Observation] (Unique Constraint)
+     Alter
+       [dbo].[DigitalObjectIdentifiers] (Table)
+       [dbo].[ImportBatchSummary] (Table)
+       [dbo].[Observation] (Table)
+       [dbo].[UserDownloads] (Table)
+       [dbo].[vImportBatchSummary] (View)
+       [dbo].[vFeatures] (View)
+       [dbo].[vLocations] (View)
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vDataLog] (View)
+     Create
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ElevationMaximum] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ElevationMinimum] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LatitudeNorth] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LatitudeSouth] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LongitudeEast] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LongitudeWest] (Index)
+       [dbo].[UX_Observation] (Unique Constraint)
+       [dbo].[Observation].[IX_Observation_SensorID] (Index)
+       [dbo].[Observation].[IX_Observation_StatusID] (Index)
+       [dbo].[vInventoryDatasets] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Create
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Refresh
+       [dbo].[vUserDownloads] (View)
+       [dbo].[vInventorySensors] (View)
+       [dbo].[vStationDatasets] (View)
+       [dbo].[vSensorThingsAPIDatastreams] (View)
+       [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIObservedProperties] (View)
+       [dbo].[vSensorThingsAPISensors] (View)
+       [dbo].[vSensorThingsAPIThings] (View)
+       [dbo].[vSensorThingsAPIFeaturesOfInterest] (View)
+       [dbo].[vSensorThingsAPIHistoricalLocations] (View)
+       [dbo].[vSensorThingsAPIObservations] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationJSON] (View)
+       [dbo].[vStationObservations] (View)
+
+The column [dbo].[DigitalObjectIdentifiers].[Title] on table [dbo].[DigitalObjectIdentifiers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[UserDownloads].[Citation] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[ElevationMaximum] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[ElevationMinimum] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[EndDate] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[Keywords] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[LatitudeNorth] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[LatitudeSouth] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[LongitudeEast] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[LongitudeWest] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[MetadataJson] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[MetadataURL] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[OpenDataPlatformID] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[Places] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[StartDate] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[Title] is being dropped, data loss could occur.
+If this deployment is executed, changes to [dbo].[vImportBatchSummary] might introduce run-time errors in [dbo].[vInventoryDataStreams].
+If this deployment is executed, changes to [dbo].[vObservationExpansion] might introduce run-time errors in [dbo].[vObservationApi].
+If this deployment is executed, changes to [dbo].[vObservationExpansion] might introduce run-time errors in [dbo].[vSensorObservations].
+

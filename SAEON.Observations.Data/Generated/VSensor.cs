@@ -72,7 +72,7 @@ namespace SAEON.Observations.Data{
                 TableSchema.TableColumn colvarCode = new TableSchema.TableColumn(schema);
                 colvarCode.ColumnName = "Code";
                 colvarCode.DataType = DbType.AnsiString;
-                colvarCode.MaxLength = 50;
+                colvarCode.MaxLength = 75;
                 colvarCode.AutoIncrement = false;
                 colvarCode.IsNullable = false;
                 colvarCode.IsPrimaryKey = false;

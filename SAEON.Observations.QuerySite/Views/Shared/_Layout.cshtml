@@ -4,14 +4,24 @@
     <meta http-equiv="Content-Type" content="text/html" />
     <meta charset="utf-8">
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128063984-6"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128063984-4"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'UA-128063984-4');
     </script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WE08ZKT2RG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-WE08ZKT2RG');
+    </script>    <!-- Clarity tracking code for http://observations-test.saeon.ac.za/ -->
+    <script>(function (c, l, a, r, i, t, y) { c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) }; t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt"; y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y); })(window, document, "clarity", "script", "6de1scpzw4");</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     @RenderSection("MetaTags", required: false)
     @if (!string.IsNullOrWhiteSpace(ViewBag.MetaDescription))
     {
@@ -21,40 +31,33 @@
     {
         <meta name="keywords" content="@ViewBag.MetaKeywords" />
     }
-    <title>@(ViewBag.Title == "Observations Database" || string.IsNullOrEmpty(ViewBag.Title) ? "Observations Database" : @ViewBag.Title + " - Observations Database")</title>
+    <title>@(ViewBag.Title == "Observations Database" || string.IsNullOrEmpty(ViewBag.Title) ? "Observations Database" : "Observations Database - " + @ViewBag.Title)</title>
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
-    <environment include="Development">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-        <!-- Google Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-        <!-- Bootstrap core CSS -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Material Design Bootstrap -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="~/css/site.css" />
-        <link rel="stylesheet" href="~/css/SAEON.css" />
-    </environment>
-    <environment exclude="Development">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-        <!-- Google Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-        <!-- Bootstrap core CSS -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Material Design Bootstrap -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="~/css/site.min.css" />
-        <link rel="stylesheet" href="~/css/SAEON.min.css" />
-    </environment>
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="stylesheet" href="~/Content/SAEON.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <link href="~/node_modules/mdbootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/node_modules/mdbootstrap/css/mdb.min.css" rel="stylesheet">
+    @Styles.Render("~/Content/ej/web/bootstrap-theme/ej.web.all.min.css")
     @RenderSection("Styles", required: false)
+    <script>
+        var appInsights = window.appInsights || function (config) {
+            function r(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } }
+            var t = { config: config }, u = document, e = window, o = 'script', s = u.createElement(o), i, f; for (s.src = config.url || '//az416426.vo.msecnd.net/scripts/a/ai.0.js', u.getElementsByTagName(o)[0].parentNode.appendChild(s), t.cookie = u.cookie, t.queue = [], i = ['Event', 'Exception', 'Metric', 'PageView', 'Trace', 'Ajax']; i.length;) r('track' + i.pop()); return r('setAuthenticatedUserContext'), r('clearAuthenticatedUserContext'), config.disableExceptionTracking || (i = 'onerror', r('_' + i), f = e[i], e[i] = function (config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t['_' + i](config, r, u, e, o), s }), t
+        }({
+            instrumentationKey: 'ab8abeba-cc7e-4238-a3d1-00781fb48938'
+        });
+
+        window.appInsights = appInsights;
+        appInsights.trackPageView();
+    </script>
 </head>
 <body class="bg-SAEON" id="Document">
     <div id="Page" class="container-fluid bg-white text-dark rounded">
         <header id="Header">
             <div class="row">
-                <div class="col-12 text-center">
+                <div class="col-md text-center">
                     <img class="Logo img-fluid" src="~/Images/Banner.jpg" alt="SAEON Banner" title="© SAEON" />
                 </div>
             </div>
@@ -62,32 +65,27 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse" id="navbarNav">
+                <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
+                        <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownQuery" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Query</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownQuery">
-                                <a class="dropdown-item" asp-area="" asp-controller="DataWizard" asp-action="Index">Data</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Datasets" asp-action="Index">Datasets</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="InventorySensors" asp-action="Index">Sensor Inventory</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Coverage" asp-action="Index">Coverage</a>
+                                @Html.ActionLink("Data", "Index", "DataWizard", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Datasets", "Datasets", "Query", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Sensors", "Sensors", "Query", null, new { @class = "dropdown-item" })
+                                @*@Html.ActionLink("Coverage", "Index", "Coverage", null, new { @class = "dropdown-item" })*@
+                                @*@Html.ActionLink("Spacial Coverage", "Index", "SpacialCoverage", null, new { @class = "dropdown-item" })*@
+                                @*@Html.ActionLink("Temporal Coverage", "Index", "TemporalCoverage", null, new { @class = "dropdown-item" })*@
                             </div>
                         </li>
-                        @*<partial name="_AdminPartial" />*@
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
-                        </li>
+                        <li class="nav-item">@Html.ActionLink("About", "About", "Home", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })</li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
-                        <partial name="_AdminPartial" />
-                        <partial name="_DataSourcesPartial" />
-                        <partial name="_LoginPartial" />
+                        @Html.Partial("_AdminPartial")
+                        @Html.Partial("_DataSourcesPartial")
+                        @Html.Partial("_LoginPartial")
                     </ul>
                 </div>
             </nav>
@@ -106,20 +104,12 @@
                 }
             </h1>
         </header>
-
-        @*<div id="Body" class="container">
-                <main role="main" class="pb-3">
-                    @RenderBody()
-                </main>
-            </div>*@
-
         <div id="Body">
             @RenderBody()
         </div>
-
         <footer id="Footer">
             <div class="row">
-                <div class="col-6">
+                <div class="col-md">
                     <br />
                     &copy; @DateTime.Now.Year - South African Environmental Observation Network (SAEON)<br />
                     <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">
@@ -141,29 +131,17 @@
             </div>
         </footer>
     </div>
-
-    <environment names="Development">
-        <!-- JQuery -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <!-- Bootstrap tooltips -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-        <!-- Bootstrap core JavaScript -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
-        <!-- MDB core JavaScript -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-    <environment names="Staging,Production">
-        <!-- JQuery -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <!-- Bootstrap tooltips -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-        <!-- Bootstrap core JavaScript -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
-        <!-- MDB core JavaScript -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
+    <script type="text/javascript" src="~/node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="~/node_modules/jquery-validation/dist/jquery.validate.js"></script>
+    <script type="text/javascript" src="~/node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript" src="~/node_modules/mdbootstrap/js/popper.min.js"></script>
+    <script type="text/javascript" src="~/node_modules/mdbootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/node_modules/mdbootstrap/js/mdb.min.js"></script>
+    @Scripts.Render("~/Scripts/jsrender.min.js")
+    @Scripts.Render("~/Scripts/ej/web/ej.web.all.min.js")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jqueryval")
     @RenderSection("Scripts", required: false)
+    @Html.EJ().ScriptManager()
 </body>
 </html>

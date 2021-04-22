@@ -47,7 +47,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
         //SAEONLogs.Information("ValidateField: {ID}", e.ID);
-        DataSourceCollection col = new DataSourceCollection();
+        DataSourceCollection col;
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
@@ -206,7 +206,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
                     {
                         //SAEONLogs.Verbose($"DirectCall.DeleteSensorSchemas(\"{ds.Id.ToString()}\",{{ eventMask: {{ showMask: true}}}});");
                         MessageBoxes.Confirm("Confirm",
-                            $"DirectCall.DeleteSensorSchemas(\"{ds.Id.ToString()}\",{{ eventMask: {{ showMask: true}}}});",
+                            $"DirectCall.DeleteSensorSchemas(\"{ds.Id}\",{{ eventMask: {{ showMask: true}}}});",
                             $"This data source can't have a data schema because sensor{(col.Count > 1 ? "s" : "")} {string.Join(", ", col)} are already linked to a data schema. Clear the schema from these sensor{(col.Count > 1 ? "s" : "")}?");
                         return;
                     }

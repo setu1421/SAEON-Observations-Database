@@ -1,49 +1,46 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SAEON.Logs;
-using SAEON.Observations.QuerySite.Controllers;
-using System.Diagnostics;
+﻿using SAEON.Logs;
+using System.Web.Mvc;
+using System.Web.UI;
 
-namespace SAEON.Observations.QuerySite.Models
+namespace SAEON.Observations.QuerySite.Controllers
 {
+#if ResponseCaching
+    [OutputCache(Duration = Defaults.CacheDuration)]
+#endif
     public class HomeController : BaseController
     {
-        public IActionResult Index()
+        [OutputCache(Duration = 0, Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult Index()
         {
             return View();
         }
 
         [Route("About")]
-        public IActionResult About()
+        public ActionResult About()
         {
             return View();
         }
 
         [Route("Contact")]
-        public IActionResult Contact()
+        public ActionResult Contact()
         {
             return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         [Route("HowToCite")]
-        public IActionResult HowToCite()
+        public ActionResult HowToCite()
         {
             return View();
         }
 
-        [Route("SetTenant/{Tenant}")]
-        public IActionResult SetTenant(string tenant)
+        [Route("SetTenant/{Name}")]
+        [OutputCache(Duration = 0, Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult SetTenant(string name)
         {
-            using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { nameof(tenant), tenant } }))
+            using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Name", name } }))
             {
-                SAEONLogs.Information("Tenant: {Tenant}", tenant);
-                Tenant = tenant;
+                SAEONLogs.Verbose("Tenant: {Tenant}", name);
+                Session[Constants.SessionKeyTenant] = name;
                 return RedirectToAction("Index", "Home");
             }
         }

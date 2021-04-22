@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
+using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
+using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +19,19 @@ namespace SAEON.Observations.WebAPI
 {
     public static class ODPMetadataHelper
     {
-        public static async Task<string> CreateMetadata(ObservationsDbContext dbContext, IConfiguration config)
+        public static async Task<string> CreateMetadata(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, IConfiguration config)
         {
             async Task GenerateODPMetadata(HttpClient client)
             {
                 async Task GenerateODPMetadataForDOI(DigitalObjectIdentifier doi, string collection)
                 {
                     if (!doi.ODPMetadataNeedsUpdate ?? true) return;
-                    AddLine($"{doi.DOIType} {doi.Code}, {doi.Name}");
+                    await AddLineAsync($"{doi.DOIType} {doi.Code}, {doi.Name}");
                     var jObj = new JObject(
+                        new JProperty("doi", doi.DOI),
                         new JProperty("collection_key", collection),
-                        new JProperty("schema_key", "saeon-odp-4-2"),
+                        //new JProperty("schema_key", "saeon-odp-4-2"),
+                        new JProperty("schema_key", "saeon-datacite-4-3"),
                         new JProperty("metadata", JObject.Parse(doi.MetadataJson)),
                         new JProperty("terms_conditions_accepted", true),
                         new JProperty("data_agreement_accepted", true),
@@ -48,8 +53,8 @@ namespace SAEON.Observations.WebAPI
                     doi.ODPMetadataId = new Guid(odpId);
                     var errors = jODP["errors"];
                     doi.ODPMetadataErrors = errors.ToString();
-                    doi.ODPMetadataNeedsUpdate = false;
                     doi.ODPMetadataIsValid = validated && !errors.HasValues;
+                    doi.ODPMetadataNeedsUpdate = !doi.ODPMetadataIsValid;
                     await dbContext.SaveChangesAsync();
                 }
 
@@ -67,42 +72,48 @@ namespace SAEON.Observations.WebAPI
                 //    await GenerateODPMetadataForDOI(doi, "observations-database-periodic-collection");
                 //}
 
-                AddLine("Generating metadata");
+                await AddLineAsync("Generating metadata");
                 var doiObservations = await dbContext.DigitalObjectIdentifiers.SingleAsync(i => i.DOIType == DOIType.ObservationsDb);
                 await GenerateODPMetadataForDynamicDOI(doiObservations);
                 foreach (var doiOrganisation in await dbContext
                    .DigitalObjectIdentifiers
                    .Where(i => i.DOIType == DOIType.Organisation && i.Code == "SAEON")
+                   .OrderBy(i => i.Name)
                    .ToListAsync())
                 {
                     await GenerateODPMetadataForDynamicDOI(doiOrganisation);
                     foreach (var doiProgramme in await dbContext
                         .DigitalObjectIdentifiers
                         .Where(i => i.ParentId == doiOrganisation.Id)
+                        .OrderBy(i => i.Name)
                         .ToListAsync())
                     {
                         await GenerateODPMetadataForDynamicDOI(doiProgramme);
                         foreach (var doiProject in await dbContext
                             .DigitalObjectIdentifiers
                             .Where(i => i.ParentId == doiProgramme.Id)
+                            .OrderBy(i => i.Name)
                             .ToListAsync())
                         {
                             await GenerateODPMetadataForDynamicDOI(doiProject);
                             foreach (var doiSite in await dbContext
                                 .DigitalObjectIdentifiers
                                 .Where(i => i.ParentId == doiProject.Id)
+                                .OrderBy(i => i.Name)
                                 .ToListAsync())
                             {
                                 await GenerateODPMetadataForDynamicDOI(doiSite);
                                 foreach (var doiStation in await dbContext
                                     .DigitalObjectIdentifiers
                                     .Where(i => i.ParentId == doiSite.Id)
+                                    .OrderBy(i => i.Name)
                                     .ToListAsync())
                                 {
                                     await GenerateODPMetadataForDynamicDOI(doiStation);
                                     foreach (var doiDataset in await dbContext
                                         .DigitalObjectIdentifiers
                                         .Where(i => i.ParentId == doiStation.Id)
+                                        .OrderBy(i => i.Name)
                                         .ToListAsync())
                                     {
                                         await GenerateODPMetadataForDynamicDOI(doiDataset);
@@ -117,17 +128,18 @@ namespace SAEON.Observations.WebAPI
             var sb = new StringBuilder();
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(config["ODPMetadataUrl"].AddTrailingSlash());
+                client.BaseAddress = new Uri(config["ODPMetadataUrl"].AddTrailingForwardSlash());
                 client.SetBearerToken(await GetTokenAsync());
                 await GenerateODPMetadata(client);
-                AddLine("Done");
+                await AddLineAsync("Done");
                 return sb.ToString();
             }
 
-            void AddLine(string line)
+            async Task AddLineAsync(string line)
             {
                 sb.AppendLine(line);
                 SAEONLogs.Information(line);
+                await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateODPMetadataStatusUpdate, line);
             }
 
             async Task<string> GetTokenAsync()
@@ -136,7 +148,7 @@ namespace SAEON.Observations.WebAPI
                 {
                     try
                     {
-                        using (var client = new HttpClient() { BaseAddress = new Uri(config["AuthenticationServerUrl"].AddTrailingSlash()) })
+                        using (var client = new HttpClient() { BaseAddress = new Uri(config["AuthenticationServerUrl"].AddTrailingForwardSlash()) })
                         {
                             using (var formContent = new FormUrlEncodedContent(new[] {
                                 new KeyValuePair<string, string>("grant_type", "client_credentials"),

@@ -2,36 +2,6 @@
 AS 
 Select
   ImportBatchSummary.*, 
- -- case when Exists(
-	--Select 
-	--  * 
-	--from 
-	--  Observation
-	--  inner join Status
-	--    on (Observation.StatusID = Status.ID)
- --   where 
- --     ((Observation.ImportBatchID = ImportBatchSummary.ImportBatchID) and 
-	--   (Observation.SensorID = ImportBatchSummary.SensorID) and
- --      (Observation.PhenomenonOfferingID = ImportBatchSummary.PhenomenonOfferingID) and
- --      (Observation.PhenomenonUOMID = ImportBatchSummary.PhenomenonUOMID) and
-	--   (Status.Name = 'Verified'))
- -- ) then 1
- -- else 0
- -- end HasVerified, 
- -- (
- -- Select 
- --   Count(*) 
- -- from 
- --   Observation
-	--inner join Status
-	--  on (Observation.StatusID = Status.ID)
- -- where 
- --   ((Observation.ImportBatchID = ImportBatchSummary.ImportBatchID) and 
-	-- (Observation.SensorID = ImportBatchSummary.SensorID) and
-	-- (Observation.PhenomenonOfferingID = ImportBatchSummary.PhenomenonOfferingID) and
-	-- (Observation.PhenomenonUOMID = ImportBatchSummary.PhenomenonUOMID) and
-	-- (Status.Name = 'Verified'))
- -- ) Verifed,
   Phenomenon.ID PhenomenonID, Phenomenon.Code PhenomenonCode, Phenomenon.Name PhenomenonName, Phenomenon.Description PhenomenonDescription, Phenomenon.Url PhenomenonUrl,
   OfferingID OfferingID, Offering.Code OfferingCode, Offering.Name OfferingName, Offering.Description OfferingDescription, 
   UnitOfMeasureID, UnitOfMeasure.Code UnitOfMeasureCode, UnitOfMeasure.Unit UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,

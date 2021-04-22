@@ -1,15 +1,16 @@
 ﻿using SAEON.Observations.Core;
-using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    public class InventoryDatasetsController : BaseController<InventoryDataset>
+    public class InventoryDatasetsController : ApiReadController<InventoryDataset>
     {
         /// <summary>
-        /// Inventory of Datasets
+        /// All Datasets
         /// </summary>
-        /// <returns>ListOf(InventoryDataStream)</returns>
-        public override IQueryable<InventoryDataset> GetAll()
+        /// <returns></returns>
+        public override Task<IEnumerable<InventoryDataset>> GetAll()
         {
             return base.GetAll();
         }

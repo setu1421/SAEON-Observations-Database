@@ -1,31 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SAEON.Logs;
+﻿using SAEON.Logs;
 using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
-    [Route("[controller]/10.15493")]
+
+    [RoutePrefix("DOI/10.15493")]
     public class DOIController : BaseController
     {
         [Route("{id}")]
-        public async Task<IActionResult> Index(string id)
+        public async Task<ActionResult> Index(string id)
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
                     var doi = "10.15493/" + id;
-                    using (var client = GetWebAPIClient())
-                    //using (var client = await GetWebAPIClientWithAccessTokenAsync())
+                    using (var client = await GetWebAPIClientAsync())
                     {
                         using (var formContent = new FormUrlEncodedContent(new[] {
                                 new KeyValuePair<string, string>("doi", doi) }))
                         {
-                            var response = await client.PostAsync(Config["WebAPIUrl"] + "/Internal/DOI/AsHtml", formContent);
+                            var response = await client.PostAsync("/Internal/DOI/AsHtml", formContent);
                             response.EnsureSuccessStatusCode();
                             var model = new DOIModel
                             {

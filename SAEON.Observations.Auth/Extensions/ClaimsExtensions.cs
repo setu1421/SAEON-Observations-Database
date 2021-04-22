@@ -1,18 +1,38 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 
 namespace SAEON.Observations.Auth
 {
+    public class ClaimInfo
+    {
+        public string Claim { get; set; }
+        public string Value { get; set; }
+        public override string ToString()
+        {
+            return $"{Claim}: {Value}";
+        }
+    }
+
     public static class ClaimsExtensions
     {
-        public static Dictionary<string, string> ToClaimsList(this IEnumerable<Claim> claims)
+        public static List<ClaimInfo> ToClaimsList(this IEnumerable<Claim> claims)
         {
-            return claims.ToDictionary(c => c.Type, c => c.Value);
+            var result = new List<ClaimInfo>();
+            foreach (var claim in claims)
+            {
+                result.Add(new ClaimInfo { Claim = claim.Type, Value = claim.Value });
+            }
+            return result;
         }
-        public static Dictionary<string, string> ToClaimsList(this List<Claim> claims)
+
+        public static List<ClaimInfo> ToClaimsList(this List<Claim> claims)
         {
-            return claims.ToDictionary(c => c.Type, c => c.Value);
+            var result = new List<ClaimInfo>();
+            foreach (var claim in claims)
+            {
+                result.Add(new ClaimInfo { Claim = claim.Type, Value = claim.Value });
+            }
+            return result;
         }
     }
 }

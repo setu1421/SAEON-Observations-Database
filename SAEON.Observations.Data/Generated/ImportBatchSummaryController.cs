@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid ImportBatchID,Guid SensorID,Guid InstrumentID,Guid StationID,Guid SiteID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int Count,double? Minimum,double? Maximum,double? Average,double? StandardDeviation,double? Variance,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,DateTime? StartDate,DateTime? EndDate)
+	    public void Insert(Guid Id,Guid ImportBatchID,Guid SensorID,Guid InstrumentID,Guid StationID,Guid SiteID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int Count,double? Minimum,double? Maximum,double? Average,double? StandardDeviation,double? Variance,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,DateTime? StartDate,DateTime? EndDate,int? DigitalObjectIdentifierID,int? VerifiedCount)
 	    {
 		    ImportBatchSummary item = new ImportBatchSummary();
 		    
@@ -128,6 +128,10 @@ namespace SAEON.Observations.Data
             
             item.EndDate = EndDate;
             
+            item.DigitalObjectIdentifierID = DigitalObjectIdentifierID;
+            
+            item.VerifiedCount = VerifiedCount;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -136,7 +140,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,Guid ImportBatchID,Guid SensorID,Guid InstrumentID,Guid StationID,Guid SiteID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int Count,double? Minimum,double? Maximum,double? Average,double? StandardDeviation,double? Variance,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,DateTime? StartDate,DateTime? EndDate)
+	    public void Update(Guid Id,Guid ImportBatchID,Guid SensorID,Guid InstrumentID,Guid StationID,Guid SiteID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int Count,double? Minimum,double? Maximum,double? Average,double? StandardDeviation,double? Variance,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,DateTime? StartDate,DateTime? EndDate,int? DigitalObjectIdentifierID,int? VerifiedCount)
 	    {
 		    ImportBatchSummary item = new ImportBatchSummary();
 	        item.MarkOld();
@@ -185,6 +189,10 @@ namespace SAEON.Observations.Data
 			item.StartDate = StartDate;
 				
 			item.EndDate = EndDate;
+				
+			item.DigitalObjectIdentifierID = DigitalObjectIdentifierID;
+				
+			item.VerifiedCount = VerifiedCount;
 				
 	        item.Save(UserName);
 	    }

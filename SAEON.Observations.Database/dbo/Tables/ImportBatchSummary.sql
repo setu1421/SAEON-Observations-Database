@@ -23,6 +23,7 @@
     [ElevationMaximum] FLOAT NULL, 
     [StartDate] DATETIME NULL, 
     [EndDate] DATETIME NULL, 
+    [VerifiedCount] INT NULL, 
     CONSTRAINT [PK_ImportBatchSummary] PRIMARY KEY CLUSTERED ([ID]), 
     CONSTRAINT [FK_ImportBatchSummary_ImportBatchID] FOREIGN KEY ([ImportBatchID]) REFERENCES [ImportBatch]([ID]), 
     CONSTRAINT [FK_ImportBatchSummary_SensorID] FOREIGN KEY ([SensorID]) REFERENCES [Sensor]([ID]), 
@@ -67,3 +68,21 @@ CREATE INDEX [IX_ImportBatchSummary_StartDate] ON [dbo].[ImportBatchSummary] ([S
 
 GO
 CREATE INDEX [IX_ImportBatchSummary_EndDate] ON [dbo].[ImportBatchSummary] ([EndDate])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_LatitudeSouth] ON [dbo].[ImportBatchSummary] ([LatitudeSouth])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_LatitudeNorth] ON [dbo].[ImportBatchSummary] ([LatitudeNorth])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_LongitudeWest] ON [dbo].[ImportBatchSummary] ([LongitudeWest])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_LongitudeEast] ON [dbo].[ImportBatchSummary] ([LongitudeEast])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_ElevationMinimum] ON [dbo].[ImportBatchSummary] ([ElevationMinimum])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_ElevationMaximum] ON [dbo].[ImportBatchSummary] ([ElevationMaximum])

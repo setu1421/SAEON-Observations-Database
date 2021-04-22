@@ -2,7 +2,7 @@
 
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
-    public class InventoryDatasetsController : BaseController<InventoryDataset>
+    public class InventoryDatasetsController : ODataController<InventoryDataset>
     {
     }
 }

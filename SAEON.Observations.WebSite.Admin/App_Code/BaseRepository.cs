@@ -1,99 +1,15 @@
-﻿using DocumentFormat.OpenXml.Packaging;
-using Ext.Net;
+﻿using Ext.Net;
 using Newtonsoft.Json;
 using SAEON.Core;
 using SAEON.Logs;
-using SAEON.OpenXML;
+using SAEON.Observations.Core;
 using SubSonic;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Web;
-
-
-public static class DataTableExtensions
-{
-    public static byte[] ToCsv(this DataTable dataTable)
-    {
-        var UTF16 = ConfigurationManager.AppSettings["UTF16CSVs"].IsTrue();
-        var separator = UTF16 ? "/t" : ",";
-        var sb = new StringBuilder();
-        IEnumerable<String> headerValues = dataTable
-            .Columns
-            .OfType<DataColumn>()
-            .Select(column => column.Caption);
-        sb.AppendLine(String.Join(separator, headerValues));
-        foreach (DataRow row in dataTable.Rows)
-        {
-            var values = new List<string>();
-            foreach (DataColumn col in dataTable.Columns)
-            {
-                if (row.IsNull(col))
-                {
-                    values.Add(string.Empty);
-                }
-                else
-                {
-                    var v = row[col];
-                    if ((v is string) || (v is Guid))
-                    {
-                        values.Add(v.ToString().DoubleQuoted());
-                    }
-                    //else if (v is DateTime date)
-                    else if (v is DateTime time)
-                    {
-                        //DateTime date = ((DateTime)v).ToUniversalTime().ToLocalTime();
-                        DateTime date = DateTime.SpecifyKind(time, DateTimeKind.Local);
-                        //values.Add(date.ToString("o"));
-                        values.Add(date.ToString("yyyy-MM-ddTHH:mm:ss.fffK"));
-                    }
-                    else
-                    {
-                        values.Add(v.ToString());
-                    }
-                }
-            }
-            sb.AppendLine(string.Join(separator, values));
-        }
-        if (!UTF16)
-            return Encoding.UTF8.GetBytes(sb.ToString());
-        else
-            return Encoding.Unicode.GetPreamble().Concat(Encoding.Unicode.GetBytes(sb.ToString())).ToArray();
-    }
-
-    public static byte[] ToExcel(this DataTable dataTable)
-    {
-        using (var ms = new MemoryStream())
-        {
-            using (var doc = ExcelHelper.CreateSpreadsheet(ms))
-            {
-                WorksheetPart wsp = ExcelHelper.GetWorksheetPart(doc, 1);
-                int r = 1;
-                int c = 1;
-                foreach (DataColumn col in dataTable.Columns)
-                {
-                    ExcelHelper.SetCellValue(doc, wsp, c++, r, col.Caption);
-                }
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    r++;
-                    c = 1;
-                    foreach (DataColumn col in dataTable.Columns)
-                    {
-                        ExcelHelper.SetCellValue(doc, wsp, c++, r, row[col]);
-                    }
-                }
-            }
-            return ms.ToArray();
-        }
-    }
-}
-
 
 /// <summary>
 /// Summary description for BaseRepository
@@ -249,7 +165,7 @@ public class BaseRepository
                         var UTF16 = ConfigurationManager.AppSettings["UTF16CSVs"].IsTrue();
                         response.Charset = UTF16 ? "UTF-16" : "UTF-8";
                         response.AddHeader("Content-Disposition", $"attachment; filename={fileName}.csv");
-                        bytes = dt.ToCsv();
+                        bytes = dt.ToCSV(UTF16);
                         response.AddHeader("Content-Length", bytes.Length.ToString());
                         response.BinaryWrite(bytes);
                         break;

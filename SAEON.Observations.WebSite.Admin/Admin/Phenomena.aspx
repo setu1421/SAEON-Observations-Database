@@ -309,7 +309,7 @@
                     </ext:Panel>
                     <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
-                            <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" FieldLabel="Description"
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" FieldLabel="Description" MaxLength="5000"
                                 AnchorHorizontal="96%"  AllowBlank="false" BlankText="Description is a required">
                             </ext:TextArea>
                         </Items>

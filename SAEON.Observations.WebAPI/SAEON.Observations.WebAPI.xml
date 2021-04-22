@@ -4,59 +4,532 @@
         <name>SAEON.Observations.WebAPI</name>
     </assembly>
     <members>
-        <member name="M:SAEON.Observations.WebAPI.Controllers.Internal.BaseController`1.GetList">
+        <member name="M:SAEON.Observations.WebAPI.BaseODataController`1.GetQuery(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             query for items
             </summary>
             <returns></returns>
         </member>
-        <member name="M:SAEON.Observations.WebAPI.Controllers.Internal.BaseController`1.GetAll">
+        <member name="M:SAEON.Observations.WebAPI.Controllers.OData.IDEntityODataController`1.GetById(System.Guid)">
             <summary>
-            Get all TEntity
+            Get a TEntity by Id
             </summary>
-            <returns>ListOf(TEntity)</returns>
+            <param name="id">The Id of the TEntity</param>
+            <returns>TEntity</returns>
         </member>
-        <member name="M:SAEON.Observations.WebAPI.Controllers.OData.BaseController`1.GetOrderBys">
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InstrumentsController.GetAll">
             <summary>
-            Overwrite to order of entities
+            All Instruments
             </summary>
-            <returns>ListOf(PredicateOf(TEntity))</returns>
+            <returns>ListOf(Instrument)</returns>
         </member>
-        <member name="M:SAEON.Observations.WebAPI.Controllers.OData.BaseController`1.GetQuery(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InstrumentsController.GetByIdAsync(System.Guid)">
             <summary>
-            query for items
+            Instrument by Id
             </summary>
-            <returns></returns>
+            <param name="id">The Id of the Instrument</param>
+            <returns>Instrument</returns>
         </member>
-        <member name="M:SAEON.Observations.WebAPI.Controllers.OData.BaseController`1.Get">
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InstrumentsController.GetByCodeAsync(System.String)">
             <summary>
-            Get all entities
+            Instrument by Code
             </summary>
-            <returns>ListOf(TEntity)</returns>
+            <param name="code">The Code of the Instrument</param>
+            <returns>Instrument</returns>
         </member>
-        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.BaseController`1.GetOrderBys">
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InstrumentsController.GetByNameAsync(System.String)">
             <summary>
-            Overwrite to order of entities
+            Instrument by Name
             </summary>
-            <returns>ListOf(PredicateOf(TEntity))</returns>
+            <param name="name">The Name of the Instrument</param>
+            <returns>Instrument</returns>
         </member>
-        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.BaseController`1.GetQuery(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InstrumentsController.GetOrganisations(System.Guid)">
             <summary>
-            query for items
+            Organisations of the Instrument
             </summary>
-            <returns></returns>
+            <param name="id">Id of the Instrument</param>
+            <returns>ListOf(Organisation)</returns>
         </member>
-        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.BaseController`1.GetAll">
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InstrumentsController.GetStations(System.Guid)">
             <summary>
-            Get all TEntity
+            Stations of the Instrument
             </summary>
-            <returns>ListOf(TEntity)</returns>
+            <param name="id">Id of the Instrument</param>
+            <returns>ListOf(Station)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InstrumentsController.GetSensors(System.Guid)">
+            <summary>
+            Sensors of the Instrument
+            </summary>
+            <param name="id">Id of the Instrument</param>
+            <returns>ListOf(Sensor)</returns>
         </member>
         <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InventoryDatasetsController.GetAll">
             <summary>
-            Inventory of Datasets
+            All Datasets
             </summary>
-            <returns>ListOf(InventoryDataStream)</returns>
+            <returns></returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InventorySensorsController.GetAll">
+            <summary>
+            All Sensors
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OfferingsController.GetAll">
+            <summary>
+            All Offerings
+            </summary>
+            <returns>ListOf(Offering)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OfferingsController.GetByIdAsync(System.Guid)">
+            <summary>
+            Offering by Id
+            </summary>
+            <param name="id">The Id of the Offering</param>
+            <returns>Offering</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OfferingsController.GetByCodeAsync(System.String)">
+            <summary>
+            Offering by Code
+            </summary>
+            <param name="code">The Code of the Offering</param>
+            <returns>Offering</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OfferingsController.GetByNameAsync(System.String)">
+            <summary>
+            Offering by Name
+            </summary>
+            <param name="name">The Name of the Offering</param>
+            <returns>Offering</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OfferingsController.GetPhenomena(System.Guid)">
+            <summary>
+            Phenomena of the Offering
+            </summary>
+            <param name="id">Id of the Offering</param>
+            <returns>ListOf(Phenomemon)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OrganisationsController.GetAll">
+            <summary>
+            All Organisations
+            </summary>
+            <returns>ListOf(Organisation)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OrganisationsController.GetByIdAsync(System.Guid)">
+            <summary>
+            Organisation by Id
+            </summary>
+            <param name="id">The Id of the Organisation</param>
+            <returns>Organisation</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OrganisationsController.GetByCodeAsync(System.String)">
+            <summary>
+            Organisation by Code
+            </summary>
+            <param name="code">The Code of the Organisation</param>
+            <returns>Organisation</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OrganisationsController.GetByNameAsync(System.String)">
+            <summary>
+            Organisation by Name
+            </summary>
+            <param name="name">The Name of the Organisation</param>
+            <returns>Organisation</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OrganisationsController.GetSites(System.Guid)">
+            <summary>
+            Sites of the Organisation
+            </summary>
+            <param name="id">Id of Organisation</param>
+            <returns>ListOf(Site)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OrganisationsController.GetStations(System.Guid)">
+            <summary>
+            Stations of the Organisation
+            </summary>
+            <param name="id">Id of Organisation</param>
+            <returns>ListOf(Station)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.OrganisationsController.GetInstruments(System.Guid)">
+            <summary>
+            Instruments of the Organisation
+            </summary>
+            <param name="id">Id of Organisation</param>
+            <returns>ListOf(Instrument)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.PhenomenaController.GetAll">
+            <summary>
+            All Phenomena
+            </summary>
+            <returns>ListOf(Phenomenon)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.PhenomenaController.GetByIdAsync(System.Guid)">
+            <summary>
+            Phenomenon by Id
+            </summary>
+            <param name="id">The Id of the Phenomenon</param>
+            <returns>Phenomenon</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.PhenomenaController.GetByCodeAsync(System.String)">
+            <summary>
+            Phenomenon by Code
+            </summary>
+            <param name="code">The Code of the Phenomenon</param>
+            <returns>Phenomenon</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.PhenomenaController.GetByNameAsync(System.String)">
+            <summary>
+            Phenomenon by Name
+            </summary>
+            <param name="name">The Name of the Phenomenon</param>
+            <returns>Phenomenon</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.PhenomenaController.GetOfferings(System.Guid)">
+            <summary>
+            Offerings of the Phenomenon
+            </summary>
+            <param name="id">Id of the Phenomenon</param>
+            <returns>ListOf(Offering)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.PhenomenaController.GetUnits(System.Guid)">
+            <summary>
+            Units of the Phenomenon
+            </summary>
+            <param name="id">Id of the Phenomenon</param>
+            <returns>ListOf(Unit)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.PhenomenaController.GetSensors(System.Guid)">
+            <summary>
+            Sensors of the Phenomenon
+            </summary>
+            <param name="id">Id of the Phenomenon</param>
+            <returns>ListOf(Sensor)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.ProgrammesController.GetAll">
+            <summary>
+            All Programmes
+            </summary>
+            <returns>ListOf(Programme)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.ProgrammesController.GetByIdAsync(System.Guid)">
+            <summary>
+            Programme by Id
+            </summary>
+            <param name="id">The Id of the Programme</param>
+            <returns>Programme</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.ProgrammesController.GetByCodeAsync(System.String)">
+            <summary>
+            Programme by Code
+            </summary>
+            <param name="code">The Code of the Programme</param>
+            <returns>Programme</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.ProgrammesController.GetByNameAsync(System.String)">
+            <summary>
+            Programme by Name
+            </summary> 
+            <param name="name">The Name of the Programme</param>
+            <returns>Programme</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.ProgrammesController.GetProjects(System.Guid)">
+            <summary>
+            Projects of the Programme
+            </summary>
+            <param name="id">Id of Programme</param>
+            <returns>ListOf(Project)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.ProjectsController.GetAll">
+            <summary>
+            All Projects
+            </summary>
+            <returns>ListOf(Project)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.ProjectsController.GetByIdAsync(System.Guid)">
+            <summary>
+            Project by Id
+            </summary>
+            <param name="id">The Id of the Project</param>
+            <returns>Project</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.ProjectsController.GetByCodeAsync(System.String)">
+            <summary>
+            Project by Code
+            </summary>
+            <param name="code">The Code of the Project</param>
+            <returns>Project</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.ProjectsController.GetByNameAsync(System.String)">
+            <summary>
+            Project by Name
+            </summary>
+            <param name="name">The Name of the Project</param>
+            <returns>Project</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.ProjectsController.ProgrammeAsync(System.Guid)">
+            <summary>
+            Programme of the Project
+            </summary>
+            <param name="id">Id of Project</param>
+            <returns>Programme</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.ProjectsController.GetStations(System.Guid)">
+            <summary>
+            Stations of the Project
+            </summary>
+            <param name="id">Id of Project</param>
+            <returns>ListOf(Station)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.SensorsController.GetAll">
+            <summary>
+            All Sensors
+            </summary>
+            <returns>ListOf(Sensor)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.SensorsController.GetByIdAsync(System.Guid)">
+            <summary>
+            Sensor by Id
+            </summary>
+            <param name="id">The Id of the Sensor</param>
+            <returns>Sensor</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.SensorsController.GetByCodeAsync(System.String)">
+            <summary>
+            Sensor by Code
+            </summary>
+            <param name="code">The Code of the Sensor</param>
+            <returns>Sensor</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.SensorsController.GetByNameAsync(System.String)">
+            <summary>
+            Sensor by Name
+            </summary>
+            <param name="name">The Name of the Sensor</param>
+            <returns>Sensor</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.SensorsController.GetPhenomenonAsync(System.Guid)">
+            <summary>
+            Phenomenon of the Sensor
+            </summary>
+            <param name="id">The Id of the Sensor</param>
+            <returns>Phenomenon</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.SensorsController.GetInstruments(System.Guid)">
+            <summary>
+            Instruments of the Sensor
+            </summary>
+            <param name="id">Id of the Sensor</param>
+            <returns>ListOf(Instrument)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.SitesController.GetAll">
+            <summary>
+            All Sites
+            </summary>
+            <returns>ListOf(Site)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.SitesController.GetByIdAsync(System.Guid)">
+            <summary>
+            Site by Id
+            </summary>
+            <param name="id">The Id of the Site</param>
+            <returns>Site</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.SitesController.GetByCodeAsync(System.String)">
+            <summary>
+            Site by Code
+            </summary>
+            <param name="code">The Code of the Site</param>
+            <returns>Site</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.SitesController.GetByNameAsync(System.String)">
+            <summary>
+            Site by Name
+            </summary>
+            <param name="name">The Name of the Site</param>
+            <returns>Site</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.SitesController.GetOrganisations(System.Guid)">
+            <summary>
+            Organisations of the Site
+            </summary>
+            <param name="id">Id of Site</param>
+            <returns>ListOf(Organisation)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.SitesController.GetStations(System.Guid)">
+            <summary>
+            Stations of the Site
+            </summary>
+            <param name="id">Id of Site</param>
+            <returns>ListOf(Station)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetAll">
+            <summary>
+            All Stations
+            </summary>
+            <returns>ListOf(Station)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetByIdAsync(System.Guid)">
+            <summary>
+            Station by Id
+            </summary>
+            <param name="id">The Id of the Station</param>
+            <returns>Station</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetByCodeAsync(System.String)">
+            <summary>
+            Station by Code
+            </summary>
+            <param name="code">The Code of the Station</param>
+            <returns>Station</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetByNameAsync(System.String)">
+            <summary>
+            Station by Name
+            </summary>
+            <param name="name">The Name of the Station</param>
+            <returns>Station</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetSiteAsync(System.Guid)">
+            <summary>
+            Site of a Station
+            </summary>
+            <param name="id">The Id of the Station</param>
+            <returns>Site</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetInstruments(System.Guid)">
+            <summary>
+            Instruments of the Station
+            </summary>
+            <param name="id">Id of the Station</param>
+            <returns>ListOf(Instrument)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetOrganisations(System.Guid)">
+            <summary>
+            Organisations of the Station
+            </summary>
+            <param name="id">Id of the Station</param>
+            <returns>ListOf(Organisation)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetProjects(System.Guid)">
+            <summary>
+            Projects of the Station
+            </summary>
+            <param name="id">Id of the Station</param>
+            <returns>ListOf(Project)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.UnitsController.GetAll">
+            <summary>
+            All Units
+            </summary>
+            <returns>ListOf(Unit)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.UnitsController.GetByIdAsync(System.Guid)">
+            <summary>
+            Unit by Id
+            </summary>
+            <param name="id">The Id of the Unit</param>
+            <returns>Unit</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.UnitsController.GetByCodeAsync(System.String)">
+            <summary>
+            Unit by Code
+            </summary>
+            <param name="code">The Code of the Unit</param>
+            <returns>Unit</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.UnitsController.GetPhenomena(System.Guid)">
+            <summary>
+            Phenomena of the Unit
+            </summary>
+            <param name="id">Id of the Unit</param>
+            <returns>ListOf(Phenomenon)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.IDEntityApiController`1.GetByIdAsync(System.Guid)">
+            <summary>
+            Get a TEntity by Id
+            </summary>
+            <param name="id">The Id of the TEntity</param>
+            <returns>TEntity</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.IDEntityApiController`1.GetSingleAsync``1(System.Guid,System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Related Entity TEntity.TRelated
+            </summary>
+            <typeparam name="TRelated"></typeparam>
+            <param name="id">Id of TEntity</param>
+            <param name="select">Lambda to select TRelated</param>
+            <returns>TaskOf(IHttpActionResult)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.IDEntityApiController`1.GetSingle``1(System.Guid,System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Related Entity TEntity.TRelated
+            </summary>
+            <typeparam name="TRelated"></typeparam>
+            <param name="id">Id of TEntity</param>
+            <param name="select">Lambda to select TRelated</param>
+            <returns>TaskOf(IHttpActionResult)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.IDEntityApiController`1.GetManyWithGuidId``1(System.Guid,System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.IEnumerable{``0}}})">
+            <summary>
+            Get IQueryableOf(TRelated)
+            </summary>
+            <typeparam name="TRelated"></typeparam>
+            <param name="id">Id of TEntity</param>
+            <param name="select">Lambda to select ListOf(TRelated)</param>
+            <returns>IQueryableOf(TRelated)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.IDEntityApiController`1.GetManyWithIntId``1(System.Guid,System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.IEnumerable{``0}}})">
+            <summary>
+            Get IQueryableOf(TRelated)
+            </summary>
+            <typeparam name="TRelated"></typeparam>
+            <param name="id">Id of TEntity</param>
+            <param name="select">Lambda to select ListOf(TRelated)</param>
+            <returns>IQueryableOf(TRelated)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.IDEntityApiController`1.GetManyWithLongId``1(System.Guid,System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.IEnumerable{``0}}})">
+            <summary>
+            Get IQueryableOf(TRelated)
+            </summary>
+            <typeparam name="TRelated"></typeparam>
+            <param name="id">Id of TEntity</param>
+            <param name="select">Lambda to select ListOf(TRelated)</param>
+            <returns>IQueryableOf(TRelated)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.CodedApiController`1.GetByCodeAsync(System.String)">
+            <summary>
+            Get a TEntity by Code
+            </summary>
+            <param name="code">The Code of the TEntity</param>
+            <returns>TEntity</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.NamedApiController`1.GetByNameAsync(System.String)">
+            <summary>
+            Get a TEntity by Name
+            </summary>
+            <param name="name">The Name of the TEntity</param>
+            <returns>TEntity</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.CodedNamedApiController`1.GetByCodeAsync(System.String)">
+            <summary>
+            Get a TEntity by Code
+            </summary>
+            <param name="code">The Code of the TEntity</param>
+            <returns>TEntity</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.CodedNamedApiController`1.GetByNameAsync(System.String)">
+            <summary>
+            Get a TEntity by Name
+            </summary>
+            <param name="name">The Name of the TEntity</param>
+            <returns>TEntity</returns>
+        </member>
+        <member name="T:SAEON.Observations.Core.OrganisationRole">
+            <summary>
+            OrganisationRole entity
+            </summary>
         </member>
     </members>
 </doc>

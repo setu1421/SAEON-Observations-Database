@@ -4,9 +4,10 @@
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
-            <a class="dropdown-item" asp-controller="Admin" asp-action="ImportSetup">Import Setup</a>
-            <a class="dropdown-item" asp-controller="Admin" asp-action="CreateDynamicDOIs">Create Dynamic DOIs</a>
+            @Html.ActionLink("Create DOIs", "CreateDOIs", "Admin", null, new { @class = "dropdown-item" })
+            @Html.ActionLink("Create Metadata", "CreateMetadata", "Admin", null, new { @class = "dropdown-item" })
+            @Html.ActionLink("CreateODPMetadata", "CreateODPMetadata", "Admin", null, new { @class = "dropdown-item" })
+            @Html.ActionLink("Import Setup", "ImportSetup", "Admin", null, new { @class = "dropdown-item" })
         </div>
     </li>
 }
-

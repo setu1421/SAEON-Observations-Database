@@ -100,6 +100,32 @@ DROP INDEX [IX_Observation_ValueYear]
 
 
 GO
+PRINT N'Dropping [dbo].[Sensor].[IX_Sensor_CodeName]...';
+
+
+GO
+DROP INDEX [IX_Sensor_CodeName]
+    ON [dbo].[Sensor];
+
+
+GO
+PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueDateDesc]...';
+
+
+GO
+DROP INDEX [IX_Observation_ValueDateDesc]
+    ON [dbo].[Observation];
+
+
+GO
+PRINT N'Dropping [dbo].[UX_Sensor_Code]...';
+
+
+GO
+ALTER TABLE [dbo].[Sensor] DROP CONSTRAINT [UX_Sensor_Code];
+
+
+GO
 PRINT N'Altering [dbo].[DigitalObjectIdentifiers]...';
 
 
@@ -108,31 +134,38 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-ALTER TABLE [dbo].[DigitalObjectIdentifiers] DROP COLUMN [DOI], COLUMN [DOIUrl];
-
-
-GO
 ALTER TABLE [dbo].[DigitalObjectIdentifiers] ALTER COLUMN [Name] VARCHAR (500) NOT NULL;
 
 
 GO
 ALTER TABLE [dbo].[DigitalObjectIdentifiers]
-    ADD [ParentID]           INT              NULL,
-        [DOIType]            TINYINT          NOT NULL,
-        [DOI]                AS               '10.15493/obsdb.' + CONVERT (VARCHAR (20), CONVERT (VARBINARY (1), DOIType), 2) + '.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
-        [DOIUrl]             AS               'https://doi.org/10.15493/obsdb.' + CONVERT (VARCHAR (20), CONVERT (VARBINARY (1), DOIType), 2) + '.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
-        [Code]               VARCHAR (200)    NOT NULL,
-        [MetadataJson]       VARCHAR (MAX)    NOT NULL,
-        [MetadataJsonSha256] BINARY (32)      NOT NULL,
-        [MetadataHtml]       VARCHAR (MAX)    NOT NULL,
-        [MetadataUrl]        VARCHAR (250)    NOT NULL,
-        [ObjectStoreUrl]     VARCHAR (250)    NULL,
-        [QueryUrl]           VARCHAR (250)    NULL,
-        [OpenDataPlatformID] UNIQUEIDENTIFIER NULL;
+    ADD [AlternateID]            UNIQUEIDENTIFIER CONSTRAINT [DF_DigitalObjectIdentifiers_AlternateID] DEFAULT NewId() NULL,
+        [ParentID]               INT              NULL,
+        [DOIType]                TINYINT          NOT NULL,
+        [Code]                   VARCHAR (200)    NOT NULL,
+        [MetadataJson]           VARCHAR (MAX)    NOT NULL,
+        [MetadataJsonSha256]     BINARY (32)      NOT NULL,
+        [MetadataHtml]           VARCHAR (MAX)    NOT NULL,
+        [MetadataUrl]            VARCHAR (250)    NOT NULL,
+        [ObjectStoreUrl]         VARCHAR (250)    NULL,
+        [QueryUrl]               VARCHAR (250)    NULL,
+        [ODPMetadataID]          UNIQUEIDENTIFIER NULL,
+        [ODPMetadataNeedsUpdate] BIT              NULL,
+        [ODPMetadataIsValid]     BIT              NULL,
+        [ODPMetadataErrors]      VARCHAR (MAX)    NULL;
 
 
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[UX_DigitalObjectIdentifiers_DOIType_Code]...';
+
+
+GO
+ALTER TABLE [dbo].[DigitalObjectIdentifiers]
+    ADD CONSTRAINT [UX_DigitalObjectIdentifiers_DOIType_Code] UNIQUE NONCLUSTERED ([DOIType] ASC, [Code] ASC);
 
 
 GO
@@ -142,15 +175,6 @@ PRINT N'Creating [dbo].[UX_DigitalObjectIdentifiers_DOIType_Name]...';
 GO
 ALTER TABLE [dbo].[DigitalObjectIdentifiers]
     ADD CONSTRAINT [UX_DigitalObjectIdentifiers_DOIType_Name] UNIQUE NONCLUSTERED ([DOIType] ASC, [Name] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_Name]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_DigitalObjectIdentifiers_Name]
-    ON [dbo].[DigitalObjectIdentifiers]([Name] ASC);
 
 
 GO
@@ -169,6 +193,32 @@ PRINT N'Creating [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_P
 GO
 CREATE NONCLUSTERED INDEX [IX_DigitalObjectIdentifiers_ParentID]
     ON [dbo].[DigitalObjectIdentifiers]([ParentID] ASC);
+
+
+GO
+PRINT N'Altering [dbo].[ImportBatchSummary]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TABLE [dbo].[ImportBatchSummary]
+    ADD [DigitalObjectIdentifierID] INT NULL;
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_DigitalObjectIdentifierID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_DigitalObjectIdentifierID]
+    ON [dbo].[ImportBatchSummary]([DigitalObjectIdentifierID] ASC);
 
 
 GO
@@ -202,6 +252,16 @@ PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueYear]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Observation_ValueYear]
     ON [dbo].[Observation]([ValueYear] ASC)
+    ON [Observations];
+
+
+GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_PhenomenonOfferingID_PhenomenonUOMID_ImportBatchID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_PhenomenonOfferingID_PhenomenonUOMID_ImportBatchID]
+    ON [dbo].[Observation]([SensorID] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC, [ImportBatchID] ASC)
     ON [Observations];
 
 
@@ -276,6 +336,41 @@ CREATE NONCLUSTERED INDEX [IX_Project_DigitalObjectIdentifierID]
 
 
 GO
+PRINT N'Altering [dbo].[Sensor]...';
+
+
+GO
+ALTER TABLE [dbo].[Sensor] ALTER COLUMN [Code] VARCHAR (75) NOT NULL;
+
+
+GO
+PRINT N'Creating [dbo].[UX_Sensor_Code]...';
+
+
+GO
+ALTER TABLE [dbo].[Sensor]
+    ADD CONSTRAINT [UX_Sensor_Code] UNIQUE NONCLUSTERED ([Code] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[UX_Sensor_Name]...';
+
+
+GO
+ALTER TABLE [dbo].[Sensor]
+    ADD CONSTRAINT [UX_Sensor_Name] UNIQUE NONCLUSTERED ([Name] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Sensor].[IX_Sensor_CodeName]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Sensor_CodeName]
+    ON [dbo].[Sensor]([Code] ASC, [Name] ASC);
+
+
+GO
 PRINT N'Altering [dbo].[Site]...';
 
 
@@ -326,6 +421,15 @@ PRINT N'Creating [dbo].[FK_DigitalObjectIdentifiers_ParentID]...';
 GO
 ALTER TABLE [dbo].[DigitalObjectIdentifiers] WITH NOCHECK
     ADD CONSTRAINT [FK_DigitalObjectIdentifiers_ParentID] FOREIGN KEY ([ParentID]) REFERENCES [dbo].[DigitalObjectIdentifiers] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_ImportBatchSummary_DigitalObjectIdentifierID]...';
+
+
+GO
+ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
+    ADD CONSTRAINT [FK_ImportBatchSummary_DigitalObjectIdentifierID] FOREIGN KEY ([DigitalObjectIdentifierID]) REFERENCES [dbo].[DigitalObjectIdentifiers] ([ID]);
 
 
 GO
@@ -486,22 +590,6 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vLocations]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vLocations]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
 PRINT N'Refreshing [dbo].[vOrganisationInstrument]...';
 
 
@@ -622,6 +710,118 @@ EXECUTE sp_refreshsqlmodule N'[dbo].[vDataLog]';
 
 
 GO
+PRINT N'Refreshing [dbo].[vInstrumentSensor]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vInstrumentSensor]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing [dbo].[vSensor]...';
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensor]';
+
+
+GO
+PRINT N'Refreshing [dbo].[vSensorDates]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorDates]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing [dbo].[vSensorLocation]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorLocation]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing [dbo].[vStation]...';
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vStation]';
+
+
+GO
+PRINT N'Refreshing [dbo].[vSensorThingsAPIInstrumentDates]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIInstrumentDates]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing [dbo].[vSensorThingsAPIStationDates]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIStationDates]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing [dbo].[vStationInstrument]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vStationInstrument]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
 PRINT N'Altering [dbo].[vImportBatchSummary]...';
 
 
@@ -709,15 +909,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensor]...';
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensor]';
-
-
-GO
-PRINT N'Refreshing [dbo].[vSensorDates]...';
+PRINT N'Altering [dbo].[vLocations]...';
 
 
 GO
@@ -725,45 +917,66 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorDates]';
-
-
+ALTER VIEW [dbo].[vLocations]
+AS
+Select distinct
+  OrganisationID, OrganisationName, OrganisationUrl,
+  ProgrammeID, ProgrammeName, ProgrammeUrl,
+  ProjectID, ProjectName, ProjectUrl,
+  SiteID, SiteName, SiteUrl,
+  StationID, StationName, StationUrl,
+  (LatitudeNorth + LatitudeSouth) / 2 Latitude,
+  (LongitudeWest + LongitudeEast) / 2 Longitude,
+  (ElevationMaximum + ElevationMinimum) / 2 Elevation
+from
+  vImportBatchSummary
+where
+  (Count > 0) and 
+  (LatitudeNorth is not null) and (LatitudeSouth is not null) and
+  (LongitudeWest is not null) and (LongitudeEast is not null)
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vStation]...';
+PRINT N'Altering [dbo].[vInventorySensors]...';
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vStation]';
-
-
-GO
-PRINT N'Refreshing [dbo].[vInventoryDatasets]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vInventoryDatasets]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vInventorySensors]...';
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vInventorySensors]';
-
-
+ALTER VIEW [dbo].[vInventorySensors]
+AS
+Select
+  Row_Number() over (order by SiteName, StationName, InstrumentName, SensorName, PhenomenonName, OfferingName, UnitOfMeasureUnit) ID, s.*
+from
+(
+Select
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
+  SiteID, SiteCode, SiteName, SiteDescription, SiteUrl,
+  StationID, StationCode, StationName, StationDescription, StationUrl,
+  InstrumentID, InstrumentCode, InstrumentName, InstrumentDescription, InstrumentUrl,
+  SensorID, SensorCode, SensorName, SensorDescription, SensorUrl,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription, PhenomenonUrl,
+  PhenomenonOfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
+  Sum(Count) Count, Min(StartDate) StartDate, Max(EndDate) EndDate,
+  Max(LatitudeNorth) LatitudeNorth, Min(LatitudeSouth) LatitudeSouth,
+  Min(LongitudeWest) LongitudeWest, Max(LongitudeEast) LongitudeEast
+from
+  vImportBatchSummary
+group by
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
+  SiteID, SiteCode, SiteName, SiteDescription, SiteUrl,
+  StationID, StationCode, StationName, StationDescription, StationUrl,
+  InstrumentID, InstrumentCode, InstrumentName, InstrumentDescription, InstrumentUrl,
+  SensorID, SensorCode, SensorName, SensorDescription, SensorUrl,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription, PhenomenonUrl,
+  PhenomenonOfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol
+) s
 GO
 PRINT N'Refreshing [dbo].[vSensorThingsAPIDatastreams]...';
 
@@ -774,6 +987,22 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIDatastreams]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing [dbo].[vSensorThingsAPILocations]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPILocations]';
 
 
 GO
@@ -813,113 +1042,6 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensorLocation]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorLocation]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPIInstrumentDates]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIInstrumentDates]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPIStationDates]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIStationDates]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vStationInstrument]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vStationInstrument]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Creating [dbo].[vStationDatasets]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-CREATE VIEW [dbo].[vStationDatasets]
-AS
-Select
-  Row_Number() over (order by StationCode, PhenomenonCode, OfferingCode, UnitOfMeasureCode) ID, s.*
-from
-(
-Select
-  SiteID, SiteCode, SiteName, SiteDescription,
-  StationID, StationCode, StationName, StationDescription,
-  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription,
-  PhenomenonOfferingID, OfferingID, OfferingCode, OfferingName, OfferingDescription,
-  PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
-  Sum(Count) Count,
-  Min(StartDate) StartDate,
-  Max(EndDate) EndDate,
-  Max(LatitudeNorth) LatitudeNorth,
-  Min(LatitudeSouth) LatitudeSouth,
-  Min(LongitudeWest) LongitudeWest,
-  Max(LongitudeEast) LongitudeEast,
-  Min(ElevationMinimum) ElevationMinimum,
-  Max(ElevationMaximum) ElevationMaximum
-from
-  vImportBatchSummary
-group by
-  SiteID, SiteCode, SiteName, SiteDescription,
-  StationID, StationCode, StationName, StationDescription,
-  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription,
-  PhenomenonOfferingID, OfferingID, OfferingCode, OfferingName, OfferingDescription,
-  PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol
-) s
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
 PRINT N'Refreshing [dbo].[vSensorThingsAPIThings]...';
 
 
@@ -929,22 +1051,6 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIThings]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vSensorThingsAPILocations]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPILocations]';
 
 
 GO
@@ -984,6 +1090,127 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
+PRINT N'Creating [dbo].[vInventoryDatasets]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE VIEW [dbo].[vInventoryDatasets]
+AS 
+Select
+  Row_Number() over (order by StationCode, PhenomenonCode, OfferingCode, UnitOfMeasureCode) ID, s.*
+from
+(
+Select
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
+  SiteID, SiteCode, SiteName, SiteDescription, SiteUrl,
+  StationID, StationCode, StationName, StationDescription, StationUrl,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription, PhenomenonUrl,
+  PhenomenonOfferingID, OfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
+  Sum(Count) Count,
+  Min(StartDate) StartDate,
+  Max(EndDate) EndDate,
+  Max(LatitudeNorth) LatitudeNorth,
+  Min(LatitudeSouth) LatitudeSouth,
+  Min(LongitudeWest) LongitudeWest,
+  Max(LongitudeEast) LongitudeEast,
+  Min(ElevationMinimum) ElevationMinimum,
+  Max(ElevationMaximum) ElevationMaximum
+from
+  vImportBatchSummary
+group by
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
+  SiteID, SiteCode, SiteName, SiteDescription, SiteUrl,
+  StationID, StationCode, StationName, StationDescription, StationUrl,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription, PhenomenonUrl,
+  PhenomenonOfferingID, OfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol
+) s
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[vStationDatasets]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE VIEW [dbo].[vStationDatasets]
+AS
+Select
+  Row_Number() over (order by StationCode, PhenomenonCode, OfferingCode, UnitOfMeasureCode) ID, s.*
+from
+(
+Select
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
+  SiteID, SiteCode, SiteName, SiteDescription,
+  StationID, StationCode, StationName, StationDescription,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription,
+  PhenomenonOfferingID, OfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
+  Sum(Count) Count,
+  Min(StartDate) StartDate,
+  Max(EndDate) EndDate,
+  Max(LatitudeNorth) LatitudeNorth,
+  Min(LatitudeSouth) LatitudeSouth,
+  Min(LongitudeWest) LongitudeWest,
+  Max(LongitudeEast) LongitudeEast,
+  Min(ElevationMinimum) ElevationMinimum,
+  Max(ElevationMaximum) ElevationMaximum
+from
+  vImportBatchSummary
+group by
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
+  SiteID, SiteCode, SiteName, SiteDescription,
+  StationID, StationCode, StationName, StationDescription,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription,
+  PhenomenonOfferingID, OfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol
+) s
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[vFeatures]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vFeatures]
+AS 
+Select distinct
+  PhenomenonID, PhenomenonName, PhenomenonUrl,
+  PhenomenonOfferingID, OfferingID, OfferingName,
+  PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureUnit
+from
+  vImportBatchSummary
+where
+  (Count > 0)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
 PRINT N'Checking existing data against newly created constraints';
 
 
@@ -993,6 +1220,8 @@ USE [$(DatabaseName)];
 
 GO
 ALTER TABLE [dbo].[DigitalObjectIdentifiers] WITH CHECK CHECK CONSTRAINT [FK_DigitalObjectIdentifiers_ParentID];
+
+ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_DigitalObjectIdentifierID];
 
 ALTER TABLE [dbo].[Organisation] WITH CHECK CHECK CONSTRAINT [FK_Organisation_DigitalObjectIdentifierID];
 

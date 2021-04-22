@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using SAEON.Logs;
 using System;
@@ -27,10 +28,18 @@ namespace SAEON.Observations.WebAPI
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostContext, config) =>
+                {
+                    config.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
+                })
                 .UseSAEONLogs()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureKestrel(options =>
+                    {
+                        options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(15);
+                    });
                 });
     }
 }

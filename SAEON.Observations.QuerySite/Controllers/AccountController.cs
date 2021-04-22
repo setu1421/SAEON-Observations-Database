@@ -1,41 +1,77 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.OpenIdConnect;
 using SAEON.Logs;
-using SAEON.Observations.Auth;
 using System;
-using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
+    [RoutePrefix("Account")]
+    [Route("{action=index}")]
     public class AccountController : BaseController
     {
         [Authorize]
-        [HttpGet]
-        public IActionResult LogIn()
+        public ActionResult LogIn()
         {
-            return RedirectToAction("Index", "Home");
+            return Redirect("/");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> LogOutAsync()
+        public ActionResult LogOut()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+
+            Request.GetOwinContext().Authentication.SignOut(OpenIdConnectAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
+            return Redirect("/");
         }
 
-        public IActionResult ClearAccessToken()
+        public ActionResult Register()
+        {
+            if (!Request.IsAuthenticated)
+            {
+                var properties = new AuthenticationProperties { RedirectUri = "/" };
+                properties.Dictionary.Add("ODPRegister", "true");
+                Request.GetOwinContext().Authentication.Challenge(properties, OpenIdConnectAuthenticationDefaults.AuthenticationType);
+                return new HttpUnauthorizedResult();
+            }
+            return Redirect("/");
+        }
+
+        /*
+        //[Authorize]
+        public ActionResult Claims()
+        {
+            ViewBag.Message = "Claims";
+            if (User is ClaimsPrincipal cp)
+            {
+                ViewData["access_token"] = cp?.FindFirst("access_token")?.Value;
+            }
+            return View();
+        }
+
+        [Authorize]
+        public async Task<ActionResult> CallApi()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                using (var client = await GetWebAPIClientWithAccessTokenAsync())
+                {
+                    //SAEONLogs.Verbose("Call: {url}", Properties.Settings.Default.WebAPIUrl + "/claims");
+                    var result = await client.GetStringAsync(ConfigurationManager.AppSettings["WebAPIUrl"].AddTrailingForwardSlash() + "ClaimsWebAPI");
+                    ViewBag.Json = JArray.Parse(result);
+                    return View("ShowApiResult");
+                }
+            }
+        }
+
+        public ActionResult ClearAccessToken()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    HttpContext.Session.Remove(ODPAuthenticationDefaults.SessionAccessToken);
-                    return NoContent();
+                    Session.Remove(Constants.SessionKeyAccessToken);
+                    return new EmptyResult();
                 }
                 catch (Exception ex)
                 {
@@ -46,14 +82,14 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         }
 
-        public IActionResult ClearIdToken()
+        public ActionResult ClearIdToken()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    HttpContext.Session.Remove(ODPAuthenticationDefaults.SessionIdToken);
-                    return NoContent();
+                    Session.Remove(Constants.SessionKeyIdToken);
+                    return new EmptyResult();
                 }
                 catch (Exception ex)
                 {
@@ -63,8 +99,9 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
 
         }
+        */
 
-        public IActionResult ClaimsQuerySite()
+        public ActionResult Claims()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -72,7 +109,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var result = HttpContext.UserInfo();
                     SAEONLogs.Information("UserInfo: {@UserInfo}", result);
-                    return new JsonResult(result);
+                    return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)
                 {
@@ -83,7 +120,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [Authorize]
-        public IActionResult ClaimsQuerySiteUser()
+        public ActionResult ClaimsAuthorized()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -91,7 +128,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var result = HttpContext.UserInfo();
                     SAEONLogs.Information("UserInfo: {@UserInfo}", result);
-                    return new JsonResult(result);
+                    return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)
                 {
@@ -101,7 +138,8 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        public async Task<IActionResult> ClaimsWebAPIAsync()
+        /*
+        public async Task<ActionResult> ClaimsWebAPI()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -130,7 +168,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         }
 
-        public async Task<IActionResult> ClaimsWebAPIAccessTokenAsync()
+        public async Task<ActionResult> ClaimsWebAPIAccessToken()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -160,13 +198,13 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> ClaimsWebAPIIdTokenAsync()
+        public async Task<ActionResult> ClaimsWebAPIIdToken()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    using (var client = await GetWebAPIClientWithIdTokenAsync())
+                    using (var client = GetWebAPIClientWithIdToken())
                     {
                         var response = await client.GetAsync("Claims/ClaimsWebAPIIdToken");
                         if (!response.IsSuccessStatusCode)
@@ -188,7 +226,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        public async Task<IActionResult> GetBearerToken()
+        public async Task<ActionResult> GetBearerToken()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -217,6 +255,6 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
 
         }
-
+        */
     }
 }

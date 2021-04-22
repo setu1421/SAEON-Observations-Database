@@ -5,6 +5,9 @@ using System.Diagnostics;
 namespace SAEON.Observations.WebAPI.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
+#if ResponseCaching
+    [ResponseCache(Duration = Defaults.CacheDuration)]
+#endif
     public class HomeController : Controller
     {
         [Route("About")]
@@ -41,5 +44,6 @@ namespace SAEON.Observations.WebAPI.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

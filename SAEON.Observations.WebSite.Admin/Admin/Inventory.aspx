@@ -5,7 +5,6 @@
     <script type="text/javascript" src="../JS/generic.js"></script>
     <script type="text/javascript">
         var submitValue = function (format) {
-
             GridData.setValue(Ext.encode(InventoryGridFilters.buildQuery(InventoryGridFilters.getFilterData())));
             var viscolsNew = makenewJsonForExport(InventoryGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
 
