@@ -13,10 +13,10 @@ namespace SAEON.Observations.Core
             }
         }
 
-        public static string HtmlB(this string value)
-        {
-            return $"<b>{value}</b>";
-        }
+        //public static string HtmlB(this string value)
+        //{
+        //    return $"<b>{value}</b>";
+        //}
 
 #if NET5_0
         public static string ToCamelCase(this string value)

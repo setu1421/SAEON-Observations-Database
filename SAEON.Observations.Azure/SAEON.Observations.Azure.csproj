@@ -9,7 +9,7 @@
     <Description>SAEON Observations - Azure</Description>
     <Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.159</Version>
+    <Version>1.0.160</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SAEON.Azure.CosmosDB" Version="1.0.180" />
-    <PackageReference Include="SAEON.Azure.Storage" Version="1.0.75" />
+    <PackageReference Include="SAEON.Azure.CosmosDB" Version="1.0.186" />
+    <PackageReference Include="SAEON.Azure.Storage" Version="1.0.76" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
