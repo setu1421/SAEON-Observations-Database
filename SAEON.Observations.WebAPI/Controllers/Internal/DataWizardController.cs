@@ -301,7 +301,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 }
                 row["Value"] = obs.DataValue;
             }
-            if (SAEONLogs.Level == LogEventLevel.Verbose)
+            if (SAEONLogs.Level == LogEventLevel.Verbose && Config["SaveSearches"].IsTrue())
             {
                 var folder = $"{HostEnvironment.ContentRootPath.AddTrailingForwardSlash()}Searches/{result.Date:yyyyMM}";
                 Directory.CreateDirectory(folder);
