@@ -60,13 +60,13 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<UserDownload, UserDownload>()
-                    .ForMember(dest => dest.Id, opt => opt.Ignore())
-                    .ForMember(dest => dest.AddedBy, opt => opt.Ignore())
-                    .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
+                    .ForMember(dest => dest.Id, opt => opt.Ignore());
+                //.ForMember(dest => dest.AddedBy, opt => opt.Ignore())
+                //.ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
                 cfg.CreateMap<UserQuery, UserQuery>()
-                    .ForMember(dest => dest.Id, opt => opt.Ignore())
-                    .ForMember(dest => dest.AddedBy, opt => opt.Ignore())
-                    .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
+                    .ForMember(dest => dest.Id, opt => opt.Ignore());
+                //.ForMember(dest => dest.AddedBy, opt => opt.Ignore())
+                //.ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
             });
             Mapper = config.CreateMapper();
             TrackChanges = true;
@@ -80,6 +80,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         protected abstract bool IsEntityOk(TEntity item, bool isPost);
 
         protected abstract void SetEntity(ref TEntity item, bool isPost);
+        protected abstract void UpdateEntity(ref TEntity item, TEntity delta);
 
         public List<string> ModelStateErrors
         {
@@ -151,7 +152,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<ActionResult> PutById(Guid id, [FromBody] TEntity delta)
+        public virtual async Task<ActionResult> PutById(Guid id, [FromBody] TEntity delta)
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "id", id }, { "delta", delta } }))
             {
@@ -165,11 +166,11 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         return BadRequest("delta cannot be null");
                     }
                     SAEONLogs.Verbose("Updating {id} {@delta}", id, delta);
-                    if (!ModelState.IsValid)
-                    {
-                        SAEONLogs.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);
-                        return BadRequest(ModelState);
-                    }
+                    //if (!ModelState.IsValid)
+                    //{
+                    //    SAEONLogs.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);
+                    //    return BadRequest(ModelState);
+                    //}
                     if (id != delta.Id)
                     {
                         SAEONLogs.Error("{id} Id not same", id);
@@ -189,8 +190,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     try
                     {
                         //SAEONLogs.Verbose("Loaded {@item}", item);
-                        Mapper.Map(delta, item);
+                        //Mapper.Map(delta, item);
                         //SAEONLogs.Verbose("Mapped delta {@item}", item);
+                        UpdateEntity(ref item, delta);
                         SetEntity(ref item, false);
                         SAEONLogs.Verbose("Set {@item}", item);
                         await DbContext.SaveChangesAsync();

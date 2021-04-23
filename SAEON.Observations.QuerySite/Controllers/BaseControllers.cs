@@ -508,6 +508,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
+                    SAEONLogs.Verbose("Delta: {@Delta}", delta);
                     if (!ModelState.IsValid)
                     {
                         SAEONLogs.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);

@@ -1,8 +1,10 @@
-﻿using SAEON.Observations.Auth;
+﻿using Microsoft.AspNetCore.Mvc;
+using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
@@ -49,11 +51,25 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 throw new NullReferenceException("Not logged in");
             }
             item.UserId = userId;
+            var now = DateTime.Now;
             if (isPost)
             {
                 item.AddedBy = userId;
+                item.AddedAt = now;
             }
             item.UpdatedBy = userId;
+            item.UpdatedAt = now;
+        }
+
+        protected override void UpdateEntity(ref UserQuery item, UserQuery delta)
+        {
+            if (!string.IsNullOrEmpty(item.Name)) item.Name = delta.Name;
+            if (!string.IsNullOrEmpty(item.Description)) item.Description = delta.Description;
+        }
+
+        public override Task<ActionResult> PutById(Guid id, [FromBody, Bind("Id", "Name", "Description", "UserId")] UserQuery delta)
+        {
+            return base.PutById(id, delta);
         }
     }
 }
