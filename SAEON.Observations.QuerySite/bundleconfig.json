@@ -6,6 +6,12 @@
     ]
   },
   {
+    "outputFileName": "Scripts/DataWizard.min.js",
+    "inputFiles": [
+      "Scripts/DataWizard.js"
+    ]
+  },
+  {
     "outputFileName": "Content/SAEON.min.css",
     "inputFiles": [
       "Content/SAEON.css"

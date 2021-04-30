@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor
+<!DOCTYPE html>
 <html lang="en-za">
 <head>
     <meta http-equiv="Content-Type" content="text/html" />
@@ -12,13 +13,12 @@
         gtag('config', 'UA-128063984-6');
     </script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NBVJ0F9CEY"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=@AnalyticsHelper.Google4Tag(httpContextAccessor.HttpContext.Request)"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-
-        gtag('config', 'G-NBVJ0F9CEY');
+        gtag('config', '@AnalyticsHelper.Google4Tag(httpContextAccessor.HttpContext.Request)');
     </script>
     <!-- Clarity tracking code for http://observationsapi-test.saeon.ac.za/ -->
     <script>(function (c, l, a, r, i, t, y) { c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) }; t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt"; y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y); })(window, document, "clarity", "script", "6de2irdzig");</script>

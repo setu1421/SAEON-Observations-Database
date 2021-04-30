@@ -27,6 +27,14 @@
     void Session_Start(object sender, EventArgs e)
     {
         // Code that runs when a new session is started
+        if (Request.IsLocal || Request.Url.DnsSafeHost.ToLowerInvariant().Contains("-test"))
+        {
+            Session.Add("GATag", "G-ZG93KDRT46");
+        }
+        else
+        {
+            Session.Add("GATag", "G-5QHD56BYB0");
+        }
     }
 
     void Session_End(object sender, EventArgs e)
