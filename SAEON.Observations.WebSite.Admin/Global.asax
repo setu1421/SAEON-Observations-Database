@@ -29,11 +29,13 @@
         // Code that runs when a new session is started
         if (Request.IsLocal || Request.Url.DnsSafeHost.ToLowerInvariant().Contains("-test"))
         {
-            Session.Add("GATag", "G-ZG93KDRT46");
+            Session.Add("GA4Tag", "G-ZG93KDRT46");
+            Session.Add("ClarityTag","6j3zwxohjo");
         }
         else
         {
-            Session.Add("GATag", "G-5QHD56BYB0");
+            Session.Add("GA4Tag", "G-5QHD56BYB0");
+            Session.Add("ClarityTag","6dewe0cje3");
         }
     }
 

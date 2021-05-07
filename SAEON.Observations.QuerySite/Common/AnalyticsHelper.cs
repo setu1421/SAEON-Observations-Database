@@ -1,32 +1,34 @@
-﻿using System.Web;
+﻿using SAEON.Logs;
+using System.Web;
 
 namespace SAEON.Observations.QuerySite
 {
     public class AnalyticsHelper
     {
-        public static string Google4Tag(HttpRequest request)
+        private static bool IsLocal(HttpRequest request)
         {
-            if (request.Url.DnsSafeHost.ToLowerInvariant().Contains("-test"))
-            {
-                return "G-WE08ZKT2RG";
-            }
-            else
-            {
-                return "G-CLMPSTENQ6";
-            }
+            return request.IsLocal || request.Url.DnsSafeHost.ToLowerInvariant().Contains("-test");
         }
 
-        public static string ClarityTag(HttpRequest request)
+        public static string ApplicationInsightsKey(HttpRequest request)
         {
-            if (request.Url.DnsSafeHost.ToLowerInvariant().Contains("-test"))
-            {
-                return "G-WE08ZKT2RG";
-            }
-            else
-            {
-                return "6de1scpzw4";
-            }
+            return IsLocal(request) ? "ab8abeba-cc7e-4238-a3d1-00781fb48938" : "16bb3687-4016-4288-a1f6-432351d2d7c7";
         }
 
+        public static string GoogleGA4Key(HttpRequest request)
+        {
+            SAEONLogs.Verbose("Query Host: {Host} IsLocal: {IsLocal}", request.Url.DnsSafeHost, request.IsLocal);
+            return IsLocal(request) ? "G-WE08ZKT2RG" : "G-CLMPSTENQ6";
+        }
+
+        public static string GoogleUAKey(HttpRequest request)
+        {
+            return IsLocal(request) ? "UA-128063984-4" : "UA-128063984-5";
+        }
+
+        public static string ClarityKey(HttpRequest request)
+        {
+            return IsLocal(request) ? "6de1scpzw4" : "6dbvienruh";
+        }
     }
 }

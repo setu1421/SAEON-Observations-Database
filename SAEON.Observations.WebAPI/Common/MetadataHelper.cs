@@ -168,41 +168,40 @@ namespace SAEON.Observations.WebAPI
                                                 metaDataset.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(station.Name) });
                                                 metaDataset.Subjects.Add(new MetadataSubject { Name = dataset.PhenomenonName });
                                                 metaDataset.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName}" });
-                                                //metaDataset.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName} {dataset.OfferingName} {dataset.UnitName}" });
-                                                //foreach (var doiPeriodic in await dbContext
-                                                //     .DigitalObjectIdentifiers
-                                                //     .Include(i => i.Parent)
-                                                //     .Include(i => i.Children)
-                                                //     .Where(i => i.ParentId == doiDataset.Id)
-                                                //     .ToListAsync())
-                                                //{
-                                                //    var metaPeriodic = MetadataForDOI(doiPeriodic, metaDataset);
-                                                //    splits = doiPeriodic.Code.Split('~', StringSplitOptions.RemoveEmptyEntries);
-                                                //    var importBatchSummary = await dbContext.ImportBatchSummary.Include(i => i.ImportBatch).Where(i => i.Id == new Guid(splits[4])).SingleAsync();
-                                                //    var instrument = await dbContext.Instruments.SingleAsync(i => i.Id == importBatchSummary.InstrumentId);
-                                                //    var sensor = await dbContext.Sensors.SingleAsync(i => i.Id == importBatchSummary.SensorId);
-                                                //    metaPeriodic.StartDate = importBatchSummary.StartDate;
-                                                //    metaPeriodic.EndDate = importBatchSummary.EndDate;
-                                                //    metaPeriodic.LatitudeNorth = importBatchSummary.LatitudeNorth;
-                                                //    metaPeriodic.LatitudeSouth = importBatchSummary.LatitudeSouth;
-                                                //    metaPeriodic.LongitudeWest = importBatchSummary.LongitudeWest;
-                                                //    metaPeriodic.LongitudeEast = importBatchSummary.LongitudeEast;
-                                                //    metaPeriodic.ElevationMinimum = importBatchSummary.ElevationMinimum;
-                                                //    metaPeriodic.ElevationMaximum = importBatchSummary.ElevationMaximum;
-                                                //    metaPeriodic.Subjects.Add(new MetadataSubject { Name = dataset.StationName });
-                                                //    metaPeriodic.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}" });
-                                                //    metaPeriodic.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName} {dataset.OfferingName} {dataset.UnitName}" });
-                                                //    var periodicName = metaPeriodic.GenerateTitle($"{dataset.StationName}, instrument {instrument.Name}, sensor {sensor.Name} " +
-                                                //            $"of {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName} for import batch {importBatchSummary.ImportBatch.Code}");
-                                                //    metaPeriodic.Generate(periodicName, periodicName);
-                                                //    doiPeriodic.Title = metaPeriodic.Title;
-                                                //    doiPeriodic.MetadataJson = metaPeriodic.ToJson();
-                                                //    oldSha256 = doiPeriodic.MetadataJsonSha256;
-                                                //    doiPeriodic.MetadataJsonSha256 = doiPeriodic.MetadataJson.Sha256();
-                                                //    doiPeriodic.ODPMetadataNeedsUpdate = oldSha256 != doiPeriodic.MetadataJsonSha256;
-                                                //    doiPeriodic.MetadataHtml = metaPeriodic.ToHtml();
-                                                //    await dbContext.SaveChangesAsync();
-                                                //}
+                                                foreach (var doiPeriodic in await dbContext
+                                                     .DigitalObjectIdentifiers
+                                                     .Include(i => i.Parent)
+                                                     .Include(i => i.Children)
+                                                     .Where(i => i.ParentId == doiDataset.Id)
+                                                     .ToListAsync())
+                                                {
+                                                    var metaPeriodic = await MetadataForDOIAsync(doiPeriodic, metaDataset);
+                                                    splits = doiPeriodic.Code.Split('~', StringSplitOptions.RemoveEmptyEntries);
+                                                    var importBatchSummary = await dbContext.ImportBatchSummary.Include(i => i.ImportBatch).Where(i => i.Id == new Guid(splits[4])).SingleAsync();
+                                                    var instrument = await dbContext.Instruments.SingleAsync(i => i.Id == importBatchSummary.InstrumentId);
+                                                    var sensor = await dbContext.Sensors.SingleAsync(i => i.Id == importBatchSummary.SensorId);
+                                                    metaPeriodic.StartDate = importBatchSummary.StartDate;
+                                                    metaPeriodic.EndDate = importBatchSummary.EndDate;
+                                                    metaPeriodic.LatitudeNorth = importBatchSummary.LatitudeNorth;
+                                                    metaPeriodic.LatitudeSouth = importBatchSummary.LatitudeSouth;
+                                                    metaPeriodic.LongitudeWest = importBatchSummary.LongitudeWest;
+                                                    metaPeriodic.LongitudeEast = importBatchSummary.LongitudeEast;
+                                                    metaPeriodic.ElevationMinimum = importBatchSummary.ElevationMinimum;
+                                                    metaPeriodic.ElevationMaximum = importBatchSummary.ElevationMaximum;
+                                                    metaPeriodic.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(dataset.StationName) });
+                                                    metaPeriodic.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}" });
+                                                    metaPeriodic.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName}" });
+                                                    var periodicName = metaPeriodic.GenerateTitle($"{dataset.StationName}, instrument {instrument.Name}, sensor {sensor.Name} " +
+                                                            $"of {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName} for import batch {importBatchSummary.ImportBatch.Code}");
+                                                    metaPeriodic.Generate(periodicName, periodicName);
+                                                    doiPeriodic.Title = metaPeriodic.Title;
+                                                    doiPeriodic.MetadataJson = metaPeriodic.ToJson();
+                                                    oldSha256 = doiPeriodic.MetadataJsonSha256;
+                                                    doiPeriodic.MetadataJsonSha256 = doiPeriodic.MetadataJson.Sha256();
+                                                    doiPeriodic.ODPMetadataNeedsUpdate = oldSha256 != doiPeriodic.MetadataJsonSha256;
+                                                    doiPeriodic.MetadataHtml = metaPeriodic.ToHtml();
+                                                    await dbContext.SaveChangesAsync();
+                                                }
                                                 var datasetName = metaDataset.GenerateTitle($"{dataset.StationName} of {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName}");
                                                 metaDataset.Generate(datasetName, datasetName);
                                                 doiDataset.Title = metaDataset.Title;
@@ -218,6 +217,10 @@ namespace SAEON.Observations.WebAPI
                                             }
                                             metaStation.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(station.Name) });
                                             metaStation.Generate();
+                                            if (!string.IsNullOrWhiteSpace(station.Url))
+                                            {
+                                                metaStation.Title += $" {station.Url}";
+                                            }
                                             doiStation.Title = metaStation.Title;
                                             doiStation.MetadataJson = metaStation.ToJson();
                                             oldSha256 = doiStation.MetadataJsonSha256;
@@ -231,6 +234,10 @@ namespace SAEON.Observations.WebAPI
                                         }
                                         metaSite.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(site.Name) });
                                         metaSite.Generate();
+                                        if (!string.IsNullOrWhiteSpace(site.Url))
+                                        {
+                                            metaSite.Title += $" {site.Url}";
+                                        }
                                         doiSite.Title = metaSite.Title;
                                         doiSite.MetadataJson = metaSite.ToJson();
                                         oldSha256 = doiSite.MetadataJsonSha256;
@@ -244,6 +251,10 @@ namespace SAEON.Observations.WebAPI
                                     }
                                     metaProject.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(project.Name) });
                                     metaProject.Generate();
+                                    if (!string.IsNullOrWhiteSpace(project.Url))
+                                    {
+                                        metaProject.Title += $" {project.Url}";
+                                    }
                                     doiProject.Title = metaProject.Title;
                                     doiProject.MetadataJson = metaProject.ToJson();
                                     oldSha256 = doiProject.MetadataJsonSha256;
@@ -257,6 +268,10 @@ namespace SAEON.Observations.WebAPI
                                 }
                                 metaProgramme.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(programme.Name) });
                                 metaProgramme.Generate();
+                                if (!string.IsNullOrWhiteSpace(programme.Url))
+                                {
+                                    metaProgramme.Title += $" {programme.Url}";
+                                }
                                 doiProgramme.Title = metaProgramme.Title;
                                 doiProgramme.MetadataJson = metaProgramme.ToJson();
                                 oldSha256 = doiProgramme.MetadataJsonSha256;
@@ -270,6 +285,10 @@ namespace SAEON.Observations.WebAPI
                             }
                             metaOrganisation.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(organisation.Name) });
                             metaOrganisation.Generate();
+                            if (!string.IsNullOrWhiteSpace(organisation.Url))
+                            {
+                                metaOrganisation.Title += $" {organisation.Url}";
+                            }
                             doiOrganisation.Title = metaOrganisation.Title;
                             doiOrganisation.MetadataJson = metaOrganisation.ToJson();
                             oldSha256 = doiOrganisation.MetadataJsonSha256;

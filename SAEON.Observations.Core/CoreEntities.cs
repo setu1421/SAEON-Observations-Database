@@ -446,6 +446,7 @@ namespace SAEON.Observations.Core
         public double? ElevationMaximum { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public int? VerifiedCount { get; set; }
 
         // Navigation
         [JsonIgnore, SwaggerIgnore]

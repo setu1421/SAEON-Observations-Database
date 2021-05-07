@@ -260,6 +260,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             result.DataMatrix.AddColumn("Value", MaxtixDataType.mdtDouble);
             result.DataMatrix.AddColumn("Instrument", MaxtixDataType.mdtString);
             result.DataMatrix.AddColumn("Sensor", MaxtixDataType.mdtString);
+            result.DataMatrix.AddColumn("Comment", MaxtixDataType.mdtString);
             int nRow = 0;
             foreach (var obs in observations)
             {
@@ -291,6 +292,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     row["Elevation"] = obs.Elevation;
                     row["Instrument"] = obs.InstrumentName;
                     row["Sensor"] = obs.SensorName;
+                    row["Comment"] = obs.Comment;
                     siteId = obs.SiteId;
                     stationId = obs.StationId;
                     phenomenonId = obs.PhenomenonId;

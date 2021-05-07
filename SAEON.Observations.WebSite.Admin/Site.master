@@ -7,8 +7,6 @@
     <link href="Styles/Site.css" rel="stylesheet" type="text/css" />
     <meta name="google-site-verification" content="X5PEowbP3hWPiigk5XU_VSVb79bjwBjAumMd0SnanjM" />
     <meta name="msvalidate.01" content="C8A2A99147917721302B2895028A760C" />
-    <!-- Clarity tracking code for https://observationsadmin.saeon.ac.za/ -->
-    <script>    (function (c, l, a, r, i, t, y) { c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) }; t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt"; y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y); })(window, document, "clarity", "script", "6dewe0cje3");</script>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
     <script type="text/javascript">
@@ -25,13 +23,21 @@
         </Listeners>
     </ext:ResourceManager>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<%=Session["GATag"]%>"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<%=Session["GA4Tag"]%>"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
-        gtag('config', '<%=Session["GATag"]%>');
+        gtag('config', '<%=Session["GA4Tag"]%>');
+    </script>
+    <!-- Clarity tracking code for http://observationsadmin.saeon.ac.za -->
+    <script>
+        (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt";
+            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+        })(window, document, "clarity", "script", "<%=Session["ClarityTag"]%>");
     </script>
     <form id="form1" runat="server">
         <div>
