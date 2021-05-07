@@ -33,3 +33,5 @@ from
   DigitalObjectIdentifiers Child
   left join DigitalObjectIdentifiers Parent
     on (Child.ParentID = Parent.ID)
+order by
+  DOI

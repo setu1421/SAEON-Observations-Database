@@ -92,7 +92,13 @@ from
 	   (d.ValueDate = o.ValueDate) and
 	   (d.PhenomenonOfferingID = o.PhenomenonOfferingID) and
 	   (d.PhenomenonUOMID = o.PhenomenonUOMID) and
-	   (((d.Elevation is null) and (o.Elevation is null)) or (d.Elevation = o.Elevation))
+	   (d.PhenomenonUOMID = o.PhenomenonUOMID) --and
+	   --(((d.Elevation is null) and (o.Elevation is null)) or
+	   -- ((d.Elevation is null) and (o.Elevation is not null)) or
+	   -- ((d.Elevation is not null) and (o.Elevation is null)) or
+	   -- ((d.Elevation is not null) and (o.Elevation is not null)))
+	    --(d.Elevation = o.Elevation))
+	   --(((d.Elevation is null) and (o.Elevation is null)) or (d.Elevation = o.Elevation))
   inner join ImportBatch
     on (o.ImportBatchID = ImportBatch.ID)
   inner join PhenomenonOffering
