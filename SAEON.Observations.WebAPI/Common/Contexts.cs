@@ -29,8 +29,8 @@ namespace SAEON.Observations.WebAPI
         public DbSet<DataSource> DataSources { get; set; }
         public DbSet<DataSourceType> DataSourceTypes { get; set; }
         public DbSet<DigitalObjectIdentifier> DigitalObjectIdentifiers { get; set; }
-        public DbSet<ImportBatch> ImportBatch { get; set; }
-        public DbSet<ImportBatchSummary> ImportBatchSummary { get; set; }
+        public DbSet<ImportBatch> ImportBatches { get; set; }
+        public DbSet<ImportBatchSummary> ImportBatchSummaries { get; set; }
         public DbSet<Instrument> Instruments { get; set; }
         public DbSet<Offering> Offerings { get; set; }
         public DbSet<Organisation> Organisations { get; set; }

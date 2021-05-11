@@ -168,40 +168,43 @@ namespace SAEON.Observations.WebAPI
                                                 metaDataset.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(station.Name) });
                                                 metaDataset.Subjects.Add(new MetadataSubject { Name = dataset.PhenomenonName });
                                                 metaDataset.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName}" });
-                                                foreach (var doiPeriodic in await dbContext
-                                                     .DigitalObjectIdentifiers
-                                                     .Include(i => i.Parent)
-                                                     .Include(i => i.Children)
-                                                     .Where(i => i.ParentId == doiDataset.Id)
-                                                     .ToListAsync())
-                                                {
-                                                    var metaPeriodic = await MetadataForDOIAsync(doiPeriodic, metaDataset);
-                                                    splits = doiPeriodic.Code.Split('~', StringSplitOptions.RemoveEmptyEntries);
-                                                    var importBatchSummary = await dbContext.ImportBatchSummary.Include(i => i.ImportBatch).Where(i => i.Id == new Guid(splits[4])).SingleAsync();
-                                                    var instrument = await dbContext.Instruments.SingleAsync(i => i.Id == importBatchSummary.InstrumentId);
-                                                    var sensor = await dbContext.Sensors.SingleAsync(i => i.Id == importBatchSummary.SensorId);
-                                                    metaPeriodic.StartDate = importBatchSummary.StartDate;
-                                                    metaPeriodic.EndDate = importBatchSummary.EndDate;
-                                                    metaPeriodic.LatitudeNorth = importBatchSummary.LatitudeNorth;
-                                                    metaPeriodic.LatitudeSouth = importBatchSummary.LatitudeSouth;
-                                                    metaPeriodic.LongitudeWest = importBatchSummary.LongitudeWest;
-                                                    metaPeriodic.LongitudeEast = importBatchSummary.LongitudeEast;
-                                                    metaPeriodic.ElevationMinimum = importBatchSummary.ElevationMinimum;
-                                                    metaPeriodic.ElevationMaximum = importBatchSummary.ElevationMaximum;
-                                                    metaPeriodic.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(dataset.StationName) });
-                                                    metaPeriodic.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}" });
-                                                    metaPeriodic.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName}" });
-                                                    var periodicName = metaPeriodic.GenerateTitle($"{dataset.StationName}, instrument {instrument.Name}, sensor {sensor.Name} " +
-                                                            $"of {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName} for import batch {importBatchSummary.ImportBatch.Code}");
-                                                    metaPeriodic.Generate(periodicName, periodicName);
-                                                    doiPeriodic.Title = metaPeriodic.Title;
-                                                    doiPeriodic.MetadataJson = metaPeriodic.ToJson();
-                                                    oldSha256 = doiPeriodic.MetadataJsonSha256;
-                                                    doiPeriodic.MetadataJsonSha256 = doiPeriodic.MetadataJson.Sha256();
-                                                    doiPeriodic.ODPMetadataNeedsUpdate = oldSha256 != doiPeriodic.MetadataJsonSha256;
-                                                    doiPeriodic.MetadataHtml = metaPeriodic.ToHtml();
-                                                    await dbContext.SaveChangesAsync();
-                                                }
+                                                //foreach (var doiPeriodic in await dbContext
+                                                //     .DigitalObjectIdentifiers
+                                                //     .Include(i => i.Parent)
+                                                //     .Include(i => i.Children)
+                                                //     .Where(i => i.ParentId == doiDataset.Id)
+                                                //     .ToListAsync())
+                                                //{
+                                                //    var metaPeriodic = await MetadataForDOIAsync(doiPeriodic, metaDataset);
+                                                //    splits = doiPeriodic.Code.Split('~', StringSplitOptions.RemoveEmptyEntries);
+                                                //    var importBatchSummary = await dbContext.ImportBatchSummary.Include(i => i.ImportBatch).Where(i => i.Id == new Guid(splits[4])).SingleAsync();
+                                                //    var instrument = await dbContext.Instruments.SingleAsync(i => i.Id == importBatchSummary.InstrumentId);
+                                                //    var sensor = await dbContext.Sensors.SingleAsync(i => i.Id == importBatchSummary.SensorId);
+                                                //    metaPeriodic.StartDate = importBatchSummary.StartDate;
+                                                //    metaPeriodic.EndDate = importBatchSummary.EndDate;
+                                                //    metaPeriodic.LatitudeNorth = importBatchSummary.LatitudeNorth;
+                                                //    metaPeriodic.LatitudeSouth = importBatchSummary.LatitudeSouth;
+                                                //    metaPeriodic.LongitudeWest = importBatchSummary.LongitudeWest;
+                                                //    metaPeriodic.LongitudeEast = importBatchSummary.LongitudeEast;
+                                                //    metaPeriodic.ElevationMinimum = importBatchSummary.ElevationMinimum;
+                                                //    metaPeriodic.ElevationMaximum = importBatchSummary.ElevationMaximum;
+                                                //    metaPeriodic.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(dataset.StationName) });
+                                                //    metaPeriodic.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}" });
+                                                //    metaPeriodic.Subjects.Add(new MetadataSubject { Name = $"{dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName}" });
+                                                //    var periodicName = metaPeriodic.GenerateTitle($"{dataset.StationName}, instrument {instrument.Name}, sensor {sensor.Name} " +
+                                                //            $"of {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName} for import batch {importBatchSummary.ImportBatch.Code}");
+                                                //    metaPeriodic.Generate(periodicName, periodicName);
+                                                //    doiPeriodic.Title = metaPeriodic.Title;
+                                                //    doiPeriodic.MetadataJson = metaPeriodic.ToJson();
+                                                //    oldSha256 = doiPeriodic.MetadataJsonSha256;
+                                                //    doiPeriodic.MetadataJsonSha256 = doiPeriodic.MetadataJson.Sha256();
+                                                //    doiPeriodic.ODPMetadataNeedsUpdate = oldSha256 != doiPeriodic.MetadataJsonSha256;
+                                                //    doiPeriodic.MetadataHtml = metaPeriodic.ToHtml();
+                                                //    doiPeriodic.CitationHtml = metaPeriodic.CitationHtml;
+                                                //    doiPeriodic.CitationText = metaPeriodic.CitationText;
+                                                //    doiPeriodic.QueryUrl = $"https://observations.saeon.ac.za/Download/{doiPeriodic.DOI}";
+                                                //    await dbContext.SaveChangesAsync();
+                                                //}
                                                 var datasetName = metaDataset.GenerateTitle($"{dataset.StationName} of {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName}");
                                                 metaDataset.Generate(datasetName, datasetName);
                                                 doiDataset.Title = metaDataset.Title;
@@ -212,7 +215,7 @@ namespace SAEON.Observations.WebAPI
                                                 doiDataset.MetadataHtml = metaDataset.ToHtml();
                                                 doiDataset.CitationHtml = metaDataset.CitationHtml;
                                                 doiDataset.CitationText = metaDataset.CitationText;
-                                                doiDataset.QueryUrl = $"https://observations.saeon.ac.za/Download/{doiDataset.DOI}";
+                                                doiDataset.SetUrls();
                                                 await dbContext.SaveChangesAsync();
                                             }
                                             metaStation.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(station.Name) });
@@ -229,7 +232,7 @@ namespace SAEON.Observations.WebAPI
                                             doiStation.MetadataHtml = metaStation.ToHtml();
                                             doiStation.CitationHtml = metaStation.CitationHtml;
                                             doiStation.CitationText = metaStation.CitationText;
-                                            doiStation.QueryUrl = $"https://observations.saeon.ac.za/Download/{doiStation.DOI}";
+                                            doiStation.SetUrls();
                                             await dbContext.SaveChangesAsync();
                                         }
                                         metaSite.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(site.Name) });
@@ -246,7 +249,7 @@ namespace SAEON.Observations.WebAPI
                                         doiSite.MetadataHtml = metaSite.ToHtml();
                                         doiSite.CitationHtml = metaSite.CitationHtml;
                                         doiSite.CitationText = metaSite.CitationText;
-                                        doiSite.QueryUrl = $"https://observations.saeon.ac.za/Download/{doiSite.DOI}";
+                                        doiSite.SetUrls();
                                         await dbContext.SaveChangesAsync();
                                     }
                                     metaProject.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(project.Name) });
@@ -263,7 +266,7 @@ namespace SAEON.Observations.WebAPI
                                     doiProject.MetadataHtml = metaProject.ToHtml();
                                     doiProject.CitationHtml = metaProject.CitationHtml;
                                     doiProject.CitationText = metaProject.CitationText;
-                                    doiProject.QueryUrl = $"https://observations.saeon.ac.za/Download/{doiProject.DOI}";
+                                    doiProject.SetUrls();
                                     await dbContext.SaveChangesAsync();
                                 }
                                 metaProgramme.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(programme.Name) });
@@ -280,7 +283,7 @@ namespace SAEON.Observations.WebAPI
                                 doiProgramme.MetadataHtml = metaProgramme.ToHtml();
                                 doiProgramme.CitationHtml = metaProgramme.CitationHtml;
                                 doiProgramme.CitationText = metaProgramme.CitationText;
-                                doiProgramme.QueryUrl = $"https://observations.saeon.ac.za/Download/{doiProgramme.DOI}";
+                                doiProgramme.SetUrls();
                                 await dbContext.SaveChangesAsync();
                             }
                             metaOrganisation.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(organisation.Name) });
@@ -297,7 +300,7 @@ namespace SAEON.Observations.WebAPI
                             doiOrganisation.MetadataHtml = metaOrganisation.ToHtml();
                             doiOrganisation.CitationHtml = metaOrganisation.CitationHtml;
                             doiOrganisation.CitationText = metaOrganisation.CitationText;
-                            doiOrganisation.QueryUrl = $"https://observations.saeon.ac.za/Download/{doiOrganisation.DOI}";
+                            doiOrganisation.SetUrls();
                             await dbContext.SaveChangesAsync();
                         }
 
@@ -323,7 +326,7 @@ namespace SAEON.Observations.WebAPI
                         doiDynamics.MetadataHtml = metaDynamics.ToHtml();
                         doiDynamics.CitationHtml = metaDynamics.CitationHtml;
                         doiDynamics.CitationText = metaDynamics.CitationText;
-                        doiDynamics.QueryUrl = $"https://observations.saeon.ac.za/Download/{doiDynamics.DOI}";
+                        doiDynamics.SetUrls();
 
                         // PeriodicDOIs collection
                         metaPeriodics.Generate("Collection of Periodic DOIs in the SAEON Observations Database", "The collection of Periodic DOIs in the SAEON Observations Database");
@@ -335,7 +338,7 @@ namespace SAEON.Observations.WebAPI
                         doiPeriodics.MetadataHtml = metaPeriodics.ToHtml();
                         doiPeriodics.CitationHtml = metaPeriodics.CitationHtml;
                         doiPeriodics.CitationText = metaPeriodics.CitationText;
-                        doiPeriodics.QueryUrl = $"https://observations.saeon.ac.za/Download/{doiPeriodics.DOI}";
+                        doiPeriodics.SetUrls();
 
                         // AdHocDOIs collection
                         metaAdHocs.Generate("Collection of AdHoc DOIs in the SAEON Observations Database", "The collection of AdHoc DOIs in the SAEON Observations Database");
@@ -347,7 +350,7 @@ namespace SAEON.Observations.WebAPI
                         doiAdHocs.MetadataHtml = metaAdHocs.ToHtml();
                         doiAdHocs.CitationHtml = metaAdHocs.CitationHtml;
                         doiAdHocs.CitationText = metaAdHocs.CitationText;
-                        doiAdHocs.QueryUrl = $"https://observations.saeon.ac.za/Download/{doiAdHocs.DOI}";
+                        doiAdHocs.SetUrls();
 
                         // Whole collection
                         metaObservations.Generate("Complete collection of observations in the SAEON Observations Database",
@@ -360,7 +363,7 @@ namespace SAEON.Observations.WebAPI
                         doiObservations.MetadataHtml = metaObservations.ToHtml();
                         doiObservations.CitationHtml = metaObservations.CitationHtml;
                         doiObservations.CitationText = metaObservations.CitationText;
-                        doiObservations.QueryUrl = $"https://observations.saeon.ac.za/Download/{doiObservations.DOI}";
+                        doiObservations.SetUrls();
                         await dbContext.SaveChangesAsync();
                     }
                 }

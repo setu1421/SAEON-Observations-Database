@@ -1,0 +1,26 @@
+[
+  {
+    "outputFileName": "Scripts/Admin.min.js",
+    "inputFiles": [
+      "Scripts/Admin.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/DataWizard.min.js",
+    "inputFiles": [
+      "Scripts/DataWizard.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/SAEON.min.css",
+    "inputFiles": [
+      "Content/SAEON.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/Site.min.css",
+    "inputFiles": [
+      "Content/Site.css"
+    ]
+  }
+]

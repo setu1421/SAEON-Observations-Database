@@ -1,0 +1,109 @@
+﻿@model SAEON.Observations.QuerySite.Models.DataWizardModel
+@using System.Configuration;
+@{
+    ViewBag.Title = "Data";
+}
+<div id="waiting">
+    @Html.EJ().WaitingPopup("waiting").Text("Please wait...").ShowOnInit(true)
+    <div class="row">
+        <div class="col-md">
+            @(Html.EJ().Tab("DataWizardTabs").Items(tabs =>
+                {
+                    tabs.Add().ID("LocationsTab").Text("Locations")
+                        .ContentTemplate(
+                                @<div class="row">
+                                    <div class="col-md-6" id="PartialLocations">
+                                        @Html.Partial("_Locations", Model)
+                                    </div>
+                                    <div class="col-md-6" id="PartialLocationsSelected">
+                                    </div>
+                                </div>);
+                        tabs.Add().ID("VariablesTab").Text("Variables").ContentTemplate(
+                                @<div class="row">
+                                    <div class="col-md-6" id="PartialVariables">
+                                        @Html.Partial("_Variables", Model)
+                                    </div>
+                                    <div class="col-md-6" id="PartialVariablesSelected">
+                                    </div>
+                                </div>);
+                tabs.Add().ID("FiltersTab").Text("Filters").ContentTemplate(
+                        @<div class="row">
+                            <div class="col-md" id="PartialFilters">
+                                @Html.Partial("_Filters", Model)
+                            </div>
+                        </div>);
+        tabs.Add().ID("StationsMapTab").Text("Stations").ContentTemplate(
+            @<div class="row">
+                <div class="col-md" id="PartialStationsMap">
+                    @Html.Partial("_StationsMap", Model)
+                </div>
+            </div>);
+tabs.Add().ID("TableTab").Text("Table").ContentTemplate(
+        @<div class="row">
+            <div class="col-md" id="PartialTable">
+            </div>
+        </div>);
+tabs.Add().ID("ChartTab").Text("Chart").ContentTemplate(
+@<div class="row">
+    <div class="col-md-12" id="PartialChart">
+    </div>
+    <div class="col-md">
+        <i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Use mouse wheel to zoom, scrollbars to scroll and zoom, click on legend to enable/disable series"></i>
+    </div>
+</div>
+);
+})
+.ClientSideEvents(ev => ev.ItemActive("DataWizard.TabActive"))
+.ClientSideEvents(ev => ev.Create("DataWizard.TabCreate")))
+        </div>
+    </div>
+    <div class="row PaddedRow">
+        <div class="col-md" id="PartialButtons">
+            @Html.Partial("_Buttons", Model)
+        </div>
+    </div>
+    <div id="PartialApproximation">
+        @Html.Partial("_Approximation", Model)
+    </div>
+</div>
+@section Scripts {
+    <script type="module">
+        import * as DataWizard from "/Scripts/DataWizard.js";
+        window.DataWizard = DataWizard;
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            //DataWizard.Testing();
+            DataWizard.HideResults();
+        });
+        function waitForMap() {
+            if (typeof DataWizard !== "undefined") {
+                DataWizard.InitMap();
+            }
+            else {
+                setTimeout(waitForMap, 250);
+            }
+        }
+        window.InitMap = function () {
+            waitForMap();
+        }
+    </script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=@ConfigurationManager.AppSettings["GoogleMapsAPIKey"]&callback=InitMap"></script>
+}
+<style type="text/css" class="cssStyles">
+    #target {
+        margin: 0 auto;
+    }
+
+    #target_WaitingPopup .e-image {
+        display: block;
+        height: 70px;
+    }
+
+    #popup {
+        height: auto;
+        width: auto;
+        margin-top: 100px;
+    }
+</style>

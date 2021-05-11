@@ -910,7 +910,16 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                     }
                                 }
                                 // Summaries
-                                CreateSummary(connScope, batch.Id);
+                                try
+                                {
+                                    CreateSummary(connScope, batch.Id);
+                                }
+                                catch (Exception ex)
+                                {
+                                    SAEONLogs.Exception(ex);
+                                    throw;
+                                }
+
                                 // Documents
 #if UseCosmosDb
                                 CreateCosmosDBItems(connScope, batch.Id);

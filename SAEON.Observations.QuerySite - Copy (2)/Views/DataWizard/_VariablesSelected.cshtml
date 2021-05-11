@@ -1,0 +1,13 @@
+﻿@using SAEON.Observations.QuerySite.Models
+@model DataWizardModel
+@(Html.EJ()
+    .ListView("listViewVariablesSelected")
+    .DataSource(Model.VariableNodesSelected.Where(i => i.Key.StartsWith("UNI~")).ToList())
+    .ShowHeader(true)
+    .HeaderTitle("Selected")
+    .FieldSettings(fs => fs.Text("Name"))
+)
+
+
+
+

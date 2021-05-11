@@ -397,8 +397,15 @@ namespace SAEON.Observations.Core
         public List<ImportBatchSummary> ImportBatchSummaries { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public List<UserDownload> UserDownloads { get; set; }
+
+        public void SetUrls()
+        {
+            MetadataUrl = $"https://catalogue.saeon.ac.za/records/{DOI}";
+            QueryUrl = $"https://observations.saeon.ac.za/Download/{DOI}";
+        }
     }
 
+    [Table("ImportBatch")]
     public class ImportBatch : GuidIdEntity
     {
         public int Code { get; set; }
@@ -417,9 +424,12 @@ namespace SAEON.Observations.Core
 
         // Navigation
         [JsonIgnore, SwaggerIgnore]
+        public DataSource DataSource { get; set; }
+        [JsonIgnore, SwaggerIgnore]
         public List<ImportBatchSummary> ImportBatchSummaries { get; set; }
     }
 
+    [Table("ImportBatchSummary")]
     public class ImportBatchSummary : GuidIdEntity
     {
         public Guid ImportBatchId { get; set; }

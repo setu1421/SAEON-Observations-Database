@@ -4,7 +4,6 @@ using Newtonsoft.Json.Linq;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Core;
-using SAEON.Observations.WebAPI.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -126,6 +125,14 @@ namespace SAEON.Observations.WebAPI
                 }
             }
             // Periodic children
+            if (DOI.DOIType == DOIType.Collection && DOI.Code == DOIHelper.PeriodicDOIsCode)
+            {
+                var children = DOI.Children.Where(i => i.DOIType == DOIType.Periodic).OrderBy(i => i.Name).ToList();
+                foreach (var child in children)
+                {
+                    RelatedIdentifiers.Add(new MetadataRelatedIdentifier { Name = "HasPart", Identifier = child.DOI, Type = "DOI" });
+                }
+            }
             // Ad-Hoc children
             if (DOI.DOIType == DOIType.Collection && DOI.Code == DOIHelper.AdHocDOIsCode)
             {
