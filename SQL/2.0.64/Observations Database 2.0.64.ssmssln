@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\Digital Object Identifiers.sql = ..\Digital Object Identifiers.sql
 		..\Data cleanup\Duplicate Observations Lookup.sql = ..\Data cleanup\Duplicate Observations Lookup.sql
 		..\Data cleanup\Duplicate Observations.sql = ..\Data cleanup\Duplicate Observations.sql
-		Fix SACTN null ProjectIDs.sql = Fix SACTN null ProjectIDs.sql
+		Fix null ProjectIDs.sql = Fix null ProjectIDs.sql
 		..\Data cleanup\ImportBatchesSummary create.sql = ..\Data cleanup\ImportBatchesSummary create.sql
 		Observations.2.64.publish.sql = Observations.2.64.publish.sql
 		Observations.2.64.publish.txt = Observations.2.64.publish.txt
@@ -28,7 +28,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8B2DA37C-EE5E-435F-9368-A975D02042A9}.Default|Default.ActiveCfg = Default
+		{181BA8FB-4644-413C-8DF0-FAF6563E29C1}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

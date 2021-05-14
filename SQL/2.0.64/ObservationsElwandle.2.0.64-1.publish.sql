@@ -51,14 +51,6 @@ USE [$(DatabaseName)];
 
 
 GO
-/*
-The column [dbo].[UserDownloads].[Title] is being dropped, data loss could occur.
-*/
-
-IF EXISTS (select top 1 1 from [dbo].[UserDownloads])
-    RAISERROR (N'Rows were detected. The schema update is terminating because data loss might occur.', 16, 127) WITH NOWAIT
-
-GO
 PRINT N'Dropping Index [dbo].[Observation].[IX_Observation_ValueDecade]...';
 
 
@@ -108,27 +100,6 @@ GO
 CREATE NONCLUSTERED INDEX [IX_Observation_ValueYear]
     ON [dbo].[Observation]([ValueYear] ASC)
     ON [Observations];
-
-
-GO
-PRINT N'Altering Table [dbo].[UserDownloads]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-ALTER TABLE [dbo].[UserDownloads] DROP COLUMN [Title];
-
-
-GO
-ALTER TABLE [dbo].[UserDownloads]
-    ADD [IsDeleted] BIT NULL;
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
@@ -212,7 +183,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing View [dbo].[vUserDownloads]...';
+PRINT N'Altering View [dbo].[vInventoryDatasets]...';
 
 
 GO
@@ -220,9 +191,43 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vUserDownloads]';
-
-
+ALTER VIEW [dbo].[vInventoryDatasets]
+AS 
+Select
+  Row_Number() over (order by StationCode, PhenomenonCode, OfferingCode, UnitOfMeasureCode) ID, s.*
+from
+(
+Select
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
+  SiteID, SiteCode, SiteName, SiteDescription, SiteUrl,
+  StationID, StationCode, StationName, StationDescription, StationUrl,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription, PhenomenonUrl,
+  PhenomenonOfferingID, OfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
+  Sum(Count) Count,
+  Sum(VerifiedCount) VerifiedCount,
+  Min(StartDate) StartDate,
+  Max(EndDate) EndDate,
+  Max(LatitudeNorth) LatitudeNorth,
+  Min(LatitudeSouth) LatitudeSouth,
+  Min(LongitudeWest) LongitudeWest,
+  Max(LongitudeEast) LongitudeEast,
+  Min(ElevationMinimum) ElevationMinimum,
+  Max(ElevationMaximum) ElevationMaximum
+from
+  vImportBatchSummary
+group by
+  OrganisationID, OrganisationCode, OrganisationName, OrganisationDescription, OrganisationUrl,
+  ProgrammeID, ProgrammeCode, ProgrammeName, ProgrammeDescription, ProgrammeUrl,
+  ProjectID, ProjectCode, ProjectName, ProjectDescription, ProjectUrl,
+  SiteID, SiteCode, SiteName, SiteDescription, SiteUrl,
+  StationID, StationCode, StationName, StationDescription, StationUrl,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription, PhenomenonUrl,
+  PhenomenonOfferingID, OfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol
+) s
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
