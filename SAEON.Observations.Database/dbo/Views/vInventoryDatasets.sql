@@ -14,6 +14,7 @@ Select
   PhenomenonOfferingID, OfferingID, OfferingCode, OfferingName, OfferingDescription,
   PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
   Sum(Count) Count,
+  Sum(VerifiedCount) VerifiedCount,
   Min(StartDate) StartDate,
   Max(EndDate) EndDate,
   Max(LatitudeNorth) LatitudeNorth,

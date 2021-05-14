@@ -191,14 +191,14 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 "    Count(*)" + Environment.NewLine +
                 "  from" + Environment.NewLine +
                 "    Observation" + Environment.NewLine +
-                "    inner join Status" + Environment.NewLine +
+                "    left join Status" + Environment.NewLine +
                 "      on (Observation.StatusID = Status.ID)" + Environment.NewLine +
                 "  where" + Environment.NewLine +
                 "    ((Observation.ImportBatchID = vObservationExpansion.ImportBatchID) and" + Environment.NewLine +
                 "     (Observation.SensorID = vObservationExpansion.SensorID) and" + Environment.NewLine +
                 "     (Observation.PhenomenonOfferingID = vObservationExpansion.PhenomenonOfferingID) and" + Environment.NewLine +
                 "     (Observation.PhenomenonUOMID = vObservationExpansion.PhenomenonUOMID) and" + Environment.NewLine +
-                "     (Status.Name = 'Verified'))" + Environment.NewLine +
+                "     ((Observation.StatusID is null) or (Status.Name = 'Verified')))" + Environment.NewLine +
                 "  ) VerifiedCount" + Environment.NewLine +
                 "from" + Environment.NewLine +
                 "  vObservationExpansion" + Environment.NewLine +

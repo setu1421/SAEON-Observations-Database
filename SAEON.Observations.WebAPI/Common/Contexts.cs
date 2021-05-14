@@ -50,7 +50,7 @@ namespace SAEON.Observations.WebAPI
         // Views
         public DbSet<VLocation> VLocations { get; set; }
         public DbSet<VFeature> VFeatures { get; set; }
-        public DbSet<VImportBatchSummary> VImportBatchSummary { get; set; }
+        public DbSet<VImportBatchSummaries> VImportBatchSummary { get; set; }
         public DbSet<InventoryDataset> InventoryDatasets { get; set; }
         public DbSet<InventorySensor> InventorySensors { get; set; }
         public DbSet<VObservationExpansion> VObservationExpansions { get; set; }

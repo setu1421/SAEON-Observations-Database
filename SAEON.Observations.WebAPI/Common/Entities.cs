@@ -15,8 +15,8 @@ namespace SAEON.Observations.Core
         //public List<Organisation> Organisations { get; set; }
     }
 
-    //[Table("vImportBatchSummary")]
-    public class VImportBatchSummary : GuidIdEntity
+    [Table("vImportBatchSummary")]
+    public class VImportBatchSummaries : GuidIdEntity
     {
         public Guid ImportBatchId { get; set; }
 
@@ -75,7 +75,8 @@ namespace SAEON.Observations.Core
         public string UnitName { get; set; }
         [Column("UnitOfMeasureSymbol")]
         public string UnitSymbol { get; set; }
-        public int Count { get; set; }
+        public int? Count { get; set; }
+        public int? VerifiedCount { get; set; }
         public double? Minimum { get; set; }
         public double? Maximum { get; set; }
         public double? Average { get; set; }

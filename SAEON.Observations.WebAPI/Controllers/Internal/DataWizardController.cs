@@ -44,7 +44,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             //SAEONLogs.Verbose("Processed Input: {@Input}", input);
         }
 
-        private IQueryable<VImportBatchSummary> GetSummaryQuery(ref DataWizardDataInput input)
+        private IQueryable<VImportBatchSummaries> GetSummaryQuery(ref DataWizardDataInput input)
         {
             CleanInput(ref input);
             SAEONLogs.Verbose("Input: {@Input}", input);
@@ -64,7 +64,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             return result.AsQueryable();
         }
 
-        private List<VImportBatchSummary> GetSummary(ref DataWizardDataInput input)
+        private List<VImportBatchSummaries> GetSummary(ref DataWizardDataInput input)
         {
             CleanInput(ref input);
             SAEONLogs.Verbose("Input: {@Input}", input);
@@ -92,8 +92,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 {
                     SAEONLogs.Verbose("Input: {@Input}", input);
                     var q = GetSummary(ref input);
-                    var rows = q.Sum(i => i.Count);
-                    //var rows = q.Select(i => i.Count).ToList().Sum();
+                    var rows = q.Sum(i => i.VerifiedCount ?? 0);
                     var result = new DataWizardApproximation
                     {
                         RowCount = rows
