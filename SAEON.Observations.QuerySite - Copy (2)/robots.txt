@@ -1,7 +1,0 @@
-﻿# Allow all
-User-agent: *
-Allow: /
-Disallow: /Admin/
-Disallow: /Account/
-
-Sitemap: https://observations-test.saeon.ac.za/sitemap.xml
