@@ -40,7 +40,8 @@
     CONSTRAINT [FK_DataLog_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]),
     CONSTRAINT [FK_DataLog_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]),
     CONSTRAINT [FK_DataLog_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]),
-    CONSTRAINT [UX_DataLog] Unique ([ImportBatchID], [SensorID], [ValueDate], [RawValue], [PhenomenonOfferingID], [PhenomenonUOMID])
+    -- Cant have unique index else duplicates wont be logged
+    --CONSTRAINT [UX_DataLog] Unique ([ImportBatchID], [SensorID], [ValueDate], [RawValue], [PhenomenonOfferingID], [PhenomenonUOMID])
 );
 GO
 CREATE INDEX [IX_DataLog_ImportBatchID] ON [dbo].[DataLog]([ImportBatchID]);

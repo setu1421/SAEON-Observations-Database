@@ -72,57 +72,61 @@ namespace SAEON.Observations.WebAPI
                 //    await GenerateODPMetadataForDOI(doi, "observations-database-periodic-collection");
                 //}
 
-                await AddLineAsync("Generating metadata");
-                var doiObservations = await dbContext.DigitalObjectIdentifiers.SingleAsync(i => i.DOIType == DOIType.ObservationsDb);
-                await GenerateODPMetadataForDynamicDOI(doiObservations);
-                foreach (var doiOrganisation in await dbContext
-                   .DigitalObjectIdentifiers
-                   .Where(i => i.DOIType == DOIType.Organisation && i.Code == "SAEON")
-                   .OrderBy(i => i.Name)
-                   .ToListAsync())
+                await AddLineAsync("Generating ODP metadata");
+                foreach (var doiDataset in await dbContext.DigitalObjectIdentifiers.Where(i => i.DOIType == DOIType.Dataset).ToListAsync())
                 {
-                    await GenerateODPMetadataForDynamicDOI(doiOrganisation);
-                    foreach (var doiProgramme in await dbContext
-                        .DigitalObjectIdentifiers
-                        .Where(i => i.ParentId == doiOrganisation.Id)
-                        .OrderBy(i => i.Name)
-                        .ToListAsync())
-                    {
-                        await GenerateODPMetadataForDynamicDOI(doiProgramme);
-                        foreach (var doiProject in await dbContext
-                            .DigitalObjectIdentifiers
-                            .Where(i => i.ParentId == doiProgramme.Id)
-                            .OrderBy(i => i.Name)
-                            .ToListAsync())
-                        {
-                            await GenerateODPMetadataForDynamicDOI(doiProject);
-                            foreach (var doiSite in await dbContext
-                                .DigitalObjectIdentifiers
-                                .Where(i => i.ParentId == doiProject.Id)
-                                .OrderBy(i => i.Name)
-                                .ToListAsync())
-                            {
-                                await GenerateODPMetadataForDynamicDOI(doiSite);
-                                foreach (var doiStation in await dbContext
-                                    .DigitalObjectIdentifiers
-                                    .Where(i => i.ParentId == doiSite.Id)
-                                    .OrderBy(i => i.Name)
-                                    .ToListAsync())
-                                {
-                                    await GenerateODPMetadataForDynamicDOI(doiStation);
-                                    foreach (var doiDataset in await dbContext
-                                        .DigitalObjectIdentifiers
-                                        .Where(i => i.ParentId == doiStation.Id)
-                                        .OrderBy(i => i.Name)
-                                        .ToListAsync())
-                                    {
-                                        await GenerateODPMetadataForDynamicDOI(doiDataset);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    await GenerateODPMetadataForDynamicDOI(doiDataset);
                 }
+                //var doiObservations = await dbContext.DigitalObjectIdentifiers.SingleAsync(i => i.DOIType == DOIType.ObservationsDb);
+                //await GenerateODPMetadataForDynamicDOI(doiObservations);
+                //foreach (var doiOrganisation in await dbContext
+                //   .DigitalObjectIdentifiers
+                //   .Where(i => i.DOIType == DOIType.Organisation && i.Code == "SAEON")
+                //   .OrderBy(i => i.Name)
+                //   .ToListAsync())
+                //{
+                //    await GenerateODPMetadataForDynamicDOI(doiOrganisation);
+                //    foreach (var doiProgramme in await dbContext
+                //        .DigitalObjectIdentifiers
+                //        .Where(i => i.ParentId == doiOrganisation.Id)
+                //        .OrderBy(i => i.Name)
+                //        .ToListAsync())
+                //    {
+                //        await GenerateODPMetadataForDynamicDOI(doiProgramme);
+                //        foreach (var doiProject in await dbContext
+                //            .DigitalObjectIdentifiers
+                //            .Where(i => i.ParentId == doiProgramme.Id)
+                //            .OrderBy(i => i.Name)
+                //            .ToListAsync())
+                //        {
+                //            await GenerateODPMetadataForDynamicDOI(doiProject);
+                //            foreach (var doiSite in await dbContext
+                //                .DigitalObjectIdentifiers
+                //                .Where(i => i.ParentId == doiProject.Id)
+                //                .OrderBy(i => i.Name)
+                //                .ToListAsync())
+                //            {
+                //                await GenerateODPMetadataForDynamicDOI(doiSite);
+                //                foreach (var doiStation in await dbContext
+                //                    .DigitalObjectIdentifiers
+                //                    .Where(i => i.ParentId == doiSite.Id)
+                //                    .OrderBy(i => i.Name)
+                //                    .ToListAsync())
+                //                {
+                //                    await GenerateODPMetadataForDynamicDOI(doiStation);
+                //                    foreach (var doiDataset in await dbContext
+                //                        .DigitalObjectIdentifiers
+                //                        .Where(i => i.ParentId == doiStation.Id)
+                //                        .OrderBy(i => i.Name)
+                //                        .ToListAsync())
+                //                    {
+                //                        await GenerateODPMetadataForDynamicDOI(doiDataset);
+                //                    }
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
             }
 
             var sb = new StringBuilder();

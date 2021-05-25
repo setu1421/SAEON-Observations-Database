@@ -5,7 +5,7 @@
     [Name] VARCHAR(150) NOT NULL, 
     [Description] VARCHAR(5000) NULL,
     [Url] VARCHAR(250) NULL, 
-	[DigitalObjectIdentifierID] Int null,
+	--[DigitalObjectIdentifierID] Int null,
     [StartDate]        DATE         NULL,
     [EndDate]        DATE         NULL,
     [UserId] UNIQUEIDENTIFIER NOT NULL,
@@ -15,11 +15,11 @@
     CONSTRAINT [PK_Site] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_Site_Code] UNIQUE ([Code]),
     CONSTRAINT [UX_Site_Name] UNIQUE ([Name]),
-    Constraint [FK_Site_DigitalObjectIdentifierID] Foreign Key ([DigitalObjectIdentifierID]) References [dbo].[DigitalObjectIdentifiers] ([ID]),
+    --Constraint [FK_Site_DigitalObjectIdentifierID] Foreign Key ([DigitalObjectIdentifierID]) References [dbo].[DigitalObjectIdentifiers] ([ID]),
     CONSTRAINT [FK_Site_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
 GO
-CREATE INDEX [IX_Site_DigitalObjectIdentifierID] ON [dbo].[Site]([DigitalObjectIdentifierID])
+--CREATE INDEX [IX_Site_DigitalObjectIdentifierID] ON [dbo].[Site]([DigitalObjectIdentifierID])
 GO
 CREATE INDEX [IX_Site_CodeName] ON [dbo].[Site] ([Code],[Name])
 GO

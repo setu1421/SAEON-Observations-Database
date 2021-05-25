@@ -16,14 +16,161 @@ namespace SAEON.Observations.WebAPI
     public static class DOIHelper
     {
         private static readonly string blankJson = "{}";
-        private static readonly string blankHtml = "<>";
-        private static readonly string blankTitle = "Title";
+        public static readonly string BlankHtml = "<>";
+        public static readonly string BlankText = "()";
 
         public static readonly string ObservationsDbCode = "ObservationsDB";
         public static readonly string DynamicDOIsCode = "DynamicDOIs";
         public static readonly string PeriodicDOIsCode = "PeriodicDOIs";
         public static readonly string AdHocDOIsCode = "AddHocDOIs";
 
+        public static async Task<string> CreateDOIsV2(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext)
+        {
+            using (SAEONLogs.MethodCall(typeof(DOIHelper)))
+            {
+                try
+                {
+                    var sb = new StringBuilder();
+                    await GenerateDOIs();
+                    await AddLineAsync("Done");
+                    return sb.ToString();
+
+                    async Task AddLineAsync(string line)
+                    {
+                        sb.AppendLine(line);
+                        SAEONLogs.Information(line);
+                        await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateDOIsStatusUpdate, line);
+                    }
+
+                    async Task GenerateDOIs()
+                    {
+                        async Task<DigitalObjectIdentifier> AddDOI(DOIType doiType, string code, string name, DigitalObjectIdentifier parent)
+                        {
+                            await AddLineAsync($"Adding {doiType} {code}, {name}");
+                            var doi = new DigitalObjectIdentifier
+                            {
+                                Parent = parent,
+                                DOIType = doiType,
+                                Code = code,
+                                Name = name ?? code,
+                                Title = BlankText,
+                                Description = BlankText,
+                                DescriptionHtml = BlankHtml,
+                                Citation = BlankText,
+                                CitationHtml = BlankHtml,
+                                MetadataJson = blankJson,
+                                MetadataJsonSha256 = blankJson.Sha256(),
+                                MetadataUrl = "https://catalogue.saeon.ac.za/records/",
+                                MetadataHtml = BlankHtml,
+                                QueryUrl = "https://observations.saeon.ac.za/",
+                                AddedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString(),
+                                UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString()
+                            };
+                            await dbContext.DigitalObjectIdentifiers.AddAsync(doi);
+                            await dbContext.SaveChangesAsync();
+                            doi.SetUrls();
+                            await dbContext.SaveChangesAsync();
+                            return doi;
+                        }
+
+                        IQueryable<VImportBatchSummaries> GetImportBatchSummaries()
+                        {
+                            return dbContext.VImportBatchSummary
+                                .Where(i =>
+                                    i.LatitudeNorth.HasValue && i.LatitudeSouth.HasValue &&
+                                    i.LongitudeWest.HasValue && i.LongitudeEast.HasValue &&
+                                    i.VerifiedCount > 0)
+                                .OrderBy(i => i.OrganisationName)
+                                .ThenBy(i => i.ProgrammeName)
+                                .ThenBy(i => i.ProjectName)
+                                .ThenBy(i => i.SiteName)
+                                .ThenBy(i => i.StationName)
+                                .ThenBy(i => i.PhenomenonName)
+                                .ThenBy(i => i.OfferingName)
+                                .ThenBy(i => i.UnitName)
+                                .ThenBy(i => i.StartDate);
+                        }
+
+                        async Task<DigitalObjectIdentifier> EnsureDatasetDOI(Station station, Dataset dataset)
+                        {
+                            var code = $"{station.Code}~{dataset.PhenomenonCode}~{dataset.OfferingCode}~{dataset.UnitCode}";
+                            var name = $"{station.Name}, {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName}";
+                            var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code == code);
+                            if (doi == null)
+                            {
+                                doi = await AddDOI(DOIType.Dataset, code, name, null);
+                                await dbContext.SaveChangesAsync();
+                            }
+                            return doi;
+                        }
+
+                        await AddLineAsync("Generating DOIs");
+                        // Preload ImportBatchSummaries
+                        var importBatchSummaries = GetImportBatchSummaries();
+                        // We only create Dynamic DOIs for SAEON, SMCRI and EFTEON
+                        var orgCodes = new string[] { "SAEON", "SMCRI", "EFTEON" };
+                        foreach (var organisation in await dbContext.Organisations.Where(i => orgCodes.Contains(i.Code)).OrderBy(i => i.Name).ToListAsync())
+                        {
+                            var programmeCodes = importBatchSummaries
+                                .Where(i => i.OrganisationCode == organisation.Code)
+                                .Select(i => i.ProgrammeCode)
+                                .Distinct();
+                            foreach (var programme in await dbContext.Programmes
+                                .Where(i => programmeCodes.Contains(i.Code))
+                                .ToListAsync())
+                            {
+                                var projectCodes = importBatchSummaries
+                                    .Where(i =>
+                                        i.OrganisationCode == organisation.Code &&
+                                        i.ProgrammeCode == programme.Code)
+                                    .Select(i => i.ProjectCode)
+                                    .Distinct();
+                                foreach (var project in await dbContext.Projects
+                                    .Where(i => projectCodes.Contains(i.Code))
+                                    .ToListAsync())
+                                {
+                                    var siteCodes = importBatchSummaries
+                                        .Where(i =>
+                                            i.OrganisationCode == organisation.Code &&
+                                            i.ProgrammeCode == programme.Code &&
+                                            i.ProjectCode == project.Code)
+                                        .Select(i => i.SiteCode)
+                                        .Distinct();
+                                    foreach (var site in await dbContext.Sites
+                                        .Where(i => siteCodes.Contains(i.Code))
+                                       .ToListAsync())
+                                    {
+                                        var stationCodes = importBatchSummaries
+                                            .Where(i =>
+                                                i.OrganisationCode == organisation.Code &&
+                                                i.ProgrammeCode == programme.Code &&
+                                                i.ProjectCode == project.Code &&
+                                                i.SiteCode == site.Code)
+                                           .Select(i => i.StationCode)
+                                           .Distinct();
+                                        foreach (var station in await dbContext.Stations.Where(i => stationCodes.Contains(i.Code))
+                                            .ToListAsync())
+                                        {
+                                            foreach (var dataset in await dbContext.Datasets.Where(i => i.StationCode == station.Code).ToListAsync())
+                                            {
+                                                var doiDataset = await EnsureDatasetDOI(station, dataset);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        /*
         public static async Task<DigitalObjectIdentifier> CreateAdHocDOI(ObservationsDbContext dbContext, HttpContext httpContext, string code, string name)
         {
             using (SAEONLogs.MethodCall(typeof(DOIHelper)))
@@ -67,7 +214,9 @@ namespace SAEON.Observations.WebAPI
                 return doi;
             }
         }
+        */
 
+        /*
         public static async Task<string> CreateDOIs(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext)
         {
             using (SAEONLogs.MethodCall(typeof(DOIHelper)))
@@ -370,147 +519,7 @@ namespace SAEON.Observations.WebAPI
                 }
             }
         }
+        */
 
-        public static async Task<string> CreateDOIsV2(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext)
-        {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper)))
-            {
-                try
-                {
-                    var sb = new StringBuilder();
-                    await GenerateDOIs();
-                    await AddLineAsync("Done");
-                    return sb.ToString();
-
-                    async Task AddLineAsync(string line)
-                    {
-                        sb.AppendLine(line);
-                        SAEONLogs.Information(line);
-                        await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateDOIsStatusUpdate, line);
-                    }
-
-                    async Task GenerateDOIs()
-                    {
-                        async Task<DigitalObjectIdentifier> AddDOI(DOIType doiType, string code, string name, DigitalObjectIdentifier parent)
-                        {
-                            await AddLineAsync($"Adding {doiType} {code}, {name}");
-                            var doi = new DigitalObjectIdentifier
-                            {
-                                Parent = parent,
-                                DOIType = doiType,
-                                Code = code,
-                                Name = name ?? code,
-                                Title = blankTitle,
-                                MetadataJson = blankJson,
-                                MetadataJsonSha256 = blankJson.Sha256(),
-                                MetadataUrl = "https://catalogue.saeon.ac.za/records/",
-                                MetadataHtml = blankHtml,
-                                QueryUrl = "https://observations.saeon.ac.za/",
-                                AddedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString(),
-                                UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString()
-                            };
-                            await dbContext.DigitalObjectIdentifiers.AddAsync(doi);
-                            await dbContext.SaveChangesAsync();
-                            doi.SetUrls();
-                            await dbContext.SaveChangesAsync();
-                            return doi;
-                        }
-
-                        IQueryable<VImportBatchSummaries> GetImportBatchSummaries()
-                        {
-                            return dbContext.VImportBatchSummary
-                                .Where(i =>
-                                    i.LatitudeNorth.HasValue && i.LatitudeSouth.HasValue &&
-                                    i.LongitudeWest.HasValue && i.LongitudeEast.HasValue &&
-                                    i.VerifiedCount > 0)
-                                .OrderBy(i => i.OrganisationName)
-                                .ThenBy(i => i.ProgrammeName)
-                                .ThenBy(i => i.ProjectName)
-                                .ThenBy(i => i.SiteName)
-                                .ThenBy(i => i.StationName)
-                                .ThenBy(i => i.PhenomenonName)
-                                .ThenBy(i => i.OfferingName)
-                                .ThenBy(i => i.UnitName)
-                                .ThenBy(i => i.StartDate);
-                        }
-
-                        async Task<DigitalObjectIdentifier> EnsureDatasetDOI(Station station, Dataset dataset)
-                        {
-                            var code = $"{station.Code}~{dataset.PhenomenonCode}~{dataset.OfferingCode}~{dataset.UnitCode}";
-                            var name = $"{station.Name}, {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName}";
-                            var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code == code);
-                            if (doi == null)
-                            {
-                                doi = await AddDOI(DOIType.Dataset, code, name, null);
-                                await dbContext.SaveChangesAsync();
-                            }
-                            return doi;
-                        }
-
-                        await AddLineAsync("Generating DOIs");
-                        // Preload ImportBatchSummarries
-                        var importBatchSummaries = GetImportBatchSummaries();
-                        // We only create Dynamic DOIs for SAEON, SMCRI and EFTEON
-                        var orgCodes = new string[] { "SAEON", "SMCRI", "EFTEON" };
-                        foreach (var organisation in await dbContext.Organisations.Where(i => orgCodes.Contains(i.Code)).OrderBy(i => i.Name).ToListAsync())
-                        {
-                            var programmeCodes = importBatchSummaries
-                                .Where(i => i.OrganisationCode == organisation.Code)
-                                .Select(i => i.ProgrammeCode)
-                                .Distinct();
-                            foreach (var programme in await dbContext.Programmes
-                                .Where(i => programmeCodes.Contains(i.Code))
-                                .ToListAsync())
-                            {
-                                var projectCodes = importBatchSummaries
-                                    .Where(i =>
-                                        i.OrganisationCode == organisation.Code &&
-                                        i.ProgrammeCode == programme.Code)
-                                    .Select(i => i.ProjectCode)
-                                    .Distinct();
-                                foreach (var project in await dbContext.Projects
-                                    .Where(i => projectCodes.Contains(i.Code))
-                                    .ToListAsync())
-                                {
-                                    var siteCodes = importBatchSummaries
-                                        .Where(i =>
-                                            i.OrganisationCode == organisation.Code &&
-                                            i.ProgrammeCode == programme.Code &&
-                                            i.ProjectCode == project.Code)
-                                        .Select(i => i.SiteCode)
-                                        .Distinct();
-                                    foreach (var site in await dbContext.Sites
-                                        .Where(i => siteCodes.Contains(i.Code))
-                                       .ToListAsync())
-                                    {
-                                        var stationCodes = importBatchSummaries
-                                            .Where(i =>
-                                                i.OrganisationCode == organisation.Code &&
-                                                i.ProgrammeCode == programme.Code &&
-                                                i.ProjectCode == project.Code &&
-                                                i.SiteCode == site.Code)
-                                           .Select(i => i.StationCode)
-                                           .Distinct();
-                                        foreach (var station in await dbContext.Stations.Where(i => stationCodes.Contains(i.Code))
-                                            .ToListAsync())
-                                        {
-                                            foreach (var dataset in await dbContext.Datasets.Where(i => i.StationCode == station.Code).ToListAsync())
-                                            {
-                                                var doiDataset = await EnsureDatasetDOI(station, dataset);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    SAEONLogs.Exception(ex);
-                    throw;
-                }
-            }
-        }
     }
 }

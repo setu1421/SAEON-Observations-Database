@@ -312,6 +312,24 @@ namespace SAEON.Observations.Core
         [Required, StringLength(5000)]
         public string Title { get; set; }
         /// <summary>
+        /// Description of the DigitalObjectIdentifier
+        /// </summary>
+        public string Description { get; set; }
+        /// <summary>
+        /// Description of the DigitalObjectIdentifier as Html 
+        /// </summary>
+        [DisplayName("Description")]
+        public string DescriptionHtml { get; set; }
+        /// <summary>
+        /// Citation of the DigitalObjectIdentifier
+        /// </summary>
+        public string Citation { get; set; }
+        /// <summary>
+        /// Citation of the DigitalObjectIdentifier as Html 
+        /// </summary>
+        [DisplayName("Citation")]
+        public string CitationHtml { get; set; }
+        /// <summary>
         /// MetadataJson of the DigitalObjectIdentifier
         /// </summary>
         [Required]
@@ -331,16 +349,6 @@ namespace SAEON.Observations.Core
         /// </summary>
         [Required, StringLength(250), Url]
         public string MetadataUrl { get; set; }
-        /// <summary>
-        /// Citation of the DigitalObjectIdentifier as Html 
-        /// </summary>
-        [DisplayName("Citation")]
-        public string CitationHtml { get; set; }
-        /// <summary>
-        /// Citation of the DigitalObjectIdentifier as Text 
-        /// </summary>
-        [DisplayName("Citation")]
-        public string CitationText { get; set; }
         /// <summary>
         /// Object Store Url of the DigitalObjectIdentifier
         /// </summary>
@@ -383,25 +391,25 @@ namespace SAEON.Observations.Core
         public DigitalObjectIdentifier Parent { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public List<DigitalObjectIdentifier> Children { get; set; }
-        [JsonIgnore, SwaggerIgnore]
-        public List<Organisation> Organisations { get; set; }
-        [JsonIgnore, SwaggerIgnore]
-        public List<Programme> Programmes { get; set; }
-        [JsonIgnore, SwaggerIgnore]
-        public List<Project> Projects { get; set; }
-        [JsonIgnore, SwaggerIgnore]
-        public List<Site> Sites { get; set; }
-        [JsonIgnore, SwaggerIgnore]
-        public List<Station> Stations { get; set; }
-        [JsonIgnore, SwaggerIgnore]
-        public List<ImportBatchSummary> ImportBatchSummaries { get; set; }
-        [JsonIgnore, SwaggerIgnore]
-        public List<UserDownload> UserDownloads { get; set; }
+        //[JsonIgnore, SwaggerIgnore]
+        //public List<Organisation> Organisations { get; set; }
+        //[JsonIgnore, SwaggerIgnore]
+        //public List<Programme> Programmes { get; set; }
+        //[JsonIgnore, SwaggerIgnore]
+        //public List<Project> Projects { get; set; }
+        //[JsonIgnore, SwaggerIgnore]
+        //public List<Site> Sites { get; set; }
+        //[JsonIgnore, SwaggerIgnore]
+        //public List<Station> Stations { get; set; }
+        //[JsonIgnore, SwaggerIgnore]
+        //public List<ImportBatchSummary> ImportBatchSummaries { get; set; }
+        //[JsonIgnore, SwaggerIgnore]
+        //public List<UserDownload> UserDownloads { get; set; }
 
         public void SetUrls()
         {
             MetadataUrl = $"https://catalogue.saeon.ac.za/records/{DOI}";
-            QueryUrl = $"https://observations.saeon.ac.za/Download/{DOI}";
+            QueryUrl = $"https://observations.saeon.ac.za/Dataset/{DOI}";
         }
     }
 
@@ -440,8 +448,8 @@ namespace SAEON.Observations.Core
         public Guid PhenomenonOfferingId { get; set; }
         [Column("PhenomenonUOMID")]
         public Guid PhenomenonUnitId { get; set; }
-        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
-        public int? DigitalObjectIdentifierId { get; set; }
+        //[JsonIgnore, SwaggerIgnore, IgnoreDataMember]
+        //public int? DigitalObjectIdentifierId { get; set; }
         public int Count { get; set; }
         public double? Minimum { get; set; }
         public double? Maximum { get; set; }
@@ -467,8 +475,8 @@ namespace SAEON.Observations.Core
         //public Site Site { get; set; }
         //public PhenomenonOffering PhenomenonOffering { get; set; }
         //public PhenomenonUnit PhenomenonUnit { get; set; }
-        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
-        public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
+        //[JsonIgnore, SwaggerIgnore, IgnoreDataMember]
+        //public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
     }
     /// <summary>
     /// Instrument entity
@@ -569,12 +577,12 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// DigitalObjectIdentifierID of the Organisation
         /// </summary>
-        [JsonIgnore, IgnoreDataMember, SwaggerIgnore]
-        public int? DigitalObjectIdentifierID { get; set; }
+        //[JsonIgnore, IgnoreDataMember, SwaggerIgnore]
+        //public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
-        [JsonIgnore, IgnoreDataMember, SwaggerIgnore]
-        public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
+        //[JsonIgnore, IgnoreDataMember, SwaggerIgnore]
+        //public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public List<Instrument> Instruments { get; set; }
         [JsonIgnore, SwaggerIgnore]
@@ -653,12 +661,12 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// DigitalObjectIdentifierID of the Programme
         /// </summary>
-        [JsonIgnore, IgnoreDataMember, SwaggerIgnore]
-        public int? DigitalObjectIdentifierID { get; set; }
+        //[JsonIgnore, IgnoreDataMember, SwaggerIgnore]
+        //public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
-        [JsonIgnore, IgnoreDataMember, SwaggerIgnore]
-        public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
+        //[JsonIgnore, IgnoreDataMember, SwaggerIgnore]
+        //public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public List<Project> Projects { get; set; }
 
@@ -702,12 +710,12 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// DigitalObjectIdentifierID of the Project
         /// </summary>
-        [JsonIgnore, IgnoreDataMember, SwaggerIgnore]
-        public int? DigitalObjectIdentifierID { get; set; }
+        //[JsonIgnore, IgnoreDataMember, SwaggerIgnore]
+        //public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
-        [JsonIgnore, IgnoreDataMember, SwaggerIgnore]
-        public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
+        //[JsonIgnore, IgnoreDataMember, SwaggerIgnore]
+        //public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public Programme Programme { get; set; }
         [JsonIgnore, SwaggerIgnore]
@@ -803,12 +811,12 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// DigitalObjectIdentifierID of the Site
         /// </summary>
-        [JsonIgnore, IgnoreDataMember, SwaggerIgnore]
-        public int? DigitalObjectIdentifierID { get; set; }
+        //[JsonIgnore, IgnoreDataMember, SwaggerIgnore]
+        //public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
-        [JsonIgnore, IgnoreDataMember, SwaggerIgnore]
-        public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
+        //[JsonIgnore, IgnoreDataMember, SwaggerIgnore]
+        //public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public List<Organisation> Organisations { get; set; }
         [JsonIgnore, SwaggerIgnore]
@@ -863,12 +871,12 @@ namespace SAEON.Observations.Core
         /// Elevation of the Station, positive above sea level, negative below sea level
         /// </summary>
         public double? Elevation { get; set; }
-        [JsonIgnore, IgnoreDataMember, SwaggerIgnore]
-        public int? DigitalObjectIdentifierID { get; set; }
+        //[JsonIgnore, IgnoreDataMember, SwaggerIgnore]
+        //public int? DigitalObjectIdentifierID { get; set; }
 
         // Navigation
-        [JsonIgnore, IgnoreDataMember, SwaggerIgnore]
-        public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
+        //[JsonIgnore, IgnoreDataMember, SwaggerIgnore]
+        //public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public Site Site { get; set; }
         [JsonIgnore, SwaggerIgnore]
@@ -927,10 +935,33 @@ namespace SAEON.Observations.Core
         [SwaggerIgnore]
         public bool IsDeleted { get; set; }
         /// <summary>
+        /// Title of the UserDownload
+        /// </summary>
+        [Required, StringLength(5000)]
+        public string Title { get; set; }
+        /// <summary>
         /// Description of the UserDownload
         /// </summary>
-        [StringLength(5000)]
+        [Required, StringLength(5000)]
         public string Description { get; set; }
+        /// <summary>
+        /// Description of the UserDownload as Html
+        /// </summary>
+        [Required, StringLength(5000)]
+        public string DescriptionHtml { get; set; }
+        /// <summary>
+        /// Citation of the UserDownload
+        /// </summary>
+        [Required, StringLength(5000)]
+        public string Citation { get; set; }
+        /// <summary>
+        /// When the query for the download was executed
+        /// </summary>
+        /// <summary>
+        /// Citation of the UserDownload as Html
+        /// </summary>
+        [Required, StringLength(5000)]
+        public string CitationHtml { get; set; }
         /// <summary>
         /// When the query for the download was executed
         /// </summary>
@@ -949,9 +980,9 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// DigitalObjectIdentifierID of the download
         /// </summary>
-        [Required, Display(Name = "Digital Object Identifier (DOI)")]
-        //[JsonIgnore, SwaggerIgnore]
-        public int DigitalObjectIdentifierId { get; set; }
+        //[Required, Display(Name = "Digital Object Identifier (DOI)")]
+        ////[JsonIgnore, SwaggerIgnore]
+        //public int DigitalObjectIdentifierId { get; set; }
         /// <summary>
         /// Url to view the download
         /// </summary>
@@ -1000,8 +1031,8 @@ namespace SAEON.Observations.Core
         public DateTime? UpdatedAt { get; set; }
 
         // Navigation
-        //[JsonIgnore, SwaggerIgnore]
-        public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
+        ////[JsonIgnore, SwaggerIgnore]
+        //public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
     }
 
     /// <summary>

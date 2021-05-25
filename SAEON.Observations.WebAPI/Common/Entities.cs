@@ -309,6 +309,24 @@ namespace SAEON.Observations.Core
         // Remove once OData allows Keyless views
         //[Key]
         public long Id { get; set; }
+        public Guid OrganisationId { get; set; }
+        public string OrganisationCode { get; set; }
+        public string OrganisationName { get; set; }
+        public string OrganisationDescription { get; set; }
+        public string OrganisationUrl { get; set; }
+        public Guid ProgrammeId { get; set; }
+        public string ProgrammeCode { get; set; }
+        public string ProgrammeName { get; set; }
+        public string ProgrammeDescription { get; set; }
+        public string ProgrammeUrl { get; set; }
+        public Guid ProjectId { get; set; }
+        public string ProjectCode { get; set; }
+        public string ProjectName { get; set; }
+        public string ProjectDescription { get; set; }
+        public string ProjectUrl { get; set; }
+        public Guid SiteId { get; set; }
+        public string SiteCode { get; set; }
+        public string SiteName { get; set; }
         public Guid StationId { get; set; }
         public string StationCode { get; set; }
         public string StationName { get; set; }

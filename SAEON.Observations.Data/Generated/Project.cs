@@ -287,20 +287,6 @@ namespace SAEON.Observations.Data
 				colvarRowVersion.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarRowVersion);
 				
-				TableSchema.TableColumn colvarDigitalObjectIdentifierID = new TableSchema.TableColumn(schema);
-				colvarDigitalObjectIdentifierID.ColumnName = "DigitalObjectIdentifierID";
-				colvarDigitalObjectIdentifierID.DataType = DbType.Int32;
-				colvarDigitalObjectIdentifierID.MaxLength = 0;
-				colvarDigitalObjectIdentifierID.AutoIncrement = false;
-				colvarDigitalObjectIdentifierID.IsNullable = true;
-				colvarDigitalObjectIdentifierID.IsPrimaryKey = false;
-				colvarDigitalObjectIdentifierID.IsForeignKey = true;
-				colvarDigitalObjectIdentifierID.IsReadOnly = false;
-				colvarDigitalObjectIdentifierID.DefaultSetting = @"";
-				
-					colvarDigitalObjectIdentifierID.ForeignKeyTableName = "DigitalObjectIdentifiers";
-				schema.Columns.Add(colvarDigitalObjectIdentifierID);
-				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -406,14 +392,6 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<byte[]>(Columns.RowVersion); }
 			set { SetColumnValue(Columns.RowVersion, value); }
 		}
-		  
-		[XmlAttribute("DigitalObjectIdentifierID")]
-		[Bindable(true)]
-		public int? DigitalObjectIdentifierID 
-		{
-			get { return GetColumnValue<int?>(Columns.DigitalObjectIdentifierID); }
-			set { SetColumnValue(Columns.DigitalObjectIdentifierID, value); }
-		}
 		
 		#endregion
 		
@@ -451,19 +429,6 @@ namespace SAEON.Observations.Data
 		}
 		
 		
-        private SAEON.Observations.Data.DigitalObjectIdentifier _DigitalObjectIdentifier = null;
-		/// <summary>
-		/// Returns a DigitalObjectIdentifier ActiveRecord object related to this Project
-		/// 
-		/// </summary>
-		public SAEON.Observations.Data.DigitalObjectIdentifier DigitalObjectIdentifier
-		{
-//			get { return SAEON.Observations.Data.DigitalObjectIdentifier.FetchByID(this.DigitalObjectIdentifierID); }  
-			get { return _DigitalObjectIdentifier ?? (_DigitalObjectIdentifier = SAEON.Observations.Data.DigitalObjectIdentifier.FetchByID(this.DigitalObjectIdentifierID)); }
-			set { SetColumnValue("DigitalObjectIdentifierID", value.Id); }
-		}
-		
-		
         private SAEON.Observations.Data.Programme _Programme = null;
 		/// <summary>
 		/// Returns a Programme ActiveRecord object related to this Project
@@ -491,7 +456,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varProgrammeID,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,int? varDigitalObjectIdentifierID)
+		public static void Insert(Guid varId,Guid varProgrammeID,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
 		{
 			Project item = new Project();
 			
@@ -519,8 +484,6 @@ namespace SAEON.Observations.Data
 			
 			item.RowVersion = varRowVersion;
 			
-			item.DigitalObjectIdentifierID = varDigitalObjectIdentifierID;
-			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -531,7 +494,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varProgrammeID,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,int? varDigitalObjectIdentifierID)
+		public static void Update(Guid varId,Guid varProgrammeID,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
 		{
 			Project item = new Project();
 			
@@ -558,8 +521,6 @@ namespace SAEON.Observations.Data
 				item.UpdatedAt = varUpdatedAt;
 			
 				item.RowVersion = varRowVersion;
-			
-				item.DigitalObjectIdentifierID = varDigitalObjectIdentifierID;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -658,13 +619,6 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn DigitalObjectIdentifierIDColumn
-        {
-            get { return Schema.Columns[12]; }
-        }
-        
-        
-        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -681,7 +635,6 @@ namespace SAEON.Observations.Data
 			 public static string AddedAt = @"AddedAt";
 			 public static string UpdatedAt = @"UpdatedAt";
 			 public static string RowVersion = @"RowVersion";
-			 public static string DigitalObjectIdentifierID = @"DigitalObjectIdentifierID";
 						
 		}
 		#endregion

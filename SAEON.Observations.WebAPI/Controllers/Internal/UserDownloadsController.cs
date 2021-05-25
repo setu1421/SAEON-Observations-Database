@@ -13,7 +13,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         protected override List<Expression<Func<UserDownload, object>>> GetIncludes()
         {
             var result = base.GetIncludes();
-            result.Add(i => i.DigitalObjectIdentifier);
+            //result.Add(i => i.DigitalObjectIdentifier);
             return result;
         }
 
@@ -71,7 +71,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         protected override void UpdateEntity(ref UserDownload item, UserDownload delta)
         {
             if (!string.IsNullOrEmpty(item.Name)) item.Name = delta.Name;
-            if (!string.IsNullOrEmpty(item.Description)) item.Description = delta.Description;
+            // No longer editable
+            //if (!string.IsNullOrEmpty(item.Description)) item.Description = delta.Description;
         }
 
         public override Task<ActionResult> PutById(Guid id, [FromBody, Bind("Id", "Name", "Description", "UserId")] UserDownload delta)

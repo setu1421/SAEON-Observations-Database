@@ -493,32 +493,28 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         // Get Data
                         var output = GetData(input, false);
                         // Create Download
-                        var doiCode = $"Data download for {User.UserId()} on {output.Date:yyyy-MM-dd HH:mm:ss.fff}";
-                        // Get a DOI
-                        SAEONLogs.Verbose("Minting DOI");
-                        var doi = await DOIHelper.CreateAdHocDOI(DbContext, HttpContext, doiCode, doiCode);
-                        SAEONLogs.Verbose("DOI: {@DOI}", doi);
-                        var metadata = await MetadataHelper.CreateAddHocMetadata(DbContext, doi, output.Metadata);
+                        var doiCode = $"Data download on {output.Date:yyyy-MM-dd HH:mm:ss.fff} {User.UserId()}";
+                        //// Get a DOI
+                        //SAEONLogs.Verbose("Minting DOI");
+                        //var doi = await DOIHelper.CreateAdHocDOI(DbContext, HttpContext, doiCode, doiCode);
+                        //SAEONLogs.Verbose("DOI: {@DOI}", doi);
+                        var metadata = new Metadata(output.Metadata);
                         metadata.Accessed = output.Date;
                         metadata.Generate(metadata.Title, metadata.Description);
-                        doi.MetadataJson = metadata.ToJson();
-                        var oldSha256 = doi.MetadataJsonSha256;
-                        doi.MetadataJsonSha256 = doi.MetadataJson.Sha256();
-                        doi.ODPMetadataNeedsUpdate = oldSha256 != doi.MetadataJsonSha256 || (!doi.ODPMetadataIsValid ?? true); ;
-                        doi.Title = metadata.Title;
-                        doi.MetadataHtml = metadata.ToHtml();
-                        doi.CitationHtml = metadata.CitationHtml;
-                        doi.CitationText = metadata.CitationText;
                         SAEONLogs.Verbose("Metadata: {@Metadata}", metadata);
                         SAEONLogs.Verbose("Adding UserDownload");
                         var baseUrl = $"{Config["QuerySiteUrl"].AddTrailingForwardSlash()}Query/Data";
                         var result = new UserDownload
                         {
                             UserId = User.UserId(),
-                            Name = doiCode,
-                            Description = metadata.Description,
                             Date = output.Date,
-                            DigitalObjectIdentifierId = doi.Id,
+                            Name = doiCode,
+                            Title = metadata.Title,
+                            Description = metadata.Description,
+                            DescriptionHtml = metadata.DescriptionHtml,
+                            Citation = metadata.Citation,
+                            CitationHtml = metadata.CitationHtml,
+                            //DigitalObjectIdentifierId = doi.Id,
                             Input = JsonConvert.SerializeObject(input),
                             RequeryUrl = $"{baseUrl}/Requery",
                             DownloadUrl = $"{baseUrl}/ViewDownload",
@@ -531,11 +527,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
                         DbContext.UserDownloads.Add(result);
                         await SaveChangesAsync();
-                        result = await DbContext.UserDownloads.Include(i => i.DigitalObjectIdentifier).FirstOrDefaultAsync(i => i.Name == doiCode);
-                        if (result == null)
-                        {
-                            throw new InvalidOperationException($"Unable to find UserDownload {doiCode}");
-                        }
                         SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
                         result.ZipCheckSum = null;
                         //result.Description += Environment.NewLine + "Please cite as follows:" + Environment.NewLine + metadata.CitationText;
@@ -548,7 +539,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         // Create files
                         SAEONLogs.Verbose("Creating files");
                         System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input, Formatting.Indented));
-                        System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), metadata.ToJson());
+                        //System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), metadata.ToJson());
                         switch (input.DownloadFormat)
                         {
                             case DownloadFormat.CSV:

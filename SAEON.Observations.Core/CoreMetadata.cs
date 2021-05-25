@@ -244,12 +244,12 @@ namespace SAEON.Observations.Core
         public MetadataResourceType ResourceType { get; } = new MetadataResourceType { Name = "Dataset", Type = "Observations" };
         public string Publisher { get; set; } = "South African Environmental Observation Network (SAEON)";
         public DateTime? PublicationDate { get; set; }
-        public int? PublicationYear => PublicationDate?.Year ?? StartDate?.Year ?? EndDate?.Year;
+        public int? PublicationYear => PublicationDate?.Year ?? EndDate?.Year ?? StartDate?.Year;
         public string Title { get; set; }
         public string Description { get; set; }
         public string DescriptionHtml { get; set; }
-        //public string ItemDescription { get; set; }
-        //public string ItemUrl { get; set; }
+        public string Citation { get; set; }
+        public string CitationHtml { get; set; }
 
         public List<MetadataRights> Rights { get; } = new List<MetadataRights> {
             new MetadataRights {

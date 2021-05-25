@@ -1,4 +1,4 @@
-use Observations;
+--use Observations;
 Select
   Sensor.Code SensorCode, Sensor.Name SensorName, ValueDate Date, Phenomenon.Name Phenomenon, Offering.Name Offering, UnitOfMeasure.Unit Unit, o.Elevation, DataValue Value, ImportBatch.Code
 from

@@ -1,15 +1,18 @@
 ﻿Create Table [dbo].[UserDownloads]
 (
     [ID] UniqueIdentifier Constraint [DF_UserDownloads_ID] DEFAULT (newid()), 
-    [Name] VarChar(150) not Null, 
-    [Description] VarChar(5000) not Null,
     [IsDeleted] Bit Null,
-    --[Title] VarChar(5000) not Null,
-    --[Keywords] VarChar(1000) not Null,
+    [Name] VarChar(150) not Null, 
 	[Date] DateTime not null,
+    [Title] VarChar(5000) not Null,
+    [Description] VarChar(5000) NOT Null,
+    [DescriptionHtml] VarChar(5000) NOT Null,
+    [Citation] VarChar(5000) not null,
+    [CitationHtml] VarChar(5000) not null,
+    --[Keywords] VarChar(1000) not Null,
     [Input] VarChar(5000) not Null,
     [RequeryURL] VarChar(5000) not Null,
-	[DigitalObjectIdentifierID] Int not null,
+	--[DigitalObjectIdentifierID] Int null,
  --   [MetadataJson] VarChar(Max) not Null,
  --   [MetadataURL] VarChar(2000) not Null,
 	--[OpenDataPlatformID] UniqueIdentifier not null,
@@ -17,7 +20,6 @@
 	[ZipFullName] VarChar(2000) not Null,
 	[ZipCheckSum] VarChar(64) not null,
     [ZipURL] VarChar(2000) not Null,
-    --[Citation] VarChar(5000) not null,
 	--[Places] VarChar(5000) null,
  --   [LatitudeNorth] FLOAT NULL, 
  --   [LatitudeSouth] FLOAT NULL, 
@@ -35,10 +37,10 @@
     [RowVersion] RowVersion not null,
     Constraint [PK_UserDownloads] Primary Key Clustered ([ID]),
     Constraint [UX_UserDownloads_UserId_Name] Unique ([UserId],[Name]),
-	Constraint [FK_UserDownloads_DigitalObjectIdentifiers] FOREIGN KEY ([DigitalObjectIdentifierID]) REFERENCES [dbo].[DigitalObjectIdentifiers] ([ID])
+	--Constraint [FK_UserDownloads_DigitalObjectIdentifiers] FOREIGN KEY ([DigitalObjectIdentifierID]) REFERENCES [dbo].[DigitalObjectIdentifiers] ([ID])
 )
 GO
-CREATE INDEX [IX_UserDownloads_DOI] ON [dbo].[UserDownloads]([DigitalObjectIdentifierID])
+--CREATE INDEX [IX_UserDownloads_DOI] ON [dbo].[UserDownloads]([DigitalObjectIdentifierID])
 GO
 CREATE TRIGGER [dbo].[TR_UserDownloads_Insert] ON [dbo].[UserDownloads]
 FOR INSERT

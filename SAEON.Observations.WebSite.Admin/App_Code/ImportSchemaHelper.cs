@@ -477,7 +477,10 @@ public class ImportSchemaHelper : IDisposable
                                 def.Sensors.Clear();
                                 def.Sensors.Add(Sensor);
                                 def.SensorDates.Clear();
-                                def.SensorDates.Add(new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, Sensor.Id).Load().ToList());
+                                var dates = new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, Sensor.Id).Load().ToList();
+                                dates.RemoveAll(d => !d.StartDate.HasValue && !d.EndDate.HasValue);
+                                def.SensorDates.Add(dates);
+
                             }
                             else
                             {
@@ -498,7 +501,9 @@ public class ImportSchemaHelper : IDisposable
                                     def.SensorDates.Clear();
                                     foreach (var sensor in def.Sensors)
                                     {
-                                        def.SensorDates.Add(new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, sensor.Id).Load().ToList());
+                                        var dates = new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, sensor.Id).Load().ToList();
+                                        dates.RemoveAll(d => !d.StartDate.HasValue && !d.EndDate.HasValue);
+                                        def.SensorDates.Add(dates);
                                     }
                                 }
                             }
@@ -695,7 +700,7 @@ public class ImportSchemaHelper : IDisposable
                             throw exc;
                         }
                     }
-                    dateValue = dateValue.Date; // Clear out time
+                    //dateValue = dateValue.Date; // Clear out time
                 }
 
                 if (tmdef != null)
@@ -844,8 +849,8 @@ public class ImportSchemaHelper : IDisposable
                                 // Sensor x Instrument_Sensor x Instrument x Station_Instrument x Station x Site
                                 var index = def.Sensors.IndexOf(sensor);
                                 var dates = def.SensorDates.ElementAt(index);
-                                SAEONLogs.Verbose("Date: {recDate} Dates: {Dates}", rec.DateValue, string.Join("; ", dates.Select(d => $"{d.StartDate} {d.EndDate}")));
-                                if (!dates?.Any() ?? true)
+                                SAEONLogs.Verbose("Date: {recDate} Dates: {DatesCount} {Dates}", rec.DateValue, dates.Count, string.Join("; ", dates.Select(d => $"Start: {d.StartDate} End: {d.EndDate}")));
+                                if (!dates.Any())
                                 {
                                     dateOk = true;
                                 }

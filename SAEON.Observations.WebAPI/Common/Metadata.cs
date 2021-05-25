@@ -1,8 +1,6 @@
-﻿using Humanizer;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SAEON.Core;
-using SAEON.Logs;
 using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
@@ -15,13 +13,13 @@ namespace SAEON.Observations.WebAPI
     {
         public DigitalObjectIdentifier DOI { get; set; }
         public MetadataIdentifier Identifier => DOI == null ? null : new MetadataIdentifier { Name = DOI.DOI, Type = "DOI" };
-        public string GenerateTitle() => GenerateTitle(DOI.Name);
-        public string GenerateTitle(string name) => $"Observations in the SAEON Observations Database for {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {MetadataHelper.CleanPrefixes(name)}";
-        public string GenerateDescription() => GenerateDescription(DOI.Name);
-        public string GenerateDescription(string name) => $"The observations in the SAEON Observations Database for {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {MetadataHelper.CleanPrefixes(name)}";
-        public string CitationHtml => $"{Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). <a href='{DOI.DOIUrl}'>{DOI.DOIUrl}</a>" +
+        //public string GenerateTitle() => GenerateTitle(DOI.Name);
+        //public string GenerateTitle(string name) => $"SAEON Observations Database {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {MetadataHelper.CleanPrefixes(name)}";
+        //public string GenerateDescription() => GenerateDescription(DOI.Name);
+        //public string GenerateDescription(string name) => $"The SAEON Observations Database {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {MetadataHelper.CleanPrefixes(name)}";
+        public string GenerateCitation() => $"{Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). {DOI.DOIUrl}" +
             (!Accessed.HasValue ? "" : $". Accessed {Accessed:yyyy-MM-dd HH:mm}");
-        public string CitationText => $"{Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). {DOI.DOIUrl}" +
+        public string GenerateCitationHtml() => $"{Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). <a href='{DOI.DOIUrl}'>{DOI.DOIUrl}</a>" +
             (!Accessed.HasValue ? "" : $". Accessed {Accessed:yyyy-MM-dd HH:mm}");
 
         public Metadata() { }
@@ -43,61 +41,127 @@ namespace SAEON.Observations.WebAPI
             ElevationMinimum = metadata.ElevationMinimum;
         }
 
-        public void Generate(string title = "", string description = "")
+        public void Generate(string variable, string station)
         {
+            string CleanText(string text)
+            {
+                return text.TrimEnd(Environment.NewLine).Replace(Environment.NewLine, " ").Replace("  ", " ").TrimEnd(".").Trim();
+            }
+
+            string Elevation()
+            {
+                string elevation = string.Empty;
+                if (ElevationMinimum.HasValue && ElevationMaximum.HasValue)
+                {
+                    if (ElevationMinimum == ElevationMaximum)
+                    {
+                        if (ElevationMinimum < 0)
+                        {
+                            elevation += $"{-ElevationMinimum:f2}m below sea level";
+                        }
+                        else if (ElevationMinimum == 0)
+                        {
+                            elevation += $"at sea level";
+                        }
+                        else
+                        {
+                            elevation += $"{ElevationMinimum:f2}m above sea level";
+                        }
+                    }
+                    else
+                    {
+                        if ((ElevationMinimum < 0) && (ElevationMaximum < 0))
+                        {
+                            elevation += $"between {-ElevationMinimum:f2}m and {-ElevationMaximum:f2}m below sea level ";
+                        }
+                        else if ((ElevationMinimum == 0) && (ElevationMaximum == 0))
+                        {
+                            elevation += $"at sea level ";
+                        }
+                        else if ((ElevationMinimum > 0) && (ElevationMaximum > 0))
+                        {
+                            elevation += $"between {ElevationMinimum:f2}m and {ElevationMaximum:f2}m above sea level ";
+                        }
+                        else
+                        {
+                            elevation += $"between {-ElevationMinimum:f2}m below sea level and {ElevationMaximum:f2}m above sea level ";
+                        }
+                    }
+                    elevation += " ";
+                }
+                return elevation;
+            }
+
+            string Dates(bool isTitle)
+            {
+                var dates = string.Empty;
+                if (StartDate.HasValue && EndDate.HasValue)
+                {
+                    if (StartDate.Value == EndDate.Value)
+                    {
+                        if (isTitle)
+                        {
+                            dates += $" on {StartDate.Value:yyyy-MM-dd}";
+                        }
+                        else
+                        {
+                            dates += $" on {StartDate.Value.ToJsonDate()}";
+                        }
+                    }
+                    else
+                    {
+                        if (isTitle)
+                        {
+                            dates += $" from {StartDate.Value:yyyy-MM-dd} to {EndDate.Value:yyyy-MM-dd}";
+                        }
+                        else
+                        {
+                            dates += $" from {StartDate.Value.ToJsonDate()} to {EndDate.Value.ToJsonDate()}";
+                        }
+                    }
+                }
+                return dates;
+            }
+
+            string BoundingBox()
+            {
+                var boundingBox = string.Empty;
+                if (LatitudeNorth.HasValue && LatitudeSouth.HasValue && LongitudeWest.HasValue && LongitudeEast.HasValue)
+                {
+                    if ((LatitudeNorth == LatitudeSouth) && (LongitudeWest == LongitudeEast))
+                    {
+                        boundingBox += $" at {LatitudeNorth:f5},{LongitudeWest:f5} (+N-S,-W+E)";
+                    }
+                    else
+                    {
+                        boundingBox += $" in area {LatitudeNorth:f5},{LongitudeWest:f5} (N,W) {LatitudeSouth:f5},{LongitudeEast:f5} (S,E) (+N-S,-W+E)";
+                    }
+                }
+                return boundingBox;
+            }
+
             if (DOI == null) throw new InvalidOperationException($"{nameof(DOI)} cannot be null");
-            if (string.IsNullOrWhiteSpace(title))
+            // Title
+            if (string.IsNullOrWhiteSpace(Title))
             {
-                title = GenerateTitle();
+                Title = $"{variable} for {station} {Elevation()}in the SAEON Observations Database{Dates(true)}";
             }
-            if (string.IsNullOrWhiteSpace(description))
+            Title = CleanText(Title);
+            // Description
+            if (string.IsNullOrWhiteSpace(Description))
             {
-                description = GenerateDescription();
+                Description = $"{variable} for {station} {Elevation()}in the SAEON Observations Database{Dates(false)}{BoundingBox()}";
             }
-            if (StartDate.HasValue && EndDate.HasValue)
-            {
-                if (StartDate.Value == EndDate.Value)
-                {
-                    title += $" on {StartDate.Value:yyyy-MM-dd}";
-                    description += $" on {StartDate.Value.ToJsonDate()}";
-                }
-                else
-                {
-                    title += $" from {StartDate.Value:yyyy-MM-dd} to {EndDate.Value:yyyy-MM-dd}";
-                    description += $" from {StartDate.Value.ToJsonDate()} to {EndDate.Value.ToJsonDate()}";
-                }
-            }
-            Title = title;
-            if (LatitudeNorth.HasValue && LatitudeSouth.HasValue && LongitudeWest.HasValue && LongitudeEast.HasValue)
-            {
-                if ((LatitudeNorth == LatitudeSouth) && (LongitudeWest == LongitudeEast))
-                {
-                    description += $" at {LatitudeNorth:f5},{LongitudeWest:f5} (+N-S,-W+E)";
-                }
-                else
-                {
-                    description += $" in area {LatitudeNorth:f5},{LongitudeWest:f5} (N,W) {LatitudeSouth:f5},{LongitudeEast:f5} (S,E) (+N-S,-W+E)";
-                }
-            }
-            if (ElevationMinimum.HasValue && ElevationMaximum.HasValue)
-            {
-                if (ElevationMinimum == ElevationMaximum)
-                {
-                    description += $" at {ElevationMinimum:f2}m above mean sea level";
-                }
-                else
-                {
-                    description += $" between {ElevationMinimum:f2}m and {ElevationMaximum:f2}m above mean sea level";
-                }
-            }
-            // Build Description as Text and Html
-            var sbText = new StringBuilder();
+            Description = CleanText(Description);
+            // Citation
+            if (string.IsNullOrEmpty(Citation) || Citation == DOIHelper.BlankText) Citation = GenerateCitation();
+            if (string.IsNullOrEmpty(CitationHtml) || CitationHtml == DOIHelper.BlankHtml) CitationHtml = GenerateCitationHtml();
+            // Build Description as Html
             var sbHtml = new StringBuilder();
-            sbText.AppendLine(description.AddTrailing("."));
-            sbHtml.AppendDLStart();
-            sbHtml.AppendDTDD("Title", title);
+            sbHtml.AppendDTDD("Title", Title);
             sbHtml.AppendDT("Description");
-            sbHtml.AppendDDStart().AppendHtmlP(description);
+            sbHtml.AppendDDStart().AppendHtmlP(Description);
+            /*
             if (DOI.Parent != null)
             {
                 sbText.AppendLine($"This collection is part of the {(DOI.Parent.DOIType == DOIType.ObservationsDb ? "" : DOI.Parent.DOIType.Humanize(LetterCasing.LowerCase))} {MetadataHelper.CleanPrefixes(DOI.Parent.Name)} {DOI.Parent.DOIUrl}.");
@@ -111,8 +175,8 @@ namespace SAEON.Observations.WebAPI
             // Dynamic children
             if (MetadataHelper.DynamicDOITypes.Contains(DOI.DOIType))
             {
-                var children = DOI.Children.Where(i => MetadataHelper.DynamicDOITypes.Contains(i.DOIType)).OrderBy(i => i.Name).ToList();
-                if (children.Any())
+                var children = DOI.Children?.Where(i => MetadataHelper.DynamicDOITypes.Contains(i.DOIType)).OrderBy(i => i.Name).ToList();
+                if (children?.Any() ?? false)
                 {
                     sbText.AppendLine($"This collection includes observations from the following {((DOI.DOIType + 1).Humanize(LetterCasing.LowerCase).ToQuantity(children.Count, ShowQuantityAs.None))}: " +
                         string.Join(", ", children.Select(i => $"{MetadataHelper.CleanPrefixes(i.Name)} {i.DOIUrl}")));
@@ -127,7 +191,7 @@ namespace SAEON.Observations.WebAPI
             // Periodic children
             if (DOI.DOIType == DOIType.Collection && DOI.Code == DOIHelper.PeriodicDOIsCode)
             {
-                var children = DOI.Children.Where(i => i.DOIType == DOIType.Periodic).OrderBy(i => i.Name).ToList();
+                var children = DOI.Children?.Where(i => i.DOIType == DOIType.Periodic).OrderBy(i => i.Name).ToList();
                 foreach (var child in children)
                 {
                     RelatedIdentifiers.Add(new MetadataRelatedIdentifier { Name = "HasPart", Identifier = child.DOI, Type = "DOI" });
@@ -136,31 +200,19 @@ namespace SAEON.Observations.WebAPI
             // Ad-Hoc children
             if (DOI.DOIType == DOIType.Collection && DOI.Code == DOIHelper.AdHocDOIsCode)
             {
-                var children = DOI.Children.Where(i => i.DOIType == DOIType.AdHoc).OrderBy(i => i.Name).ToList();
+                var children = DOI.Children?.Where(i => i.DOIType == DOIType.AdHoc).OrderBy(i => i.Name).ToList();
                 foreach (var child in children)
                 {
                     RelatedIdentifiers.Add(new MetadataRelatedIdentifier { Name = "HasPart", Identifier = child.DOI, Type = "DOI" });
                 }
             }
+            */
             sbHtml.AppendDDEnd();
 
             sbHtml.AppendDTDD("Publisher", $"{Publisher} {PublicationYear}");
             if (StartDate.HasValue || EndDate.HasValue)
             {
-                var dates = string.Empty;
-                if (StartDate.HasValue)
-                {
-                    dates += $" Created: {StartDate:yyyy-MM-dd}";
-                }
-                if (StartDate.HasValue && EndDate.HasValue)
-                {
-                    dates += $" Collected: {StartDate.ToJsonDate()}/{EndDate.ToJsonDate()}";
-                }
-                else if (StartDate.HasValue)
-                {
-                    dates += $" Collected:  {StartDate.ToJsonDate()}";
-                }
-                sbHtml.AppendDTDD("Dates", dates.Trim());
+                sbHtml.AppendDTDD("Dates", Dates(true));
             }
             if (Rights.Any())
             {
@@ -182,9 +234,6 @@ namespace SAEON.Observations.WebAPI
             }
             sbHtml.AppendDTDD("Citation", CitationHtml);
             sbHtml.AppendDLEnd();
-            var desc = sbText.ToString().TrimEnd(Environment.NewLine).Replace(Environment.NewLine, " ").Replace("  ", " ").TrimEnd("."); //.Replace(Environment.NewLine,"<br>");
-            SAEONLogs.Verbose("Desc: {Desc}", desc);
-            Description = desc;
             DescriptionHtml = sbHtml.ToString();
         }
 
@@ -298,8 +347,8 @@ namespace SAEON.Observations.WebAPI
                     // Pre Schema 4.3
                     //new JProperty("alternateIdentifiers", new JArray(AlternateIdentifiers.Select(i => i.AsJson()))),
                     new JProperty("relatedIdentifiers", new JArray(RelatedIdentifiers.Select(i => i.AsJson()))),
-                    // Pre Schema 4.3
                     //new JProperty("schemaVersion", "https://datacite.org/schema/kernel-4"),
+                    new JProperty("schemaVersion", "http://datacite.org/schema/kernel-4"),
                     new JProperty("immutableResource", new JObject(
                         new JProperty("resourceDescription", Title),
                         new JProperty("resourceData", new JObject(

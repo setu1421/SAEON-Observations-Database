@@ -561,6 +561,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarCount);
                 
+                TableSchema.TableColumn colvarVerifiedCount = new TableSchema.TableColumn(schema);
+                colvarVerifiedCount.ColumnName = "VerifiedCount";
+                colvarVerifiedCount.DataType = DbType.Int32;
+                colvarVerifiedCount.MaxLength = 0;
+                colvarVerifiedCount.AutoIncrement = false;
+                colvarVerifiedCount.IsNullable = true;
+                colvarVerifiedCount.IsPrimaryKey = false;
+                colvarVerifiedCount.IsForeignKey = false;
+                colvarVerifiedCount.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarVerifiedCount);
+                
                 TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
                 colvarStartDate.ColumnName = "StartDate";
                 colvarStartDate.DataType = DbType.DateTime;
@@ -1295,6 +1307,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("VerifiedCount")]
+        [Bindable(true)]
+        public int? VerifiedCount 
+	    {
+		    get
+		    {
+			    return GetColumnValue<int?>("VerifiedCount");
+		    }
+            set 
+		    {
+			    SetColumnValue("VerifiedCount", value);
+            }
+        }
+	      
         [XmlAttribute("StartDate")]
         [Bindable(true)]
         public DateTime? StartDate 
@@ -1497,6 +1523,8 @@ namespace SAEON.Observations.Data{
             public static string UnitOfMeasureSymbol = @"UnitOfMeasureSymbol";
             
             public static string Count = @"Count";
+            
+            public static string VerifiedCount = @"VerifiedCount";
             
             public static string StartDate = @"StartDate";
             

@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Solution File, Format Version 18.00
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1DF844BA-7FAC-4A3C-BD03-0430291F31B1}"
+	ProjectSection(SolutionItems) = preProject
+		..\2.0.64\Clear out DOIs.sql = ..\2.0.64\Clear out DOIs.sql
+		..\Digital Object Identifiers.sql = ..\Digital Object Identifiers.sql
+		Observations.publish 2.0.65.sql = Observations.publish 2.0.65.sql
+		Observations.publish 2.0.65.txt = Observations.publish 2.0.65.txt
+		ObservationsElwandle 2.0.65.publish.sql = ObservationsElwandle 2.0.65.publish.sql
+		ObservationsElwandle 2.0.65.publish.txt = ObservationsElwandle 2.0.65.publish.txt
+		ObservationsFynbos 2.0.65.publish.sql = ObservationsFynbos 2.0.65.publish.sql
+		ObservationsFynbos 2.0.65.publish.txt = ObservationsFynbos 2.0.65.publish.txt
+		ObservationsSACTN 2.0.65.publish.sql = ObservationsSACTN 2.0.65.publish.sql
+		ObservationsSACTN 2.0.65.publish.txt = ObservationsSACTN 2.0.65.publish.txt
+		Preprocess.sql = Preprocess.sql
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9228CF60-EFA0-4782-BF77-E183506B1CE9}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F59FF809-EEB5-452C-87F7-142F07B2F26B}
+	EndGlobalSection
+EndGlobal

@@ -6,7 +6,7 @@
     [Name] VARCHAR(150) NOT NULL, 
     [Description] VARCHAR(5000) NULL,
     [Url] VARCHAR(250) NULL, 
-	[DigitalObjectIdentifierID] Int null,
+	--[DigitalObjectIdentifierID] Int null,
     [StartDate]        DATE         NULL,
     [EndDate]        DATE         NULL,
     [UserId] UNIQUEIDENTIFIER NOT NULL,
@@ -16,12 +16,12 @@
     CONSTRAINT [PK_Project] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_Project_ProgramID_Code] UNIQUE ([ProgrammeID],[Code]),
     CONSTRAINT [UX_Project_ProgramID_Name] UNIQUE ([ProgrammeID],[Name]),
-    Constraint [FK_Project_DigitalObjectIdentifierID] Foreign Key ([DigitalObjectIdentifierID]) References [dbo].[DigitalObjectIdentifiers] ([ID]),
+    --Constraint [FK_Project_DigitalObjectIdentifierID] Foreign Key ([DigitalObjectIdentifierID]) References [dbo].[DigitalObjectIdentifiers] ([ID]),
     CONSTRAINT [FK_Project_Programme] FOREIGN KEY ([ProgrammeID]) REFERENCES [dbo].[Programme] ([ID]),
     CONSTRAINT [FK_Project_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
 GO
-CREATE INDEX [IX_Project_DigitalObjectIdentifierID] ON [dbo].[Project]([DigitalObjectIdentifierID])
+--CREATE INDEX [IX_Project_DigitalObjectIdentifierID] ON [dbo].[Project]([DigitalObjectIdentifierID])
 GO
 CREATE INDEX [IX_Project_ProgrammeID] ON [dbo].[Project] ([ProgrammeID])
 GO
