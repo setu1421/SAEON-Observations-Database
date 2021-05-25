@@ -113,6 +113,15 @@ DROP INDEX [IX_Observation_ValueYear]
 
 
 GO
+PRINT N'Dropping Index [dbo].[UserDownloads].[IX_UserDownloads_DOI]...';
+
+
+GO
+DROP INDEX [IX_UserDownloads_DOI]
+    ON [dbo].[UserDownloads];
+
+
+GO
 PRINT N'Dropping Index [dbo].[Observation].[IX_Observation_SensorID]...';
 
 
@@ -128,6 +137,14 @@ PRINT N'Dropping Index [dbo].[Observation].[IX_Observation_StatusID]...';
 GO
 DROP INDEX [IX_Observation_StatusID]
     ON [dbo].[Observation];
+
+
+GO
+PRINT N'Dropping Foreign Key [dbo].[FK_UserDownloads_DigitalObjectIdentifiers]...';
+
+
+GO
+ALTER TABLE [dbo].[UserDownloads] DROP CONSTRAINT [FK_UserDownloads_DigitalObjectIdentifiers];
 
 
 GO
@@ -306,12 +323,36 @@ ALTER TABLE [dbo].[UserDownloads] DROP COLUMN [Citation], COLUMN [ElevationMaxim
 
 
 GO
+ALTER TABLE [dbo].[UserDownloads] ALTER COLUMN [Description] VARCHAR (5000) NULL;
+
+ALTER TABLE [dbo].[UserDownloads] ALTER COLUMN [DigitalObjectIdentifierID] INT NULL;
+
+
+GO
 ALTER TABLE [dbo].[UserDownloads]
     ADD [IsDeleted] BIT NULL;
 
 
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating Index [dbo].[UserDownloads].[IX_UserDownloads_DOI]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_UserDownloads_DOI]
+    ON [dbo].[UserDownloads]([DigitalObjectIdentifierID] ASC);
+
+
+GO
+PRINT N'Creating Foreign Key [dbo].[FK_UserDownloads_DigitalObjectIdentifiers]...';
+
+
+GO
+ALTER TABLE [dbo].[UserDownloads] WITH NOCHECK
+    ADD CONSTRAINT [FK_UserDownloads_DigitalObjectIdentifiers] FOREIGN KEY ([DigitalObjectIdentifierID]) REFERENCES [dbo].[DigitalObjectIdentifiers] ([ID]);
 
 
 GO
@@ -861,6 +902,7 @@ Select
   PhenomenonOfferingID, OfferingID, OfferingCode, OfferingName, OfferingDescription,
   PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
   Sum(Count) Count,
+  Sum(VerifiedCount) VerifiedCount,
   Min(StartDate) StartDate,
   Max(EndDate) EndDate,
   Max(LatitudeNorth) LatitudeNorth,
@@ -883,6 +925,18 @@ group by
 ) s
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Checking existing data against newly created constraints';
+
+
+GO
+USE [$(DatabaseName)];
+
+
+GO
+ALTER TABLE [dbo].[UserDownloads] WITH CHECK CHECK CONSTRAINT [FK_UserDownloads_DigitalObjectIdentifiers];
 
 
 GO

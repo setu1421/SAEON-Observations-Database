@@ -57,9 +57,13 @@
      Drop
        [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
        [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[UserDownloads].[IX_UserDownloads_DOI] (Index)
+       [dbo].[FK_UserDownloads_DigitalObjectIdentifiers] (Foreign Key)
      Create
        [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
        [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[UserDownloads].[IX_UserDownloads_DOI] (Index)
+       [dbo].[FK_UserDownloads_DigitalObjectIdentifiers] (Foreign Key)
      Refresh
        [dbo].[vUserDownloads] (View)
        [dbo].[vInventorySensors] (View)
