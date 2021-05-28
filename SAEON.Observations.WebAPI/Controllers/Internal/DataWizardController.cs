@@ -20,6 +20,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.Mime;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
@@ -314,21 +315,22 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             result.Metadata.PublicationDate = result.Date;
             var titles = observations.Where(i => i.StationName.StartsWith("ELW, ")).Select(i =>
             {
+                var variable = $"{MetadataHelper.CleanPrefixes(i.PhenomenonName)}, {i.OfferingName}, {i.UnitName}";
                 var siteName = MetadataHelper.CleanPrefixes(i.SiteName);
                 var stationName = MetadataHelper.CleanPrefixes(i.StationName);
                 if (stationName.EndsWith(siteName))
                 {
                     stationName = stationName.Substring(0, stationName.Length - siteName.Length - 2);
                 }
-                return $"{stationName} of {i.PhenomenonName}";
+                return $"{variable} for {stationName}";
             }).Union(observations.Where(i => !i.StationName.StartsWith("ELW, ")).Select(i =>
             {
+                var variable = $"{MetadataHelper.CleanPrefixes(i.PhenomenonName)}, {i.OfferingName}, {i.UnitName}";
                 var siteName = MetadataHelper.CleanPrefixes(i.SiteName);
                 var stationName = MetadataHelper.CleanPrefixes(i.StationName);
-                return $"{siteName}, {stationName} of {i.PhenomenonName}";
+                return $"{variable} for {siteName}, {stationName}";
             })).Distinct();
-            result.Metadata.Title = "Observations in the SAEON Observations Database for " +
-                string.Join("; ", titles.OrderBy(i => i));
+            result.Metadata.Title = string.Join("; ", titles.OrderBy(i => i));
             var descriptions = observations.Where(i => i.StationName.StartsWith("ELW, ")).Select(i =>
             {
                 var siteName = MetadataHelper.CleanPrefixes(i.SiteName);
@@ -344,8 +346,24 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 var stationName = MetadataHelper.CleanPrefixes(i.StationName);
                 return $"{siteName}, {stationName} of {i.PhenomenonName}, {i.OfferingName}, {i.UnitName}";
             })).Distinct();
-            result.Metadata.Description = "Observations in the SAEON Observations Database for " +
-                string.Join("; ", descriptions.OrderBy(i => i));
+            result.Metadata.Description = string.Join("; ", descriptions.OrderBy(i => i));
+            var datasetCodes = observations.Select(i => $"{i.StationCode}~{i.PhenomenonCode}~{i.OfferingCode}~{i.UnitCode}").Distinct();
+            SAEONLogs.Verbose("DatasetCodes: {DatasetCodes}", datasetCodes.ToList());
+            var datasetDOIs = DbContext.DigitalObjectIdentifiers.Where(i => datasetCodes.Contains(i.Code)).OrderBy(i => i.Name);
+            if (!datasetDOIs.Any())
+            {
+                SAEONLogs.Error("No datasetDOIs found");
+            }
+            else
+            {
+                result.Metadata.Citation = "Please cite the use of these datasets as follows: " + string.Join("; ", datasetDOIs.Select(i => $"{i.Citation} accessed {result.Date:yyyy-MM-dd HH:mm}"));
+                var sbHtml = new StringBuilder();
+                sbHtml.AppendLine("<p>");
+                sbHtml.AppendLine("Please cite the use of these datasets as follows:");
+                sbHtml.AppendHtmlUL(datasetDOIs.Select(i => $"{i.CitationHtml} accessed {result.Date:yyyy-MM-dd HH:mm}"));
+                sbHtml.AppendLine("</p>");
+                result.Metadata.CitationHtml = sbHtml.ToString();
+            }
             // Keywords
             //result.Metadata.Subjects.AddRange(observations.Select(i => i.OrganisationName).Distinct().Select(i => new MetadataSubject { Name = MetadataHelper.CleanPrefixes(i) }));
             //result.Metadata.Subjects.AddRange(observations.Select(i => i.ProgrammeName).Distinct().Select(i => new MetadataSubject { Name = MetadataHelper.CleanPrefixes(i) }));
@@ -500,7 +518,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         //SAEONLogs.Verbose("DOI: {@DOI}", doi);
                         var metadata = new Metadata(output.Metadata);
                         metadata.Accessed = output.Date;
-                        metadata.Generate(metadata.Title, metadata.Description);
+                        metadata.Generate();
                         SAEONLogs.Verbose("Metadata: {@Metadata}", metadata);
                         SAEONLogs.Verbose("Adding UserDownload");
                         var baseUrl = $"{Config["QuerySiteUrl"].AddTrailingForwardSlash()}Query/Data";

@@ -87,7 +87,21 @@ namespace SAEON.Observations.WebAPI
                             metaDataset.Subjects.Add(new MetadataSubject { Name = CleanPrefixes(dataset.PhenomenonName) });
                             metaDataset.Subjects.Add(new MetadataSubject { Name = $"{CleanPrefixes(dataset.PhenomenonName)}, {dataset.OfferingName}, {dataset.UnitName}" });
                             var variable = $"{CleanPrefixes(dataset.PhenomenonName)}, {dataset.OfferingName}, {dataset.UnitName}";
-                            var station = $"{CleanPrefixes(dataset.StationName)}";
+                            var siteName = CleanPrefixes(dataset.SiteName);
+                            var stationName = CleanPrefixes(dataset.StationName);
+                            string station;
+                            if (dataset.StationName.StartsWith("ELW, "))
+                            {
+                                if (stationName.EndsWith(siteName))
+                                {
+                                    stationName = stationName.Substring(0, stationName.Length - siteName.Length - 2);
+                                }
+                                station = stationName;
+                            }
+                            else
+                            {
+                                station = $"{siteName}, {stationName}";
+                            }
                             metaDataset.Generate(variable, station);
                             doiDataset.Title = metaDataset.Title;
                             doiDataset.Description = metaDataset.Description;

@@ -5,44 +5,44 @@ namespace SAEON.Observations.WebAPI
 {
     public static class StringBuilderExtensions
     {
-        public static StringBuilder AppendDD(this StringBuilder builder, string text)
+        public static StringBuilder AppendHtmlDD(this StringBuilder builder, string text)
         {
             return builder.AppendLine($"<dd>{text}</dd>");
         }
 
-        public static StringBuilder AppendDDStart(this StringBuilder builder)
+        public static StringBuilder AppendHtmlDDStart(this StringBuilder builder)
         {
             return builder.AppendLine("<dd>");
         }
 
-        public static StringBuilder AppendDDStart(this StringBuilder builder, string text)
+        public static StringBuilder AppendHtmlDDStart(this StringBuilder builder, string text)
         {
             return builder.AppendLine($"<dd>{text}");
         }
 
-        public static StringBuilder AppendDDEnd(this StringBuilder builder)
+        public static StringBuilder AppendHtmlDDEnd(this StringBuilder builder)
         {
             return builder.AppendLine("</dd>");
         }
 
-        public static StringBuilder AppendDLStart(this StringBuilder builder)
+        public static StringBuilder AppendHtmlDLStart(this StringBuilder builder)
         {
             return builder.AppendLine("<dl class='dl-horizontal'>");
         }
-        public static StringBuilder AppendDLEnd(this StringBuilder builder)
+        public static StringBuilder AppendHtmlDLEnd(this StringBuilder builder)
         {
             return builder.AppendLine("</dl>");
         }
 
-        public static StringBuilder AppendDT(this StringBuilder builder, string text)
+        public static StringBuilder AppendHtmlDT(this StringBuilder builder, string text)
         {
             return builder.AppendLine($"<dt>{text}</dt>");
         }
 
-        public static StringBuilder AppendDTDD(this StringBuilder builder, string term, string description)
+        public static StringBuilder AppendHtmlDTDD(this StringBuilder builder, string term, string description)
         {
-            builder.AppendDT(term);
-            return builder.AppendDD(description);
+            builder.AppendHtmlDT(term);
+            return builder.AppendHtmlDD(description);
         }
 
         public static StringBuilder AppendHtmlH2(this StringBuilder builder, string text)

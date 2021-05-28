@@ -13,10 +13,6 @@ namespace SAEON.Observations.WebAPI
     {
         public DigitalObjectIdentifier DOI { get; set; }
         public MetadataIdentifier Identifier => DOI == null ? null : new MetadataIdentifier { Name = DOI.DOI, Type = "DOI" };
-        //public string GenerateTitle() => GenerateTitle(DOI.Name);
-        //public string GenerateTitle(string name) => $"SAEON Observations Database {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {MetadataHelper.CleanPrefixes(name)}";
-        //public string GenerateDescription() => GenerateDescription(DOI.Name);
-        //public string GenerateDescription(string name) => $"The SAEON Observations Database {DOI.DOIType.Humanize(LetterCasing.LowerCase)} {MetadataHelper.CleanPrefixes(name)}";
         public string GenerateCitation() => $"{Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). {DOI.DOIUrl}" +
             (!Accessed.HasValue ? "" : $". Accessed {Accessed:yyyy-MM-dd HH:mm}");
         public string GenerateCitationHtml() => $"{Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). <a href='{DOI.DOIUrl}'>{DOI.DOIUrl}</a>" +
@@ -29,6 +25,8 @@ namespace SAEON.Observations.WebAPI
             PublicationDate = metadata.PublicationDate;
             Title = metadata.Title;
             Description = metadata.Description;
+            Citation = metadata.Citation;
+            CitationHtml = metadata.CitationHtml;
             Accessed = metadata.Accessed;
             StartDate = metadata.StartDate;
             EndDate = metadata.EndDate;
@@ -41,7 +39,7 @@ namespace SAEON.Observations.WebAPI
             ElevationMinimum = metadata.ElevationMinimum;
         }
 
-        public void Generate(string variable, string station)
+        public void Generate(string variable = null, string station = null)
         {
             string CleanText(string text)
             {
@@ -140,27 +138,37 @@ namespace SAEON.Observations.WebAPI
                 return boundingBox;
             }
 
-            if (DOI == null) throw new InvalidOperationException($"{nameof(DOI)} cannot be null");
+            //if (DOI == null) throw new InvalidOperationException($"{nameof(DOI)} cannot be null");
+            if (string.IsNullOrWhiteSpace(Title))
+            {
+                if (string.IsNullOrWhiteSpace(variable)) throw new ArgumentNullException(nameof(variable), $"{nameof(variable)} cannot be null if {nameof(Title)} is null");
+                if (string.IsNullOrWhiteSpace(station)) throw new ArgumentNullException(nameof(station), $"{nameof(station)} cannot be null if {nameof(Title)} is null");
+            }
+            if (string.IsNullOrWhiteSpace(Description))
+            {
+                if (string.IsNullOrWhiteSpace(variable)) throw new ArgumentNullException(nameof(variable), $"{nameof(variable)} cannot be null if {nameof(Description)} is null");
+                if (string.IsNullOrWhiteSpace(station)) throw new ArgumentNullException(nameof(station), $"{nameof(station)} cannot be null if {nameof(Description)} is null");
+            }
             // Title
             if (string.IsNullOrWhiteSpace(Title))
             {
-                Title = $"{variable} for {station} {Elevation()}in the SAEON Observations Database{Dates(true)}";
+                Title = $"{variable} for {station}";
             }
-            Title = CleanText(Title);
+            Title = CleanText($"{Title} {Elevation()}{Dates(true)}in the SAEON Observations Database");
             // Description
             if (string.IsNullOrWhiteSpace(Description))
             {
-                Description = $"{variable} for {station} {Elevation()}in the SAEON Observations Database{Dates(false)}{BoundingBox()}";
+                Description = $"{variable} for {station}";
             }
-            Description = CleanText(Description);
+            Description = CleanText($"{Description} {Elevation()}{Dates(false)}{BoundingBox()}in the SAEON Observations Database");
             // Citation
             if (string.IsNullOrEmpty(Citation) || Citation == DOIHelper.BlankText) Citation = GenerateCitation();
             if (string.IsNullOrEmpty(CitationHtml) || CitationHtml == DOIHelper.BlankHtml) CitationHtml = GenerateCitationHtml();
             // Build Description as Html
             var sbHtml = new StringBuilder();
-            sbHtml.AppendDTDD("Title", Title);
-            sbHtml.AppendDT("Description");
-            sbHtml.AppendDDStart().AppendHtmlP(Description);
+            sbHtml.AppendHtmlDTDD("Title", Title);
+            sbHtml.AppendHtmlDT("Description");
+            sbHtml.AppendHtmlDDStart().AppendHtmlP(Description);
             /*
             if (DOI.Parent != null)
             {
@@ -207,33 +215,33 @@ namespace SAEON.Observations.WebAPI
                 }
             }
             */
-            sbHtml.AppendDDEnd();
+            sbHtml.AppendHtmlDDEnd();
 
-            sbHtml.AppendDTDD("Publisher", $"{Publisher} {PublicationYear}");
+            sbHtml.AppendHtmlDTDD("Publisher", $"{Publisher} {PublicationYear}");
             if (StartDate.HasValue || EndDate.HasValue)
             {
-                sbHtml.AppendDTDD("Dates", Dates(true));
+                sbHtml.AppendHtmlDTDD("Dates", Dates(true));
             }
             if (Rights.Any())
             {
-                sbHtml.AppendDTDD("License", Rights[0].Name);
+                sbHtml.AppendHtmlDTDD("License", Rights[0].Name);
             }
             // Keyword cleanup
             var cleanSubjects = Subjects.Where(i => !i.Name.StartsWith("http")).Distinct().ToList();
             var excludes = new List<string> { "South African Environmental Observation Network", "Observations Database" };
             cleanSubjects.RemoveAll(i => excludes.Contains(i.Name));
             cleanSubjects.ForEach(i => i.Name = i.Name/*.Replace(",", "")*/.Replace("  ", " "));
-            sbHtml.AppendDTDD("Keywords", $"{string.Join("; ", cleanSubjects.OrderBy(i => i.Name).Select(i => i.Name))}");
-            if (!string.IsNullOrWhiteSpace(DOI.MetadataUrl))
+            sbHtml.AppendHtmlDTDD("Keywords", $"{string.Join("; ", cleanSubjects.OrderBy(i => i.Name).Select(i => i.Name))}");
+            if (!string.IsNullOrWhiteSpace(DOI?.MetadataUrl))
             {
-                sbHtml.AppendDTDD("Metadata URL", $"<a href='{DOI.MetadataUrl}'>{DOI.MetadataUrl}</a>");
+                sbHtml.AppendHtmlDTDD("Metadata URL", $"<a href='{DOI.MetadataUrl}'>{DOI.MetadataUrl}</a>");
             }
-            if (!string.IsNullOrWhiteSpace(DOI.QueryUrl))
+            if (!string.IsNullOrWhiteSpace(DOI?.QueryUrl))
             {
-                sbHtml.AppendDTDD("Query URL", $"<a href='{DOI.QueryUrl}'>{DOI.QueryUrl}</a>");
+                sbHtml.AppendHtmlDTDD("Query URL", $"<a href='{DOI.QueryUrl}'>{DOI.QueryUrl}</a>");
             }
-            sbHtml.AppendDTDD("Citation", CitationHtml);
-            sbHtml.AppendDLEnd();
+            sbHtml.AppendHtmlDTDD("Citation", CitationHtml);
+            sbHtml.AppendHtmlDLEnd();
             DescriptionHtml = sbHtml.ToString();
         }
 

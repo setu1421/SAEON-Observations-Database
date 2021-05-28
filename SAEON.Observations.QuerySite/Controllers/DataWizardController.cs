@@ -779,6 +779,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpGet]
         [Route("ViewDownload/{id:guid}")]
+        [Authorize]
         public async Task<ActionResult> ViewDownload(Guid? id)
         {
             using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Id", id } }))
