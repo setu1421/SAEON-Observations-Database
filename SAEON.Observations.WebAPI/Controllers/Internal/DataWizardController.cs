@@ -1,4 +1,5 @@
-﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+﻿using Humanizer;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -333,33 +334,35 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             result.Metadata.Title = string.Join("; ", titles.OrderBy(i => i));
             var descriptions = observations.Where(i => i.StationName.StartsWith("ELW, ")).Select(i =>
             {
+                var variable = $"{MetadataHelper.CleanPrefixes(i.PhenomenonName)}, {i.OfferingName}, {i.UnitName}";
                 var siteName = MetadataHelper.CleanPrefixes(i.SiteName);
                 var stationName = MetadataHelper.CleanPrefixes(i.StationName);
                 if (stationName.EndsWith(siteName))
                 {
                     stationName = stationName.Substring(0, stationName.Length - siteName.Length - 2);
                 }
-                return $"{stationName} of {i.PhenomenonName}, {i.OfferingName}, {i.UnitName}";
+                return $"{variable} for {stationName}";
             }).Union(observations.Where(i => !i.StationName.StartsWith("ELW, ")).Select(i =>
             {
+                var variable = $"{MetadataHelper.CleanPrefixes(i.PhenomenonName)}, {i.OfferingName}, {i.UnitName}";
                 var siteName = MetadataHelper.CleanPrefixes(i.SiteName);
                 var stationName = MetadataHelper.CleanPrefixes(i.StationName);
-                return $"{siteName}, {stationName} of {i.PhenomenonName}, {i.OfferingName}, {i.UnitName}";
+                return $"{variable} for {siteName}, {stationName}";
             })).Distinct();
             result.Metadata.Description = string.Join("; ", descriptions.OrderBy(i => i));
             var datasetCodes = observations.Select(i => $"{i.StationCode}~{i.PhenomenonCode}~{i.OfferingCode}~{i.UnitCode}").Distinct();
             SAEONLogs.Verbose("DatasetCodes: {DatasetCodes}", datasetCodes.ToList());
-            var datasetDOIs = DbContext.DigitalObjectIdentifiers.Where(i => datasetCodes.Contains(i.Code)).OrderBy(i => i.Name);
+            var datasetDOIs = DbContext.DigitalObjectIdentifiers.Where(i => datasetCodes.Contains(i.Code)).OrderBy(i => i.Name).ToList();
             if (!datasetDOIs.Any())
             {
-                SAEONLogs.Error("No datasetDOIs found");
+                SAEONLogs.Error("No dataset DOIs found! Dataset Codes: {Codes}", datasetCodes);
             }
             else
             {
-                result.Metadata.Citation = "Please cite the use of these datasets as follows: " + string.Join("; ", datasetDOIs.Select(i => $"{i.Citation} accessed {result.Date:yyyy-MM-dd HH:mm}"));
+                result.Metadata.Citation = $"Please cite the use of {"this".ToQuantity(datasetDOIs.Count, ShowQuantityAs.None)} {"dataset".ToQuantity(datasetDOIs.Count, ShowQuantityAs.None)} as follows: " + string.Join("; ", datasetDOIs.Select(i => $"{i.Citation} accessed {result.Date:yyyy-MM-dd HH:mm}"));
                 var sbHtml = new StringBuilder();
                 sbHtml.AppendLine("<p>");
-                sbHtml.AppendLine("Please cite the use of these datasets as follows:");
+                sbHtml.AppendLine($"Please cite the use of {"this".ToQuantity(datasetDOIs.Count, ShowQuantityAs.None)} {"dataset".ToQuantity(datasetDOIs.Count, ShowQuantityAs.None)} as follows:");
                 sbHtml.AppendHtmlUL(datasetDOIs.Select(i => $"{i.CitationHtml} accessed {result.Date:yyyy-MM-dd HH:mm}"));
                 sbHtml.AppendLine("</p>");
                 result.Metadata.CitationHtml = sbHtml.ToString();

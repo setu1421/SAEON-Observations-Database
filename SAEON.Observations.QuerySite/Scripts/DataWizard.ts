@@ -16,7 +16,7 @@ export function Testing() {
 
 // Variables
 const locationsExpand = true;
-let locationsLoaded = false; 
+let locationsLoaded = false;
 let locationsReady = false;
 let locationsSelected = false;
 let loading = false;

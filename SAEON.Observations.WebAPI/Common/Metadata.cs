@@ -154,13 +154,15 @@ namespace SAEON.Observations.WebAPI
             {
                 Title = $"{variable} for {station}";
             }
-            Title = CleanText($"{Title} {Elevation()}{Dates(true)}in the SAEON Observations Database");
+            //Title = CleanText($"{Title} {Elevation()}{Dates(true)} in the SAEON Observations Database");
+            Title = CleanText($"{Title} {Elevation()}{Dates(true)}");
             // Description
             if (string.IsNullOrWhiteSpace(Description))
             {
                 Description = $"{variable} for {station}";
             }
-            Description = CleanText($"{Description} {Elevation()}{Dates(false)}{BoundingBox()}in the SAEON Observations Database");
+            //Description = CleanText($"{Description} {Elevation()}{Dates(false)}{BoundingBox()} in the SAEON Observations Database");
+            Description = CleanText($"{Description} {Elevation()}{Dates(false)}{BoundingBox()}");
             // Citation
             if (string.IsNullOrEmpty(Citation) || Citation == DOIHelper.BlankText) Citation = GenerateCitation();
             if (string.IsNullOrEmpty(CitationHtml) || CitationHtml == DOIHelper.BlankHtml) CitationHtml = GenerateCitationHtml();
