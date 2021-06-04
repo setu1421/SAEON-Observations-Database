@@ -9,8 +9,8 @@ using System.Web.Mvc;
 namespace SAEON.Observations.QuerySite.Controllers
 {
 
-    [RoutePrefix("DOI/10.15493")]
-    public class DOIController : BaseController
+    [RoutePrefix("Dataset/10.15493")]
+    public class DatasetController : BaseController
     {
         [Route("{id}")]
         public async Task<ActionResult> Index(string id)
@@ -25,12 +25,12 @@ namespace SAEON.Observations.QuerySite.Controllers
                         using (var formContent = new FormUrlEncodedContent(new[] {
                                 new KeyValuePair<string, string>("doi", doi) }))
                         {
-                            var response = await client.PostAsync("/Internal/DOI/AsHtml", formContent);
+                            var response = await client.PostAsync("/Internal/DOI/AsQuery", formContent);
                             response.EnsureSuccessStatusCode();
-                            var model = new DOIHtmlModel
+                            var model = new DOIQuerylModel
                             {
                                 Id = doi,
-                                Html = await response.Content.ReadAsStringAsync()
+                                Input = await response.Content.ReadAsStringAsync()
                             };
                             return View(model);
                         }

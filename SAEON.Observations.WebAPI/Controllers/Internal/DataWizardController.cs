@@ -519,8 +519,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         //SAEONLogs.Verbose("Minting DOI");
                         //var doi = await DOIHelper.CreateAdHocDOI(DbContext, HttpContext, doiCode, doiCode);
                         //SAEONLogs.Verbose("DOI: {@DOI}", doi);
-                        var metadata = new Metadata(output.Metadata);
-                        metadata.Accessed = output.Date;
+                        var metadata = new Metadata(output.Metadata)
+                        {
+                            Accessed = output.Date
+                        };
                         metadata.Generate();
                         SAEONLogs.Verbose("Metadata: {@Metadata}", metadata);
                         SAEONLogs.Verbose("Adding UserDownload");

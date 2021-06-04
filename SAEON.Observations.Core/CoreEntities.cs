@@ -277,7 +277,7 @@ namespace SAEON.Observations.Core
         public List<DataSchema> DataSchemas { get; set; }
     }
 
-    public enum DOIType { ObservationsDb, Collection, Organisation, Programme, Project, Site, Station, Dataset, Periodic, AdHoc }
+    public enum DOIType { /*ObservationsDb, Collection, Organisation, Programme, Project, Site, Station,*/ Dataset = 7/*, Periodic, AdHoc*/ }
 
     /// <summary>
     /// DigitalObjectIdentifiers entity
@@ -372,6 +372,8 @@ namespace SAEON.Observations.Core
         /// </summary>
         public bool? ODPMetadataIsValid { get; set; }
         public string ODPMetadataErrors { get; set; }
+        public bool? ODPMetadataIsPublished { get; set; }
+        public string ODPMetadataPublishErrors { get; set; }
         /// <summary> 
         /// UserId of user who added the DigitalObjectIdentifier   
         /// </summary>

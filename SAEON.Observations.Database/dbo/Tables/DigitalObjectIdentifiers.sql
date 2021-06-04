@@ -23,6 +23,8 @@
     [ODPMetadataNeedsUpdate] Bit null,
     [ODPMetadataIsValid] Bit null,
     [ODPMetadataErrors] VarChar(Max) null,
+    [ODPMetadataIsPublished] Bit null,
+    [ODPMetadataPublishErrors] VarChar(Max) null,
     [AddedAt] DateTime null Constraint [DF_DigitalObjectIdentifiers_AddedAt] DEFAULT (getdate()),
     [AddedBy] VarChar(128) not Null,
     [UpdatedAt] DateTime null Constraint [DF_DigitalObjectIdentifiers_UpdatedAt] DEFAULT (getdate()), 

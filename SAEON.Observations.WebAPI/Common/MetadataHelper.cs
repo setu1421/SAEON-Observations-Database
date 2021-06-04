@@ -14,7 +14,7 @@ namespace SAEON.Observations.WebAPI
 {
     public static class MetadataHelper
     {
-        public static DOIType[] DynamicDOITypes => new DOIType[] { DOIType.ObservationsDb, DOIType.Collection, DOIType.Organisation, DOIType.Programme, DOIType.Project, DOIType.Site, DOIType.Station, DOIType.Dataset };
+        public static DOIType[] DynamicDOITypes => new DOIType[] { /*DOIType.ObservationsDb, DOIType.Collection, DOIType.Organisation, DOIType.Programme, DOIType.Project, DOIType.Site, DOIType.Station,*/ DOIType.Dataset };
 
 
         public static string CleanPrefixes(string name)

@@ -58,5 +58,30 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 }
             }
         }
+
+        [HttpPost("[action]")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> AsQuery([FromForm] string doi)
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    var model = await DbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOI == doi);
+                    if (model == null)
+                    {
+                        SAEONLogs.Error($"DOI {doi} not found");
+                        return NotFound($"DOI {doi} not found");
+                    }
+                    return Content(model.MetadataHtml, MediaTypeNames.Text.Html);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
     }
 }
