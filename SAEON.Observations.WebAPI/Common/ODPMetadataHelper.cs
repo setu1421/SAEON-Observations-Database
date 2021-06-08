@@ -34,7 +34,6 @@ namespace SAEON.Observations.WebAPI
                         var jObj = new JObject(
                             new JProperty("doi", doi.DOI),
                             new JProperty("collection_key", collection),
-                            //new JProperty("schema_key", "saeon-odp-4-2"),
                             new JProperty("schema_key", "saeon-datacite-4-3"),
                             new JProperty("metadata", JObject.Parse(doi.MetadataJson)),
                             new JProperty("terms_conditions_accepted", true),
@@ -60,7 +59,7 @@ namespace SAEON.Observations.WebAPI
                         doi.ODPMetadataIsValid = validated && !errors.HasValues;
                         doi.ODPMetadataNeedsUpdate = !doi.ODPMetadataIsValid;
                     }
-                    if (needsPublish)
+                    if (needsPublish && (doi.ODPMetadataIsValid ?? false))
                     {
                         await AddLineAsync($"Publishing {doi.DOIType} {doi.Code}, {doi.Name}");
                         doi.ODPMetadataIsPublished = null;
@@ -70,11 +69,9 @@ namespace SAEON.Observations.WebAPI
                         var jsonODP = await response.Content.ReadAsStringAsync();
                         SAEONLogs.Verbose("jsonODP: {jsonODP}", jsonODP);
                         var jODP = JObject.Parse(jsonODP);
-                        doi.ODPMetadataIsPublished = jODP["success"].ToString().IsTrue();
-                        if (!doi.ODPMetadataIsPublished ?? false)
-                        {
-                            doi.ODPMetadataPublishErrors = jODP["errors"].ToString();
-                        }
+                        var errors = jODP["errors"];
+                        doi.ODPMetadataPublishErrors = errors.ToString();
+                        doi.ODPMetadataIsPublished = jODP["success"].ToString().IsTrue() && !errors.HasValues;
                     }
                     await dbContext.SaveChangesAsync();
                 }

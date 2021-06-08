@@ -360,9 +360,11 @@ namespace SAEON.Observations.WebAPI
                     //new JProperty("schemaVersion", "https://datacite.org/schema/kernel-4"),
                     new JProperty("schemaVersion", "http://datacite.org/schema/kernel-4"),
                     new JProperty("immutableResource", new JObject(
-                        new JProperty("resourceDescription", Title),
-                        new JProperty("resourceData", new JObject(
-                            new JProperty("downloadURL", DOI.QueryUrl)))))
+                        new JProperty("resourceName", Title),
+                        new JProperty("resourceDescription", Description),
+                        new JProperty("resourceDownload", new JObject(
+                            new JProperty("downloadURL", DOI.QueryUrl),
+                            new JProperty("fileFormat", "external")))))
                );
             return jObj.ToString(Formatting.Indented);
         }

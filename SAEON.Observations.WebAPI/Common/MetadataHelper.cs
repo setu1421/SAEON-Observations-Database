@@ -113,6 +113,10 @@ namespace SAEON.Observations.WebAPI
                             oldSha256 = doiDataset.MetadataJsonSha256;
                             doiDataset.MetadataJsonSha256 = doiDataset.MetadataJson.Sha256();
                             doiDataset.ODPMetadataNeedsUpdate = (oldSha256 != doiDataset.MetadataJsonSha256) || (!doiDataset.ODPMetadataIsValid ?? true);
+                            if (doiDataset.ODPMetadataNeedsUpdate ?? false)
+                            {
+                                doiDataset.ODPMetadataIsPublished = false;
+                            }
                             doiDataset.MetadataHtml = metaDataset.ToHtml();
                             await dbContext.SaveChangesAsync();
                         }
