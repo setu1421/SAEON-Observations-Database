@@ -8,6 +8,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Web;
@@ -41,10 +42,21 @@ namespace SAEON.Observations.QuerySite.Controllers
         [Route]
         public async Task<ActionResult> Index()
         {
+            return await Index(await CreateModelAsync());
+            //ViewBag.Authorization = await GetAuthorizationAsync();
+            //ViewBag.Tenant = Tenant;
+            //ViewBag.WebAPIUrl = ConfigurationManager.AppSettings["WebAPIUrl"];
+            //return View(await CreateModelAsync());
+        }
+
+        [HttpGet]
+        private async Task<ActionResult> Index(DataWizardModel model)
+        {
             ViewBag.Authorization = await GetAuthorizationAsync();
             ViewBag.Tenant = Tenant;
             ViewBag.WebAPIUrl = ConfigurationManager.AppSettings["WebAPIUrl"];
-            return View(await CreateModelAsync());
+            SessionModel = model;
+            return View(model);
         }
 
         #region State
@@ -236,7 +248,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     SessionModel = model;
                     SAEONLogs.Verbose("LocationNodesSelected: {@LocationNodesSelected}", model.LocationNodesSelected);
                     SAEONLogs.Verbose("Locations: {@Locations}", model.Locations);
-                    SAEONLogs.Verbose("MapPoints: {@MapPoints}", model.MapPoints);
+                    //SAEONLogs.Verbose("MapPoints: {@MapPoints}", model.MapPoints);
                     return PartialView("_LocationsSelectedHtml", model);
                 }
                 catch (Exception ex)
@@ -844,5 +856,53 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
         #endregion Download
+
+        #region Dataset
+        [HttpGet]
+        [Route("Dataset/{id}")]
+        public async Task<ActionResult> Dataset(string id)
+        {
+            ViewBag.Authorization = await GetAuthorizationAsync();
+            ViewBag.Tenant = Tenant;
+            ViewBag.WebAPIUrl = ConfigurationManager.AppSettings["WebAPIUrl"];
+            var doi = "10.15493/" + id;
+            using (var client = await GetWebAPIClientAsync())
+            {
+                using (var formContent = new FormUrlEncodedContent(new[] {
+                        new KeyValuePair<string, string>("doi", doi) }))
+                {
+                    var response = await client.PostAsync("/Internal/DOI/AsQueryInput", formContent);
+                    response.EnsureSuccessStatusCode();
+                    var datasetInput = await response.Content.ReadAsStringAsync();
+                    SAEONLogs.Verbose("DatasetInput: {input}", datasetInput);
+                    var wizardInput = JsonConvert.DeserializeObject<DataWizardDataInput>(datasetInput);
+                    SAEONLogs.Verbose("WizardInput: {@wizardInput}", wizardInput);
+                    var model = await CreateModelAsync();
+                    // Locations
+                    List<string> locations = new List<string>();
+                    foreach (var location in wizardInput.Locations)
+                    {
+                        locations.AddRange(model.LocationNodes.Where(i => i.Key.StartsWith($"STA~{location.StationId}")).Select(i => i.Key));
+                    }
+                    UpdateLocationsSelected(locations);
+                    // Variables
+                    List<string> variables = new List<string>();
+                    foreach (var variable in wizardInput.Variables)
+                    {
+                        variables.AddRange(model.VariableNodes.Where(i => i.Key == $"UNI~{variable.UnitId}|OFF~{variable.OfferingId}|PHE~{variable.PhenomenonId}").Select(i => i.Key));
+                    }
+                    UpdateVariablesSelected(variables);
+                    // Filters
+                    model.StartDate = wizardInput.StartDate;
+                    model.EndDate = wizardInput.EndDate;
+                    model.ElevationMinimum = wizardInput.ElevationMinimum;
+                    model.ElevationMaximum = wizardInput.ElevationMaximum;
+                    SessionModel = model;
+                    return View("Index", model);
+                }
+            }
+        }
+
+        #endregion
     }
 }

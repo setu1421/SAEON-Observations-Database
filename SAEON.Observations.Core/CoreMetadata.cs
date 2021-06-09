@@ -238,7 +238,8 @@ namespace SAEON.Observations.Core
             Name = "SAEON Observations Database",
             Type = "Organizational",
             Identifiers = new List<MetadataNameIdentifier> { new MetadataNameIdentifier {
-                Name = "https://ror.org/041j42q70", Scheme = "ROR", SchemeUri = "https://ror.org" } }
+                Name = "https://ror.org/041j42q70", Scheme = "ROR", SchemeUri = "https://ror.org" } },
+            Affiliations = new List<MetadataAffiliation> { new MetadataAffiliation { Name = "South African Environmental Observation Network (SAEON), PO Box 2600, Pretoria, 0001, South Africa" } }
         };
         public string Language { get; set; } = "en-za";
         public MetadataResourceType ResourceType { get; } = new MetadataResourceType { Name = "Dataset", Type = "Observations" };
@@ -284,7 +285,7 @@ namespace SAEON.Observations.Core
                 {
                     new MetadataAffiliation
                     {
-                        Name = "South African Environmental Observation Network (SAEON)",
+                        Name = "PO Box 2600, Pretoria, 0001, South Africa",
                         Identifier = "https://ror.org/041j42q70",
                         Scheme = "ROR",
                         SchemeUri = "https://ror.org"
@@ -293,14 +294,14 @@ namespace SAEON.Observations.Core
             },
             new MetadataContributor
             {
-                Name = "South African Environmental Observation Network (SAEON), uLwazi node",
+                Name = "uLwazi Node",
                 Type = "Organizational",
                 ContributorType = "DataCurator",
                 Affiliations = new List<MetadataAffiliation>
                 {
                     new MetadataAffiliation
                     {
-                        Name = "South African Environmental Observation Network (SAEON)",
+                        Name = "South African Environmental Observation Network (SAEON), PO Box 2600, Pretoria, 0001, South Africa",
                         Identifier = "https://ror.org/041j42q70",
                         Scheme = "ROR",
                         SchemeUri = "https://ror.org"
@@ -327,7 +328,7 @@ namespace SAEON.Observations.Core
                 {
                     new MetadataAffiliation
                     {
-                        Name = "South African Environmental Observation Network (SAEON)",
+                        Name = "Elwandle Coastal Node, South African Environmental Observation Network (SAEON), PO Box 2600, Pretoria, 0001, South Africa",
                         Identifier = "https://ror.org/041j42q70",
                         Scheme = "ROR",
                         SchemeUri = "https://ror.org"

@@ -86,6 +86,7 @@ namespace SAEON.Observations.WebAPI
         {
             Expression = expression;
         }
+
         public OrderBy(Expression<Func<TEntity, object>> expression, bool ascending)
         {
             Expression = expression;
