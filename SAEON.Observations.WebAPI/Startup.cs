@@ -1,6 +1,7 @@
 using HealthChecks.UI.Client;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNet.OData.Formatter;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OData.Edm;
 using Microsoft.OpenApi.Models;
 using SAEON.Core;
@@ -87,7 +89,6 @@ namespace SAEON.Observations.WebAPI
                         .AddDbContextCheck<ObservationsDbContext>("ObservationsDatabase");
 
                     services.AddDbContext<ObservationsDbContext>();
-                    services.AddOData();
 
                     services.AddSwaggerGen(options =>
                     {
@@ -126,11 +127,11 @@ namespace SAEON.Observations.WebAPI
                         //    }
                         //});
                     });
-                    //SetOutputFormatters(services);
-
                     services.AddSignalR();
                     services.AddControllers();
                     services.AddControllersWithViews();
+                    services.AddOData();
+                    SetODataFormatters(services);
                     services.AddApplicationInsightsTelemetry();
                     IFileProvider physicalProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
                     services.AddSingleton<IFileProvider>(physicalProvider);
@@ -141,6 +142,29 @@ namespace SAEON.Observations.WebAPI
                     throw;
                 }
             }
+
+
+            void SetODataFormatters(IServiceCollection services)
+            {
+                services.AddMvcCore(options =>
+                {
+                    foreach (var formatter in options.OutputFormatters
+                        .OfType<ODataOutputFormatter>()
+                        .Where(it => !it.SupportedMediaTypes.Any()))
+                    {
+                        formatter.SupportedMediaTypes.Add(
+                            new MediaTypeHeaderValue("application/odata"));
+                    }
+                    foreach (var formatter in options.InputFormatters
+                        .OfType<ODataInputFormatter>()
+                        .Where(it => !it.SupportedMediaTypes.Any()))
+                    {
+                        formatter.SupportedMediaTypes.Add(
+                            new MediaTypeHeaderValue("application/odata"));
+                    }
+                });
+            }
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -260,27 +284,6 @@ namespace SAEON.Observations.WebAPI
                 return builder.GetEdmModel();
             }
         }
-
-        //private static void SetOutputFormatters(IServiceCollection services)
-        //{
-        //    services.AddMvcCore(options =>
-        //    {
-        //        foreach (var formatter in options.OutputFormatters
-        //            .OfType<ODataOutputFormatter>()
-        //            .Where(it => !it.SupportedMediaTypes.Any()))
-        //        {
-        //            formatter.SupportedMediaTypes.Add(
-        //                new MediaTypeHeaderValue("application/odata"));
-        //        }
-        //        foreach (var formatter in options.InputFormatters
-        //            .OfType<ODataInputFormatter>()
-        //            .Where(it => !it.SupportedMediaTypes.Any()))
-        //        {
-        //            formatter.SupportedMediaTypes.Add(
-        //                new MediaTypeHeaderValue("application/odata"));
-        //        }
-        //    });
-        //}
     }
 }
 
