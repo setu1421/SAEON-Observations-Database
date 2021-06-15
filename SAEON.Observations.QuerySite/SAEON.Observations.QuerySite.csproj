@@ -741,7 +741,9 @@
     <Content Include="Images\Banner.jpg" />
     <Content Include="Images\DSI logo.jpg" />
     <Content Include="Images\DST logo.png" />
+    <Content Include="Images\green-dot.png" />
     <Content Include="Images\Logo.png" />
+    <Content Include="Images\red-dot.png" />
     <Content Include="Images\SAEON 20th Logo.png" />
     <Content Include="Images\SAEON logo.png" />
     <Content Include="Images\SMCRI Booklet-map.jpg" />

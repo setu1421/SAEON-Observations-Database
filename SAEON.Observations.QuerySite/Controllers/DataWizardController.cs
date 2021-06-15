@@ -898,6 +898,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     model.ElevationMinimum = wizardInput.ElevationMinimum;
                     model.ElevationMaximum = wizardInput.ElevationMaximum;
                     SessionModel = model;
+                    //SAEONLogs.Verbose("SessionModel: {@SessionModel}", model);
                     return View("Index", model);
                 }
             }

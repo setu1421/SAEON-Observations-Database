@@ -165,10 +165,10 @@ export function UpdateMap() {
             markers.push(marker);
             mapBounds.extend(marker.getPosition());
             if (mapPoint.IsSelected) {
-                marker.setIcon('https://maps.google.com/mapfiles/ms/icons/green-dot.png');
+                marker.setIcon('/Images/green-dot.png');
             }
             else {
-                marker.setIcon('https://maps.google.com/mapfiles/ms/icons/red-dot.png');
+                marker.setIcon('/Images/red-dot.png');
             }
         }
     })
