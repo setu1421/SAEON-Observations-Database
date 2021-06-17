@@ -149,7 +149,6 @@
     <Compile Include="Generated\VImportBatchSummary.cs" />
     <Compile Include="Generated\VInstrumentOrganisation.cs" />
     <Compile Include="Generated\VInstrumentSensor.cs" />
-    <Compile Include="Generated\VInventorySensor.cs" />
     <Compile Include="Generated\VLocation.cs" />
     <Compile Include="Generated\VModuleRoleModule.cs" />
     <Compile Include="Generated\VObservation.cs" />
