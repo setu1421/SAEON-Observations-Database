@@ -91,7 +91,7 @@ namespace SAEON.Observations.WebAPI
                                 .ThenBy(i => i.StartDate);
                         }
 
-                        async Task<DigitalObjectIdentifier> EnsureDatasetDOI(Station station, Dataset dataset)
+                        async Task<DigitalObjectIdentifier> EnsureDatasetDOI(Station station, InventoryDataset dataset)
                         {
                             var code = $"{station.Code}~{dataset.PhenomenonCode}~{dataset.OfferingCode}~{dataset.UnitCode}";
                             var name = $"{station.Name}, {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName}";
@@ -151,7 +151,14 @@ namespace SAEON.Observations.WebAPI
                                         foreach (var station in await dbContext.Stations.Where(i => stationCodes.Contains(i.Code))
                                             .ToListAsync())
                                         {
-                                            foreach (var dataset in await dbContext.Datasets.Where(i => i.StationCode == station.Code).ToListAsync())
+                                            foreach (var dataset in await dbContext.InventoryDatasets.Where(i =>
+                                                i.OrganisationCode == organisation.Code &&
+                                                i.ProgrammeCode == programme.Code &&
+                                                i.ProjectCode == project.Code &&
+                                                i.SiteCode == site.Code &&
+                                                i.StationCode == station.Code &&
+                                                i.LatitudeNorth.HasValue && i.LongitudeEast.HasValue &&
+                                                i.VerifiedCount > 0).ToListAsync())
                                             {
                                                 var doiDataset = await EnsureDatasetDOI(station, dataset);
                                             }

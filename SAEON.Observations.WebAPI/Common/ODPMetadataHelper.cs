@@ -65,6 +65,11 @@ namespace SAEON.Observations.WebAPI
                         doi.ODPMetadataIsPublished = null;
                         doi.ODPMetadataPublishErrors = null;
                         var response = await client.PostAsync($"metadata/workflow/{doi.ODPMetadataId}?state=published", null);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                            SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                        }
                         response.EnsureSuccessStatusCode();
                         var jsonODP = await response.Content.ReadAsStringAsync();
                         SAEONLogs.Verbose("jsonODP: {jsonODP}", jsonODP);
@@ -91,9 +96,10 @@ namespace SAEON.Observations.WebAPI
                 //}
 
                 await AddLineAsync("Generating ODP metadata");
-                foreach (var doiDataset in await dbContext.DigitalObjectIdentifiers.Where(i => i.DOIType == DOIType.Dataset).ToListAsync())
+                foreach (var doiDataset in await dbContext.DigitalObjectIdentifiers.Where(i => i.DOIType == DOIType.Dataset).OrderBy(i => i.Id).ToListAsync())
                 {
                     await GenerateODPMetadataForDynamicDOI(doiDataset);
+                    break;
                 }
                 //var doiObservations = await dbContext.DigitalObjectIdentifiers.SingleAsync(i => i.DOIType == DOIType.ObservationsDb);
                 //await GenerateODPMetadataForDynamicDOI(doiObservations);
@@ -148,10 +154,8 @@ namespace SAEON.Observations.WebAPI
             }
 
             var sb = new StringBuilder();
-            using (var client = new HttpClient())
+            using (var client = await GetClient(config))
             {
-                client.BaseAddress = new Uri(config["ODPMetadataUrl"].AddTrailingForwardSlash());
-                client.SetBearerToken(await GetTokenAsync());
                 await GenerateODPMetadata(client);
                 await AddLineAsync("Done");
                 return sb.ToString();
@@ -163,6 +167,17 @@ namespace SAEON.Observations.WebAPI
                 SAEONLogs.Information(line);
                 await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateODPMetadataStatusUpdate, line);
             }
+        }
+
+
+        public static async Task<HttpClient> GetClient(IConfiguration config)
+        {
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri(config["ODPMetadataUrl"].AddTrailingForwardSlash())
+            };
+            client.SetBearerToken(await GetTokenAsync());
+            return client;
 
             async Task<string> GetTokenAsync()
             {
@@ -210,5 +225,60 @@ namespace SAEON.Observations.WebAPI
                 }
             }
         }
+
+        public static async Task<string> GetMetadataRecords(IConfiguration config)
+        {
+            using (var client = await GetClient(config))
+            {
+                var sb = new StringBuilder();
+                for (int i = 1; i < 335; i++)
+                {
+                    var response = await client.GetAsync($"metadata/doi/10.15493/obsdb.0000.{i:X4}");
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                        SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                    }
+                    response.EnsureSuccessStatusCode();
+                    var jsonODP = await response.Content.ReadAsStringAsync();
+                    var jODP = JObject.Parse(jsonODP);
+                    sb.AppendLine(jODP.Value<string>("id"));
+                }
+                return sb.ToString(); ;
+            }
+        }
+
+        public static async Task<string> UnpublishMetadataRecords(IConfiguration config)
+        {
+            using (var client = await GetClient(config))
+            {
+                var ids = new List<string>();
+                for (int i = 1; i < 335; i++)
+                {
+                    var response = await client.GetAsync($"metadata/doi/10.15493/obsdb.0000.{i:X4}");
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                        SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                    }
+                    response.EnsureSuccessStatusCode();
+                    var jsonODP = await response.Content.ReadAsStringAsync();
+                    var jODP = JObject.Parse(jsonODP);
+                    var id = jODP.Value<string>("id");
+                    ids.Add(id);
+                    response = await client.PostAsync($"metadata/workflow/{id}", null);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                        SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                    }
+                    response.EnsureSuccessStatusCode();
+                    break;
+                    if (i > 10) break;
+                }
+                return string.Join(";", ids);
+            }
+        }
+
     }
 }
