@@ -30,7 +30,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await DOIHelper.CreateDOIsV2(DbContext, AdminHub, HttpContext));
+                    return Content(await DOIHelper.CreateDOIsV2(DbContext, AdminHub, HttpContext, AnalyticsHelper.IsTest(Request)));
                 }
                 catch (Exception ex)
                 {
@@ -47,7 +47,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await MetadataHelper.CreateMetadataV2(DbContext, AdminHub));
+                    return Content(await MetadataHelper.CreateMetadataV2(DbContext, AdminHub, AnalyticsHelper.IsTest(Request)));
                 }
                 catch (Exception ex)
                 {

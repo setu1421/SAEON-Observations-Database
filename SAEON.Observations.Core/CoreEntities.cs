@@ -408,10 +408,10 @@ namespace SAEON.Observations.Core
         //[JsonIgnore, SwaggerIgnore]
         //public List<UserDownload> UserDownloads { get; set; }
 
-        public void SetUrls()
+        public void SetUrls(bool isTest)
         {
             MetadataUrl = $"https://catalogue.saeon.ac.za/records/{DOI}";
-            QueryUrl = $"https://observations.saeon.ac.za/Dataset/{DOI}";
+            QueryUrl = $"https://observations{(isTest ? "-test" : "")}.saeon.ac.za/Dataset/{DOI}";
         }
     }
 

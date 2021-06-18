@@ -92,14 +92,14 @@
                             <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownQuery" role="button" data-mdb-toggle="dropdown" aria-expanded="false">Query</a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdownQuery">
-                                    @Html.ActionLink("Data", "Index", "DataWizard", null, new { @class = "dropdown-item" })
-                                    @Html.ActionLink("Datasets", "Datasets", "Query", null, new { @class = "dropdown-item" })
-                                    @Html.ActionLink("Sensors", "Sensors", "Query", null, new { @class = "dropdown-item" })
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownQuery">
+                                    <li>@Html.ActionLink("Data", "Index", "DataWizard", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Datasets", "Datasets", "Query", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Sensors", "Sensors", "Query", null, new { @class = "dropdown-item" })</li>
                                     @*@Html.ActionLink("Coverage", "Index", "Coverage", null, new { @class = "dropdown-item" })*@
                                     @*@Html.ActionLink("Spacial Coverage", "Index", "SpacialCoverage", null, new { @class = "dropdown-item" })*@
                                     @*@Html.ActionLink("Temporal Coverage", "Index", "TemporalCoverage", null, new { @class = "dropdown-item" })*@
-                                </div>
+                                </ul>
                             </li>
                             <li class="nav-item">@Html.ActionLink("About", "About", "Home", null, new { @class = "nav-link" })</li>
                             <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })</li>

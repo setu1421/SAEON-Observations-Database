@@ -28,7 +28,7 @@ namespace SAEON.Observations.WebAPI
             return result;
         }
 
-        public static async Task<string> CreateMetadataV2(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub)
+        public static async Task<string> CreateMetadataV2(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, bool isTest)
         {
             using (SAEONLogs.MethodCall(typeof(MetadataHelper)))
             {
@@ -108,7 +108,7 @@ namespace SAEON.Observations.WebAPI
                             doiDataset.DescriptionHtml = metaDataset.DescriptionHtml;
                             doiDataset.Citation = metaDataset.Citation;
                             doiDataset.CitationHtml = metaDataset.CitationHtml;
-                            doiDataset.SetUrls();
+                            doiDataset.SetUrls(isTest);
                             doiDataset.MetadataJson = metaDataset.ToJson();
                             oldSha256 = doiDataset.MetadataJsonSha256;
                             doiDataset.MetadataJsonSha256 = doiDataset.MetadataJson.Sha256();
