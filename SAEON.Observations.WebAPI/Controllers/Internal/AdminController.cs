@@ -97,40 +97,40 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetMetadataRecords()
-        {
-            using (SAEONLogs.MethodCall(GetType()))
-            {
-                try
-                {
-                    return Content(await ODPMetadataHelper.GetMetadataRecords(Config));
-                }
-                catch (Exception ex)
-                {
-                    SAEONLogs.Exception(ex);
-                    throw;
-                }
-            }
+        //[HttpGet("[action]")]
+        //public async Task<IActionResult> GetMetadataRecords()
+        //{
+        //    using (SAEONLogs.MethodCall(GetType()))
+        //    {
+        //        try
+        //        {
+        //            return Content(await ODPMetadataHelper.GetMetadataRecords(Config));
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            SAEONLogs.Exception(ex);
+        //            throw;
+        //        }
+        //    }
 
-        }
+        //}
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> UnpublishMetadataRecords()
-        {
-            using (SAEONLogs.MethodCall(GetType()))
-            {
-                try
-                {
-                    return Content(await ODPMetadataHelper.UnpublishMetadataRecords(Config));
-                }
-                catch (Exception ex)
-                {
-                    SAEONLogs.Exception(ex);
-                    throw;
-                }
-            }
+        //[HttpGet("[action]")]
+        //public async Task<IActionResult> UnpublishMetadataRecords()
+        //{
+        //    using (SAEONLogs.MethodCall(GetType()))
+        //    {
+        //        try
+        //        {
+        //            return Content(await ODPMetadataHelper.UnpublishMetadataRecords(Config));
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            SAEONLogs.Exception(ex);
+        //            throw;
+        //        }
+        //    }
 
-        }
+        //}
     }
 }

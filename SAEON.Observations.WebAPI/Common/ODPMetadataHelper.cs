@@ -99,7 +99,6 @@ namespace SAEON.Observations.WebAPI
                 foreach (var doiDataset in await dbContext.DigitalObjectIdentifiers.Where(i => i.DOIType == DOIType.Dataset).OrderBy(i => i.Id).ToListAsync())
                 {
                     await GenerateODPMetadataForDynamicDOI(doiDataset);
-                    break;
                 }
                 //var doiObservations = await dbContext.DigitalObjectIdentifiers.SingleAsync(i => i.DOIType == DOIType.ObservationsDb);
                 //await GenerateODPMetadataForDynamicDOI(doiObservations);
@@ -226,59 +225,59 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
-        public static async Task<string> GetMetadataRecords(IConfiguration config)
-        {
-            using (var client = await GetClient(config))
-            {
-                var sb = new StringBuilder();
-                for (int i = 1; i < 335; i++)
-                {
-                    var response = await client.GetAsync($"metadata/doi/10.15493/obsdb.0000.{i:X4}");
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
-                        SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
-                    }
-                    response.EnsureSuccessStatusCode();
-                    var jsonODP = await response.Content.ReadAsStringAsync();
-                    var jODP = JObject.Parse(jsonODP);
-                    sb.AppendLine(jODP.Value<string>("id"));
-                }
-                return sb.ToString(); ;
-            }
-        }
+        //public static async Task<string> GetMetadataRecords(IConfiguration config)
+        //{
+        //    using (var client = await GetClient(config))
+        //    {
+        //        var sb = new StringBuilder();
+        //        for (int i = 1; i < 335; i++)
+        //        {
+        //            var response = await client.GetAsync($"metadata/doi/10.15493/obsdb.0000.{i:X4}");
+        //            if (!response.IsSuccessStatusCode)
+        //            {
+        //                SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+        //                SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+        //            }
+        //            response.EnsureSuccessStatusCode();
+        //            var jsonODP = await response.Content.ReadAsStringAsync();
+        //            var jODP = JObject.Parse(jsonODP);
+        //            sb.AppendLine(jODP.Value<string>("id"));
+        //        }
+        //        return sb.ToString(); ;
+        //    }
+        //}
 
-        public static async Task<string> UnpublishMetadataRecords(IConfiguration config)
-        {
-            using (var client = await GetClient(config))
-            {
-                var ids = new List<string>();
-                for (int i = 1; i < 335; i++)
-                {
-                    var response = await client.GetAsync($"metadata/doi/10.15493/obsdb.0000.{i:X4}");
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
-                        SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
-                    }
-                    response.EnsureSuccessStatusCode();
-                    var jsonODP = await response.Content.ReadAsStringAsync();
-                    var jODP = JObject.Parse(jsonODP);
-                    var id = jODP.Value<string>("id");
-                    ids.Add(id);
-                    response = await client.PostAsync($"metadata/workflow/{id}", null);
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
-                        SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
-                    }
-                    response.EnsureSuccessStatusCode();
-                    break;
-                    if (i > 10) break;
-                }
-                return string.Join(";", ids);
-            }
-        }
+        //public static async Task<string> UnpublishMetadataRecords(IConfiguration config)
+        //{
+        //    using (var client = await GetClient(config))
+        //    {
+        //        var ids = new List<string>();
+        //        for (int i = 1; i < 335; i++)
+        //        {
+        //            var response = await client.GetAsync($"metadata/doi/10.15493/obsdb.0000.{i:X4}");
+        //            if (!response.IsSuccessStatusCode)
+        //            {
+        //                SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+        //                SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+        //            }
+        //            response.EnsureSuccessStatusCode();
+        //            var jsonODP = await response.Content.ReadAsStringAsync();
+        //            var jODP = JObject.Parse(jsonODP);
+        //            var id = jODP.Value<string>("id");
+        //            ids.Add(id);
+        //            response = await client.PostAsync($"metadata/workflow/{id}", null);
+        //            if (!response.IsSuccessStatusCode)
+        //            {
+        //                SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+        //                SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+        //            }
+        //            response.EnsureSuccessStatusCode();
+        //            break;
+        //            if (i > 10) break;
+        //        }
+        //        return string.Join(";", ids);
+        //    }
+        //}
 
     }
 }
