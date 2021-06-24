@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using SAEON.AspNet.Auth;
 using SAEON.Core;
 using SAEON.Logs;
-using SAEON.Observations.Auth;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.IO;

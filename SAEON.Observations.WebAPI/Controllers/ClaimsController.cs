@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SAEON.AspNet.Auth;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
 using System;
@@ -22,7 +23,7 @@ namespace SAEON.Observations.WebAPI.Controllers
             {
                 try
                 {
-                    var result = HttpContext.UserInfo();
+                    var result = auth.HttpContextExtensions.UserInfo(HttpContext);
                     SAEONLogs.Information("UserInfo: {@UserInfo}", result);
                     return new JsonResult(result);
                 }
@@ -44,7 +45,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 try
                 {
                     //SAEONLogs.Information("Token: {Token}", HttpContext.Request.GetBearerToken());
-                    var result = HttpContext.UserInfo();
+                    var result = auth.HttpContextExtensions.UserInfo(HttpContext);
                     SAEONLogs.Information("UserInfo: {@UserInfo}", result);
                     return new JsonResult(result);
                 }
@@ -66,7 +67,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 try
                 {
                     //SAEONLogs.Information("Token: {Token}", HttpContext.Request.GetBearerToken());
-                    var result = HttpContext.UserInfo();
+                    var result = auth.HttpContextExtensions.UserInfo(HttpContext);
                     SAEONLogs.Information("UserInfo: {@UserInfo}", result);
                     return new JsonResult(result);
                 }

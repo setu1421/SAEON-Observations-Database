@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SAEON.AspNet.Auth;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
 using SAEON.Observations.Core;

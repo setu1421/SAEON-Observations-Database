@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [Route("Api/[controller]")]
-    [EnableCors(SAEONAuthenticationDefaults.CorsAllowAllPolicy)]
+    [EnableCors(ObsDBAuthenticationDefaults.CorsAllowAllPolicy)]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public abstract class ApiReadController<TEntity> : BaseReadController<TEntity> where TEntity : BaseEntity
     {

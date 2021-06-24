@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SAEON.AspNet.Auth;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     [Route("Internal/[controller]")]
-    [EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
+    [EnableCors(ObsDBAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -24,7 +25,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     }
 
     [Route("Internal/[controller]")]
-    [EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
+    [EnableCors(ObsDBAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -33,7 +34,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     }
 
     [Route("Internal/[controller]")]
-    [EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
+    [EnableCors(ObsDBAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -46,7 +47,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     }
 
     [Route("Internal/[controller]")]
-    [EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
+    [EnableCors(ObsDBAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

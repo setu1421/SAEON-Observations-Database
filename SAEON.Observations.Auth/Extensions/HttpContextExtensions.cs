@@ -15,7 +15,7 @@ namespace SAEON.Observations.Auth
             {
                 TenantFromHeader = TenantAuthenticationHandler.GetTenantFromHeaders(context.Request, config),
                 TenantFromSession = session?.GetString(TenantAuthenticationDefaults.HeaderKeyTenant),
-                SessionODPAccessToken = session?.GetString(ODPAuthenticationDefaults.SessionKeyODPAccessToken),
+                SessionODPAccessToken = session?.GetString(ObsDBAuthenticationDefaults.SessionKeyODPAccessToken),
                 BearerToken = context.Request?.GetBearerToken(),
                 context.User.Identity.IsAuthenticated,
                 UserIsAdmin = context.UserIsAdmin(),

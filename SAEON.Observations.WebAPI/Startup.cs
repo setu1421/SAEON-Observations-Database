@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OData.Edm;
 using Microsoft.OpenApi.Models;
+using SAEON.AspNet.Auth;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
@@ -66,7 +67,7 @@ namespace SAEON.Observations.WebAPI
                         .AddAuthentication()
                         .AddODP(options =>
                         {
-                            options.IntrospectionUrl = Configuration[ODPAuthenticationDefaults.ConfigKeyIntrospectionUrl];
+                            options.IntrospectionUrl = Configuration[ObsDBAuthenticationDefaults.ConfigKeyAuthenticationServerIntrospectionUrl];
                         })
                         .AddTenant(options =>
                         {
@@ -234,7 +235,7 @@ namespace SAEON.Observations.WebAPI
                         });
                         endpoints.MapDefaultControllerRoute();
                         endpoints.MapControllers();
-                        endpoints.MapHub<AdminHub>("/AdminHub").RequireCors(SAEONAuthenticationDefaults.CorsAllowSignalRPolicy);
+                        endpoints.MapHub<AdminHub>("/AdminHub").RequireCors(ObsDBAuthenticationDefaults.CorsAllowSignalRPolicy);
                         //endpoints.MapODataRoute("Internal", "Internal", GetInternalEdmModel()).Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop);
                         endpoints.MapODataRoute("OData", "OData", GetODataEdmModel()).Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop); ;
                     });
