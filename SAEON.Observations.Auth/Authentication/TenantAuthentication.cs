@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
+using SAEON.AspNet.Auth;
 using SAEON.Logs;
 using System;
 using System.Linq;

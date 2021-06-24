@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SAEON.AspNet.Auth;
 using SAEON.Logs;
 
 namespace SAEON.Observations.WebAPI

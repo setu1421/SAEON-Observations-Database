@@ -107,7 +107,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var result = HttpContext.UserInfo();
+                    var result = HttpContext.ApplicationInstance.Context.UserInfo();
                     SAEONLogs.Information("UserInfo: {@UserInfo}", result);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
@@ -126,7 +126,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var result = HttpContext.UserInfo();
+                    var result = HttpContext.ApplicationInstance.Context.UserInfo();
                     SAEONLogs.Information("UserInfo: {@UserInfo}", result);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }

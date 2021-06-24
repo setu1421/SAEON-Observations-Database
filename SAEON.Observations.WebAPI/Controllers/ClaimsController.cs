@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
 using System;
+using auth = SAEON.AspNet.Auth;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
@@ -83,7 +84,8 @@ namespace SAEON.Observations.WebAPI.Controllers
             {
                 try
                 {
-                    var token = HttpContext.Request.GetBearerToken();
+
+                    var token = auth.HttpRequestExtensions.GetBearerToken(HttpContext.Request);
                     SAEONLogs.Information("Token: {Token}", token);
                     return new JsonResult(token);
                 }

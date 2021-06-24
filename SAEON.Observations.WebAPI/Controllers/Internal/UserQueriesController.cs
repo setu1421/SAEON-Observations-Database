@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SAEON.Observations.Auth;
+using SAEON.AspNet.Auth;
 using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;

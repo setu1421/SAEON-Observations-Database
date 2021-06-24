@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SAEON.AspNet.Auth;
 
 namespace SAEON.Observations.Auth
 {
@@ -24,25 +25,6 @@ namespace SAEON.Observations.Auth
                 Claims = context.User.Claims.ToClaimsList()
             };
             return result;
-        }
-
-        public static string UserId(this HttpContext context)
-        {
-            return context.User.UserId();
-        }
-
-        public static bool UserIsAdmin(this HttpContext context)
-        {
-            return context.User.IsAdmin();
-        }
-        public static string UserName(this HttpContext context)
-        {
-            return context.User.Name();
-        }
-
-        public static string UserEmail(this HttpContext context)
-        {
-            return context.User.Email();
         }
     }
 }

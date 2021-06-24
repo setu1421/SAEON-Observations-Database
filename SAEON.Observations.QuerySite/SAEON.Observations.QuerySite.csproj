@@ -137,6 +137,9 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="SAEON.AspNet.Auth, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.AspNet.Auth.1.0.5\lib\net472\SAEON.AspNet.Auth.dll</HintPath>
+    </Reference>
     <Reference Include="SAEON.Core, Version=1.0.34.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Core.1.0.34\lib\net472\SAEON.Core.dll</HintPath>
     </Reference>
@@ -289,18 +292,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SAEON.Observations.Auth\Extensions\ClaimsExtensions.cs">
-      <Link>Common\ClaimsExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\SAEON.Observations.Auth\Extensions\ClaimsPrincipalExtensions.cs">
-      <Link>Common\ClaimsPrincipalExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\SAEON.Observations.Auth\Extensions\HttpClientExtensions.cs">
-      <Link>Common\HttpClientExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\SAEON.Observations.Auth\Extensions\IPrincipalExtensions.cs">
-      <Link>Common\IPrincipalExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\SAEON.Observations.Auth\SignalR\SignalRDefaults.cs">
       <Link>Common\SignalRDefaults.cs</Link>
     </Compile>
