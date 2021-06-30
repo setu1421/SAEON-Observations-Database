@@ -460,7 +460,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 durationStopwatch.Start();
                 var stageStopwatch = new Stopwatch();
                 stageStopwatch.Start();
-                SAEONLogs.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.58, batch.DataSource.Name, batch.FileName);
+                SAEONLogs.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.59, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
                 stageStopwatch.Stop();
                 SAEONLogs.Information("Imported {count:N0} observations in {elapsed}", values.Count, stageStopwatch.Elapsed.TimeStr());
@@ -563,6 +563,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 }
                             stageStopwatch.Stop();
                             SAEONLogs.Information("Created DataTable {count:n0} bad observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
+                            SAEONLogs.Verbose("BadValues: {BadValues}", dtBadValues.Dump().Replace("<br />", Environment.NewLine));
                         }
                         if (goodValues.Any())
                         {
@@ -635,6 +636,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 }
                             stageStopwatch.Stop();
                             SAEONLogs.Information("Created DataTable {count:n0} good observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
+                            SAEONLogs.Verbose("GoodValues: {GoodValues}", dtGoodValues.Dump().Replace("<br />", Environment.NewLine));
                         }
                     }
                     try

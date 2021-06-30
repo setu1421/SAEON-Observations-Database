@@ -618,7 +618,7 @@ public class ImportSchemaHelper : IDisposable
                 SAEONLogs.Information("Checking for duplicates in batch");
                 stageStopwatch.Restart();
                 SchemaValues.CompleteAdding();
-                var dupGroups = SchemaValues.GroupBy(i => new { i.SensorID, i.DateValue, i.DataValue, i.PhenomenonOfferingID, i.PhenomenonUOMID, i.Elevation }).Where(g => g.Count() > 1).ToList();
+                var dupGroups = SchemaValues.GroupBy(i => new { i.SensorID, i.DateValue, i.PhenomenonOfferingID, i.PhenomenonUOMID, i.Elevation }).Where(g => g.Count() > 1).ToList();
                 var dupValues = dupGroups.SelectMany(i => i).ToList();
                 if (dupGroups.Any())
                 {
