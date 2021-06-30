@@ -124,22 +124,22 @@ namespace SAEON.Observations.Auth
 
     public static class TenantAuthenticationExtensions
     {
-        public static AuthenticationBuilder AddTenant(this AuthenticationBuilder builder)
+        public static AuthenticationBuilder AddTenantAuthentication(this AuthenticationBuilder builder)
         {
-            return AddTenant(builder, TenantAuthenticationDefaults.AuthenticationScheme, _ => { });
+            return AddTenantAuthentication(builder, TenantAuthenticationDefaults.AuthenticationScheme, _ => { });
         }
 
-        public static AuthenticationBuilder AddTenant(this AuthenticationBuilder builder, string authenticationScheme)
+        public static AuthenticationBuilder AddTenantAuthentication(this AuthenticationBuilder builder, string authenticationScheme)
         {
-            return AddTenant(builder, authenticationScheme, _ => { });
+            return AddTenantAuthentication(builder, authenticationScheme, _ => { });
         }
 
-        public static AuthenticationBuilder AddTenant(this AuthenticationBuilder builder, Action<TenantAuthenticationOptions> configureOptions)
+        public static AuthenticationBuilder AddTenantAuthentication(this AuthenticationBuilder builder, Action<TenantAuthenticationOptions> configureOptions)
         {
-            return AddTenant(builder, TenantAuthenticationDefaults.AuthenticationScheme, configureOptions);
+            return AddTenantAuthentication(builder, TenantAuthenticationDefaults.AuthenticationScheme, configureOptions);
         }
 
-        public static AuthenticationBuilder AddTenant(this AuthenticationBuilder builder, string authenticationScheme, Action<TenantAuthenticationOptions> configureOptions)
+        public static AuthenticationBuilder AddTenantAuthentication(this AuthenticationBuilder builder, string authenticationScheme, Action<TenantAuthenticationOptions> configureOptions)
         {
             builder.Services.AddSingleton<IPostConfigureOptions<TenantAuthenticationOptions>, TenantAuthenticationPostConfigureOptions>();
             //builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<TenantAuthenticationOptions>, TenantAuthenticationPostConfigureOptions>());

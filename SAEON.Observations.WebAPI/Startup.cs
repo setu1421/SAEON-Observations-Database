@@ -65,11 +65,11 @@ namespace SAEON.Observations.WebAPI
                         .AddCookie();
                     services
                         .AddAuthentication()
-                        .AddODP(options =>
+                        .AddODPAuthentication(options =>
                         {
                             options.IntrospectionUrl = Configuration[ObsDBAuthenticationDefaults.ConfigKeyAuthenticationServerIntrospectionUrl];
                         })
-                        .AddTenant(options =>
+                        .AddTenantAuthentication(options =>
                         {
                             options.Tenants = Configuration[TenantAuthenticationDefaults.ConfigKeyTenants];
                             options.DefaultTenant = Configuration[TenantAuthenticationDefaults.ConfigKeyDefaultTenant];
