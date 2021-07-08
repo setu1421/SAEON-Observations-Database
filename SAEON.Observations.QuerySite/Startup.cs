@@ -98,7 +98,7 @@ namespace SAEON.Observations.QuerySite
                                             SAEONLogs.Error("ODPAuthorization, invalid token {Token}", accessToken);
                                             throw new SecurityTokenValidationException("Invalid token");
                                         }
-                                        if (jObj["ext"] == null)
+                                        if (jObj["ext"] is null)
                                         { // Access token
                                             var clientId = jObj.Value<string>("client_id");
                                             var claims = new List<Claim> {

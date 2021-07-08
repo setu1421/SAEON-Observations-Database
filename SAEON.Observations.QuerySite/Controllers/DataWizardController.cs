@@ -24,7 +24,7 @@ namespace SAEON.Observations.QuerySite.Controllers
     {
         protected override async Task<DataWizardModel> LoadModelAsync(DataWizardModel model)
         {
-            if (model == null) throw new ArgumentNullException(nameof(model));
+            if (model is null) throw new ArgumentNullException(nameof(model));
             model.Clear();
             model.LocationNodes.AddRange(await GetListAsync<LocationNode>("Internal/Locations"));
             model.VariableNodes.AddRange(await GetListAsync<VariableNode>("Internal/Variables"));
@@ -630,7 +630,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     //SAEONLogs.Verbose("Model: {@model}", model);
                     await LoadModelAsync(model);
                     var userQuery = model.UserQueries.FirstOrDefault(i => i.Name == input.Name);
-                    if (userQuery == null)
+                    if (userQuery is null)
                     {
                         throw new HttpException((int)HttpStatusCode.NotFound, $"UserQuery not found {input?.Name}");
                     }
@@ -799,13 +799,13 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     SAEONLogs.Verbose("Id: {Id}", id);
-                    if ((id == null) || !id.HasValue)
+                    if ((id is null) || !id.HasValue)
                     {
                         return RedirectToAction("Index");
                     }
 
                     var userDownload = await GetEntityAsync<UserDownload>($"Internal/UserDownloads/{id}");
-                    if (userDownload == null)
+                    if (userDownload is null)
                     {
                         throw new ArgumentException($"Unable to find download {id}", nameof(id));
                     }
@@ -828,14 +828,14 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    if ((id == null) || !id.HasValue)
+                    if ((id is null) || !id.HasValue)
                     {
                         RedirectToAction("Index");
                         return null;
                     }
 
                     var userDownload = await GetEntityAsync<UserDownload>($"Internal/UserDownloads/{id}");
-                    if (userDownload == null)
+                    if (userDownload is null)
                     {
                         throw new ArgumentException($"Unable to find download {id}", nameof(id));
                     }

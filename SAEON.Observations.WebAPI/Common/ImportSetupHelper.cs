@@ -41,7 +41,7 @@ namespace SAEON.Observations.WebAPI
                             if (string.IsNullOrWhiteSpace(OrganisationCode)) continue;
                             var OrganisationName = GetString(OrganisationsList, rOrganisation, 1);
                             var Organisation = await dbContext.Organisations.FirstOrDefaultAsync(i => i.Code == OrganisationCode);
-                            if (Organisation != null)
+                            if (Organisation is not null)
                                 if (!UpdateData)
                                 {
                                     SAEONLogs.Verbose("Ignoring Organisation {OrganisationCode}, {OrganisationName}", OrganisationCode, OrganisationName);
@@ -78,7 +78,7 @@ namespace SAEON.Observations.WebAPI
                             if (string.IsNullOrWhiteSpace(programmeCode)) continue;
                             var programmeName = GetString(programmesList, rProgramme, 1);
                             var programme = await dbContext.Programmes.FirstOrDefaultAsync(i => i.Code == programmeCode);
-                            if (programme != null)
+                            if (programme is not null)
                                 if (!UpdateData)
                                 {
                                     SAEONLogs.Verbose("Ignoring Programme {ProgrammeCode}, {ProgrammeName}", programmeCode, programmeName);
@@ -121,7 +121,7 @@ namespace SAEON.Observations.WebAPI
                             if (string.IsNullOrWhiteSpace(projectCode)) continue;
                             var projectName = GetString(projectsList, rProject, 1);
                             var project = await dbContext.Projects.FirstOrDefaultAsync(i => i.Code == projectCode);
-                            if (project != null)
+                            if (project is not null)
                                 if (!UpdateData)
                                 {
                                     SAEONLogs.Verbose("Ignoring Project {ProjectCode}, {ProjectName}", projectCode, projectName);
@@ -166,7 +166,7 @@ namespace SAEON.Observations.WebAPI
                             if (string.IsNullOrWhiteSpace(siteCode)) continue;
                             var siteName = GetString(sitesList, rSite, 1);
                             var site = await dbContext.Sites.FirstOrDefaultAsync(i => i.Code == siteCode);
-                            if (site != null)
+                            if (site is not null)
                                 if (!UpdateData)
                                 {
                                     SAEONLogs.Verbose("Ignoring Site {SiteCode} {SiteName}", siteCode, siteName);
@@ -225,7 +225,7 @@ namespace SAEON.Observations.WebAPI
                             if (string.IsNullOrWhiteSpace(stationCode)) continue;
                             var stationName = GetString(stationsList, rStation, 1);
                             var station = await dbContext.Stations.FirstOrDefaultAsync(i => i.Code == stationCode);
-                            if (station != null)
+                            if (station is not null)
                                 if (!UpdateData)
                                 {
                                     SAEONLogs.Verbose("Ignoring Station {StationCode}, {StationName}", stationCode, stationName);
@@ -288,7 +288,7 @@ namespace SAEON.Observations.WebAPI
                             var instrumentName = GetString(instrumentsList, rInstrument, 1);
                             var instrument = await dbContext.Instruments.FirstOrDefaultAsync(i => i.Code == instrumentCode);
                             var stationCode = GetString(instrumentStations, rInstrument, 0);
-                            if (instrument != null)
+                            if (instrument is not null)
                                 if (!UpdateData)
                                 {
                                     SAEONLogs.Verbose("Ignoring Instrument {InstrumentCode}, {InstrumentName}", instrumentCode, instrumentName);
@@ -346,7 +346,7 @@ namespace SAEON.Observations.WebAPI
                             if (string.IsNullOrWhiteSpace(dataSchemaCode)) continue;
                             var dataSchemaName = GetString(dataSchemasList, rInstrument, 1);
                             var dataSchema = await dbContext.DataSchemas.FirstOrDefaultAsync(i => i.Code == dataSchemaCode);
-                            if (dataSchema != null)
+                            if (dataSchema is not null)
                                 if (!UpdateData)
                                 {
                                     SAEONLogs.Verbose("Ignoring DataSchema {DataSchemaCode}, {DataSchemaName}", dataSchemaCode, dataSchemaName);
@@ -385,7 +385,7 @@ namespace SAEON.Observations.WebAPI
                             if (string.IsNullOrWhiteSpace(dataSourceCode)) continue;
                             var dataSourceName = GetString(dataSourcesList, rInstrument, 1);
                             var dataSource = await dbContext.DataSources.FirstOrDefaultAsync(i => i.Code == dataSourceCode);
-                            if (dataSource != null)
+                            if (dataSource is not null)
                                 if (!UpdateData)
                                 {
                                     SAEONLogs.Verbose("Ignoring DataSource {DataSourceCode}, {DataSourceName}", dataSourceCode, dataSourceName);
@@ -430,7 +430,7 @@ namespace SAEON.Observations.WebAPI
                             if (string.IsNullOrWhiteSpace(phenomenonCode)) continue;
                             var phenomenonName = GetString(phenomenaList, rPhenomenon, 1);
                             var phenomenon = await dbContext.Phenomena.FirstOrDefaultAsync(i => i.Code == phenomenonCode);
-                            if (phenomenon != null)
+                            if (phenomenon is not null)
                                 if (!UpdateData)
                                 {
                                     SAEONLogs.Verbose("Ignoring Phenomenon {PhenomenonCode}, {PhenomenonName}", phenomenonCode, phenomenonName);
@@ -473,7 +473,7 @@ namespace SAEON.Observations.WebAPI
                             var rInstrument = FindRowIndex(instrumentsList, 0, instrumentCode);
                             var dataSourceCode = GetString(dataSourcesList, rInstrument, 0);
                             var phenomenaCode = GetString(sensorPhenomena, rSensor, 0);
-                            if (sensor != null)
+                            if (sensor is not null)
                                 if (!UpdateData)
                                 {
                                     SAEONLogs.Verbose("Ignoring Sensor {SensorCode}, {SensorName}", sensorCode, sensorName);

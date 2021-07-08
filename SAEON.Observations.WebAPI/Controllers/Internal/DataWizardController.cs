@@ -148,7 +148,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 try
                 {
                     SAEONLogs.Information("Input: {@Input}", input);
-                    if (input == null)
+                    if (input is null)
                     {
                         throw new ArgumentNullException(nameof(input));
                     }
@@ -269,7 +269,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 {
                     SAEONLogs.Verbose("DataMatrix.Row: {Row}", nRow);
                 }
-                if ((row == null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.Elevation != elevation) || (obs.PhenomenonId != phenomenonId) || (obs.OfferingId != offeringId) || (obs.UnitId != unitId) || (obs.ValueDate != date))
+                if ((row is null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.Elevation != elevation) || (obs.PhenomenonId != phenomenonId) || (obs.OfferingId != offeringId) || (obs.UnitId != unitId) || (obs.ValueDate != date))
                 {
                     row = result.DataMatrix.AddRow();
                     row["Site"] = obs.SiteName;
@@ -401,7 +401,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     {
                         SAEONLogs.Verbose("Chart.Row: {Row}", nRow);
                     }
-                    if ((series == null) || (obs.SiteId != siteId) || (obs.StationId != stationId))
+                    if ((series is null) || (obs.SiteId != siteId) || (obs.StationId != stationId))
                     {
                         series = new ChartSeries
                         {
@@ -452,7 +452,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    if (input == null)
+                    if (input is null)
                     {
                         throw new ArgumentNullException(nameof(input));
                     }
@@ -639,7 +639,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 {
                     SAEONLogs.Verbose("Uri: {Uri}", Request.GetUri());
                     SAEONLogs.Verbose("Input: {@input}", input);
-                    if (input == null)
+                    if (input is null)
                     {
                         throw new ArgumentNullException(nameof(input));
                     }
@@ -661,7 +661,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 try
                 {
                     var userDownload = DbContext.UserDownloads.FirstOrDefault(i => i.Id == id);
-                    if (userDownload == null)
+                    if (userDownload is null)
                     {
                         throw new ArgumentException($"UserDownload with Id: {id} not found!");
                         //return Request.CreateErrorResponse(HttpStatusCode.NotFound, $"UserDownload with Id: {id} not found!");

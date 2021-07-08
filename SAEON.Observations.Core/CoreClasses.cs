@@ -93,7 +93,7 @@ namespace SAEON.Observations.Core
 
         public string AsString(object value)
         {
-            if (value == null) return string.Empty;
+            if (value is null) return string.Empty;
             return DataType switch
             {
                 MaxtixDataType.mdtBoolean => ((bool)value).ToString(),
@@ -141,7 +141,7 @@ namespace SAEON.Observations.Core
         public bool IsNull(string name)
         {
             var val = this[name];
-            return (val == null);
+            return (val is null);
         }
     }
 
@@ -208,7 +208,7 @@ namespace SAEON.Observations.Core
                 foreach (var dmCol in Columns)
                 {
                     var value = dmRow[dmCol.Name];
-                    if (value != null)
+                    if (value is not null)
                     {
                         dataRow[dmCol.Name] = value;
                     }

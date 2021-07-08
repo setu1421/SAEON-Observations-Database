@@ -12,7 +12,7 @@ namespace SAEON.Observations.WebAPI
     public class Metadata : MetadataCore
     {
         public DigitalObjectIdentifier DOI { get; set; }
-        public MetadataIdentifier Identifier => DOI == null ? null : new MetadataIdentifier { Name = DOI.DOI, Type = "DOI" };
+        public MetadataIdentifier Identifier => DOI is null ? null : new MetadataIdentifier { Name = DOI.DOI, Type = "DOI" };
         public string GenerateCitation() => $"{Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). {DOI.DOIUrl}" +
             (!Accessed.HasValue ? "" : $". Accessed {Accessed:yyyy-MM-dd HH:mm}");
         public string GenerateCitationHtml() => $"{Creator.Name} ({PublicationYear}): {Title}. {Publisher}. (dataset). <a href='{DOI.DOIUrl}'>{DOI.DOIUrl}</a>" +
@@ -138,7 +138,7 @@ namespace SAEON.Observations.WebAPI
                 return boundingBox;
             }
 
-            //if (DOI == null) throw new InvalidOperationException($"{nameof(DOI)} cannot be null");
+            //if (DOI is null) throw new InvalidOperationException($"{nameof(DOI)} cannot be null");
             if (string.IsNullOrWhiteSpace(Title))
             {
                 if (string.IsNullOrWhiteSpace(variable)) throw new ArgumentNullException(nameof(variable), $"{nameof(variable)} cannot be null if {nameof(Title)} is null");
@@ -172,7 +172,7 @@ namespace SAEON.Observations.WebAPI
             sbHtml.AppendHtmlDT("Description");
             sbHtml.AppendHtmlDDStart().AppendHtmlP(Description);
             /*
-            if (DOI.Parent != null)
+            if (DOI.Parent is not null)
             {
                 sbText.AppendLine($"This collection is part of the {(DOI.Parent.DOIType == DOIType.ObservationsDb ? "" : DOI.Parent.DOIType.Humanize(LetterCasing.LowerCase))} {MetadataHelper.CleanPrefixes(DOI.Parent.Name)} {DOI.Parent.DOIUrl}.");
                 sbHtml.AppendHtmlP($"This collection is part of the {(DOI.Parent.DOIType == DOIType.ObservationsDb ? "" : DOI.Parent.DOIType.Humanize(LetterCasing.LowerCase))} {MetadataHelper.CleanPrefixes(DOI.Parent.Name)} <a href='{DOI.Parent.DOIUrl}'>{DOI.Parent.DOI}</a>");

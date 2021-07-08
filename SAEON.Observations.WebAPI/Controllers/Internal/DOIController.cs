@@ -20,7 +20,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 try
                 {
                     var _doi = await DbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOI == doi);
-                    if (_doi == null)
+                    if (_doi is null)
                     {
                         SAEONLogs.Error($"DOI {doi} not found");
                         return NotFound($"DOI {doi} not found");
@@ -45,7 +45,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 try
                 {
                     var _doi = await DbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOI == doi);
-                    if (_doi == null)
+                    if (_doi is null)
                     {
                         SAEONLogs.Error($"DOI {doi} not found");
                         return NotFound($"DOI {doi} not found");
@@ -70,7 +70,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 try
                 {
                     var _doi = await DbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOI == doi);
-                    if (_doi == null)
+                    if (_doi is null)
                     {
                         SAEONLogs.Error($"DOI {doi} not found");
                         return NotFound($"DOI {doi} not found");

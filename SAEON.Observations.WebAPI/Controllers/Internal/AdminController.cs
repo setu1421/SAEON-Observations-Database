@@ -81,7 +81,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    if (formFile == null) throw new ArgumentNullException(nameof(formFile));
+                    if (formFile is null) throw new ArgumentNullException(nameof(formFile));
                     if (formFile.Length == 0) throw new ArgumentOutOfRangeException(nameof(formFile), "File length cannot be zero");
                     var ext = Path.GetExtension(formFile.FileName).ToLowerInvariant();
                     if (!(ext == ".xls" || ext == ".xlsx")) throw new ArgumentOutOfRangeException(nameof(formFile), "Invalid file extension");

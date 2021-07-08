@@ -99,7 +99,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 try
                 {
                     UpdateRequest();
-                    if (item == null)
+                    if (item is null)
                     {
                         SAEONLogs.Error("item cannot be null");
                         return BadRequest("item cannot be null");
@@ -161,7 +161,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 {
                     UpdateRequest();
                     SAEONLogs.Information("Put: {id}", id);
-                    if (delta == null)
+                    if (delta is null)
                     {
                         SAEONLogs.Error("delta cannot be null");
                         return BadRequest("delta cannot be null");
@@ -183,7 +183,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         return BadRequest($"{delta.Name} invalid");
                     }
                     var item = await GetQuery().Where(i => i.Id == id).FirstOrDefaultAsync();
-                    if (item == null)
+                    if (item is null)
                     {
                         SAEONLogs.Error("{id} not found", id);
                         return NotFound();
@@ -223,7 +223,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     UpdateRequest();
                     SAEONLogs.Verbose("Deleting {id}", id);
                     var item = await GetQuery().Where(i => i.Id == id).FirstOrDefaultAsync();
-                    if (item == null)
+                    if (item is null)
                     {
                         SAEONLogs.Error("{id} not found", id);
                         return NotFound();

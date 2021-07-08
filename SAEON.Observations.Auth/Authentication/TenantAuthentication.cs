@@ -35,7 +35,7 @@ namespace SAEON.Observations.Auth
     {
         public void PostConfigure(string name, TenantAuthenticationOptions options)
         {
-            if (options == null) throw new ArgumentNullException(nameof(options));
+            if (options is null) throw new ArgumentNullException(nameof(options));
             if (string.IsNullOrEmpty(options.Tenants))
             {
                 throw new InvalidOperationException("Tenants must be provided in options");
@@ -107,8 +107,8 @@ namespace SAEON.Observations.Auth
         {
             using (SAEONLogs.MethodCall(typeof(TenantAuthenticationHandler)))
             {
-                if (request == null) throw new ArgumentNullException(nameof(request));
-                if (config == null) throw new ArgumentNullException(nameof(config));
+                if (request is null) throw new ArgumentNullException(nameof(request));
+                if (config is null) throw new ArgumentNullException(nameof(config));
                 var tenants = (config[TenantAuthenticationDefaults.ConfigKeyTenants] ?? string.Empty).Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
                 var defaultTenant = (config[TenantAuthenticationDefaults.ConfigKeyDefaultTenant] ?? string.Empty);
                 string tenant = defaultTenant;

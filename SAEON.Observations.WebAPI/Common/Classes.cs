@@ -33,14 +33,14 @@
 
         public override bool Equals(object obj)
         {
-            if (obj == null) return false;
+            if (obj is null) return false;
             if (!(obj is SpacialStation spacialStation)) return false;
             return Equals(spacialStation);
         }
 
         public bool Equals(SpacialStation spacialStation)
         {
-            if (spacialStation == null) return false;
+            if (spacialStation is null) return false;
             return
                 (Name == spacialStation.Name);
         }

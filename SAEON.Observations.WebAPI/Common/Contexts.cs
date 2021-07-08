@@ -82,7 +82,7 @@ namespace SAEON.Observations.WebAPI
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            if (modelBuilder == null) throw new ArgumentNullException(nameof(modelBuilder));
+            if (modelBuilder is null) throw new ArgumentNullException(nameof(modelBuilder));
             base.OnModelCreating(modelBuilder);
             //modelBuilder.Entity<VFeature>().HasNoKey().ToView("vFeatures");
             //modelBuilder.Entity<VLocation>().HasNoKey().ToView("vLocations");

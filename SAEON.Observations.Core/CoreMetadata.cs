@@ -231,9 +231,9 @@ namespace SAEON.Observations.Core
     {
         public MetadataCore Parent { get; set; }
         //public DigitalObjectIdentifier DOI { get; set; }
-        //public MetadataIdentifier Identifier => DOI == null ? null : new MetadataIdentifier { Name = DOI.DOI, Type = "DOI" };
+        //public MetadataIdentifier Identifier => DOI is null ? null : new MetadataIdentifier { Name = DOI.DOI, Type = "DOI" };
         public List<MetadataAlternateIdentifier> AlternateIdentifiers { get; } = new List<MetadataAlternateIdentifier>();
-        public MetadataCreator Creator = new MetadataCreator
+        public MetadataCreator Creator = new()
         {
             Name = "SAEON Observations Database",
             Type = "Organizational",
@@ -346,7 +346,7 @@ namespace SAEON.Observations.Core
                 if (startDate != value)
                 {
                     startDate = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.StartDate.HasValue || (Parent.StartDate > value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.StartDate.HasValue || (Parent.StartDate > value)))
                     {
                         Parent.StartDate = value;
                     }
@@ -362,7 +362,7 @@ namespace SAEON.Observations.Core
                 if (endDate != value)
                 {
                     endDate = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.EndDate.HasValue || (Parent.EndDate < value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.EndDate.HasValue || (Parent.EndDate < value)))
                     {
                         Parent.EndDate = value;
                     }
@@ -379,7 +379,7 @@ namespace SAEON.Observations.Core
                 if (latitudeNorth != value)
                 {
                     latitudeNorth = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.LatitudeNorth.HasValue || (Parent.LatitudeNorth > value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.LatitudeNorth.HasValue || (Parent.LatitudeNorth > value)))
                     {
                         Parent.LatitudeNorth = value;
                     }
@@ -395,7 +395,7 @@ namespace SAEON.Observations.Core
                 if (latitudeSouth != value)
                 {
                     latitudeSouth = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.LatitudeSouth.HasValue || (Parent.LatitudeSouth < value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.LatitudeSouth.HasValue || (Parent.LatitudeSouth < value)))
                     {
                         Parent.LatitudeSouth = value;
                     }
@@ -411,7 +411,7 @@ namespace SAEON.Observations.Core
                 if (longitudeWest != value)
                 {
                     longitudeWest = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.LongitudeWest.HasValue || (Parent.LongitudeWest > value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.LongitudeWest.HasValue || (Parent.LongitudeWest > value)))
                     {
                         Parent.LongitudeWest = value;
                     }
@@ -427,7 +427,7 @@ namespace SAEON.Observations.Core
                 if (longitudeEast != value)
                 {
                     longitudeEast = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.LongitudeEast.HasValue || (Parent.LongitudeEast < value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.LongitudeEast.HasValue || (Parent.LongitudeEast < value)))
                     {
                         Parent.LongitudeEast = value;
                     }
@@ -443,7 +443,7 @@ namespace SAEON.Observations.Core
                 if (elevationMinimum != value)
                 {
                     elevationMinimum = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.ElevationMinimum.HasValue || (Parent.ElevationMinimum > value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.ElevationMinimum.HasValue || (Parent.ElevationMinimum > value)))
                     {
                         Parent.ElevationMinimum = value;
                     }
@@ -459,7 +459,7 @@ namespace SAEON.Observations.Core
                 if (elevationMaximum != value)
                 {
                     elevationMaximum = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.ElevationMaximum.HasValue || (Parent.ElevationMaximum < value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.ElevationMaximum.HasValue || (Parent.ElevationMaximum < value)))
                     {
                         Parent.ElevationMaximum = value;
                     }
