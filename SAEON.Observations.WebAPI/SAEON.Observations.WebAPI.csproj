@@ -17,7 +17,7 @@
     <DocumentationFile>SAEON.Observations.WebAPI.xml</DocumentationFile>
     <!--<NoWarn>1701;1702;1591</NoWarn>-->
     <NoWarn>1591</NoWarn>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;NoResponseCaching</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -50,12 +50,13 @@
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
     <PackageReference Include="Humanizer.Core" Version="2.11.10" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.17.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.5.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="5.0.7" />
+    <!--<PackageReference Include="Microsoft.AspNetCore.OData" Version="7.5.8" />-->
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="[7.5.8,8.0)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="5.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-    <PackageReference Include="SAEON.Observations.Auth" Version="1.0.32" />
+    <PackageReference Include="SAEON.Observations.Auth" Version="1.0.33" />
     <PackageReference Include="SAEON.OpenXML" Version="1.0.102" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.4" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.4" />
@@ -72,23 +73,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>false</CopyToPublishDirectory>
     </Content>
-    <Content Update="appsettings.App03.json">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>appsettings.json</DependentUpon>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>false</CopyToPublishDirectory>
-    </Content>
     <Content Update="appsettings.Debug.json">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>appsettings.json</DependentUpon>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>false</CopyToPublishDirectory>
-    </Content>
-    <Content Update="appsettings.Development.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>false</CopyToPublishDirectory>
-    </Content>
-    <Content Update="appsettings.Release.json">
       <IsTransformFile>true</IsTransformFile>
       <DependentUpon>appsettings.json</DependentUpon>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
