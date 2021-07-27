@@ -7,8 +7,9 @@
         var split = tenantItem.Split(new char[] { ',' });
         tenants.Add((split[0], split[1]));
     }
+    
 }
-@if ((Session != null) && tenants.Any())
+@if ((Session != null) && tenants.Any() && Request.IsLocal && (User.IsInRole("admin") || User.IsInRole("'Admin")))
 {
     var sessionTenant = Session[Constants.SessionKeyTenant]?.ToString() ?? ConfigurationManager.AppSettings[Constants.ConfigKeyDefaultTenant] ?? "Fynbos";
     <li class="nav-item dropdown">

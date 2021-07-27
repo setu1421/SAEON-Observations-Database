@@ -76,6 +76,16 @@
         .ContentType("ajax")
         .ContentUrl("/DataWizard/GetDownloadDialog")
         .Render();
+    Html.EJ()
+        .Dialog("dialogDataset")
+        .Title("Dataset Download")
+        .ShowOnInit(false)
+        .Width("1024")
+        //.Width("auto")
+        .ClientSideEvents(ev => ev.Close("DataWizard.DatasetClose"))
+        .ContentType("ajax")
+        .ContentUrl("/DataWizard/GetDatasetDialog")
+        .Render();
     <span style="width:5px" />
     if (!Request.IsAuthenticated)
     {

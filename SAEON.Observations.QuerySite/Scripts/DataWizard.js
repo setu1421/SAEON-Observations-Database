@@ -60,6 +60,7 @@ export function TabCreate() {
 class State {
     constructor() {
         this.IsAuthenticated = false;
+        this.IsDataset = false;
         this.LoadEnabled = false;
         this.SaveEnabled = false;
         this.SearchEnabled = false;
@@ -332,8 +333,27 @@ function UpdateFilters(isClick = false) {
 export function FiltersChanged() {
     UpdateFilters(true);
 }
+// Datasets
+export function DatasetOpen() {
+    DisableButtons();
+    $("#dialogDataset").ejDialog("open");
+}
+export function DatasetClose() {
+    $("#dialogDataset").ejDialog("close");
+    HideWaiting();
+    EnableButtons();
+}
+//export function DatasetDownload() {
+//    DatasetClose();
+//    $.get("/DataWizard/DatasetDownload")
+//        .done(function () {
+//        })
+//        .fail(function (jqXHR, status, error) {
+//            ErrorInFunc("DatasetDownload", status, error)
+//        });
+//}
 // Search
-export function Search() {
+export function Search(event, isDataset = false) {
     ShowWaiting();
     $.get("/DataWizard/GetData")
         .done(function () {
@@ -344,7 +364,13 @@ export function Search() {
                 //searched = true;
                 EnableButtons();
                 HideWaiting();
-                SelectTab(5);
+                if (isDataset === false) {
+                    SelectTab(5);
+                }
+                else {
+                    SelectTab(4);
+                    DatasetOpen();
+                }
             });
             //    });
         });

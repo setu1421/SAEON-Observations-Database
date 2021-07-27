@@ -71,6 +71,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var result = new StateModel
                     {
                         IsAuthenticated = model.IsAuthenticated,
+                        IsDataset = model.IsDataset,
                         LoadEnabled = model.IsAuthenticated && model.UserQueries.Any(),
                         SaveEnabled = model.IsAuthenticated && model.LocationNodesSelected.Any() && model.VariableNodesSelected.Any(),
                         SearchEnabled = model.LocationNodesSelected.Any() && model.VariableNodesSelected.Any() && (model.Approximation.RowCount > 0),
@@ -859,6 +860,40 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         #region Dataset
         [HttpGet]
+        public PartialViewResult GetDatasetDialog()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    return PartialView("_DatasetDialog", SessionModel);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        //[HttpGet]
+        //public ActionResult DatasetDownload()
+        //{
+        //    using (SAEONLogs.MethodCall(GetType()))
+        //    {
+        //        try
+        //        {
+        //            return RedirectToAction("GetDownload");
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            SAEONLogs.Exception(ex);
+        //            throw;
+        //        }
+        //    }
+        //}
+
+        [HttpGet]
         [Route("Dataset/{id}")]
         public async Task<ActionResult> Dataset(string id)
         {
@@ -897,6 +932,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     model.EndDate = wizardInput.EndDate;
                     model.ElevationMinimum = wizardInput.ElevationMinimum;
                     model.ElevationMaximum = wizardInput.ElevationMaximum;
+                    model.IsDataset = true;
                     SessionModel = model;
                     //SAEONLogs.Verbose("SessionModel: {@SessionModel}", model);
                     return View("Index", model);

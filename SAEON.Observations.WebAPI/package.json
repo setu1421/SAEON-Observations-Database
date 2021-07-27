@@ -14,6 +14,6 @@
   "dependencies": {
     "jquery": "^3.6.0",
     "jquery-validation-unobtrusive": "^3.2.12",
-    "mdb-ui-kit": "^3.8.0"
+    "mdb-ui-kit": "^3.9.0"
   }
 }

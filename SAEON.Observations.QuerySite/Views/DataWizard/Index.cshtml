@@ -76,10 +76,15 @@ tabs.Add().ID("ChartTab").Text("Chart").ContentTemplate(
             $('[data-toggle="tooltip"]').tooltip();
             //DataWizard.Testing();
             DataWizard.HideResults();
+            //DataWizard.Testing();
         });
         function waitForMap() {
             if (typeof DataWizard !== "undefined") {
                 DataWizard.InitMap();
+                DataWizard.EnableButtons();
+                @if (@Model.IsDataset) {
+                <text>DataWizard.Search(null, true);</text>
+                }
             }
             else {
                 setTimeout(waitForMap, 250);

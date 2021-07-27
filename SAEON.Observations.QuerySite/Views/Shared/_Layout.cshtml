@@ -102,7 +102,7 @@
                                 </ul>
                             </li>
                             <li class="nav-item">@Html.ActionLink("About", "About", "Home", null, new { @class = "nav-link" })</li>
-                            <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })</li>
+                            @*<li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })</li>*@
                         </ul>
                         <ul class="navbar-nav ms-auto">
                             @Html.Partial("_AdminPartial")
@@ -131,15 +131,17 @@
             @RenderBody()
         </div>
         <footer id="Footer">
-            <div class="row">
-                <div class="col-md">
-                    <br />
-                    &copy; @DateTime.Now.Year - South African Environmental Observation Network (SAEON)<br />
+            <div class="row align-items-center">
+                <div class="col-6">
+                    <span class="d-none d-sm-block d-md-block">
+                        <br />
+                        &copy; @DateTime.Now.Year - South African Environmental Observation Network (SAEON)<br />
+                    </span>
                     <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">
                         <img alt="Creative Commons License" class="footer-image" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
                     </a>
                     <br />
-                    <div style="clear: both">
+                    <div class="d-none d-sm-block d-md-block" style="clear: both">
                         Observations Database is licensed under a <a rel="license" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a><br />
                         @Html.ActionLink("How to cite", "HowToCite", "Home")
                     </div>
