@@ -27,7 +27,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         {
                             var response = await client.PostAsync("/Internal/DOI/AsHtml", formContent);
                             response.EnsureSuccessStatusCode();
-                            var model = new DOIModel
+                            var model = new DOIHtmlModel
                             {
                                 Id = doi,
                                 Html = await response.Content.ReadAsStringAsync()

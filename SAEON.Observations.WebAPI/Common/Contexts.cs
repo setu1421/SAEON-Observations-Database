@@ -29,8 +29,8 @@ namespace SAEON.Observations.WebAPI
         public DbSet<DataSource> DataSources { get; set; }
         public DbSet<DataSourceType> DataSourceTypes { get; set; }
         public DbSet<DigitalObjectIdentifier> DigitalObjectIdentifiers { get; set; }
-        public DbSet<ImportBatch> ImportBatch { get; set; }
-        public DbSet<ImportBatchSummary> ImportBatchSummary { get; set; }
+        public DbSet<ImportBatch> ImportBatches { get; set; }
+        public DbSet<ImportBatchSummary> ImportBatchSummaries { get; set; }
         public DbSet<Instrument> Instruments { get; set; }
         public DbSet<Offering> Offerings { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
@@ -50,7 +50,7 @@ namespace SAEON.Observations.WebAPI
         // Views
         public DbSet<VLocation> VLocations { get; set; }
         public DbSet<VFeature> VFeatures { get; set; }
-        public DbSet<VImportBatchSummary> VImportBatchSummary { get; set; }
+        public DbSet<VImportBatchSummaries> VImportBatchSummary { get; set; }
         public DbSet<InventoryDataset> InventoryDatasets { get; set; }
         public DbSet<InventorySensor> InventorySensors { get; set; }
         public DbSet<VObservationExpansion> VObservationExpansions { get; set; }
@@ -82,7 +82,7 @@ namespace SAEON.Observations.WebAPI
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            if (modelBuilder == null) throw new ArgumentNullException(nameof(modelBuilder));
+            if (modelBuilder is null) throw new ArgumentNullException(nameof(modelBuilder));
             base.OnModelCreating(modelBuilder);
             //modelBuilder.Entity<VFeature>().HasNoKey().ToView("vFeatures");
             //modelBuilder.Entity<VLocation>().HasNoKey().ToView("vLocations");
@@ -97,66 +97,67 @@ namespace SAEON.Observations.WebAPI
                 .HasMany(i => i.Instruments)
                 .WithMany(i => i.Organisations)
                 .UsingEntity<OrganisationInstrument>(
-                    oi => oi.HasOne<Instrument>().WithMany().HasForeignKey(i => i.InstrumentId),
-                    oi => oi.HasOne<Organisation>().WithMany().HasForeignKey(i => i.OrganisationId))
+                    oi => oi.HasOne(i => i.Instrument).WithMany().HasForeignKey(i => i.InstrumentId),
+                    oi => oi.HasOne(i => i.Organisation).WithMany().HasForeignKey(i => i.OrganisationId))
                 .ToTable("Organisation_Instrument")
                 .HasKey(i => new { i.OrganisationId, i.InstrumentId });
             modelBuilder.Entity<Organisation>()
                 .HasMany(i => i.Sites)
                 .WithMany(i => i.Organisations)
                 .UsingEntity<OrganisationSite>(
-                    os => os.HasOne<Site>().WithMany().HasForeignKey(i => i.SiteId),
-                    os => os.HasOne<Organisation>().WithMany().HasForeignKey(i => i.OrganisationId))
+                    os => os.HasOne(i => i.Site).WithMany().HasForeignKey(i => i.SiteId),
+                    os => os.HasOne(i => i.Organisation).WithMany().HasForeignKey(i => i.OrganisationId))
                 .ToTable("Organisation_Site")
                 .HasKey(i => new { i.OrganisationId, i.SiteId });
             modelBuilder.Entity<Organisation>()
                 .HasMany(i => i.Stations)
                 .WithMany(i => i.Organisations)
                 .UsingEntity<OrganisationStation>(
-                    os => os.HasOne<Station>().WithMany().HasForeignKey(i => i.StationId),
-                    os => os.HasOne<Organisation>().WithMany().HasForeignKey(i => i.OrganisationId))
+                    os => os.HasOne(i => i.Station).WithMany().HasForeignKey(i => i.StationId),
+                    os => os.HasOne(i => i.Organisation).WithMany().HasForeignKey(i => i.OrganisationId))
                 .ToTable("Organisation_Station")
                 .HasKey(i => new { i.OrganisationId, i.StationId });
             modelBuilder.Entity<Project>()
                 .HasMany(i => i.Stations)
                 .WithMany(i => i.Projects)
                 .UsingEntity<ProjectStation>(
-                    ps => ps.HasOne<Station>().WithMany().HasForeignKey(i => i.StationId),
-                    ps => ps.HasOne<Project>().WithMany().HasForeignKey(i => i.ProjectId))
+                    ps => ps.HasOne(i => i.Station).WithMany().HasForeignKey(i => i.StationId),
+                    ps => ps.HasOne(i => i.Project).WithMany().HasForeignKey(i => i.ProjectId))
                 .ToTable("Project_Station")
                 .HasKey(i => new { i.ProjectId, i.StationId });
             modelBuilder.Entity<Station>()
                 .HasMany(i => i.Instruments)
                 .WithMany(i => i.Stations)
                 .UsingEntity<StationInstrument>(
-                    si => si.HasOne<Instrument>().WithMany().HasForeignKey(i => i.InstrumentId),
-                    si => si.HasOne<Station>().WithMany().HasForeignKey(i => i.StationId))
+                    si => si.HasOne(i => i.Instrument).WithMany().HasForeignKey(i => i.InstrumentId),
+                    si => si.HasOne(i => i.Station).WithMany().HasForeignKey(i => i.StationId))
                 .ToTable("Station_Instrument")
                 .HasKey(i => new { i.StationId, i.InstrumentId });
             modelBuilder.Entity<Instrument>()
                 .HasMany(i => i.Sensors)
                 .WithMany(i => i.Instruments)
                 .UsingEntity<InstrumentSensor>(
-                    si => si.HasOne<Sensor>().WithMany().HasForeignKey(i => i.SensorId),
-                    si => si.HasOne<Instrument>().WithMany().HasForeignKey(i => i.InstrumentId))
+                    si => si.HasOne(i => i.Sensor).WithMany().HasForeignKey(i => i.SensorId),
+                    si => si.HasOne(i => i.Instrument).WithMany().HasForeignKey(i => i.InstrumentId))
                 .ToTable("Instrument_Sensor")
                 .HasKey(i => new { i.InstrumentId, i.SensorId });
             modelBuilder.Entity<Phenomenon>()
                 .HasMany(i => i.Offerings)
                 .WithMany(i => i.Phenomena)
                 .UsingEntity<PhenomenonOffering>(
-                    i => i.HasOne<Offering>().WithMany().HasForeignKey(i => i.OfferingId),
-                    i => i.HasOne<Phenomenon>().WithMany().HasForeignKey(i => i.PhenomenonId))
+                    i => i.HasOne(i => i.Offering).WithMany().HasForeignKey(i => i.OfferingId),
+                    i => i.HasOne(i => i.Phenomenon).WithMany().HasForeignKey(i => i.PhenomenonId))
                 .ToTable("PhenomenonOffering")
                 .HasKey(i => new { i.PhenomenonId, i.OfferingId });
             modelBuilder.Entity<Phenomenon>()
                 .HasMany(i => i.Units)
                 .WithMany(i => i.Phenomena)
                 .UsingEntity<PhenomenonUnit>(
-                    i => i.HasOne<Unit>().WithMany().HasForeignKey(i => i.UnitId),
-                    i => i.HasOne<Phenomenon>().WithMany().HasForeignKey(i => i.PhenomenonId))
+                    i => i.HasOne(i => i.Unit).WithMany().HasForeignKey(i => i.UnitId),
+                    i => i.HasOne(i => i.Phenomenon).WithMany().HasForeignKey(i => i.PhenomenonId))
                 .ToTable("PhenomenonUOM")
                 .HasKey(i => new { i.PhenomenonId, i.UnitId });
+            //SAEONLogs.Verbose("EFModel: {EFModel}", modelBuilder.Model.ToDebugString(MetadataDebugStringOptions.ShortDefault));
         }
 
         private void ValidateChanges()

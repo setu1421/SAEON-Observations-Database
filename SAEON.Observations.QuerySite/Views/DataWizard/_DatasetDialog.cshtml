@@ -1,0 +1,44 @@
+﻿@using SAEON.Observations.QuerySite.Models
+@model DataWizardModel
+<div>
+    <p>
+        You arrived here by clicking on the Download button for this dataset in the SAEON catalogue. The location, variable and filters for this dataset have been
+        pre-populated ready for download.
+    </p>
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <p>You need to be logged in to download this dataset. Please login first and try the download again.</p>
+    }
+    else
+    {
+        <p>
+            Click on the Download button to download the dataset.
+        </p>
+    }
+    @*<p>
+            Click on the Download button to download the dataset, else click on Cancel.
+        </p>*@
+</div>
+<div>
+    @(Html.EJ()
+        .Button("btnDatasetOk")
+        .Text("Ok")
+        .ShowRoundedCorner(true)
+        .Type(ButtonType.Button)
+        .Size(ButtonSize.Medium)
+        .ContentType(ContentType.TextAndImage)
+        .PrefixIcon("e-icon e-righttick")
+        .ClientSideEvents(e => e.Click("DataWizard.DatasetClose"))
+    )
+    @*@(Html.EJ()
+        .Button("btnDatasetCancel")
+        .Text("Cancel")
+        .ShowRoundedCorner(true)
+        .Type(ButtonType.Button)
+        .Size(ButtonSize.Medium)
+        .ContentType(ContentType.TextAndImage)
+        .PrefixIcon("e-icon e-cancel")
+        .ClientSideEvents(e => e.Click("DataWizard.DatasetClose"))
+    )*@
+</div>
+@Html.EJ().ScriptManager()

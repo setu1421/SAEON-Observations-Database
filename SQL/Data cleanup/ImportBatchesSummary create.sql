@@ -1,4 +1,4 @@
-use Observations
+--use Observations
 begin transaction
 Delete ImportBatchSummary
 Insert Into ImportBatchSummary
@@ -14,14 +14,14 @@ Select
     Count(*) 
   from 
     Observation
-	inner join Status
+	left join Status
 	  on (Observation.StatusID = Status.ID)
   where 
     ((Observation.ImportBatchID = vObservationExpansion.ImportBatchID) and 
 	 (Observation.SensorID = vObservationExpansion.SensorID) and
 	 (Observation.PhenomenonOfferingID = vObservationExpansion.PhenomenonOfferingID) and
 	 (Observation.PhenomenonUOMID = vObservationExpansion.PhenomenonUOMID) and
-	 (Status.Name = 'Verified'))
+	 ((Observation.StatusID is null) or (Status.Name = 'Verified')))
   ) VerifiedCount
 from
   vObservationExpansion

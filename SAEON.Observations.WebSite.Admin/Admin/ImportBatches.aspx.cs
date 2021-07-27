@@ -180,12 +180,26 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             var sql =
                 "Insert Into ImportBatchSummary" + Environment.NewLine +
                 "  (ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance," + Environment.NewLine +
-                "   LatitudeNorth, LatitudeSouth, LongitudeWest, LongitudeEast, ElevationMinimum, ElevationMaximum, StartDate, EndDate)" + Environment.NewLine +
+                "   LatitudeNorth, LatitudeSouth, LongitudeWest, LongitudeEast, ElevationMinimum, ElevationMaximum, StartDate, EndDate, VerifiedCount)" + Environment.NewLine +
                 "Select" + Environment.NewLine +
                 "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, " + Environment.NewLine +
                 "  STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance, " + Environment.NewLine +
                 "  Max(Latitude) LatitudeNorth, Min(Latitude) LatitudeSouth, Min(Longitude) LongitudeWest, Max(Longitude) LongitudeEast, " + Environment.NewLine +
-                "  Min(Elevation) ElevationMinimum, Max(Elevation) ElevationMaximum, Min(ValueDate) StartDate, Max(ValueDate) EndDate" + Environment.NewLine +
+                "  Min(Elevation) ElevationMinimum, Max(Elevation) ElevationMaximum, Min(ValueDate) StartDate, Max(ValueDate) EndDate, " + Environment.NewLine +
+                "  (" + Environment.NewLine +
+                "  Select" + Environment.NewLine +
+                "    Count(*)" + Environment.NewLine +
+                "  from" + Environment.NewLine +
+                "    Observation" + Environment.NewLine +
+                "    left join Status" + Environment.NewLine +
+                "      on (Observation.StatusID = Status.ID)" + Environment.NewLine +
+                "  where" + Environment.NewLine +
+                "    ((Observation.ImportBatchID = vObservationExpansion.ImportBatchID) and" + Environment.NewLine +
+                "     (Observation.SensorID = vObservationExpansion.SensorID) and" + Environment.NewLine +
+                "     (Observation.PhenomenonOfferingID = vObservationExpansion.PhenomenonOfferingID) and" + Environment.NewLine +
+                "     (Observation.PhenomenonUOMID = vObservationExpansion.PhenomenonUOMID) and" + Environment.NewLine +
+                "     ((Observation.StatusID is null) or (Status.Name = 'Verified')))" + Environment.NewLine +
+                "  ) VerifiedCount" + Environment.NewLine +
                 "from" + Environment.NewLine +
                 "  vObservationExpansion" + Environment.NewLine +
                 "where" + Environment.NewLine +
@@ -446,7 +460,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 durationStopwatch.Start();
                 var stageStopwatch = new Stopwatch();
                 stageStopwatch.Start();
-                SAEONLogs.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.58, batch.DataSource.Name, batch.FileName);
+                SAEONLogs.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.59, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
                 stageStopwatch.Stop();
                 SAEONLogs.Information("Imported {count:N0} observations in {elapsed}", values.Count, stageStopwatch.Elapsed.TimeStr());
@@ -549,6 +563,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 }
                             stageStopwatch.Stop();
                             SAEONLogs.Information("Created DataTable {count:n0} bad observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
+                            SAEONLogs.Verbose("BadValues: {BadValues}", dtBadValues.Dump().Replace("<br />", Environment.NewLine));
                         }
                         if (goodValues.Any())
                         {
@@ -621,6 +636,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 }
                             stageStopwatch.Stop();
                             SAEONLogs.Information("Created DataTable {count:n0} good observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
+                            SAEONLogs.Verbose("GoodValues: {GoodValues}", dtGoodValues.Dump().Replace("<br />", Environment.NewLine));
                         }
                     }
                     try
@@ -896,7 +912,16 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                     }
                                 }
                                 // Summaries
-                                CreateSummary(connScope, batch.Id);
+                                try
+                                {
+                                    CreateSummary(connScope, batch.Id);
+                                }
+                                catch (Exception ex)
+                                {
+                                    SAEONLogs.Exception(ex);
+                                    throw;
+                                }
+
                                 // Documents
 #if UseCosmosDb
                                 CreateCosmosDBItems(connScope, batch.Id);
@@ -1418,7 +1443,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }
     }
 
-    /*
     [DirectMethod]
     public void ConfirmDeleteEntry(Guid Id)
     {
@@ -1478,7 +1502,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
         }
     }
-    */
 
     protected void ImportBatchesGridStore_Submit(object sender, StoreSubmitDataEventArgs e)
     {

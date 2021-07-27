@@ -231,25 +231,26 @@ namespace SAEON.Observations.Core
     {
         public MetadataCore Parent { get; set; }
         //public DigitalObjectIdentifier DOI { get; set; }
-        //public MetadataIdentifier Identifier => DOI == null ? null : new MetadataIdentifier { Name = DOI.DOI, Type = "DOI" };
+        //public MetadataIdentifier Identifier => DOI is null ? null : new MetadataIdentifier { Name = DOI.DOI, Type = "DOI" };
         public List<MetadataAlternateIdentifier> AlternateIdentifiers { get; } = new List<MetadataAlternateIdentifier>();
-        public MetadataCreator Creator = new MetadataCreator
+        public MetadataCreator Creator = new()
         {
             Name = "SAEON Observations Database",
             Type = "Organizational",
             Identifiers = new List<MetadataNameIdentifier> { new MetadataNameIdentifier {
-                Name = "https://ror.org/041j42q70", Scheme = "ROR", SchemeUri = "https://ror.org" } }
+                Name = "https://ror.org/041j42q70", Scheme = "ROR", SchemeUri = "https://ror.org" } },
+            Affiliations = new List<MetadataAffiliation> { new MetadataAffiliation { Name = "South African Environmental Observation Network (SAEON), PO Box 2600, Pretoria, 0001, South Africa" } }
         };
         public string Language { get; set; } = "en-za";
         public MetadataResourceType ResourceType { get; } = new MetadataResourceType { Name = "Dataset", Type = "Observations" };
         public string Publisher { get; set; } = "South African Environmental Observation Network (SAEON)";
         public DateTime? PublicationDate { get; set; }
-        public int? PublicationYear => PublicationDate?.Year ?? StartDate?.Year ?? EndDate?.Year;
+        public int? PublicationYear => PublicationDate?.Year ?? EndDate?.Year ?? StartDate?.Year;
         public string Title { get; set; }
         public string Description { get; set; }
         public string DescriptionHtml { get; set; }
-        //public string ItemDescription { get; set; }
-        //public string ItemUrl { get; set; }
+        public string Citation { get; set; }
+        public string CitationHtml { get; set; }
 
         public List<MetadataRights> Rights { get; } = new List<MetadataRights> {
             new MetadataRights {
@@ -284,7 +285,7 @@ namespace SAEON.Observations.Core
                 {
                     new MetadataAffiliation
                     {
-                        Name = "South African Environmental Observation Network (SAEON)",
+                        Name = "PO Box 2600, Pretoria, 0001, South Africa",
                         Identifier = "https://ror.org/041j42q70",
                         Scheme = "ROR",
                         SchemeUri = "https://ror.org"
@@ -293,14 +294,14 @@ namespace SAEON.Observations.Core
             },
             new MetadataContributor
             {
-                Name = "South African Environmental Observation Network (SAEON), uLwazi node",
+                Name = "uLwazi Node",
                 Type = "Organizational",
                 ContributorType = "DataCurator",
                 Affiliations = new List<MetadataAffiliation>
                 {
                     new MetadataAffiliation
                     {
-                        Name = "South African Environmental Observation Network (SAEON)",
+                        Name = "South African Environmental Observation Network (SAEON), PO Box 2600, Pretoria, 0001, South Africa",
                         Identifier = "https://ror.org/041j42q70",
                         Scheme = "ROR",
                         SchemeUri = "https://ror.org"
@@ -327,7 +328,7 @@ namespace SAEON.Observations.Core
                 {
                     new MetadataAffiliation
                     {
-                        Name = "South African Environmental Observation Network (SAEON)",
+                        Name = "Elwandle Coastal Node, South African Environmental Observation Network (SAEON), PO Box 2600, Pretoria, 0001, South Africa",
                         Identifier = "https://ror.org/041j42q70",
                         Scheme = "ROR",
                         SchemeUri = "https://ror.org"
@@ -345,7 +346,7 @@ namespace SAEON.Observations.Core
                 if (startDate != value)
                 {
                     startDate = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.StartDate.HasValue || (Parent.StartDate > value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.StartDate.HasValue || (Parent.StartDate > value)))
                     {
                         Parent.StartDate = value;
                     }
@@ -361,7 +362,7 @@ namespace SAEON.Observations.Core
                 if (endDate != value)
                 {
                     endDate = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.EndDate.HasValue || (Parent.EndDate < value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.EndDate.HasValue || (Parent.EndDate < value)))
                     {
                         Parent.EndDate = value;
                     }
@@ -378,7 +379,7 @@ namespace SAEON.Observations.Core
                 if (latitudeNorth != value)
                 {
                     latitudeNorth = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.LatitudeNorth.HasValue || (Parent.LatitudeNorth > value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.LatitudeNorth.HasValue || (Parent.LatitudeNorth > value)))
                     {
                         Parent.LatitudeNorth = value;
                     }
@@ -394,7 +395,7 @@ namespace SAEON.Observations.Core
                 if (latitudeSouth != value)
                 {
                     latitudeSouth = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.LatitudeSouth.HasValue || (Parent.LatitudeSouth < value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.LatitudeSouth.HasValue || (Parent.LatitudeSouth < value)))
                     {
                         Parent.LatitudeSouth = value;
                     }
@@ -410,7 +411,7 @@ namespace SAEON.Observations.Core
                 if (longitudeWest != value)
                 {
                     longitudeWest = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.LongitudeWest.HasValue || (Parent.LongitudeWest > value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.LongitudeWest.HasValue || (Parent.LongitudeWest > value)))
                     {
                         Parent.LongitudeWest = value;
                     }
@@ -426,7 +427,7 @@ namespace SAEON.Observations.Core
                 if (longitudeEast != value)
                 {
                     longitudeEast = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.LongitudeEast.HasValue || (Parent.LongitudeEast < value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.LongitudeEast.HasValue || (Parent.LongitudeEast < value)))
                     {
                         Parent.LongitudeEast = value;
                     }
@@ -442,7 +443,7 @@ namespace SAEON.Observations.Core
                 if (elevationMinimum != value)
                 {
                     elevationMinimum = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.ElevationMinimum.HasValue || (Parent.ElevationMinimum > value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.ElevationMinimum.HasValue || (Parent.ElevationMinimum > value)))
                     {
                         Parent.ElevationMinimum = value;
                     }
@@ -458,7 +459,7 @@ namespace SAEON.Observations.Core
                 if (elevationMaximum != value)
                 {
                     elevationMaximum = value;
-                    if (value.HasValue && (Parent != null) && (!Parent.ElevationMaximum.HasValue || (Parent.ElevationMaximum < value)))
+                    if (value.HasValue && (Parent is not null) && (!Parent.ElevationMaximum.HasValue || (Parent.ElevationMaximum < value)))
                     {
                         Parent.ElevationMaximum = value;
                     }

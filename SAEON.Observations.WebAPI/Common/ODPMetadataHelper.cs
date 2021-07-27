@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
+using SAEON.AspNet.Auth;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
@@ -25,36 +26,59 @@ namespace SAEON.Observations.WebAPI
             {
                 async Task GenerateODPMetadataForDOI(DigitalObjectIdentifier doi, string collection)
                 {
-                    if (!doi.ODPMetadataNeedsUpdate ?? true) return;
-                    await AddLineAsync($"{doi.DOIType} {doi.Code}, {doi.Name}");
-                    var jObj = new JObject(
-                        new JProperty("doi", doi.DOI),
-                        new JProperty("collection_key", collection),
-                        //new JProperty("schema_key", "saeon-odp-4-2"),
-                        new JProperty("schema_key", "saeon-datacite-4-3"),
-                        new JProperty("metadata", JObject.Parse(doi.MetadataJson)),
-                        new JProperty("terms_conditions_accepted", true),
-                        new JProperty("data_agreement_accepted", true),
-                        new JProperty("data_agreement_url", "https://observations.saeon.ac.za/DataUsage"),
-                        new JProperty("capture_method", "harvester")
-                        );
-                    var response = await client.PostAsync("metadata/", new StringContent(jObj.ToString(), Encoding.UTF8, MediaTypeNames.Application.Json));
-                    if (!response.IsSuccessStatusCode)
+                    var needsUpdate = doi.ODPMetadataNeedsUpdate ?? false;
+                    var needsPublish = !doi.ODPMetadataIsPublished ?? true;
+                    if (!needsUpdate && !needsPublish) return;
+                    if (needsUpdate)
                     {
-                        SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
-                        SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                        await AddLineAsync($"Updating {doi.DOIType} {doi.Code}, {doi.Name}");
+                        var jObj = new JObject(
+                            new JProperty("doi", doi.DOI),
+                            new JProperty("collection_key", collection),
+                            new JProperty("schema_key", "saeon-datacite-4-3"),
+                            new JProperty("metadata", JObject.Parse(doi.MetadataJson)),
+                            new JProperty("terms_conditions_accepted", true),
+                            new JProperty("data_agreement_accepted", true),
+                            new JProperty("data_agreement_url", "https://observations.saeon.ac.za/DataUsage"),
+                            new JProperty("capture_method", "harvester")
+                            );
+                        var response = await client.PostAsync("metadata/", new StringContent(jObj.ToString(), Encoding.UTF8, MediaTypeNames.Application.Json));
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                            SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                        }
+                        response.EnsureSuccessStatusCode();
+                        var jsonODP = await response.Content.ReadAsStringAsync();
+                        SAEONLogs.Verbose("jsonODP: {jsonODP}", jsonODP);
+                        var jODP = JObject.Parse(jsonODP);
+                        var odpId = jODP.Value<string>("id");
+                        var validated = jODP.Value<bool>("validated");
+                        doi.ODPMetadataId = new Guid(odpId);
+                        var errors = jODP["errors"];
+                        doi.ODPMetadataErrors = errors.ToString();
+                        doi.ODPMetadataIsValid = validated && !errors.HasValues;
+                        doi.ODPMetadataNeedsUpdate = !doi.ODPMetadataIsValid;
                     }
-                    response.EnsureSuccessStatusCode();
-                    var jsonODP = await response.Content.ReadAsStringAsync();
-                    SAEONLogs.Verbose("jsonODP: {jsonODP}", jsonODP);
-                    var jODP = JObject.Parse(jsonODP);
-                    var odpId = jODP.Value<string>("id");
-                    var validated = jODP.Value<bool>("validated");
-                    doi.ODPMetadataId = new Guid(odpId);
-                    var errors = jODP["errors"];
-                    doi.ODPMetadataErrors = errors.ToString();
-                    doi.ODPMetadataIsValid = validated && !errors.HasValues;
-                    doi.ODPMetadataNeedsUpdate = !doi.ODPMetadataIsValid;
+                    if (needsPublish && (doi.ODPMetadataIsValid ?? false))
+                    {
+                        await AddLineAsync($"Publishing {doi.DOIType} {doi.Code}, {doi.Name}");
+                        doi.ODPMetadataIsPublished = null;
+                        doi.ODPMetadataPublishErrors = null;
+                        var response = await client.PostAsync($"metadata/workflow/{doi.ODPMetadataId}?state=published", null);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                            SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                        }
+                        response.EnsureSuccessStatusCode();
+                        var jsonODP = await response.Content.ReadAsStringAsync();
+                        SAEONLogs.Verbose("jsonODP: {jsonODP}", jsonODP);
+                        var jODP = JObject.Parse(jsonODP);
+                        var errors = jODP["errors"];
+                        doi.ODPMetadataPublishErrors = errors.ToString();
+                        doi.ODPMetadataIsPublished = jODP["success"].ToString().IsTrue() && !errors.HasValues;
+                    }
                     await dbContext.SaveChangesAsync();
                 }
 
@@ -72,64 +96,66 @@ namespace SAEON.Observations.WebAPI
                 //    await GenerateODPMetadataForDOI(doi, "observations-database-periodic-collection");
                 //}
 
-                await AddLineAsync("Generating metadata");
-                var doiObservations = await dbContext.DigitalObjectIdentifiers.SingleAsync(i => i.DOIType == DOIType.ObservationsDb);
-                await GenerateODPMetadataForDynamicDOI(doiObservations);
-                foreach (var doiOrganisation in await dbContext
-                   .DigitalObjectIdentifiers
-                   .Where(i => i.DOIType == DOIType.Organisation && i.Code == "SAEON")
-                   .OrderBy(i => i.Name)
-                   .ToListAsync())
+                await AddLineAsync("Generating ODP metadata");
+                foreach (var doiDataset in await dbContext.DigitalObjectIdentifiers.Where(i => i.DOIType == DOIType.Dataset).OrderBy(i => i.Id).ToListAsync())
                 {
-                    await GenerateODPMetadataForDynamicDOI(doiOrganisation);
-                    foreach (var doiProgramme in await dbContext
-                        .DigitalObjectIdentifiers
-                        .Where(i => i.ParentId == doiOrganisation.Id)
-                        .OrderBy(i => i.Name)
-                        .ToListAsync())
-                    {
-                        await GenerateODPMetadataForDynamicDOI(doiProgramme);
-                        foreach (var doiProject in await dbContext
-                            .DigitalObjectIdentifiers
-                            .Where(i => i.ParentId == doiProgramme.Id)
-                            .OrderBy(i => i.Name)
-                            .ToListAsync())
-                        {
-                            await GenerateODPMetadataForDynamicDOI(doiProject);
-                            foreach (var doiSite in await dbContext
-                                .DigitalObjectIdentifiers
-                                .Where(i => i.ParentId == doiProject.Id)
-                                .OrderBy(i => i.Name)
-                                .ToListAsync())
-                            {
-                                await GenerateODPMetadataForDynamicDOI(doiSite);
-                                foreach (var doiStation in await dbContext
-                                    .DigitalObjectIdentifiers
-                                    .Where(i => i.ParentId == doiSite.Id)
-                                    .OrderBy(i => i.Name)
-                                    .ToListAsync())
-                                {
-                                    await GenerateODPMetadataForDynamicDOI(doiStation);
-                                    foreach (var doiDataset in await dbContext
-                                        .DigitalObjectIdentifiers
-                                        .Where(i => i.ParentId == doiStation.Id)
-                                        .OrderBy(i => i.Name)
-                                        .ToListAsync())
-                                    {
-                                        await GenerateODPMetadataForDynamicDOI(doiDataset);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    await GenerateODPMetadataForDynamicDOI(doiDataset);
                 }
+                //var doiObservations = await dbContext.DigitalObjectIdentifiers.SingleAsync(i => i.DOIType == DOIType.ObservationsDb);
+                //await GenerateODPMetadataForDynamicDOI(doiObservations);
+                //foreach (var doiOrganisation in await dbContext
+                //   .DigitalObjectIdentifiers
+                //   .Where(i => i.DOIType == DOIType.Organisation && i.Code == "SAEON")
+                //   .OrderBy(i => i.Name)
+                //   .ToListAsync())
+                //{
+                //    await GenerateODPMetadataForDynamicDOI(doiOrganisation);
+                //    foreach (var doiProgramme in await dbContext
+                //        .DigitalObjectIdentifiers
+                //        .Where(i => i.ParentId == doiOrganisation.Id)
+                //        .OrderBy(i => i.Name)
+                //        .ToListAsync())
+                //    {
+                //        await GenerateODPMetadataForDynamicDOI(doiProgramme);
+                //        foreach (var doiProject in await dbContext
+                //            .DigitalObjectIdentifiers
+                //            .Where(i => i.ParentId == doiProgramme.Id)
+                //            .OrderBy(i => i.Name)
+                //            .ToListAsync())
+                //        {
+                //            await GenerateODPMetadataForDynamicDOI(doiProject);
+                //            foreach (var doiSite in await dbContext
+                //                .DigitalObjectIdentifiers
+                //                .Where(i => i.ParentId == doiProject.Id)
+                //                .OrderBy(i => i.Name)
+                //                .ToListAsync())
+                //            {
+                //                await GenerateODPMetadataForDynamicDOI(doiSite);
+                //                foreach (var doiStation in await dbContext
+                //                    .DigitalObjectIdentifiers
+                //                    .Where(i => i.ParentId == doiSite.Id)
+                //                    .OrderBy(i => i.Name)
+                //                    .ToListAsync())
+                //                {
+                //                    await GenerateODPMetadataForDynamicDOI(doiStation);
+                //                    foreach (var doiDataset in await dbContext
+                //                        .DigitalObjectIdentifiers
+                //                        .Where(i => i.ParentId == doiStation.Id)
+                //                        .OrderBy(i => i.Name)
+                //                        .ToListAsync())
+                //                    {
+                //                        await GenerateODPMetadataForDynamicDOI(doiDataset);
+                //                    }
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
             }
 
             var sb = new StringBuilder();
-            using (var client = new HttpClient())
+            using (var client = await GetClient(config))
             {
-                client.BaseAddress = new Uri(config["ODPMetadataUrl"].AddTrailingForwardSlash());
-                client.SetBearerToken(await GetTokenAsync());
                 await GenerateODPMetadata(client);
                 await AddLineAsync("Done");
                 return sb.ToString();
@@ -141,6 +167,17 @@ namespace SAEON.Observations.WebAPI
                 SAEONLogs.Information(line);
                 await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateODPMetadataStatusUpdate, line);
             }
+        }
+
+
+        public static async Task<HttpClient> GetClient(IConfiguration config)
+        {
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri(config["ODPMetadataUrl"].AddTrailingForwardSlash())
+            };
+            client.SetBearerToken(await GetTokenAsync());
+            return client;
 
             async Task<string> GetTokenAsync()
             {
@@ -188,5 +225,60 @@ namespace SAEON.Observations.WebAPI
                 }
             }
         }
+
+        //public static async Task<string> GetMetadataRecords(IConfiguration config)
+        //{
+        //    using (var client = await GetClient(config))
+        //    {
+        //        var sb = new StringBuilder();
+        //        for (int i = 1; i < 335; i++)
+        //        {
+        //            var response = await client.GetAsync($"metadata/doi/10.15493/obsdb.0000.{i:X4}");
+        //            if (!response.IsSuccessStatusCode)
+        //            {
+        //                SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+        //                SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+        //            }
+        //            response.EnsureSuccessStatusCode();
+        //            var jsonODP = await response.Content.ReadAsStringAsync();
+        //            var jODP = JObject.Parse(jsonODP);
+        //            sb.AppendLine(jODP.Value<string>("id"));
+        //        }
+        //        return sb.ToString(); ;
+        //    }
+        //}
+
+        //public static async Task<string> UnpublishMetadataRecords(IConfiguration config)
+        //{
+        //    using (var client = await GetClient(config))
+        //    {
+        //        var ids = new List<string>();
+        //        for (int i = 1; i < 335; i++)
+        //        {
+        //            var response = await client.GetAsync($"metadata/doi/10.15493/obsdb.0000.{i:X4}");
+        //            if (!response.IsSuccessStatusCode)
+        //            {
+        //                SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+        //                SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+        //            }
+        //            response.EnsureSuccessStatusCode();
+        //            var jsonODP = await response.Content.ReadAsStringAsync();
+        //            var jODP = JObject.Parse(jsonODP);
+        //            var id = jODP.Value<string>("id");
+        //            ids.Add(id);
+        //            response = await client.PostAsync($"metadata/workflow/{id}", null);
+        //            if (!response.IsSuccessStatusCode)
+        //            {
+        //                SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+        //                SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+        //            }
+        //            response.EnsureSuccessStatusCode();
+        //            break;
+        //            if (i > 10) break;
+        //        }
+        //        return string.Join(";", ids);
+        //    }
+        //}
+
     }
 }

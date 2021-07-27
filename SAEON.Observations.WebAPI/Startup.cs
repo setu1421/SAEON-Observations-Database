@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OData.Edm;
 using Microsoft.OpenApi.Models;
+using SAEON.AspNet.Auth;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
@@ -64,11 +65,11 @@ namespace SAEON.Observations.WebAPI
                         .AddCookie();
                     services
                         .AddAuthentication()
-                        .AddODP(options =>
+                        .AddODPAuthentication(options =>
                         {
-                            options.IntrospectionUrl = Configuration[ODPAuthenticationDefaults.ConfigKeyIntrospectionUrl];
+                            options.IntrospectionUrl = Configuration[ObsDBAuthenticationDefaults.ConfigKeyAuthenticationServerIntrospectionUrl];
                         })
-                        .AddTenant(options =>
+                        .AddTenantAuthentication(options =>
                         {
                             options.Tenants = Configuration[TenantAuthenticationDefaults.ConfigKeyTenants];
                             options.DefaultTenant = Configuration[TenantAuthenticationDefaults.ConfigKeyDefaultTenant];
@@ -89,7 +90,6 @@ namespace SAEON.Observations.WebAPI
                         .AddDbContextCheck<ObservationsDbContext>("ObservationsDatabase");
 
                     services.AddDbContext<ObservationsDbContext>();
-                    services.AddOData();
 
                     services.AddSwaggerGen(options =>
                     {
@@ -128,11 +128,11 @@ namespace SAEON.Observations.WebAPI
                         //    }
                         //});
                     });
-                    SetOutputFormatters(services);
-
                     services.AddSignalR();
                     services.AddControllers();
                     services.AddControllersWithViews();
+                    services.AddOData();
+                    SetODataFormatters(services);
                     services.AddApplicationInsightsTelemetry();
                     IFileProvider physicalProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
                     services.AddSingleton<IFileProvider>(physicalProvider);
@@ -143,6 +143,29 @@ namespace SAEON.Observations.WebAPI
                     throw;
                 }
             }
+
+
+            void SetODataFormatters(IServiceCollection services)
+            {
+                services.AddMvcCore(options =>
+                {
+                    foreach (var formatter in options.OutputFormatters
+                        .OfType<ODataOutputFormatter>()
+                        .Where(it => !it.SupportedMediaTypes.Any()))
+                    {
+                        formatter.SupportedMediaTypes.Add(
+                            new MediaTypeHeaderValue("application/odata"));
+                    }
+                    foreach (var formatter in options.InputFormatters
+                        .OfType<ODataInputFormatter>()
+                        .Where(it => !it.SupportedMediaTypes.Any()))
+                    {
+                        formatter.SupportedMediaTypes.Add(
+                            new MediaTypeHeaderValue("application/odata"));
+                    }
+                });
+            }
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -212,7 +235,7 @@ namespace SAEON.Observations.WebAPI
                         });
                         endpoints.MapDefaultControllerRoute();
                         endpoints.MapControllers();
-                        endpoints.MapHub<AdminHub>("/AdminHub").RequireCors(SAEONAuthenticationDefaults.CorsAllowSignalRPolicy);
+                        endpoints.MapHub<AdminHub>("/AdminHub").RequireCors(ObsDBAuthenticationDefaults.CorsAllowSignalRPolicy);
                         //endpoints.MapODataRoute("Internal", "Internal", GetInternalEdmModel()).Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop);
                         endpoints.MapODataRoute("OData", "OData", GetODataEdmModel()).Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop); ;
                     });
@@ -261,27 +284,6 @@ namespace SAEON.Observations.WebAPI
                 builder.EntitySet<Unit>("Units");
                 return builder.GetEdmModel();
             }
-        }
-
-        private static void SetOutputFormatters(IServiceCollection services)
-        {
-            services.AddMvcCore(options =>
-            {
-                foreach (var formatter in options.OutputFormatters
-                    .OfType<ODataOutputFormatter>()
-                    .Where(it => !it.SupportedMediaTypes.Any()))
-                {
-                    formatter.SupportedMediaTypes.Add(
-                        new MediaTypeHeaderValue("application/odata"));
-                }
-                foreach (var formatter in options.InputFormatters
-                    .OfType<ODataInputFormatter>()
-                    .Where(it => !it.SupportedMediaTypes.Any()))
-                {
-                    formatter.SupportedMediaTypes.Add(
-                        new MediaTypeHeaderValue("application/odata"));
-                }
-            });
         }
     }
 }

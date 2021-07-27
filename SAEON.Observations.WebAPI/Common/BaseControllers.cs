@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SAEON.AspNet.Auth;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
@@ -36,7 +37,7 @@ namespace SAEON.Observations.WebAPI
         {
             get
             {
-                if (dbContext == null)
+                if (dbContext is null)
                 {
                     dbContext = HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
                     if (TrackChanges)
@@ -86,6 +87,7 @@ namespace SAEON.Observations.WebAPI
         {
             Expression = expression;
         }
+
         public OrderBy(Expression<Func<TEntity, object>> expression, bool ascending)
         {
             Expression = expression;
@@ -128,14 +130,14 @@ namespace SAEON.Observations.WebAPI
             {
                 query = query.Where(where);
             }
-            if (extraWhere != null)
+            if (extraWhere is not null)
             {
                 query = query.Where(extraWhere);
             }
             var orderBys = GetOrderBys();
             //SAEONLogs.Verbose("OrderBys: {orderBys}", orderBys?.Count);
             var orderBy = orderBys.FirstOrDefault();
-            if (orderBy != null)
+            if (orderBy is not null)
             {
                 IOrderedQueryable<TEntity> orderedQuery;
                 if (orderBy.Ascending)
@@ -186,7 +188,7 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     TEntity item = await GetQuery(i => (i.Id == id)).FirstOrDefaultAsync();
-                    if (item == null)
+                    if (item is null)
                     {
                         SAEONLogs.Error("{id} not found", id);
                         return NotFound();
@@ -230,7 +232,7 @@ namespace SAEON.Observations.WebAPI
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
             var query = DbContext.Set<TEntity>()/*.AsNoTracking()*/.AsQueryable();
-            if (extraWhere != null)
+            if (extraWhere is not null)
             {
                 query = query.Where(extraWhere);
             }

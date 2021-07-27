@@ -455,18 +455,70 @@ namespace SAEON.Observations.Data
 				colvarCitationHtml.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarCitationHtml);
 				
-				TableSchema.TableColumn colvarCitationText = new TableSchema.TableColumn(schema);
-				colvarCitationText.ColumnName = "CitationText";
-				colvarCitationText.DataType = DbType.AnsiString;
-				colvarCitationText.MaxLength = 5000;
-				colvarCitationText.AutoIncrement = false;
-				colvarCitationText.IsNullable = true;
-				colvarCitationText.IsPrimaryKey = false;
-				colvarCitationText.IsForeignKey = false;
-				colvarCitationText.IsReadOnly = false;
-				colvarCitationText.DefaultSetting = @"";
-				colvarCitationText.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarCitationText);
+				TableSchema.TableColumn colvarDescription = new TableSchema.TableColumn(schema);
+				colvarDescription.ColumnName = "Description";
+				colvarDescription.DataType = DbType.AnsiString;
+				colvarDescription.MaxLength = 5000;
+				colvarDescription.AutoIncrement = false;
+				colvarDescription.IsNullable = false;
+				colvarDescription.IsPrimaryKey = false;
+				colvarDescription.IsForeignKey = false;
+				colvarDescription.IsReadOnly = false;
+				colvarDescription.DefaultSetting = @"";
+				colvarDescription.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarDescription);
+				
+				TableSchema.TableColumn colvarDescriptionHtml = new TableSchema.TableColumn(schema);
+				colvarDescriptionHtml.ColumnName = "DescriptionHtml";
+				colvarDescriptionHtml.DataType = DbType.AnsiString;
+				colvarDescriptionHtml.MaxLength = 5000;
+				colvarDescriptionHtml.AutoIncrement = false;
+				colvarDescriptionHtml.IsNullable = false;
+				colvarDescriptionHtml.IsPrimaryKey = false;
+				colvarDescriptionHtml.IsForeignKey = false;
+				colvarDescriptionHtml.IsReadOnly = false;
+				colvarDescriptionHtml.DefaultSetting = @"";
+				colvarDescriptionHtml.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarDescriptionHtml);
+				
+				TableSchema.TableColumn colvarCitation = new TableSchema.TableColumn(schema);
+				colvarCitation.ColumnName = "Citation";
+				colvarCitation.DataType = DbType.AnsiString;
+				colvarCitation.MaxLength = 5000;
+				colvarCitation.AutoIncrement = false;
+				colvarCitation.IsNullable = true;
+				colvarCitation.IsPrimaryKey = false;
+				colvarCitation.IsForeignKey = false;
+				colvarCitation.IsReadOnly = false;
+				colvarCitation.DefaultSetting = @"";
+				colvarCitation.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarCitation);
+				
+				TableSchema.TableColumn colvarODPMetadataIsPublished = new TableSchema.TableColumn(schema);
+				colvarODPMetadataIsPublished.ColumnName = "ODPMetadataIsPublished";
+				colvarODPMetadataIsPublished.DataType = DbType.Boolean;
+				colvarODPMetadataIsPublished.MaxLength = 0;
+				colvarODPMetadataIsPublished.AutoIncrement = false;
+				colvarODPMetadataIsPublished.IsNullable = true;
+				colvarODPMetadataIsPublished.IsPrimaryKey = false;
+				colvarODPMetadataIsPublished.IsForeignKey = false;
+				colvarODPMetadataIsPublished.IsReadOnly = false;
+				colvarODPMetadataIsPublished.DefaultSetting = @"";
+				colvarODPMetadataIsPublished.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarODPMetadataIsPublished);
+				
+				TableSchema.TableColumn colvarODPMetadataPublishErrors = new TableSchema.TableColumn(schema);
+				colvarODPMetadataPublishErrors.ColumnName = "ODPMetadataPublishErrors";
+				colvarODPMetadataPublishErrors.DataType = DbType.AnsiString;
+				colvarODPMetadataPublishErrors.MaxLength = -1;
+				colvarODPMetadataPublishErrors.AutoIncrement = false;
+				colvarODPMetadataPublishErrors.IsNullable = true;
+				colvarODPMetadataPublishErrors.IsPrimaryKey = false;
+				colvarODPMetadataPublishErrors.IsForeignKey = false;
+				colvarODPMetadataPublishErrors.IsReadOnly = false;
+				colvarODPMetadataPublishErrors.DefaultSetting = @"";
+				colvarODPMetadataPublishErrors.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarODPMetadataPublishErrors);
 				
 				BaseSchema = schema;
 				//add this schema to the provider
@@ -678,12 +730,44 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.CitationHtml, value); }
 		}
 		  
-		[XmlAttribute("CitationText")]
+		[XmlAttribute("Description")]
 		[Bindable(true)]
-		public string CitationText 
+		public string Description 
 		{
-			get { return GetColumnValue<string>(Columns.CitationText); }
-			set { SetColumnValue(Columns.CitationText, value); }
+			get { return GetColumnValue<string>(Columns.Description); }
+			set { SetColumnValue(Columns.Description, value); }
+		}
+		  
+		[XmlAttribute("DescriptionHtml")]
+		[Bindable(true)]
+		public string DescriptionHtml 
+		{
+			get { return GetColumnValue<string>(Columns.DescriptionHtml); }
+			set { SetColumnValue(Columns.DescriptionHtml, value); }
+		}
+		  
+		[XmlAttribute("Citation")]
+		[Bindable(true)]
+		public string Citation 
+		{
+			get { return GetColumnValue<string>(Columns.Citation); }
+			set { SetColumnValue(Columns.Citation, value); }
+		}
+		  
+		[XmlAttribute("ODPMetadataIsPublished")]
+		[Bindable(true)]
+		public bool? ODPMetadataIsPublished 
+		{
+			get { return GetColumnValue<bool?>(Columns.ODPMetadataIsPublished); }
+			set { SetColumnValue(Columns.ODPMetadataIsPublished, value); }
+		}
+		  
+		[XmlAttribute("ODPMetadataPublishErrors")]
+		[Bindable(true)]
+		public string ODPMetadataPublishErrors 
+		{
+			get { return GetColumnValue<string>(Columns.ODPMetadataPublishErrors); }
+			set { SetColumnValue(Columns.ODPMetadataPublishErrors, value); }
 		}
 		
 		#endregion
@@ -702,30 +786,6 @@ namespace SAEON.Observations.Data
 		public SAEON.Observations.Data.DigitalObjectIdentifierCollection ChildDigitalObjectIdentifiers()
 		{
 			return new SAEON.Observations.Data.DigitalObjectIdentifierCollection().Where(DigitalObjectIdentifier.Columns.ParentID, Id).Load();
-		}
-		public SAEON.Observations.Data.ImportBatchSummaryCollection ImportBatchSummaryRecords()
-		{
-			return new SAEON.Observations.Data.ImportBatchSummaryCollection().Where(ImportBatchSummary.Columns.DigitalObjectIdentifierID, Id).Load();
-		}
-		public SAEON.Observations.Data.OrganisationCollection OrganisationRecords()
-		{
-			return new SAEON.Observations.Data.OrganisationCollection().Where(Organisation.Columns.DigitalObjectIdentifierID, Id).Load();
-		}
-		public SAEON.Observations.Data.ProgrammeCollection ProgrammeRecords()
-		{
-			return new SAEON.Observations.Data.ProgrammeCollection().Where(Programme.Columns.DigitalObjectIdentifierID, Id).Load();
-		}
-		public SAEON.Observations.Data.ProjectCollection ProjectRecords()
-		{
-			return new SAEON.Observations.Data.ProjectCollection().Where(Project.Columns.DigitalObjectIdentifierID, Id).Load();
-		}
-		public SAEON.Observations.Data.SiteCollection SiteRecords()
-		{
-			return new SAEON.Observations.Data.SiteCollection().Where(Site.Columns.DigitalObjectIdentifierID, Id).Load();
-		}
-		public SAEON.Observations.Data.StationCollection StationRecords()
-		{
-			return new SAEON.Observations.Data.StationCollection().Where(Station.Columns.DigitalObjectIdentifierID, Id).Load();
 		}
 		#endregion
 		
@@ -760,7 +820,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,Guid? varAlternateID,int? varParentID,byte varDOIType,string varCode,string varMetadataJson,byte[] varMetadataJsonSha256,string varMetadataHtml,string varMetadataUrl,string varObjectStoreUrl,string varQueryUrl,Guid? varODPMetadataID,bool? varODPMetadataNeedsUpdate,bool? varODPMetadataIsValid,string varODPMetadataErrors,string varTitle,string varCitationHtml,string varCitationText)
+		public static void Insert(string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,Guid? varAlternateID,int? varParentID,byte varDOIType,string varCode,string varMetadataJson,byte[] varMetadataJsonSha256,string varMetadataHtml,string varMetadataUrl,string varObjectStoreUrl,string varQueryUrl,Guid? varODPMetadataID,bool? varODPMetadataNeedsUpdate,bool? varODPMetadataIsValid,string varODPMetadataErrors,string varTitle,string varCitationHtml,string varDescription,string varDescriptionHtml,string varCitation,bool? varODPMetadataIsPublished,string varODPMetadataPublishErrors)
 		{
 			DigitalObjectIdentifier item = new DigitalObjectIdentifier();
 			
@@ -812,7 +872,15 @@ namespace SAEON.Observations.Data
 			
 			item.CitationHtml = varCitationHtml;
 			
-			item.CitationText = varCitationText;
+			item.Description = varDescription;
+			
+			item.DescriptionHtml = varDescriptionHtml;
+			
+			item.Citation = varCitation;
+			
+			item.ODPMetadataIsPublished = varODPMetadataIsPublished;
+			
+			item.ODPMetadataPublishErrors = varODPMetadataPublishErrors;
 			
 		
 			if (System.Web.HttpContext.Current != null)
@@ -824,7 +892,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(int varId,string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,Guid? varAlternateID,int? varParentID,byte varDOIType,string varCode,string varMetadataJson,byte[] varMetadataJsonSha256,string varMetadataHtml,string varMetadataUrl,string varObjectStoreUrl,string varQueryUrl,Guid? varODPMetadataID,bool? varODPMetadataNeedsUpdate,bool? varODPMetadataIsValid,string varODPMetadataErrors,string varTitle,string varCitationHtml,string varCitationText)
+		public static void Update(int varId,string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,Guid? varAlternateID,int? varParentID,byte varDOIType,string varCode,string varMetadataJson,byte[] varMetadataJsonSha256,string varMetadataHtml,string varMetadataUrl,string varObjectStoreUrl,string varQueryUrl,Guid? varODPMetadataID,bool? varODPMetadataNeedsUpdate,bool? varODPMetadataIsValid,string varODPMetadataErrors,string varTitle,string varCitationHtml,string varDescription,string varDescriptionHtml,string varCitation,bool? varODPMetadataIsPublished,string varODPMetadataPublishErrors)
 		{
 			DigitalObjectIdentifier item = new DigitalObjectIdentifier();
 			
@@ -878,7 +946,15 @@ namespace SAEON.Observations.Data
 			
 				item.CitationHtml = varCitationHtml;
 			
-				item.CitationText = varCitationText;
+				item.Description = varDescription;
+			
+				item.DescriptionHtml = varDescriptionHtml;
+			
+				item.Citation = varCitation;
+			
+				item.ODPMetadataIsPublished = varODPMetadataIsPublished;
+			
+				item.ODPMetadataPublishErrors = varODPMetadataPublishErrors;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -1068,9 +1144,37 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn CitationTextColumn
+        public static TableSchema.TableColumn DescriptionColumn
         {
             get { return Schema.Columns[25]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn DescriptionHtmlColumn
+        {
+            get { return Schema.Columns[26]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn CitationColumn
+        {
+            get { return Schema.Columns[27]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ODPMetadataIsPublishedColumn
+        {
+            get { return Schema.Columns[28]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ODPMetadataPublishErrorsColumn
+        {
+            get { return Schema.Columns[29]; }
         }
         
         
@@ -1104,7 +1208,11 @@ namespace SAEON.Observations.Data
 			 public static string ODPMetadataErrors = @"ODPMetadataErrors";
 			 public static string Title = @"Title";
 			 public static string CitationHtml = @"CitationHtml";
-			 public static string CitationText = @"CitationText";
+			 public static string Description = @"Description";
+			 public static string DescriptionHtml = @"DescriptionHtml";
+			 public static string Citation = @"Citation";
+			 public static string ODPMetadataIsPublished = @"ODPMetadataIsPublished";
+			 public static string ODPMetadataPublishErrors = @"ODPMetadataPublishErrors";
 						
 		}
 		#endregion

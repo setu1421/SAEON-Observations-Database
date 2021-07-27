@@ -1,4 +1,5 @@
-﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+﻿using Humanizer;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -6,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SAEON.AspNet.Auth;
 using SAEON.Core;
 using SAEON.Logs;
-using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
 using Serilog.Events;
 using System;
@@ -20,6 +21,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.Mime;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
@@ -44,7 +46,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             //SAEONLogs.Verbose("Processed Input: {@Input}", input);
         }
 
-        private IQueryable<VImportBatchSummary> GetSummaryQuery(ref DataWizardDataInput input)
+        private IQueryable<VImportBatchSummaries> GetSummaryQuery(ref DataWizardDataInput input)
         {
             CleanInput(ref input);
             SAEONLogs.Verbose("Input: {@Input}", input);
@@ -64,7 +66,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             return result.AsQueryable();
         }
 
-        private List<VImportBatchSummary> GetSummary(ref DataWizardDataInput input)
+        private List<VImportBatchSummaries> GetSummary(ref DataWizardDataInput input)
         {
             CleanInput(ref input);
             SAEONLogs.Verbose("Input: {@Input}", input);
@@ -92,8 +94,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 {
                     SAEONLogs.Verbose("Input: {@Input}", input);
                     var q = GetSummary(ref input);
-                    var rows = q.Sum(i => i.Count);
-                    //var rows = q.Select(i => i.Count).ToList().Sum();
+                    var rows = q.Sum(i => i.VerifiedCount ?? 0);
                     var result = new DataWizardApproximation
                     {
                         RowCount = rows
@@ -147,7 +148,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 try
                 {
                     SAEONLogs.Information("Input: {@Input}", input);
-                    if (input == null)
+                    if (input is null)
                     {
                         throw new ArgumentNullException(nameof(input));
                     }
@@ -260,6 +261,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             result.DataMatrix.AddColumn("Value", MaxtixDataType.mdtDouble);
             result.DataMatrix.AddColumn("Instrument", MaxtixDataType.mdtString);
             result.DataMatrix.AddColumn("Sensor", MaxtixDataType.mdtString);
+            result.DataMatrix.AddColumn("Comment", MaxtixDataType.mdtString);
             int nRow = 0;
             foreach (var obs in observations)
             {
@@ -267,7 +269,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 {
                     SAEONLogs.Verbose("DataMatrix.Row: {Row}", nRow);
                 }
-                if ((row == null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.Elevation != elevation) || (obs.PhenomenonId != phenomenonId) || (obs.OfferingId != offeringId) || (obs.UnitId != unitId) || (obs.ValueDate != date))
+                if ((row is null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.Elevation != elevation) || (obs.PhenomenonId != phenomenonId) || (obs.OfferingId != offeringId) || (obs.UnitId != unitId) || (obs.ValueDate != date))
                 {
                     row = result.DataMatrix.AddRow();
                     row["Site"] = obs.SiteName;
@@ -291,6 +293,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     row["Elevation"] = obs.Elevation;
                     row["Instrument"] = obs.InstrumentName;
                     row["Sensor"] = obs.SensorName;
+                    row["Comment"] = obs.Comment;
                     siteId = obs.SiteId;
                     stationId = obs.StationId;
                     phenomenonId = obs.PhenomenonId;
@@ -301,7 +304,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 }
                 row["Value"] = obs.DataValue;
             }
-            if (SAEONLogs.Level == LogEventLevel.Verbose)
+            if (SAEONLogs.Level == LogEventLevel.Verbose && Config["SaveSearches"].IsTrue())
             {
                 var folder = $"{HostEnvironment.ContentRootPath.AddTrailingForwardSlash()}Searches/{result.Date:yyyyMM}";
                 Directory.CreateDirectory(folder);
@@ -313,38 +316,57 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             result.Metadata.PublicationDate = result.Date;
             var titles = observations.Where(i => i.StationName.StartsWith("ELW, ")).Select(i =>
             {
+                var variable = $"{MetadataHelper.CleanPrefixes(i.PhenomenonName)}, {i.OfferingName}, {i.UnitName}";
                 var siteName = MetadataHelper.CleanPrefixes(i.SiteName);
                 var stationName = MetadataHelper.CleanPrefixes(i.StationName);
                 if (stationName.EndsWith(siteName))
                 {
                     stationName = stationName.Substring(0, stationName.Length - siteName.Length - 2);
                 }
-                return $"{stationName} of {i.PhenomenonName}";
+                return $"{variable} for {stationName}";
             }).Union(observations.Where(i => !i.StationName.StartsWith("ELW, ")).Select(i =>
             {
+                var variable = $"{MetadataHelper.CleanPrefixes(i.PhenomenonName)}, {i.OfferingName}, {i.UnitName}";
                 var siteName = MetadataHelper.CleanPrefixes(i.SiteName);
                 var stationName = MetadataHelper.CleanPrefixes(i.StationName);
-                return $"{siteName}, {stationName} of {i.PhenomenonName}";
+                return $"{variable} for {siteName}, {stationName}";
             })).Distinct();
-            result.Metadata.Title = "Observations in the SAEON Observations Database for " +
-                string.Join("; ", titles.OrderBy(i => i));
+            result.Metadata.Title = string.Join("; ", titles.OrderBy(i => i));
             var descriptions = observations.Where(i => i.StationName.StartsWith("ELW, ")).Select(i =>
             {
+                var variable = $"{MetadataHelper.CleanPrefixes(i.PhenomenonName)}, {i.OfferingName}, {i.UnitName}";
                 var siteName = MetadataHelper.CleanPrefixes(i.SiteName);
                 var stationName = MetadataHelper.CleanPrefixes(i.StationName);
                 if (stationName.EndsWith(siteName))
                 {
                     stationName = stationName.Substring(0, stationName.Length - siteName.Length - 2);
                 }
-                return $"{stationName} of {i.PhenomenonName}, {i.OfferingName}, {i.UnitName}";
+                return $"{variable} for {stationName}";
             }).Union(observations.Where(i => !i.StationName.StartsWith("ELW, ")).Select(i =>
             {
+                var variable = $"{MetadataHelper.CleanPrefixes(i.PhenomenonName)}, {i.OfferingName}, {i.UnitName}";
                 var siteName = MetadataHelper.CleanPrefixes(i.SiteName);
                 var stationName = MetadataHelper.CleanPrefixes(i.StationName);
-                return $"{siteName}, {stationName} of {i.PhenomenonName}, {i.OfferingName}, {i.UnitName}";
+                return $"{variable} for {siteName}, {stationName}";
             })).Distinct();
-            result.Metadata.Description = "Observations in the SAEON Observations Database for " +
-                string.Join("; ", descriptions.OrderBy(i => i));
+            result.Metadata.Description = string.Join("; ", descriptions.OrderBy(i => i));
+            var datasetCodes = observations.Select(i => $"{i.StationCode}~{i.PhenomenonCode}~{i.OfferingCode}~{i.UnitCode}").Distinct();
+            SAEONLogs.Verbose("DatasetCodes: {DatasetCodes}", datasetCodes.ToList());
+            var datasetDOIs = DbContext.DigitalObjectIdentifiers.Where(i => datasetCodes.Contains(i.Code)).OrderBy(i => i.Name).ToList();
+            if (!datasetDOIs.Any())
+            {
+                SAEONLogs.Error("No dataset DOIs found! Dataset Codes: {Codes}", datasetCodes);
+            }
+            else
+            {
+                result.Metadata.Citation = $"Please cite the use of {"this".ToQuantity(datasetDOIs.Count, ShowQuantityAs.None)} {"dataset".ToQuantity(datasetDOIs.Count, ShowQuantityAs.None)} as follows: " + string.Join("; ", datasetDOIs.Select(i => $"{i.Citation} accessed {result.Date:yyyy-MM-dd HH:mm}"));
+                var sbHtml = new StringBuilder();
+                sbHtml.AppendLine("<p>");
+                sbHtml.AppendLine($"Please cite the use of {"this".ToQuantity(datasetDOIs.Count, ShowQuantityAs.None)} {"dataset".ToQuantity(datasetDOIs.Count, ShowQuantityAs.None)} as follows:");
+                sbHtml.AppendHtmlUL(datasetDOIs.Select(i => $"{i.CitationHtml} accessed {result.Date:yyyy-MM-dd HH:mm}"));
+                sbHtml.AppendLine("</p>");
+                result.Metadata.CitationHtml = sbHtml.ToString();
+            }
             // Keywords
             //result.Metadata.Subjects.AddRange(observations.Select(i => i.OrganisationName).Distinct().Select(i => new MetadataSubject { Name = MetadataHelper.CleanPrefixes(i) }));
             //result.Metadata.Subjects.AddRange(observations.Select(i => i.ProgrammeName).Distinct().Select(i => new MetadataSubject { Name = MetadataHelper.CleanPrefixes(i) }));
@@ -379,7 +401,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     {
                         SAEONLogs.Verbose("Chart.Row: {Row}", nRow);
                     }
-                    if ((series == null) || (obs.SiteId != siteId) || (obs.StationId != stationId))
+                    if ((series is null) || (obs.SiteId != siteId) || (obs.StationId != stationId))
                     {
                         series = new ChartSeries
                         {
@@ -430,7 +452,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    if (input == null)
+                    if (input is null)
                     {
                         throw new ArgumentNullException(nameof(input));
                     }
@@ -492,32 +514,30 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         // Get Data
                         var output = GetData(input, false);
                         // Create Download
-                        var doiCode = $"Data download for {User.UserId()} on {output.Date:yyyy-MM-dd HH:mm:ss.fff}";
-                        // Get a DOI
-                        SAEONLogs.Verbose("Minting DOI");
-                        var doi = await DOIHelper.CreateAdHocDOI(DbContext, HttpContext, doiCode, doiCode);
-                        SAEONLogs.Verbose("DOI: {@DOI}", doi);
-                        var metadata = await MetadataHelper.CreateAddHocMetadata(DbContext, doi, output.Metadata);
-                        metadata.Accessed = output.Date;
-                        metadata.Generate(metadata.Title, metadata.Description);
-                        doi.MetadataJson = metadata.ToJson();
-                        var oldSha256 = doi.MetadataJsonSha256;
-                        doi.MetadataJsonSha256 = doi.MetadataJson.Sha256();
-                        doi.ODPMetadataNeedsUpdate = oldSha256 != doi.MetadataJsonSha256 || (!doi.ODPMetadataIsValid ?? true); ;
-                        doi.Title = metadata.Title;
-                        doi.MetadataHtml = metadata.ToHtml();
-                        doi.CitationHtml = metadata.CitationHtml;
-                        doi.CitationText = metadata.CitationText;
+                        var doiCode = $"Data download on {output.Date:yyyy-MM-dd HH:mm:ss.fff} {User.UserId()}";
+                        //// Get a DOI
+                        //SAEONLogs.Verbose("Minting DOI");
+                        //var doi = await DOIHelper.CreateAdHocDOI(DbContext, HttpContext, doiCode, doiCode);
+                        //SAEONLogs.Verbose("DOI: {@DOI}", doi);
+                        var metadata = new Metadata(output.Metadata)
+                        {
+                            Accessed = output.Date
+                        };
+                        metadata.Generate();
                         SAEONLogs.Verbose("Metadata: {@Metadata}", metadata);
                         SAEONLogs.Verbose("Adding UserDownload");
                         var baseUrl = $"{Config["QuerySiteUrl"].AddTrailingForwardSlash()}Query/Data";
                         var result = new UserDownload
                         {
                             UserId = User.UserId(),
-                            Name = doiCode,
-                            Description = metadata.Description,
                             Date = output.Date,
-                            DigitalObjectIdentifierId = doi.Id,
+                            Name = doiCode,
+                            Title = metadata.Title,
+                            Description = metadata.Description,
+                            DescriptionHtml = metadata.DescriptionHtml,
+                            Citation = metadata.Citation,
+                            CitationHtml = metadata.CitationHtml,
+                            //DigitalObjectIdentifierId = doi.Id,
                             Input = JsonConvert.SerializeObject(input),
                             RequeryUrl = $"{baseUrl}/Requery",
                             DownloadUrl = $"{baseUrl}/ViewDownload",
@@ -530,11 +550,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
                         DbContext.UserDownloads.Add(result);
                         await SaveChangesAsync();
-                        result = await DbContext.UserDownloads.Include(i => i.DigitalObjectIdentifier).FirstOrDefaultAsync(i => i.Name == doiCode);
-                        if (result == null)
-                        {
-                            throw new InvalidOperationException($"Unable to find UserDownload {doiCode}");
-                        }
                         SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
                         result.ZipCheckSum = null;
                         //result.Description += Environment.NewLine + "Please cite as follows:" + Environment.NewLine + metadata.CitationText;
@@ -547,7 +562,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         // Create files
                         SAEONLogs.Verbose("Creating files");
                         System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input, Formatting.Indented));
-                        System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), metadata.ToJson());
+                        //System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), metadata.ToJson());
                         switch (input.DownloadFormat)
                         {
                             case DownloadFormat.CSV:
@@ -624,7 +639,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 {
                     SAEONLogs.Verbose("Uri: {Uri}", Request.GetUri());
                     SAEONLogs.Verbose("Input: {@input}", input);
-                    if (input == null)
+                    if (input is null)
                     {
                         throw new ArgumentNullException(nameof(input));
                     }
@@ -646,7 +661,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 try
                 {
                     var userDownload = DbContext.UserDownloads.FirstOrDefault(i => i.Id == id);
-                    if (userDownload == null)
+                    if (userDownload is null)
                     {
                         throw new ArgumentException($"UserDownload with Id: {id} not found!");
                         //return Request.CreateErrorResponse(HttpStatusCode.NotFound, $"UserDownload with Id: {id} not found!");

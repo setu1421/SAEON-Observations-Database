@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [Route("Api/[controller]")]
-    [EnableCors(SAEONAuthenticationDefaults.CorsAllowAllPolicy)]
+    [EnableCors(ObsDBAuthenticationDefaults.CorsAllowAllPolicy)]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public abstract class ApiReadController<TEntity> : BaseReadController<TEntity> where TEntity : BaseEntity
     {
@@ -44,7 +44,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 {
                     UpdateRequest();
                     TEntity item = await GetQuery(i => (i.Id == id)).FirstOrDefaultAsync();
-                    if (item == null)
+                    if (item is null)
                     {
                         SAEONLogs.Error("{id} not found", id);
                         return NotFound();
@@ -244,7 +244,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 {
                     UpdateRequest();
                     TEntity item = await GetQuery(i => (i.Code == code)).FirstOrDefaultAsync();
-                    if (item == null)
+                    if (item is null)
                     {
                         SAEONLogs.Error("{code} not found", code);
                         return NotFound();
@@ -287,7 +287,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 {
                     UpdateRequest();
                     TEntity item = await GetQuery(i => (i.Name == name)).FirstOrDefaultAsync();
-                    if (item == null)
+                    if (item is null)
                     {
                         SAEONLogs.Error("{name} not found", name);
                         return NotFound();
@@ -331,7 +331,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 {
                     UpdateRequest();
                     TEntity item = await GetQuery(i => (i.Code == code)).FirstOrDefaultAsync();
-                    if (item == null)
+                    if (item is null)
                     {
                         SAEONLogs.Error("{code} not found", code);
                         return NotFound();
@@ -364,7 +364,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 {
                     UpdateRequest();
                     TEntity item = await GetQuery(i => (i.Name == name)).FirstOrDefaultAsync();
-                    if (item == null)
+                    if (item is null)
                     {
                         SAEONLogs.Error("{name} not found", name);
                         return NotFound();

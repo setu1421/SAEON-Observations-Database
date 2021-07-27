@@ -73,6 +73,7 @@ export function TabCreate() {
 // State
 class State {
     IsAuthenticated = false;
+    IsDataset = false;
     LoadEnabled = false;
     SaveEnabled = false;
     SearchEnabled = false;
@@ -197,10 +198,10 @@ export function UpdateMap() {
                 markers.push(marker);
                 mapBounds.extend(marker.getPosition() as google.maps.LatLng);
                 if (mapPoint.IsSelected) {
-                    marker.setIcon('https://maps.google.com/mapfiles/ms/icons/green-dot.png');
+                    marker.setIcon('/Images/green-dot.png');
                 }
                 else {
-                    marker.setIcon('https://maps.google.com/mapfiles/ms/icons/red-dot.png');
+                    marker.setIcon('/Images/red-dot.png');
                 }
             }
         })
@@ -379,9 +380,32 @@ export function FiltersChanged() {
     UpdateFilters(true);
 }
 
+// Datasets
+
+export function DatasetOpen() {
+    DisableButtons();
+    $("#dialogDataset").ejDialog("open");
+}
+
+export function DatasetClose() {
+    $("#dialogDataset").ejDialog("close");
+    HideWaiting();
+    EnableButtons();
+}
+
+//export function DatasetDownload() {
+//    DatasetClose();
+//    $.get("/DataWizard/DatasetDownload")
+//        .done(function () {
+//        })
+//        .fail(function (jqXHR, status, error) {
+//            ErrorInFunc("DatasetDownload", status, error)
+//        });
+//}
+
 // Search
 
-export function Search() {
+export function Search(event: Event, isDataset = false) {
     ShowWaiting();
     $.get("/DataWizard/GetData")
         .done(function () {
@@ -392,7 +416,13 @@ export function Search() {
                     //searched = true;
                     EnableButtons();
                     HideWaiting();
-                    SelectTab(5);
+                    if (isDataset === false) {
+                        SelectTab(5);
+                    }
+                    else {
+                        SelectTab(4);
+                        DatasetOpen();
+                    }
                 });
                 //    });
             });
@@ -575,4 +605,3 @@ export function TabActive() {
         FitMap();
     }
 }
-

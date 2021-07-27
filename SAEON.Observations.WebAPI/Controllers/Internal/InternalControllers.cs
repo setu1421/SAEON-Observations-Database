@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SAEON.AspNet.Auth;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     [Route("Internal/[controller]")]
-    [EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
+    [EnableCors(ObsDBAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -24,7 +25,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     }
 
     [Route("Internal/[controller]")]
-    [EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
+    [EnableCors(ObsDBAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -33,7 +34,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     }
 
     [Route("Internal/[controller]")]
-    [EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
+    [EnableCors(ObsDBAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -46,7 +47,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     }
 
     [Route("Internal/[controller]")]
-    [EnableCors(SAEONAuthenticationDefaults.CorsAllowQuerySitePolicy)]
+    [EnableCors(ObsDBAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -60,13 +61,13 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<UserDownload, UserDownload>()
-                    .ForMember(dest => dest.Id, opt => opt.Ignore())
-                    .ForMember(dest => dest.AddedBy, opt => opt.Ignore())
-                    .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
+                    .ForMember(dest => dest.Id, opt => opt.Ignore());
+                //.ForMember(dest => dest.AddedBy, opt => opt.Ignore())
+                //.ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
                 cfg.CreateMap<UserQuery, UserQuery>()
-                    .ForMember(dest => dest.Id, opt => opt.Ignore())
-                    .ForMember(dest => dest.AddedBy, opt => opt.Ignore())
-                    .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
+                    .ForMember(dest => dest.Id, opt => opt.Ignore());
+                //.ForMember(dest => dest.AddedBy, opt => opt.Ignore())
+                //.ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
             });
             Mapper = config.CreateMapper();
             TrackChanges = true;
@@ -80,6 +81,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         protected abstract bool IsEntityOk(TEntity item, bool isPost);
 
         protected abstract void SetEntity(ref TEntity item, bool isPost);
+        protected abstract void UpdateEntity(ref TEntity item, TEntity delta);
 
         public List<string> ModelStateErrors
         {
@@ -97,7 +99,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 try
                 {
                     UpdateRequest();
-                    if (item == null)
+                    if (item is null)
                     {
                         SAEONLogs.Error("item cannot be null");
                         return BadRequest("item cannot be null");
@@ -151,7 +153,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<ActionResult> PutById(Guid id, [FromBody] TEntity delta)
+        public virtual async Task<ActionResult> PutById(Guid id, [FromBody] TEntity delta)
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "id", id }, { "delta", delta } }))
             {
@@ -159,17 +161,17 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 {
                     UpdateRequest();
                     SAEONLogs.Information("Put: {id}", id);
-                    if (delta == null)
+                    if (delta is null)
                     {
                         SAEONLogs.Error("delta cannot be null");
                         return BadRequest("delta cannot be null");
                     }
                     SAEONLogs.Verbose("Updating {id} {@delta}", id, delta);
-                    if (!ModelState.IsValid)
-                    {
-                        SAEONLogs.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);
-                        return BadRequest(ModelState);
-                    }
+                    //if (!ModelState.IsValid)
+                    //{
+                    //    SAEONLogs.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);
+                    //    return BadRequest(ModelState);
+                    //}
                     if (id != delta.Id)
                     {
                         SAEONLogs.Error("{id} Id not same", id);
@@ -181,7 +183,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         return BadRequest($"{delta.Name} invalid");
                     }
                     var item = await GetQuery().Where(i => i.Id == id).FirstOrDefaultAsync();
-                    if (item == null)
+                    if (item is null)
                     {
                         SAEONLogs.Error("{id} not found", id);
                         return NotFound();
@@ -189,8 +191,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     try
                     {
                         //SAEONLogs.Verbose("Loaded {@item}", item);
-                        Mapper.Map(delta, item);
+                        //Mapper.Map(delta, item);
                         //SAEONLogs.Verbose("Mapped delta {@item}", item);
+                        UpdateEntity(ref item, delta);
                         SetEntity(ref item, false);
                         SAEONLogs.Verbose("Set {@item}", item);
                         await DbContext.SaveChangesAsync();
@@ -220,7 +223,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     UpdateRequest();
                     SAEONLogs.Verbose("Deleting {id}", id);
                     var item = await GetQuery().Where(i => i.Id == id).FirstOrDefaultAsync();
-                    if (item == null)
+                    if (item is null)
                     {
                         SAEONLogs.Error("{id} not found", id);
                         return NotFound();

@@ -16,8 +16,8 @@ namespace SAEON.Observations.Core
     {
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)
         {
-            if (schema == null) throw new ArgumentNullException(nameof(schema));
-            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (schema is null) throw new ArgumentNullException(nameof(schema));
+            if (context is null) throw new ArgumentNullException(nameof(context));
             //SAEONLogs.Verbose("Schema: {Schema}", schema.Title);
             if (schema?.Properties.Count == 0) return;
             var excludedProperties = context.Type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SwaggerIgnoreAttribute)));

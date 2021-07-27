@@ -16,7 +16,7 @@ public static class Startup
     public static void Run()
     {
         SAEONLogs
-            .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebSite.Admin-.txt"))
+            .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebSite.Admin-.log"))
             .Initialize();
         ApplicationHelper.ApplicationName = "SAEON.Observations.WebSite.Admin";
         SAEONLogs.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName, SAEONLogs.Level);

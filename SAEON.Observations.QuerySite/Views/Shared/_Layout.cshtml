@@ -1,26 +1,39 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var request = HttpContext.Current.Request;
+    var AppInsightsKey = @AnalyticsHelper.ApplicationInsightsKey(request);
+    var UAKey = @AnalyticsHelper.GoogleUAKey(request);
+    var GA4Key = @AnalyticsHelper.GoogleGA4Key(request);
+    var ClarityKey = @AnalyticsHelper.ClarityKey(request);
+}
+<!DOCTYPE html>
 <html lang="en-za">
 <head>
     <meta http-equiv="Content-Type" content="text/html" />
     <meta charset="utf-8">
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128063984-4"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=@UAKey"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-        gtag('config', 'UA-128063984-4');
+        gtag('config', '@UAKey');
     </script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WE08ZKT2RG"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=@GA4Key"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-
-        gtag('config', 'G-WE08ZKT2RG');
-    </script>    <!-- Clarity tracking code for http://observations-test.saeon.ac.za/ -->
-    <script>(function (c, l, a, r, i, t, y) { c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) }; t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt"; y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y); })(window, document, "clarity", "script", "6de1scpzw4");</script>
+        gtag('config', '@GA4Key');
+    </script>
+    <!-- Clarity tracking code for http://observations.saeon.ac.za/ -->
+    <script type="text/javascript">
+        (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+        })(window, document, "clarity", "script", "@ClarityKey");
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     @RenderSection("MetaTags", required: false)
     @if (!string.IsNullOrWhiteSpace(ViewBag.MetaDescription))
@@ -34,11 +47,14 @@
     <title>@(ViewBag.Title == "Observations Database" || string.IsNullOrEmpty(ViewBag.Title) ? "Observations Database" : "Observations Database - " + @ViewBag.Title)</title>
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="/node_modules/mdb-ui-kit/css/mdb.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/Content/Site.css" />
     <link rel="stylesheet" href="~/Content/SAEON.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-    <link href="~/node_modules/mdbootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="~/node_modules/mdbootstrap/css/mdb.min.css" rel="stylesheet">
     @Styles.Render("~/Content/ej/web/bootstrap-theme/ej.web.all.min.css")
     @RenderSection("Styles", required: false)
     <script>
@@ -46,7 +62,7 @@
             function r(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } }
             var t = { config: config }, u = document, e = window, o = 'script', s = u.createElement(o), i, f; for (s.src = config.url || '//az416426.vo.msecnd.net/scripts/a/ai.0.js', u.getElementsByTagName(o)[0].parentNode.appendChild(s), t.cookie = u.cookie, t.queue = [], i = ['Event', 'Exception', 'Metric', 'PageView', 'Trace', 'Ajax']; i.length;) r('track' + i.pop()); return r('setAuthenticatedUserContext'), r('clearAuthenticatedUserContext'), config.disableExceptionTracking || (i = 'onerror', r('_' + i), f = e[i], e[i] = function (config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t['_' + i](config, r, u, e, o), s }), t
         }({
-            instrumentationKey: 'ab8abeba-cc7e-4238-a3d1-00781fb48938'
+            instrumentationKey: '@AppInsightsKey'
         });
 
         window.appInsights = appInsights;
@@ -61,32 +77,39 @@
                     <img class="Logo img-fluid" src="~/Images/Banner.jpg" alt="SAEON Banner" title="© SAEON" />
                 </div>
             </div>
+            <!-- Navbar -->
             <nav class="navbar navbar-expand-sm navbar-dark bg-SAEON rounded">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownQuery" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Query</a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownQuery">
-                                @Html.ActionLink("Data", "Index", "DataWizard", null, new { @class = "dropdown-item" })
-                                @Html.ActionLink("Datasets", "Datasets", "Query", null, new { @class = "dropdown-item" })
-                                @Html.ActionLink("Sensors", "Sensors", "Query", null, new { @class = "dropdown-item" })
-                                @*@Html.ActionLink("Coverage", "Index", "Coverage", null, new { @class = "dropdown-item" })*@
-                                @*@Html.ActionLink("Spacial Coverage", "Index", "SpacialCoverage", null, new { @class = "dropdown-item" })*@
-                                @*@Html.ActionLink("Temporal Coverage", "Index", "TemporalCoverage", null, new { @class = "dropdown-item" })*@
-                            </div>
-                        </li>
-                        <li class="nav-item">@Html.ActionLink("About", "About", "Home", null, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })</li>
-                    </ul>
-                    <ul class="navbar-nav ml-auto">
-                        @Html.Partial("_AdminPartial")
-                        @Html.Partial("_DataSourcesPartial")
-                        @Html.Partial("_LoginPartial")
-                    </ul>
+                <!-- Container wrapper -->
+                <div class="container-fluid">
+                    <!-- Toggle button -->
+                    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarNav"
+                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <!-- Collapsible wrapper -->
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownQuery" role="button" data-mdb-toggle="dropdown" aria-expanded="false">Query</a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownQuery">
+                                    <li>@Html.ActionLink("Data", "Index", "DataWizard", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Datasets", "Datasets", "Query", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Sensors", "Sensors", "Query", null, new { @class = "dropdown-item" })</li>
+                                    @*@Html.ActionLink("Coverage", "Index", "Coverage", null, new { @class = "dropdown-item" })*@
+                                    @*@Html.ActionLink("Spacial Coverage", "Index", "SpacialCoverage", null, new { @class = "dropdown-item" })*@
+                                    @*@Html.ActionLink("Temporal Coverage", "Index", "TemporalCoverage", null, new { @class = "dropdown-item" })*@
+                                </ul>
+                            </li>
+                            <li class="nav-item">@Html.ActionLink("About", "About", "Home", null, new { @class = "nav-link" })</li>
+                            @*<li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })</li>*@
+                        </ul>
+                        <ul class="navbar-nav ms-auto">
+                            @Html.Partial("_AdminPartial")
+                            @Html.Partial("_DataSourcesPartial")
+                            @Html.Partial("_LoginPartial")
+                        </ul>
+                    </div>
                 </div>
             </nav>
             <h1>
@@ -108,21 +131,23 @@
             @RenderBody()
         </div>
         <footer id="Footer">
-            <div class="row">
-                <div class="col-md">
-                    <br />
-                    &copy; @DateTime.Now.Year - South African Environmental Observation Network (SAEON)<br />
+            <div class="row align-items-center">
+                <div class="col-6">
+                    <span class="d-none d-sm-block d-md-block">
+                        <br />
+                        &copy; @DateTime.Now.Year - South African Environmental Observation Network (SAEON)<br />
+                    </span>
                     <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">
                         <img alt="Creative Commons License" class="footer-image" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
                     </a>
                     <br />
-                    <div style="clear: both">
+                    <div class="d-none d-sm-block d-md-block" style="clear: both">
                         Observations Database is licensed under a <a rel="license" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a><br />
                         @Html.ActionLink("How to cite", "HowToCite", "Home")
                     </div>
                 </div>
                 <div class="col-6">
-                    <div class="float-right">
+                    <div class="d-flex justify-content-end">
                         <a href="https://www.dst.gov.za/" target="_blank">
                             <img class="footer-image dsi-logo" src="~/Images/DSI logo.jpg" alt="Department of Science and Innovation logo" title="Department of Science and Innovation" />
                         </a>
@@ -131,12 +156,10 @@
             </div>
         </footer>
     </div>
-    <script type="text/javascript" src="~/node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="~/node_modules/jquery-validation/dist/jquery.validate.js"></script>
     <script type="text/javascript" src="~/node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
-    <script type="text/javascript" src="~/node_modules/mdbootstrap/js/popper.min.js"></script>
-    <script type="text/javascript" src="~/node_modules/mdbootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="~/node_modules/mdbootstrap/js/mdb.min.js"></script>
+    <script type="text/javascript" src="/node_modules/mdb-ui-kit/js/mdb.min.js"></script>
     @Scripts.Render("~/Scripts/jsrender.min.js")
     @Scripts.Render("~/Scripts/ej/web/ej.web.all.min.js")
     @Scripts.Render("~/bundles/modernizr")

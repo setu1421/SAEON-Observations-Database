@@ -1,0 +1,32 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Alter
+       [dbo].[DigitalObjectIdentifiers] (Table)
+       [dbo].[Observation] (Table)
+
+** Supporting actions
+     Drop
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Create
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Refresh
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vSensorThingsAPIObservations] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationJSON] (View)
+       [dbo].[vStationObservations] (View)
+
+If this deployment is executed, changes to [dbo].[vObservationExpansion] might introduce run-time errors in [dbo].[vObservationApi].
+If this deployment is executed, changes to [dbo].[vObservationExpansion] might introduce run-time errors in [dbo].[vSensorObservations].
+

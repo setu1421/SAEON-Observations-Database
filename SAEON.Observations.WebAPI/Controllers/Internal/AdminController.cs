@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using SAEON.AspNet.Auth;
 using SAEON.Core;
 using SAEON.Logs;
-using SAEON.Observations.Auth;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.IO;
@@ -30,7 +30,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await DOIHelper.CreateDOIs(DbContext, AdminHub, HttpContext));
+                    return Content(await DOIHelper.CreateDOIsV2(DbContext, AdminHub, HttpContext, AnalyticsHelper.IsTest(Request)));
                 }
                 catch (Exception ex)
                 {
@@ -47,7 +47,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await MetadataHelper.CreateMetadata(DbContext, AdminHub));
+                    return Content(await MetadataHelper.CreateMetadataV2(DbContext, AdminHub, AnalyticsHelper.IsTest(Request)));
                 }
                 catch (Exception ex)
                 {
@@ -81,7 +81,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    if (formFile == null) throw new ArgumentNullException(nameof(formFile));
+                    if (formFile is null) throw new ArgumentNullException(nameof(formFile));
                     if (formFile.Length == 0) throw new ArgumentOutOfRangeException(nameof(formFile), "File length cannot be zero");
                     var ext = Path.GetExtension(formFile.FileName).ToLowerInvariant();
                     if (!(ext == ".xls" || ext == ".xlsx")) throw new ArgumentOutOfRangeException(nameof(formFile), "Invalid file extension");
@@ -96,5 +96,41 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 }
             }
         }
+
+        //[HttpGet("[action]")]
+        //public async Task<IActionResult> GetMetadataRecords()
+        //{
+        //    using (SAEONLogs.MethodCall(GetType()))
+        //    {
+        //        try
+        //        {
+        //            return Content(await ODPMetadataHelper.GetMetadataRecords(Config));
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            SAEONLogs.Exception(ex);
+        //            throw;
+        //        }
+        //    }
+
+        //}
+
+        //[HttpGet("[action]")]
+        //public async Task<IActionResult> UnpublishMetadataRecords()
+        //{
+        //    using (SAEONLogs.MethodCall(GetType()))
+        //    {
+        //        try
+        //        {
+        //            return Content(await ODPMetadataHelper.UnpublishMetadataRecords(Config));
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            SAEONLogs.Exception(ex);
+        //            throw;
+        //        }
+        //    }
+
+        //}
     }
 }

@@ -321,18 +321,6 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarEndDate);
                 
-                TableSchema.TableColumn colvarDigitalObjectIdentifierID = new TableSchema.TableColumn(schema);
-                colvarDigitalObjectIdentifierID.ColumnName = "DigitalObjectIdentifierID";
-                colvarDigitalObjectIdentifierID.DataType = DbType.Int32;
-                colvarDigitalObjectIdentifierID.MaxLength = 0;
-                colvarDigitalObjectIdentifierID.AutoIncrement = false;
-                colvarDigitalObjectIdentifierID.IsNullable = true;
-                colvarDigitalObjectIdentifierID.IsPrimaryKey = false;
-                colvarDigitalObjectIdentifierID.IsForeignKey = false;
-                colvarDigitalObjectIdentifierID.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarDigitalObjectIdentifierID);
-                
                 TableSchema.TableColumn colvarVerifiedCount = new TableSchema.TableColumn(schema);
                 colvarVerifiedCount.ColumnName = "VerifiedCount";
                 colvarVerifiedCount.DataType = DbType.Int32;
@@ -1231,20 +1219,6 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("DigitalObjectIdentifierID")]
-        [Bindable(true)]
-        public int? DigitalObjectIdentifierID 
-	    {
-		    get
-		    {
-			    return GetColumnValue<int?>("DigitalObjectIdentifierID");
-		    }
-            set 
-		    {
-			    SetColumnValue("DigitalObjectIdentifierID", value);
-            }
-        }
-	      
         [XmlAttribute("VerifiedCount")]
         [Bindable(true)]
         public int? VerifiedCount 
@@ -1925,8 +1899,6 @@ namespace SAEON.Observations.Data{
             public static string StartDate = @"StartDate";
             
             public static string EndDate = @"EndDate";
-            
-            public static string DigitalObjectIdentifierID = @"DigitalObjectIdentifierID";
             
             public static string VerifiedCount = @"VerifiedCount";
             

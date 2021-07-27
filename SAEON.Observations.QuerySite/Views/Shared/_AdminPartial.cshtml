@@ -1,13 +1,13 @@
-﻿@using SAEON.Observations.Auth
+﻿@using SAEON.AspNet.Auth
 @if (User.IsAdmin())
 {
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
-            @Html.ActionLink("Create DOIs", "CreateDOIs", "Admin", null, new { @class = "dropdown-item" })
-            @Html.ActionLink("Create Metadata", "CreateMetadata", "Admin", null, new { @class = "dropdown-item" })
-            @Html.ActionLink("CreateODPMetadata", "CreateODPMetadata", "Admin", null, new { @class = "dropdown-item" })
-            @Html.ActionLink("Import Setup", "ImportSetup", "Admin", null, new { @class = "dropdown-item" })
-        </div>
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin" data-mdb-toggle="dropdown" aria-expanded="false">Admin</a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownAdmin">
+            <li>@Html.ActionLink("Create DOIs", "CreateDOIs", "Admin", null, new { @class = "dropdown-item" })</li>
+            <li>@Html.ActionLink("Create Metadata", "CreateMetadata", "Admin", null, new { @class = "dropdown-item" })</li>
+            <li>@Html.ActionLink("Create ODP Metadata", "CreateODPMetadata", "Admin", null, new { @class = "dropdown-item" })</li>
+            <li>@Html.ActionLink("Import Setup", "ImportSetup", "Admin", null, new { @class = "dropdown-item" })</li>
+        </ul>
     </li>
 }

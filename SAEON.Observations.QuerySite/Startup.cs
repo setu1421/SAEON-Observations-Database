@@ -4,8 +4,8 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Newtonsoft.Json.Linq;
 using Owin;
+using SAEON.AspNet.Auth;
 using SAEON.Logs;
-using SAEON.Observations.Auth;
 using Syncfusion.Licensing;
 using System;
 using System.Collections.Generic;
@@ -31,7 +31,7 @@ namespace SAEON.Observations.QuerySite
                 try
                 {
                     SAEONLogs.Verbose("AuthenticationServer: {AuthenticationServer}", ConfigurationManager.AppSettings["AuthenticationServerUrl"]);
-                    SyncfusionLicenseProvider.RegisterLicense("NDI0NzEzQDMxMzkyZTMxMmUzMGFsd0NxcFFXQkNOdDg4OE9vS3BLcXZvMTJCOXpWSUk5bktveGw3QVZzVmc9;NDI0NzE0QDMxMzkyZTMxMmUzMEZnaSsxZEtweS84YWxxVW5OaTZQZzJFZ1RKZk5KM2s3S0VUbnU4bDk5VDg9");
+                    SyncfusionLicenseProvider.RegisterLicense("NDczOTQ5QDMxMzkyZTMyMmUzME1LdUlFQWJPZWNkN3NuOUNzeVZPVUVOWU5pNFVEalBHV0VsODh0eWtkQ289;NDczOTUwQDMxMzkyZTMyMmUzMEJoOUpDMzloVDFHOWgvdHJOTjY2U3JidWRxM21xclBSaUQyTk02MlNpMTQ9;NDczOTUxQDMxMzkyZTMyMmUzMFU4cHdXUUJtVU5NZGsvVnNBZHUvOVZ1RU9ycmlwRHFnTXlDbFBLVFY3QXM9;NDczOTUyQDMxMzkyZTMyMmUzMGk4czFUdFh0bHQ2cEMxYlNFcUZkbTg1c1JrV25DT1lVTUlkaWxQNk1UcDA9");
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.AntiForgeryClaim;
                     //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -98,7 +98,7 @@ namespace SAEON.Observations.QuerySite
                                             SAEONLogs.Error("ODPAuthorization, invalid token {Token}", accessToken);
                                             throw new SecurityTokenValidationException("Invalid token");
                                         }
-                                        if (jObj["ext"] == null)
+                                        if (jObj["ext"] is null)
                                         { // Access token
                                             var clientId = jObj.Value<string>("client_id");
                                             var claims = new List<Claim> {

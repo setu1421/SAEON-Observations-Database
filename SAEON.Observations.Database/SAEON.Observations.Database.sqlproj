@@ -549,9 +549,6 @@
     </ArtifactReference>
   </ItemGroup>
   <ItemGroup>
-    <RefactorLog Include="SAEON.Observations.Database.refactorlog" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>

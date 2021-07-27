@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAEON.AspNet.Auth;
 using SAEON.Core;
 using SAEON.Logs;
-using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
 using System;
@@ -234,7 +234,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         //{
         //    string GenerateQueryString()
         //    {
-        //        if (input == null)
+        //        if (input is null)
         //            return "";
         //        else
         //            return $"?json={JsonConvert.SerializeObject(input)}";
@@ -369,7 +369,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         private TModel GetSessionModel()
         {
-            if (Session[sessionModelKey] == null)
+            if (Session[sessionModelKey] is null)
             {
                 Session[sessionModelKey] = new TModel();
             }
@@ -459,7 +459,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<TEntity>();
                         SAEONLogs.Verbose("Data: {data}", data);
-                        if (data == null) return RedirectToAction("Index");
+                        if (data is null) return RedirectToAction("Index");
                         return View(data);
                     }
                 }
@@ -488,7 +488,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<TEntity>();
                         SAEONLogs.Verbose("Data: {data}", data);
-                        if (data == null) return RedirectToAction("Index");
+                        if (data is null) return RedirectToAction("Index");
                         return View(data);
                     }
                 }
@@ -508,6 +508,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
+                    SAEONLogs.Verbose("Delta: {@Delta}", delta);
                     if (!ModelState.IsValid)
                     {
                         SAEONLogs.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);
@@ -549,7 +550,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<TEntity>();
                         SAEONLogs.Verbose("Data: {data}", data);
-                        if (data == null) return RedirectToAction("Index");
+                        if (data is null) return RedirectToAction("Index");
                         return View(data);
                     }
                 }

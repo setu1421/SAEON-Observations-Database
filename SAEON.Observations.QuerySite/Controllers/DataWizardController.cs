@@ -8,6 +8,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Web;
@@ -23,7 +24,7 @@ namespace SAEON.Observations.QuerySite.Controllers
     {
         protected override async Task<DataWizardModel> LoadModelAsync(DataWizardModel model)
         {
-            if (model == null) throw new ArgumentNullException(nameof(model));
+            if (model is null) throw new ArgumentNullException(nameof(model));
             model.Clear();
             model.LocationNodes.AddRange(await GetListAsync<LocationNode>("Internal/Locations"));
             model.VariableNodes.AddRange(await GetListAsync<VariableNode>("Internal/Variables"));
@@ -41,10 +42,21 @@ namespace SAEON.Observations.QuerySite.Controllers
         [Route]
         public async Task<ActionResult> Index()
         {
+            return await Index(await CreateModelAsync());
+            //ViewBag.Authorization = await GetAuthorizationAsync();
+            //ViewBag.Tenant = Tenant;
+            //ViewBag.WebAPIUrl = ConfigurationManager.AppSettings["WebAPIUrl"];
+            //return View(await CreateModelAsync());
+        }
+
+        [HttpGet]
+        private async Task<ActionResult> Index(DataWizardModel model)
+        {
             ViewBag.Authorization = await GetAuthorizationAsync();
             ViewBag.Tenant = Tenant;
             ViewBag.WebAPIUrl = ConfigurationManager.AppSettings["WebAPIUrl"];
-            return View(await CreateModelAsync());
+            SessionModel = model;
+            return View(model);
         }
 
         #region State
@@ -59,6 +71,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var result = new StateModel
                     {
                         IsAuthenticated = model.IsAuthenticated,
+                        IsDataset = model.IsDataset,
                         LoadEnabled = model.IsAuthenticated && model.UserQueries.Any(),
                         SaveEnabled = model.IsAuthenticated && model.LocationNodesSelected.Any() && model.VariableNodesSelected.Any(),
                         SearchEnabled = model.LocationNodesSelected.Any() && model.VariableNodesSelected.Any() && (model.Approximation.RowCount > 0),
@@ -236,7 +249,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     SessionModel = model;
                     SAEONLogs.Verbose("LocationNodesSelected: {@LocationNodesSelected}", model.LocationNodesSelected);
                     SAEONLogs.Verbose("Locations: {@Locations}", model.Locations);
-                    SAEONLogs.Verbose("MapPoints: {@MapPoints}", model.MapPoints);
+                    //SAEONLogs.Verbose("MapPoints: {@MapPoints}", model.MapPoints);
                     return PartialView("_LocationsSelectedHtml", model);
                 }
                 catch (Exception ex)
@@ -618,7 +631,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     //SAEONLogs.Verbose("Model: {@model}", model);
                     await LoadModelAsync(model);
                     var userQuery = model.UserQueries.FirstOrDefault(i => i.Name == input.Name);
-                    if (userQuery == null)
+                    if (userQuery is null)
                     {
                         throw new HttpException((int)HttpStatusCode.NotFound, $"UserQuery not found {input?.Name}");
                     }
@@ -779,6 +792,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpGet]
         [Route("ViewDownload/{id:guid}")]
+        [Authorize]
         public async Task<ActionResult> ViewDownload(Guid? id)
         {
             using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Id", id } }))
@@ -786,13 +800,13 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     SAEONLogs.Verbose("Id: {Id}", id);
-                    if ((id == null) || !id.HasValue)
+                    if ((id is null) || !id.HasValue)
                     {
                         return RedirectToAction("Index");
                     }
 
                     var userDownload = await GetEntityAsync<UserDownload>($"Internal/UserDownloads/{id}");
-                    if (userDownload == null)
+                    if (userDownload is null)
                     {
                         throw new ArgumentException($"Unable to find download {id}", nameof(id));
                     }
@@ -815,14 +829,14 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    if ((id == null) || !id.HasValue)
+                    if ((id is null) || !id.HasValue)
                     {
                         RedirectToAction("Index");
                         return null;
                     }
 
                     var userDownload = await GetEntityAsync<UserDownload>($"Internal/UserDownloads/{id}");
-                    if (userDownload == null)
+                    if (userDownload is null)
                     {
                         throw new ArgumentException($"Unable to find download {id}", nameof(id));
                     }
@@ -843,5 +857,89 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
         #endregion Download
+
+        #region Dataset
+        [HttpGet]
+        public PartialViewResult GetDatasetDialog()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    return PartialView("_DatasetDialog", SessionModel);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        //[HttpGet]
+        //public ActionResult DatasetDownload()
+        //{
+        //    using (SAEONLogs.MethodCall(GetType()))
+        //    {
+        //        try
+        //        {
+        //            return RedirectToAction("GetDownload");
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            SAEONLogs.Exception(ex);
+        //            throw;
+        //        }
+        //    }
+        //}
+
+        [HttpGet]
+        [Route("Dataset/{id}")]
+        public async Task<ActionResult> Dataset(string id)
+        {
+            ViewBag.Authorization = await GetAuthorizationAsync();
+            ViewBag.Tenant = Tenant;
+            ViewBag.WebAPIUrl = ConfigurationManager.AppSettings["WebAPIUrl"];
+            var doi = "10.15493/" + id;
+            using (var client = await GetWebAPIClientAsync())
+            {
+                using (var formContent = new FormUrlEncodedContent(new[] {
+                        new KeyValuePair<string, string>("doi", doi) }))
+                {
+                    var response = await client.PostAsync("/Internal/DOI/AsQueryInput", formContent);
+                    response.EnsureSuccessStatusCode();
+                    var datasetInput = await response.Content.ReadAsStringAsync();
+                    SAEONLogs.Verbose("DatasetInput: {input}", datasetInput);
+                    var wizardInput = JsonConvert.DeserializeObject<DataWizardDataInput>(datasetInput);
+                    SAEONLogs.Verbose("WizardInput: {@wizardInput}", wizardInput);
+                    var model = await CreateModelAsync();
+                    // Locations
+                    List<string> locations = new List<string>();
+                    foreach (var location in wizardInput.Locations)
+                    {
+                        locations.AddRange(model.LocationNodes.Where(i => i.Key.StartsWith($"STA~{location.StationId}")).Select(i => i.Key));
+                    }
+                    UpdateLocationsSelected(locations);
+                    // Variables
+                    List<string> variables = new List<string>();
+                    foreach (var variable in wizardInput.Variables)
+                    {
+                        variables.AddRange(model.VariableNodes.Where(i => i.Key == $"UNI~{variable.UnitId}|OFF~{variable.OfferingId}|PHE~{variable.PhenomenonId}").Select(i => i.Key));
+                    }
+                    UpdateVariablesSelected(variables);
+                    // Filters
+                    model.StartDate = wizardInput.StartDate;
+                    model.EndDate = wizardInput.EndDate;
+                    model.ElevationMinimum = wizardInput.ElevationMinimum;
+                    model.ElevationMaximum = wizardInput.ElevationMaximum;
+                    model.IsDataset = true;
+                    SessionModel = model;
+                    //SAEONLogs.Verbose("SessionModel: {@SessionModel}", model);
+                    return View("Index", model);
+                }
+            }
+        }
+
+        #endregion
     }
 }

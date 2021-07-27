@@ -13,5 +13,10 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             Resource = "Internal/UserDownloads";
         }
+
+        //public override Task<ActionResult> Edit([Bind(Include = "Id,UserId,Name,Description")] UserDownload delta)
+        //{
+        //    return base.Edit(delta);
+        //}
     }
 }

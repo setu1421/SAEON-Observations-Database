@@ -4,15 +4,18 @@
     ViewBag.Title = "View Download";
 }
 @section MetaTags {
-    <meta name="dc.identifier" content="@Model.DigitalObjectIdentifier.DOI" />
-    <meta name="citation_doi" content="@Model.DigitalObjectIdentifier.DOI">
+    <meta name="dc.identifier" content="@Model.Id" />
+    <meta name="dct.title" content="@Model.Title" />
+    @*    <meta name="citation_doi" content="@Model.DigitalObjectIdentifier.DOI">*@
 }
 <div class="row">
     <div class="col-md">
-        <p class="font-weight-bold">Digital Object Identifier (DOI)</p>
-        <p><a href="@Model.DigitalObjectIdentifier.DOIUrl">@Model.DigitalObjectIdentifier.DOI</a></p>
+        <p class="font-weight-bold">Identifier</p>
+        <p><a href="@Model.Id">@Model.Id</a></p>
+        <p class="font-weight-bold">Name</p>
+        <p>@Model.Name</p>
         <p class="font-weight-bold">Title</p>
-        <p>@Model.DigitalObjectIdentifier.Title</p>
+        <p>@Model.Title</p>
         <p class="font-weight-bold">Description</p>
         <p>@Model.Description</p>
         <p class="font-weight-bold">Copyright and license</p>
@@ -26,23 +29,20 @@
         </p>
         <p class="font-weight-bold">Attribution</p>
         <p>
-            Users of SAEON data are required to clearly acknowledge the source of the material derived from SAEON. Please cite as follows:<br />
-            <br />
-            @Html.Raw(Model.DigitalObjectIdentifier.CitationHtml)<br />
-            <br />
-            If relevant, also credit other organisations involved in collection of this particular dataset (as listed in 'credit' in the metadata record)
+            Users of SAEON data are required to clearly acknowledge the source of the material derived from SAEON.<br />
+            @Html.Raw(Model.CitationHtml)
         </p>
         <p class="font-weight-bold">Usage</p>
         <p>
-            Data, products and services from SAEON are provided "as is" without any warranty as to fitness for a particular purpose
+            Data, products and services from SAEON are provided "as is" without any warranty as to fitness for a particular purpose.
         </p>
         <p>
             By using this data you are accepting the license agreement and terms specified above.
             You accept all risks and responsibility for losses, damages, costs and other consequences resulting directly or indirectly from using this site
-            and any information or material available from it
+            and any information or material available from it.
         </p>
-        <p class="font-weight-bold">Metadata</p>
-        <p>The metadata for your download from the Observations Database is available at <a href="@Model.DigitalObjectIdentifier.MetadataUrl" target="_blank">@Model.DigitalObjectIdentifier.MetadataUrl.RemoveHttp())</a></p>
+        @*<p class="font-weight-bold">Metadata</p>
+        <p>The metadata for your download from the Observations Database is available at <a href="@Model.DigitalObjectIdentifier.MetadataUrl" target="_blank">@Model.DigitalObjectIdentifier.MetadataUrl.RemoveHttp())</a></p>*@
         <p class="font-weight-bold">Download Zip</p>
         <p>Your download from the Observations Database is available at @Html.ActionLink(Model.ZipUrl.RemoveHttp(), "DownloadZip", new { id = Model.Id })</p>
         <p class="font-weight-bold">Checksum</p>

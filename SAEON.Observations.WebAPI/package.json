@@ -12,7 +12,8 @@
   "author": "Tim Parker-Nance",
   "license": "MIT",
   "dependencies": {
+    "jquery": "^3.6.0",
     "jquery-validation-unobtrusive": "^3.2.12",
-    "mdbootstrap": "^4.19.2"
+    "mdb-ui-kit": "^3.9.0"
   }
 }

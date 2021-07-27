@@ -1,4 +1,4 @@
-﻿using SAEON.Observations.Auth;
+﻿using SAEON.AspNet.Auth;
 using System.Security.Claims;
 using System.Web;
 
@@ -6,7 +6,7 @@ namespace SAEON.Observations.QuerySite
 {
     public static class HttpContextExtensions
     {
-        public static object UserInfo(this HttpContextBase context)
+        public static object UserInfo(this HttpContext context)
         {
             var result = new
             {
@@ -22,25 +22,5 @@ namespace SAEON.Observations.QuerySite
             };
             return result;
         }
-
-        public static string UserId(this HttpContextBase context)
-        {
-            return (context.User as ClaimsPrincipal).UserId();
-        }
-
-        public static bool UserIsAdmin(this HttpContextBase context)
-        {
-            return (context.User as ClaimsPrincipal).IsAdmin();
-        }
-        public static string UserName(this HttpContextBase context)
-        {
-            return (context.User as ClaimsPrincipal).Name();
-        }
-
-        public static string UserEmail(this HttpContextBase context)
-        {
-            return (context.User as ClaimsPrincipal).Email();
-        }
-
     }
 }

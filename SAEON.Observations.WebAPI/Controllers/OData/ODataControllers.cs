@@ -13,7 +13,7 @@ using System.Linq.Expressions;
 
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
-    [EnableCors(SAEONAuthenticationDefaults.CorsAllowAllPolicy)]
+    [EnableCors(ObsDBAuthenticationDefaults.CorsAllowAllPolicy)]
     public abstract class ODataController<TEntity> : BaseODataController<TEntity> where TEntity : BaseEntity
     {
         protected override void UpdateRequest()

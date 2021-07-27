@@ -1,27 +1,41 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor
+@{
+    var request = httpContextAccessor.HttpContext.Request;
+    var AppInsightsKey = AnalyticsHelper.ApplicationInsightsKey(request);
+    var UAKey = @AnalyticsHelper.GoogleUAKey(request);
+    var GA4Key = @AnalyticsHelper.GoogleGA4Key(request);
+    var ClarityKey = @AnalyticsHelper.ClarityKey(request);
+}
+<!DOCTYPE html>
 <html lang="en-za">
 <head>
     <meta http-equiv="Content-Type" content="text/html" />
     <meta charset="utf-8">
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128063984-6"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=@UAKey"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-        gtag('config', 'UA-128063984-6');
+        gtag('config', '@UAKey');
     </script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NBVJ0F9CEY"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=@GA4Key"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-
-        gtag('config', 'G-NBVJ0F9CEY');
+        gtag('config', '@GA4Key');
     </script>
-    <!-- Clarity tracking code for http://observationsapi-test.saeon.ac.za/ -->
-    <script>(function (c, l, a, r, i, t, y) { c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) }; t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt"; y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y); })(window, document, "clarity", "script", "6de2irdzig");</script>
+    <!-- Clarity tracking code for http://observationsapi.saeon.ac.za/ -->
+    <script>
+        (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt";
+            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+        })(window, document, "clarity", "script", "@ClarityKey");
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @RenderSection("MetaTags", required: false)
     @if (!string.IsNullOrWhiteSpace(ViewBag.MetaDescription))
@@ -35,9 +49,12 @@
     <title>@(ViewBag.Title == "Observations Database WebAPI" || string.IsNullOrEmpty(ViewBag.Title) ? "Observations Database WebAPI" : @ViewBag.Title + " - Observations Database WebAPI")</title>
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-    <link href="~/node_modules/mdbootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="~/node_modules/mdbootstrap/css/mdb.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="/node_modules/mdb-ui-kit/css/mdb.min.css" rel="stylesheet" />
     <environment include="Development">
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/SAEON.css" />
@@ -47,6 +64,7 @@
         <link rel="stylesheet" href="~/css/SAEON.min.css" />
     </environment>
     @RenderSection("Styles", required: false)
+    @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body class="bg-SAEON" id="Document">
     <div id="Page" class="container-fluid bg-white text-dark rounded">
@@ -56,34 +74,41 @@
                     <img class="Logo img-fluid" src="~/Images/Banner.jpg" alt="SAEON Banner" title="© SAEON" />
                 </div>
             </div>
+            <!-- Navbar -->
             <nav class="navbar navbar-expand-sm navbar-dark bg-SAEON rounded">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="swagger" asp-action="">OpenAPI</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="OData" asp-action="$metadata">OData</a>
-                        </li>
-                        @*<li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="SensorThings" asp-action="Index">SensorThings</a>
+                <!-- Container wrapper -->
+                <div class="container-fluid">
+                    <!-- Toggle button -->
+                    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarNav"
+                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <!-- Collapsible wrapper -->
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="GraphQL">GraphQL</a>
+                                <a class="nav-link" asp-area="" asp-controller="swagger" asp-action="">OpenAPI</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="OData" asp-action="$metadata">OData</a>
+                            </li>
+                            @*<li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="SensorThings" asp-action="Index">SensorThings</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="GraphQL">GraphQL</a>
+                                </li>*@
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
+                            </li>
+                            @*<li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
                             </li>*@
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
-                        </li>
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
             </nav>
             <h1>
@@ -113,21 +138,23 @@
         </div>
 
         <footer id="Footer">
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-6">
-                    <br />
-                    &copy; @DateTime.Now.Year - South African Environmental Observation Network (SAEON)<br />
+                    <span class="d-none d-sm-block d-md-block">
+                        <br />
+                        &copy; @DateTime.Now.Year - South African Environmental Observation Network (SAEON)<br />
+                    </span>
                     <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">
                         <img alt="Creative Commons License" class="footer-image" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
                     </a>
                     <br />
-                    <div style="clear: both">
+                    <div class="d-none d-sm-block d-md-block" style="clear: both">
                         Observations Database is licensed under a <a rel="license" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a><br />
                         @Html.ActionLink("How to cite", "HowToCite", "Home")
                     </div>
                 </div>
                 <div class="col-6">
-                    <div class="float-right">
+                    <div class="d-flex justify-content-end">
                         <a href="https://www.dst.gov.za/" target="_blank">
                             <img class="footer-image dsi-logo" src="~/Images/DSI logo.jpg" alt="Department of Science and Innovation logo" title="Department of Science and Innovation" />
                         </a>
@@ -136,12 +163,10 @@
             </div>
         </footer>
     </div>
-    <script type="text/javascript" src="~/node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="~/node_modules/jquery-validation/dist/jquery.validate.js"></script>
     <script type="text/javascript" src="~/node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
-    <script type="text/javascript" src="~/node_modules/mdbootstrap/js/popper.min.js"></script>
-    <script type="text/javascript" src="~/node_modules/mdbootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="~/node_modules/mdbootstrap/js/mdb.min.js"></script>
+    <script type="text/javascript" src="/node_modules/mdb-ui-kit/js/mdb.min.js"></script>
     <environment names="Development">
         <script src="~/js/site.js"></script>
     </environment>
