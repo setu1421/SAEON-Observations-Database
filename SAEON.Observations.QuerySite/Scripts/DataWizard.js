@@ -512,7 +512,8 @@ export function Download() {
         downloading = false;
         //EnableButtons();
         HideWaiting();
-        window.location = data.url;
+        window.open(data.downloadUrl, '_blank');
+        window.location = data.viewDownloadUrl;
     })
         .fail(function (jqXHR, status, error) {
         ErrorInFunc("GetDownload", status, error);

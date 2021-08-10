@@ -780,7 +780,10 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.ElevationMaximum = model.ElevationMaximum;
                     var userDownload = await PostEntityAsync<DataWizardDataInput, UserDownload>("Internal/DataWizard/GetDownload", input);
                     SAEONLogs.Verbose("UserDownload: {@userDownload}", userDownload);
-                    return Json(new { url = Url.Action("ViewDownload", new { userDownload.Id }) }, JsonRequestBehavior.AllowGet);
+                    //RedirectToAction(nameof(ViewDownload), new { id = userDownload.Id });
+                    model.IsDataset = false;
+                    SessionModel = model;
+                    return Json(new { viewDownloadUrl = Url.Action("ViewDownload", new { userDownload.Id }), downloadUrl = Url.Action("DownloadZip", new { userDownload.Id }) }, JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)
                 {
