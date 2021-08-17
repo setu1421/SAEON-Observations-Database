@@ -8,11 +8,12 @@ using SAEON.Logs;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
-    [Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
+    //[Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
     public class AdminController : InternalApiController
     {
         private readonly IHubContext<AdminHub> AdminHub;
@@ -24,6 +25,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpPost("[action]")]
+        [Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
         public async Task<IActionResult> CreateDOIs()
         {
             using (SAEONLogs.MethodCall(GetType()))
@@ -41,6 +43,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpPost("[action]")]
+        [Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
         public async Task<IActionResult> CreateMetadata()
         {
             using (SAEONLogs.MethodCall(GetType()))
@@ -58,6 +61,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpPost("[action]")]
+        [Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
         public async Task<IActionResult> CreateODPMetadata()
         {
             using (SAEONLogs.MethodCall(GetType()))
@@ -75,6 +79,35 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpPost("[action]")]
+        [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+        public async Task<IActionResult> UpdateODP()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    var sb = new StringBuilder();
+                    SAEONLogs.Information("CreateDOIs");
+                    sb.AppendLine("CreateDOIs");
+                    sb.AppendLine(await DOIHelper.CreateDOIsV2(DbContext, AdminHub, HttpContext, AnalyticsHelper.IsTest(Request)));
+                    SAEONLogs.Information("CreateMetadata");
+                    sb.AppendLine("CreateMetadata");
+                    sb.AppendLine(await MetadataHelper.CreateMetadataV2(DbContext, AdminHub, AnalyticsHelper.IsTest(Request)));
+                    SAEONLogs.Information("CreateODPMetadata");
+                    sb.AppendLine("CreateODPMetadata");
+                    sb.AppendLine(await ODPMetadataHelper.CreateMetadata(DbContext, AdminHub, Config));
+                    return Content(sb.ToString());
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpPost("[action]")]
+        [Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
         public async Task<IActionResult> ImportSetup(IFormFile formFile)
         {
             using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "FileName", formFile?.FileName } }))

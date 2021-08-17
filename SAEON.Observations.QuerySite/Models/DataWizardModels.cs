@@ -20,9 +20,9 @@ namespace SAEON.Observations.QuerySite.Models
         [DisplayName("End Date")]
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
         [DisplayName("Minimum elevation")]
-        public float ElevationMinimum { get; set; }
+        public double ElevationMinimum { get; set; }
         [DisplayName("Maximum elevation")]
-        public float ElevationMaximum { get; set; }
+        public double ElevationMaximum { get; set; }
         public DataWizardApproximation Approximation { get; set; } = new DataWizardApproximation();
         public DataWizardDataOutput DataOutput { get; set; } = new DataWizardDataOutput();
         public bool IsAuthenticated { get; set; }
