@@ -95,20 +95,20 @@
       <HintPath>..\packages\Microsoft.Configuration.ConfigurationBuilders.UserSecrets.2.0.0\lib\Net471\Microsoft.Configuration.ConfigurationBuilders.UserSecrets.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=6.12.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.6.12.0\lib\net472\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=6.12.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.6.12.1\lib\net472\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel.Logging, Version=6.12.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Logging.6.12.0\lib\net472\Microsoft.IdentityModel.Logging.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=6.12.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Logging.6.12.1\lib\net472\Microsoft.IdentityModel.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel.Protocols, Version=6.12.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Protocols.6.12.0\lib\net472\Microsoft.IdentityModel.Protocols.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel.Protocols, Version=6.12.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Protocols.6.12.1\lib\net472\Microsoft.IdentityModel.Protocols.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect, Version=6.12.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Protocols.OpenIdConnect.6.12.0\lib\net472\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect, Version=6.12.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Protocols.OpenIdConnect.6.12.1\lib\net472\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel.Tokens, Version=6.12.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.6.12.0\lib\net472\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=6.12.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.6.12.1\lib\net472\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.4.2.0\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -140,11 +140,11 @@
     <Reference Include="SAEON.AspNet.Auth, Version=1.0.9.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.AspNet.Auth.1.0.9\lib\net472\SAEON.AspNet.Auth.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Core, Version=1.0.35.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Core.1.0.35\lib\net472\SAEON.Core.dll</HintPath>
+    <Reference Include="SAEON.Core, Version=1.0.37.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Core.1.0.37\lib\net472\SAEON.Core.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Logs.NetFramework, Version=1.0.38.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Logs.NetFramework.1.0.38\lib\net472\SAEON.Logs.NetFramework.dll</HintPath>
+    <Reference Include="SAEON.Logs.NetFramework, Version=1.0.39.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Logs.NetFramework.1.0.39\lib\net472\SAEON.Logs.NetFramework.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.10.0\lib\net46\Serilog.dll</HintPath>
@@ -167,38 +167,38 @@
     <Reference Include="Serilog.Sinks.Seq, Version=5.0.1.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.Seq.5.0.1\lib\net45\Serilog.Sinks.Seq.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Compression.Base, Version=19.2450.0.49, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.19.2.0.49\lib\net45\Syncfusion.Compression.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Compression.Base, Version=19.2450.0.56, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.19.2.0.56\lib\net45\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.DocIO.Base, Version=19.2450.0.49, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.DocIO.AspNet.Mvc5.19.2.0.49\lib\net45\Syncfusion.DocIO.Base.dll</HintPath>
+    <Reference Include="Syncfusion.DocIO.Base, Version=19.2450.0.56, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.DocIO.AspNet.Mvc5.19.2.0.56\lib\net45\Syncfusion.DocIO.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.EJ, Version=19.2450.0.49, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.19.2.0.49\lib\net45\Syncfusion.EJ.dll</HintPath>
+    <Reference Include="Syncfusion.EJ, Version=19.2450.0.56, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.19.2.0.56\lib\net45\Syncfusion.EJ.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.EJ.Export, Version=19.2450.0.49, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.19.2.0.49\lib\net45\Syncfusion.EJ.Export.dll</HintPath>
+    <Reference Include="Syncfusion.EJ.Export, Version=19.2450.0.56, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.19.2.0.56\lib\net45\Syncfusion.EJ.Export.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.EJ.MVC, Version=19.2500.0.49, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.19.2.0.49\lib\net45\Syncfusion.EJ.MVC.dll</HintPath>
+    <Reference Include="Syncfusion.EJ.MVC, Version=19.2500.0.56, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.19.2.0.56\lib\net45\Syncfusion.EJ.MVC.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Licensing, Version=19.2450.0.49, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.XlsIO.AspNet.Mvc5.19.2.0.49\lib\net45\Syncfusion.Licensing.dll</HintPath>
+    <Reference Include="Syncfusion.Licensing, Version=19.2450.0.56, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.XlsIO.AspNet.Mvc5.19.2.0.56\lib\net45\Syncfusion.Licensing.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Linq.Base, Version=19.2450.0.49, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.19.2.0.49\lib\net45\Syncfusion.Linq.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Linq.Base, Version=19.2450.0.56, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.19.2.0.56\lib\net45\Syncfusion.Linq.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.OfficeChart.Base, Version=19.2450.0.49, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.19.2.0.49\lib\net45\Syncfusion.OfficeChart.Base.dll</HintPath>
+    <Reference Include="Syncfusion.OfficeChart.Base, Version=19.2450.0.56, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.19.2.0.56\lib\net45\Syncfusion.OfficeChart.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Pdf.Base, Version=19.2450.0.49, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Pdf.AspNet.Mvc5.19.2.0.49\lib\net45\Syncfusion.Pdf.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Pdf.Base, Version=19.2450.0.56, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Pdf.AspNet.Mvc5.19.2.0.56\lib\net45\Syncfusion.Pdf.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Presentation.Base, Version=19.2450.0.49, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Presentation.AspNet.Mvc5.19.2.0.49\lib\net45\Syncfusion.Presentation.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Presentation.Base, Version=19.2450.0.56, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Presentation.AspNet.Mvc5.19.2.0.56\lib\net45\Syncfusion.Presentation.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.XlsIO.Base, Version=19.2450.0.49, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.XlsIO.AspNet.Mvc5.19.2.0.49\lib\net45\Syncfusion.XlsIO.Base.dll</HintPath>
+    <Reference Include="Syncfusion.XlsIO.Base, Version=19.2450.0.56, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.XlsIO.AspNet.Mvc5.19.2.0.56\lib\net45\Syncfusion.XlsIO.Base.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -210,8 +210,8 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
-    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=6.12.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.6.12.0\lib\net472\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=6.12.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.6.12.1\lib\net472\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
     <Reference Include="System.Management" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -758,11 +758,6 @@
     <Content Include="Scripts\Admin.min.js">
       <DependentUpon>Admin.js</DependentUpon>
     </Content>
-    <!--<Content Include="Scripts\DataWizard.js" />
-    <Content Include="Scripts\DataWizard.min.js">
-      <DependentUpon>DataWizard.js</DependentUpon>
-    </Content>-->
-    <Content Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Scripts\ej\common\ej.core.min.js" />
     <Content Include="Scripts\ej\common\ej.data.min.js" />
     <Content Include="Scripts\ej\common\ej.draggable.min.js" />
@@ -899,6 +894,11 @@
     <Content Include="Scripts\ej\web\ej.uploadbox.min.js" />
     <Content Include="Scripts\ej\web\ej.waitingpopup.min.js" />
     <Content Include="Scripts\ej\web\ej.web.all.min.js" />
+    <!--<Content Include="Scripts\DataWizard.js" />
+    <Content Include="Scripts\DataWizard.min.js">
+      <DependentUpon>DataWizard.js</DependentUpon>
+    </Content>-->
+    <Content Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.0.js" />
     <Content Include="Scripts\jquery-3.6.0.min.js" />
     <Content Include="Scripts\jquery-3.6.0.slim.js" />

@@ -41,7 +41,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             //SAEONLogs.Verbose("Input: {@Input}", input);
             input.Locations = input.Locations.Distinct().ToList();
             input.Variables = input.Variables.Distinct().ToList();
-            if (input.StartDate > input.EndDate) throw new ArgumentException(nameof(input));
+            if (input.StartDate > input.EndDate) throw new ArgumentException("StartDate after EndDate", nameof(input));
             input.StartDate = input.StartDate.Date;
             input.EndDate = input.EndDate.Date.AddDays(1).AddMilliseconds(-1);
             //SAEONLogs.Verbose("Processed Input: {@Input}", input);
@@ -109,9 +109,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 .AsEnumerable()
                 .Where(i =>
                     (!locations.Any() || locations.Contains(new Location { StationId = i.StationId })) &&
-                    (!variables.Any() || variables.Contains(new Variable { PhenomenonId = i.PhenomenonId, OfferingId = i.OfferingId, UnitId = i.UnitId })) &&
-                DateRangesOverlap(startDate, endDate, i.StartDate, i.EndDate) &&
-                DoubleRangesOverlap(elevationMinimum, elevationMaximum, i.ElevationMinimum, i.ElevationMaximum))
+                    (!variables.Any() || variables.Contains(new Variable { PhenomenonId = i.PhenomenonId, OfferingId = i.OfferingId, UnitId = i.UnitId })))
+                .Where(i =>
+                    DateRangesOverlap(startDate, endDate, i.StartDate, i.EndDate) &&
+                    DoubleRangesOverlap(elevationMinimum, elevationMaximum, i.ElevationMinimum, i.ElevationMaximum))
                 .Distinct()
                 .OrderBy(i => i.SiteName)
                 .ThenBy(i => i.StationName)
@@ -123,12 +124,13 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
             bool DateRangesOverlap(DateTime startA, DateTime endA, DateTime? startB, DateTime? endB)
             {
-                return (!endB.HasValue || (startA <= endB)) && (!startB.HasValue || (endA >= startB));
+                //SAEONLogs.Verbose("startA: {startA} endA: {endA} startB: {startB} endB: {endB}", startA, endA, startB, endB);
+                return (!endB.HasValue || (startA < endB)) && (!startB.HasValue || (endA > startB));
             }
 
             bool DoubleRangesOverlap(double startA, double endA, double? startB, double? endB)
             {
-                return (!endB.HasValue || (startA <= endB)) && (!startB.HasValue || (endA >= startB));
+                return (!endB.HasValue || (startA < endB)) && (!startB.HasValue || (endA > startB));
             }
         }
 
@@ -270,7 +272,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 .Where(i =>
                     importBatchIDs.Contains(i.ImportBatchId) &&
                     ((i.StatusId == null) || (i.StatusName == "Verified")) &&
-                    ((i.ValueDate >= input.StartDate) && (i.ValueDate < input.EndDate)) &&
+                    ((i.ValueDate >= input.StartDate) && (i.ValueDate <= input.EndDate)) &&
                     (!i.Elevation.HasValue || (i.Elevation >= input.ElevationMinimum)) &&
                     (!i.Elevation.HasValue || (i.Elevation <= input.ElevationMaximum)))
                 .OrderBy(obs => obs.SiteName)
@@ -613,10 +615,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         switch (input.DownloadFormat)
                         {
                             case DownloadFormat.CSV:
-                                System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Data.csv"), output.DataMatrix.ToCSV());
+                                System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, $"Data {output.Date:yyyyMMdd HHmmss}.csv"), output.DataMatrix.ToCSV());
                                 break;
                             case DownloadFormat.Excel:
-                                System.IO.File.WriteAllBytes(Path.Combine(dirInfo.FullName, "Data.xlsx"), output.DataMatrix.ToExcel());
+                                System.IO.File.WriteAllBytes(Path.Combine(dirInfo.FullName, $"Data {output.Date:yyyyMMdd HHmmss}.xlsx"), output.DataMatrix.ToExcel());
                                 break;
                             case DownloadFormat.NetCDF:
                                 break;

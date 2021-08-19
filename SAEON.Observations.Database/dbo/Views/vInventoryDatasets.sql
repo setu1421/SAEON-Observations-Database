@@ -15,6 +15,7 @@ Select
   PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
   Sum(Count) Count,
   Sum(VerifiedCount) VerifiedCount,
+  Sum(UnverifiedCount) UnverifiedCount,
   Min(StartDate) StartDate,
   Max(EndDate) EndDate,
   Max(LatitudeNorth) LatitudeNorth,

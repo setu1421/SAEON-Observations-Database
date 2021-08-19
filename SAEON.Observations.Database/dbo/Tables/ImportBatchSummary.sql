@@ -24,6 +24,7 @@
     [StartDate] DATETIME NULL, 
     [EndDate] DATETIME NULL, 
     [VerifiedCount] INT NULL, 
+    [UnverifiedCount] INT NULL, 
     CONSTRAINT [PK_ImportBatchSummary] PRIMARY KEY CLUSTERED ([ID]), 
     CONSTRAINT [FK_ImportBatchSummary_ImportBatchID] FOREIGN KEY ([ImportBatchID]) REFERENCES [ImportBatch]([ID]), 
     CONSTRAINT [FK_ImportBatchSummary_SensorID] FOREIGN KEY ([SensorID]) REFERENCES [Sensor]([ID]), 
@@ -62,6 +63,12 @@ GO
 
 GO
 CREATE INDEX [IX_ImportBatchSummary_Count] ON [dbo].[ImportBatchSummary] ([Count])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_VerifiedCount] ON [dbo].[ImportBatchSummary] ([VerifiedCount])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_UnverifiedCount] ON [dbo].[ImportBatchSummary] ([UnverifiedCount])
 
 GO
 CREATE INDEX [IX_ImportBatchSummary_StartDate] ON [dbo].[ImportBatchSummary] ([StartDate])

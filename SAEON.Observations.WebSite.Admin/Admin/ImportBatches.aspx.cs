@@ -180,7 +180,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             var sql =
                 "Insert Into ImportBatchSummary" + Environment.NewLine +
                 "  (ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance," + Environment.NewLine +
-                "   LatitudeNorth, LatitudeSouth, LongitudeWest, LongitudeEast, ElevationMinimum, ElevationMaximum, StartDate, EndDate, VerifiedCount)" + Environment.NewLine +
+                "   LatitudeNorth, LatitudeSouth, LongitudeWest, LongitudeEast, ElevationMinimum, ElevationMaximum, StartDate, EndDate, VerifiedCount, UnverifiedCount)" + Environment.NewLine +
                 "Select" + Environment.NewLine +
                 "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, " + Environment.NewLine +
                 "  STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance, " + Environment.NewLine +
@@ -199,7 +199,21 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 "     (Observation.PhenomenonOfferingID = vObservationExpansion.PhenomenonOfferingID) and" + Environment.NewLine +
                 "     (Observation.PhenomenonUOMID = vObservationExpansion.PhenomenonUOMID) and" + Environment.NewLine +
                 "     ((Observation.StatusID is null) or (Status.Name = 'Verified')))" + Environment.NewLine +
-                "  ) VerifiedCount" + Environment.NewLine +
+                "  ) VerifiedCount," + Environment.NewLine +
+                "  (" + Environment.NewLine +
+                "  Select" + Environment.NewLine +
+                "    Count(*)" + Environment.NewLine +
+                "  from" + Environment.NewLine +
+                "    Observation" + Environment.NewLine +
+                "    inner join Status" + Environment.NewLine +
+                "      on (Observation.StatusID = Status.ID)" + Environment.NewLine +
+                "  where" + Environment.NewLine +
+                "    ((Observation.ImportBatchID = vObservationExpansion.ImportBatchID) and" + Environment.NewLine +
+                "     (Observation.SensorID = vObservationExpansion.SensorID) and" + Environment.NewLine +
+                "     (Observation.PhenomenonOfferingID = vObservationExpansion.PhenomenonOfferingID) and" + Environment.NewLine +
+                "     (Observation.PhenomenonUOMID = vObservationExpansion.PhenomenonUOMID) and" + Environment.NewLine +
+                "     (Status.Name <> 'Verified'))" + Environment.NewLine +
+                "  ) UnverifiedCount" + Environment.NewLine +
                 "from" + Environment.NewLine +
                 "  vObservationExpansion" + Environment.NewLine +
                 "where" + Environment.NewLine +
@@ -460,7 +474,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 durationStopwatch.Start();
                 var stageStopwatch = new Stopwatch();
                 stageStopwatch.Start();
-                SAEONLogs.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.59, batch.DataSource.Name, batch.FileName);
+                SAEONLogs.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.60, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
                 stageStopwatch.Stop();
                 SAEONLogs.Information("Imported {count:N0} observations in {elapsed}", values.Count, stageStopwatch.Elapsed.TimeStr());
