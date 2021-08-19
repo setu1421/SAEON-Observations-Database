@@ -494,10 +494,11 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var input = new DataWizardDataInput();
                     input.Locations.AddRange(model.Locations);
                     input.Variables.AddRange(model.Variables);
-                    input.StartDate = model.StartDate.ToUniversalTime();
-                    input.EndDate = model.EndDate.ToUniversalTime();
+                    input.StartDate = model.StartDate/*.ToUniversalTime()*/;
+                    input.EndDate = model.EndDate/*.ToUniversalTime()*/;
                     input.ElevationMinimum = model.ElevationMinimum;
                     input.ElevationMaximum = model.ElevationMaximum;
+                    //SAEONLogs.Verbose("Approximation: Input: {@Input}", input);
                     model.Approximation = await PostEntityAsync<DataWizardDataInput, DataWizardApproximation>("Internal/DataWizard/Approximation", input);
                     SAEONLogs.Verbose("RowCount: {RowCount} Errors: {Errors}", model.Approximation.RowCount, model.Approximation.Errors);
                     SessionModel = model;
@@ -524,8 +525,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var input = new DataWizardDataInput();
                     input.Locations.AddRange(model.Locations);
                     input.Variables.AddRange(model.Variables);
-                    input.StartDate = model.StartDate.ToUniversalTime();
-                    input.EndDate = model.EndDate.ToUniversalTime();
+                    input.StartDate = model.StartDate/*.ToUniversalTime()*/;
+                    input.EndDate = model.EndDate/*.ToUniversalTime()*/;
                     input.ElevationMinimum = model.ElevationMinimum;
                     input.ElevationMaximum = model.ElevationMaximum;
                     model.DataOutput = await PostEntityAsync<DataWizardDataInput, DataWizardDataOutput>("Internal/DataWizard/GetData", input);
@@ -700,8 +701,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var queryInput = new DataWizardDataInput();
                     queryInput.Locations.AddRange(model.Locations);
                     queryInput.Variables.AddRange(model.Variables);
-                    queryInput.StartDate = model.StartDate.ToUniversalTime();
-                    queryInput.EndDate = model.EndDate.ToUniversalTime();
+                    queryInput.StartDate = model.StartDate/*.ToUniversalTime()*/;
+                    queryInput.EndDate = model.EndDate/*.ToUniversalTime()*/;
                     queryInput.ElevationMinimum = model.ElevationMinimum;
                     queryInput.ElevationMaximum = model.ElevationMaximum;
                     var userQuery = new UserQuery
@@ -774,13 +775,16 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var input = new DataWizardDataInput();
                     input.Locations.AddRange(model.Locations);
                     input.Variables.AddRange(model.Variables);
-                    input.StartDate = model.StartDate.ToUniversalTime();
-                    input.EndDate = model.EndDate.ToUniversalTime();
+                    input.StartDate = model.StartDate/*.ToUniversalTime()*/;
+                    input.EndDate = model.EndDate/*.ToUniversalTime()*/;
                     input.ElevationMinimum = model.ElevationMinimum;
                     input.ElevationMaximum = model.ElevationMaximum;
                     var userDownload = await PostEntityAsync<DataWizardDataInput, UserDownload>("Internal/DataWizard/GetDownload", input);
                     SAEONLogs.Verbose("UserDownload: {@userDownload}", userDownload);
-                    return Json(new { url = Url.Action("ViewDownload", new { userDownload.Id }) }, JsonRequestBehavior.AllowGet);
+                    //RedirectToAction(nameof(ViewDownload), new { id = userDownload.Id });
+                    model.IsDataset = false;
+                    SessionModel = model;
+                    return Json(new { viewDownloadUrl = Url.Action("ViewDownload", new { userDownload.Id }), downloadUrl = Url.Action("DownloadZip", new { userDownload.Id }) }, JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)
                 {

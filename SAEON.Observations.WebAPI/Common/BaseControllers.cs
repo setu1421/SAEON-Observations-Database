@@ -220,6 +220,11 @@ namespace SAEON.Observations.WebAPI
         private ObservationsDbContext _dbContext;
         protected ObservationsDbContext DbContext => _dbContext ??= HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
 
+        protected virtual List<Expression<Func<TEntity, bool>>> GetWheres()
+        {
+            return new List<Expression<Func<TEntity, bool>>>();
+        }
+
         protected virtual List<Expression<Func<TEntity, object>>> GetOrderBys()
         {
             return new List<Expression<Func<TEntity, object>>>();
@@ -232,6 +237,10 @@ namespace SAEON.Observations.WebAPI
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
             var query = DbContext.Set<TEntity>()/*.AsNoTracking()*/.AsQueryable();
+            foreach (var where in GetWheres())
+            {
+                query = query.Where(where);
+            }
             if (extraWhere is not null)
             {
                 query = query.Where(extraWhere);

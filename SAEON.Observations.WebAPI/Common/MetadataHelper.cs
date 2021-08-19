@@ -48,9 +48,10 @@ namespace SAEON.Observations.WebAPI
 
                     async Task GenerateMetadata()
                     {
-                        async Task<Metadata> MetadataForDOIAsync(DigitalObjectIdentifier doi, Metadata parent)
+                        //async Task<Metadata> MetadataForDOIAsync(DigitalObjectIdentifier doi, Metadata parent)
+                        Metadata MetadataForDOI(DigitalObjectIdentifier doi, Metadata parent)
                         {
-                            await AddLineAsync($"{doi.DOIType} {doi.Code}, {doi.Name}");
+                            //await AddLineAsync($"{doi.DOIType} {doi.Code}, {doi.Name}");
                             var metadata = new Metadata
                             {
                                 DOI = doi,
@@ -70,7 +71,7 @@ namespace SAEON.Observations.WebAPI
                                 i.OfferingCode == splits[2] &&
                                 i.UnitCode == splits[3])
                                 .SingleAsync();
-                            var metaDataset = await MetadataForDOIAsync(doiDataset, null);
+                            var metaDataset = MetadataForDOI(doiDataset, null);
                             metaDataset.StartDate = dataset.StartDate;
                             metaDataset.EndDate = dataset.EndDate;
                             metaDataset.LatitudeNorth = dataset.LatitudeNorth;
@@ -112,7 +113,11 @@ namespace SAEON.Observations.WebAPI
                             doiDataset.MetadataJson = metaDataset.ToJson();
                             oldSha256 = doiDataset.MetadataJsonSha256;
                             doiDataset.MetadataJsonSha256 = doiDataset.MetadataJson.Sha256();
-                            doiDataset.ODPMetadataNeedsUpdate = (oldSha256 != doiDataset.MetadataJsonSha256) || (!doiDataset.ODPMetadataIsValid ?? true);
+                            doiDataset.ODPMetadataNeedsUpdate = (!ShaEqual(oldSha256, doiDataset.MetadataJsonSha256)) || (!doiDataset.ODPMetadataIsValid ?? true);
+                            if (doiDataset.ODPMetadataNeedsUpdate ?? false)
+                            {
+                                await AddLineAsync($"{doiDataset.DOIType} {doiDataset.Code}, {doiDataset.Name}");
+                            }
                             if (doiDataset.ODPMetadataNeedsUpdate ?? false)
                             {
                                 doiDataset.ODPMetadataIsPublished = false;
@@ -127,6 +132,11 @@ namespace SAEON.Observations.WebAPI
                     SAEONLogs.Exception(ex);
                     throw;
                 }
+            }
+
+            bool ShaEqual(ReadOnlySpan<byte> a1, ReadOnlySpan<byte> a2)
+            {
+                return a1.SequenceEqual(a2);
             }
         }
 

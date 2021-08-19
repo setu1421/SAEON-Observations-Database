@@ -29,7 +29,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     SAEONLogs.Information("Calling WebAPI");
                     using (var client = await GetWebAPIClientAsync())
                     {
-                        var response = await client.PostAsync("/Internal/Admin/CreateDOIs", null);
+                        var response = await client.PostAsync("Internal/Admin/CreateDOIs", null);
                         response.EnsureSuccessStatusCode();
                     }
                     return new HttpStatusCodeResult(HttpStatusCode.NoContent);
@@ -56,7 +56,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     using (var client = await GetWebAPIClientAsync())
                     {
-                        var response = await client.PostAsync("/Internal/Admin/CreateMetadata", null);
+                        var response = await client.PostAsync("Internal/Admin/CreateMetadata", null);
                         response.EnsureSuccessStatusCode();
                     }
                     return new HttpStatusCodeResult(HttpStatusCode.NoContent);
@@ -83,7 +83,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     using (var client = await GetWebAPIClientAsync())
                     {
-                        var response = await client.PostAsync("/Internal/Admin/CreateODPMetadata", null);
+                        var response = await client.PostAsync("Internal/Admin/CreateODPMetadata", null);
                         response.EnsureSuccessStatusCode();
                     }
                     return new HttpStatusCodeResult(HttpStatusCode.NoContent);

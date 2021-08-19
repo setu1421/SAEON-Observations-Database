@@ -84,8 +84,6 @@ namespace SAEON.Observations.WebAPI
         {
             if (modelBuilder is null) throw new ArgumentNullException(nameof(modelBuilder));
             base.OnModelCreating(modelBuilder);
-            //modelBuilder.Entity<VFeature>().HasNoKey().ToView("vFeatures");
-            //modelBuilder.Entity<VLocation>().HasNoKey().ToView("vLocations");
             modelBuilder.Entity<InventoryDataset>().ToView("vInventoryDatasets");
             modelBuilder.Entity<InventorySensor>().ToView("vInventorySensors");
             modelBuilder.Entity<Dataset>().ToView("vStationDatasets");

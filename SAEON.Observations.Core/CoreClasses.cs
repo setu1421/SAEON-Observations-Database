@@ -329,8 +329,8 @@ namespace SAEON.Observations.Core
         public List<Variable> Variables { get; set; } = new List<Variable>();
         public DateTime StartDate { get; set; } = DateTime.Now.AddYears(-100).Date;
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
-        public float ElevationMinimum { get; set; } = -100; // m
-        public float ElevationMaximum { get; set; } = 3000; // m
+        public double ElevationMinimum { get; set; } = -100; // m
+        public double ElevationMaximum { get; set; } = 3000; // m
     }
 
     public class DataWizardDataOutput

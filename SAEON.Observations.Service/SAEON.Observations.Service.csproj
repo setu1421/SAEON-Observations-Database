@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Authors>Tim Parker-Nance</Authors>
+    <Company>South African Environmental Observation Network (SAEON)</Company>
+    <Product>SAEON Observations Database</Product>
+    <Description>SAEON Observations - Service</Description>
+    <Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
+    <ApplicationIcon>SAEON.ico</ApplicationIcon>
+    <UserSecretsId>dotnet-SAEON.Observations.Service-E23484AC-7825-4210-9B6E-79599F37F6E4</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="SAEON.AspNet.Auth" Version="1.0.9" />
+    <PackageReference Include="SAEON.Observations.Auth" Version="1.0.34" />
+  </ItemGroup>
+</Project>

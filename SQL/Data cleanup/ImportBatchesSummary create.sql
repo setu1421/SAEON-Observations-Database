@@ -3,7 +3,7 @@ begin transaction
 Delete ImportBatchSummary
 Insert Into ImportBatchSummary
   (ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance, 
-   LatitudeNorth, LatitudeSouth, LongitudeWest, LongitudeEast, ElevationMinimum, ElevationMaximum, StartDate, EndDate, VerifiedCount)
+   LatitudeNorth, LatitudeSouth, LongitudeWest, LongitudeEast, ElevationMinimum, ElevationMaximum, StartDate, EndDate, VerifiedCount, UnverifiedCount)
 Select
   ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, 
   AVG(DataValue) Average, STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance, 
@@ -22,7 +22,21 @@ Select
 	 (Observation.PhenomenonOfferingID = vObservationExpansion.PhenomenonOfferingID) and
 	 (Observation.PhenomenonUOMID = vObservationExpansion.PhenomenonUOMID) and
 	 ((Observation.StatusID is null) or (Status.Name = 'Verified')))
-  ) VerifiedCount
+  ) VerifiedCount,
+  (
+  Select 
+    Count(*) 
+  from 
+    Observation
+	inner join Status
+	  on (Observation.StatusID = Status.ID)
+  where 
+    ((Observation.ImportBatchID = vObservationExpansion.ImportBatchID) and 
+	 (Observation.SensorID = vObservationExpansion.SensorID) and
+	 (Observation.PhenomenonOfferingID = vObservationExpansion.PhenomenonOfferingID) and
+	 (Observation.PhenomenonUOMID = vObservationExpansion.PhenomenonUOMID) and
+	 (Status.Name <> 'Verified'))
+  ) UnverifiedCount
 from
   vObservationExpansion
 group by

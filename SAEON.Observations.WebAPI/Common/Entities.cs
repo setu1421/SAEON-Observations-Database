@@ -77,6 +77,7 @@ namespace SAEON.Observations.Core
         public string UnitSymbol { get; set; }
         public int? Count { get; set; }
         public int? VerifiedCount { get; set; }
+        public int? UnverifiedCount { get; set; }
         public double? Minimum { get; set; }
         public double? Maximum { get; set; }
         public double? Average { get; set; }

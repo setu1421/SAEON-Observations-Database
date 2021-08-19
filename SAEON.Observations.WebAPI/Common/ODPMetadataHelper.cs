@@ -28,6 +28,7 @@ namespace SAEON.Observations.WebAPI
                 {
                     var needsUpdate = doi.ODPMetadataNeedsUpdate ?? false;
                     var needsPublish = !doi.ODPMetadataIsPublished ?? true;
+                    //SAEONLogs.Verbose("NeedsUpdate: {NeedsUpdate} NeedsPublish: {NeedsPublish}", needsUpdate, needsPublish);
                     if (!needsUpdate && !needsPublish) return;
                     if (needsUpdate)
                     {
@@ -168,7 +169,6 @@ namespace SAEON.Observations.WebAPI
                 await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateODPMetadataStatusUpdate, line);
             }
         }
-
 
         public static async Task<HttpClient> GetClient(IConfiguration config)
         {
