@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SAEON.Observations.QuerySite.Models
 {
-    public class DataWizardModel : BaseModel
+    public class DataWizardModel : BaseModel, IValidatableObject
     {
         public List<LocationNode> LocationNodes { get; } = new List<LocationNode>();
         public List<LocationNode> LocationNodesSelected { get; } = new List<LocationNode>();
@@ -15,8 +15,14 @@ namespace SAEON.Observations.QuerySite.Models
         public List<VariableNode> VariableNodesSelected { get; } = new List<VariableNode>();
         public List<Variable> Variables { get; } = new List<Variable>();
         public List<MapPoint> MapPoints { get; } = new List<MapPoint>();
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [IsBeforeDate(nameof(EndDate))]
         [DisplayName("Start Date")]
         public DateTime StartDate { get; set; } = DateTime.Now.AddYears(-100).Date;
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [IsAfterDate(nameof(StartDate))]
         [DisplayName("End Date")]
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
         [DisplayName("Minimum elevation")]
@@ -50,6 +56,18 @@ namespace SAEON.Observations.QuerySite.Models
             HaveSearched = false;
             UserDownloads.Clear();
             UserQueries.Clear();
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (StartDate > EndDate)
+            {
+                yield return new ValidationResult("Start Date can't be after End Date");
+            }
+            if (EndDate < StartDate)
+            {
+                yield return new ValidationResult("End Date can't be before Start Date");
+            }
         }
     }
 

@@ -451,6 +451,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
+                    //SAEONLogs.Verbose("MapPoints: {@MapPoints}", SessionModel.MapPoints);
                     return GetListAsJson(SessionModel.MapPoints);
                 }
                 catch (Exception ex)
@@ -494,8 +495,16 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var input = new DataWizardDataInput();
                     input.Locations.AddRange(model.Locations);
                     input.Variables.AddRange(model.Variables);
-                    input.StartDate = model.StartDate/*.ToUniversalTime()*/;
-                    input.EndDate = model.EndDate/*.ToUniversalTime()*/;
+                    if (model.StartDate <= model.EndDate)
+                    {
+                        input.StartDate = model.StartDate;
+                        input.EndDate = model.EndDate;
+                    }
+                    else
+                    {
+                        input.StartDate = model.EndDate;
+                        input.EndDate = model.StartDate;
+                    }
                     input.ElevationMinimum = model.ElevationMinimum;
                     input.ElevationMaximum = model.ElevationMaximum;
                     //SAEONLogs.Verbose("Approximation: Input: {@Input}", input);
@@ -525,8 +534,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var input = new DataWizardDataInput();
                     input.Locations.AddRange(model.Locations);
                     input.Variables.AddRange(model.Variables);
-                    input.StartDate = model.StartDate/*.ToUniversalTime()*/;
-                    input.EndDate = model.EndDate/*.ToUniversalTime()*/;
+                    input.StartDate = model.StartDate;
+                    input.EndDate = model.EndDate;
                     input.ElevationMinimum = model.ElevationMinimum;
                     input.ElevationMaximum = model.ElevationMaximum;
                     model.DataOutput = await PostEntityAsync<DataWizardDataInput, DataWizardDataOutput>("Internal/DataWizard/GetData", input);
@@ -701,8 +710,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var queryInput = new DataWizardDataInput();
                     queryInput.Locations.AddRange(model.Locations);
                     queryInput.Variables.AddRange(model.Variables);
-                    queryInput.StartDate = model.StartDate/*.ToUniversalTime()*/;
-                    queryInput.EndDate = model.EndDate/*.ToUniversalTime()*/;
+                    queryInput.StartDate = model.StartDate;
+                    queryInput.EndDate = model.EndDate;
                     queryInput.ElevationMinimum = model.ElevationMinimum;
                     queryInput.ElevationMaximum = model.ElevationMaximum;
                     var userQuery = new UserQuery
@@ -775,8 +784,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var input = new DataWizardDataInput();
                     input.Locations.AddRange(model.Locations);
                     input.Variables.AddRange(model.Variables);
-                    input.StartDate = model.StartDate/*.ToUniversalTime()*/;
-                    input.EndDate = model.EndDate/*.ToUniversalTime()*/;
+                    input.StartDate = model.StartDate;
+                    input.EndDate = model.EndDate;
                     input.ElevationMinimum = model.ElevationMinimum;
                     input.ElevationMaximum = model.ElevationMaximum;
                     var userDownload = await PostEntityAsync<DataWizardDataInput, UserDownload>("Internal/DataWizard/GetDownload", input);

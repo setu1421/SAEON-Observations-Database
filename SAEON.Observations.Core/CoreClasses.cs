@@ -6,6 +6,8 @@ using SAEON.Core;
 using SAEON.OpenXML;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.IO;
 using System.Runtime.Serialization;
@@ -323,14 +325,34 @@ namespace SAEON.Observations.Core
         }
     }
 
-    public class DataWizardDataInput
+    public class DataWizardDataInput : IValidatableObject
     {
         public List<Location> Locations { get; set; } = new List<Location>();
         public List<Variable> Variables { get; set; } = new List<Variable>();
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [IsBeforeDate(nameof(EndDate))]
+        [DisplayName("Start Date")]
         public DateTime StartDate { get; set; } = DateTime.Now.AddYears(-100).Date;
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [IsAfterDate(nameof(StartDate))]
+        [DisplayName("End Date")]
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
         public double ElevationMinimum { get; set; } = -100; // m
         public double ElevationMaximum { get; set; } = 3000; // m
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (StartDate > EndDate)
+            {
+                yield return new ValidationResult("Start Date can't be after End Date");
+            }
+            if (EndDate < StartDate)
+            {
+                yield return new ValidationResult("End Date can't be before Start Date");
+            }
+        }
     }
 
     public class DataWizardDataOutput

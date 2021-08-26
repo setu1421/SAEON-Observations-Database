@@ -15,7 +15,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             LocationNode project = null;
             LocationNode site = null;
             LocationNode station = null;
-            foreach (var location in DbContext.VLocations.Where(i => i.Latitude != null && i.Longitude != null).OrderBy(i => i.OrganisationName).ThenBy(i => i.ProgrammeName).ThenBy(i => i.ProjectName).ThenBy(i => i.SiteName).ThenBy(i => i.StationName))
+            foreach (var location in DbContext.VLocations.OrderBy(i => i.OrganisationName).ThenBy(i => i.ProgrammeName).ThenBy(i => i.ProjectName).ThenBy(i => i.SiteName).ThenBy(i => i.StationName))
             {
                 if (organisation?.Id != location.OrganisationID)
                 {

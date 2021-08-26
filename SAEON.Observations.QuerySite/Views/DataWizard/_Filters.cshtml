@@ -1,30 +1,33 @@
 ﻿@using SAEON.Observations.QuerySite.Models
 @model DataWizardModel
-<div class="row">
-    <div class="col-md-1">
-        @Html.LabelFor(i => i.StartDate)
+@using (Html.BeginForm(null))
+{
+    <div class="row">
+        <div class="col-md-1">
+            @Html.LabelFor(i => i.StartDate)
+        </div>
+        <div class="col-md-11">
+            @Html.EJ().DatePickerFor(i => i.StartDate).DateFormat("yyyy-MM-dd").ValidationRules(r => r.AddRule("isbeforedate", "EndDate")).ValidationMessages(m => m.AddMessage("isbeforedate", "Start Date must be before End Date")).ClientSideEvents(ev => ev.Change("DataWizard.FiltersChanged"))
+        </div>
     </div>
-    <div class="col-md-11">
-        @Html.EJ().DatePickerFor(i => i.StartDate).DateFormat("yyyy-MM-dd").ClientSideEvents(ev => ev.Change("DataWizard.FiltersChanged"))
+    <div class="row">
+        <div class="col-md-1">
+            @Html.LabelFor(i => i.EndDate)
+        </div>
+        <div class="col-md-11">
+            @Html.EJ().DatePickerFor(i => i.EndDate).DateFormat("yyyy-MM-dd").ValidationRules(r => r.AddRule("isafterdate", "StartDate")).ValidationMessages(m => m.AddMessage("isafterdate", "End Date must be after Start Date")).ClientSideEvents(ev => ev.Change("DataWizard.FiltersChanged"))
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-1">
-        @Html.LabelFor(i => i.EndDate)
+    <div class="row">
+        <div class="col-md text-center">
+            @Html.LabelFor(i => i.ElevationMinimum, "Elevation (m)")
+        </div>
     </div>
-    <div class="col-md-11">
-        @Html.EJ().DatePickerFor(i => i.EndDate).DateFormat("yyyy-MM-dd").ClientSideEvents(ev => ev.Change("DataWizard.FiltersChanged"))
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            @(Html.EJ().Slider("ElevationSlider").SliderType(SlideType.Range).MinValue(-100).MaxValue(3000).ShowScale(true).SmallStep(25).LargeStep(100).ClientSideEvents(ev => ev.Change("DataWizard.FiltersChanged")))
+        </div>
+        <div class="col-md-1"></div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md text-center">
-        @Html.LabelFor(i => i.ElevationMinimum, "Elevation (m)")
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-1"></div>
-    <div class="col-md-10">
-        @(Html.EJ().Slider("ElevationSlider").SliderType(SlideType.Range).MinValue(-100).MaxValue(3000).ShowScale(true).SmallStep(25).LargeStep(100).ClientSideEvents(ev => ev.Change("DataWizard.FiltersChanged")))
-    </div>
-    <div class="col-md-1"></div>
-</div>
+}
