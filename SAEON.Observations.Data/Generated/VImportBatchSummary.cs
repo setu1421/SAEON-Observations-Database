@@ -333,6 +333,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarVerifiedCount);
                 
+                TableSchema.TableColumn colvarUnverifiedCount = new TableSchema.TableColumn(schema);
+                colvarUnverifiedCount.ColumnName = "UnverifiedCount";
+                colvarUnverifiedCount.DataType = DbType.Int32;
+                colvarUnverifiedCount.MaxLength = 0;
+                colvarUnverifiedCount.AutoIncrement = false;
+                colvarUnverifiedCount.IsNullable = true;
+                colvarUnverifiedCount.IsPrimaryKey = false;
+                colvarUnverifiedCount.IsForeignKey = false;
+                colvarUnverifiedCount.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarUnverifiedCount);
+                
                 TableSchema.TableColumn colvarPhenomenonID = new TableSchema.TableColumn(schema);
                 colvarPhenomenonID.ColumnName = "PhenomenonID";
                 colvarPhenomenonID.DataType = DbType.Guid;
@@ -1233,6 +1245,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("UnverifiedCount")]
+        [Bindable(true)]
+        public int? UnverifiedCount 
+	    {
+		    get
+		    {
+			    return GetColumnValue<int?>("UnverifiedCount");
+		    }
+            set 
+		    {
+			    SetColumnValue("UnverifiedCount", value);
+            }
+        }
+	      
         [XmlAttribute("PhenomenonID")]
         [Bindable(true)]
         public Guid PhenomenonID 
@@ -1901,6 +1927,8 @@ namespace SAEON.Observations.Data{
             public static string EndDate = @"EndDate";
             
             public static string VerifiedCount = @"VerifiedCount";
+            
+            public static string UnverifiedCount = @"UnverifiedCount";
             
             public static string PhenomenonID = @"PhenomenonID";
             

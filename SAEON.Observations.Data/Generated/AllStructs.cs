@@ -330,21 +330,17 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VInstrumentSensor = @"vInstrumentSensor";
         
-		public static readonly string VInventorySensor = @"vInventorySensors";
+		public static readonly string VInventoryDataset = @"vInventoryDatasets";
         
-		public static readonly string VLocation = @"vLocations";
+		public static readonly string VInventorySensor = @"vInventorySensors";
         
 		public static readonly string VModuleRoleModule = @"vModuleRoleModule";
         
 		public static readonly string VObservation = @"vObservation";
         
-		public static readonly string VObservationApi = @"vObservationApi";
-        
 		public static readonly string VObservationExpansion = @"vObservationExpansion";
         
 		public static readonly string VObservationJSON = @"vObservationJSON";
-        
-		public static readonly string VObservationODatum = @"vObservationOData";
         
 		public static readonly string VOfferingPhenomena = @"vOfferingPhenomena";
         

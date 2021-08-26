@@ -433,6 +433,19 @@ namespace SAEON.Observations.Data
 				colvarVerifiedCount.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarVerifiedCount);
 				
+				TableSchema.TableColumn colvarUnverifiedCount = new TableSchema.TableColumn(schema);
+				colvarUnverifiedCount.ColumnName = "UnverifiedCount";
+				colvarUnverifiedCount.DataType = DbType.Int32;
+				colvarUnverifiedCount.MaxLength = 0;
+				colvarUnverifiedCount.AutoIncrement = false;
+				colvarUnverifiedCount.IsNullable = true;
+				colvarUnverifiedCount.IsPrimaryKey = false;
+				colvarUnverifiedCount.IsForeignKey = false;
+				colvarUnverifiedCount.IsReadOnly = false;
+				colvarUnverifiedCount.DefaultSetting = @"";
+				colvarUnverifiedCount.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUnverifiedCount);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -626,6 +639,14 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<int?>(Columns.VerifiedCount); }
 			set { SetColumnValue(Columns.VerifiedCount, value); }
 		}
+		  
+		[XmlAttribute("UnverifiedCount")]
+		[Bindable(true)]
+		public int? UnverifiedCount 
+		{
+			get { return GetColumnValue<int?>(Columns.UnverifiedCount); }
+			set { SetColumnValue(Columns.UnverifiedCount, value); }
+		}
 		
 		#endregion
 		
@@ -739,7 +760,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate,int? varVerifiedCount)
+		public static void Insert(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate,int? varVerifiedCount,int? varUnverifiedCount)
 		{
 			ImportBatchSummary item = new ImportBatchSummary();
 			
@@ -789,6 +810,8 @@ namespace SAEON.Observations.Data
 			
 			item.VerifiedCount = varVerifiedCount;
 			
+			item.UnverifiedCount = varUnverifiedCount;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -799,7 +822,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate,int? varVerifiedCount)
+		public static void Update(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate,int? varVerifiedCount,int? varUnverifiedCount)
 		{
 			ImportBatchSummary item = new ImportBatchSummary();
 			
@@ -848,6 +871,8 @@ namespace SAEON.Observations.Data
 				item.EndDate = varEndDate;
 			
 				item.VerifiedCount = varVerifiedCount;
+			
+				item.UnverifiedCount = varUnverifiedCount;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -1023,6 +1048,13 @@ namespace SAEON.Observations.Data
         
         
         
+        public static TableSchema.TableColumn UnverifiedCountColumn
+        {
+            get { return Schema.Columns[23]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -1050,6 +1082,7 @@ namespace SAEON.Observations.Data
 			 public static string StartDate = @"StartDate";
 			 public static string EndDate = @"EndDate";
 			 public static string VerifiedCount = @"VerifiedCount";
+			 public static string UnverifiedCount = @"UnverifiedCount";
 						
 		}
 		#endregion
