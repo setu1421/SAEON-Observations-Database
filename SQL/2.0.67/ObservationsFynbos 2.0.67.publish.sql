@@ -49,6 +49,8 @@ USE [$(DatabaseName)];
 --            WITH ROLLBACK IMMEDIATE;
 --    END
 
+go
+drop view if exists vInventoryDataStreams
 
 GO
 PRINT N'Dropping Index [dbo].[Observation].[IX_Observation_ValueDecade]...';
@@ -154,22 +156,6 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing View [dbo].[vFeatures]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vFeatures]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
 PRINT N'Altering View [dbo].[vInventoryDatasets]...';
 
 
@@ -229,7 +215,7 @@ EXECUTE sp_refreshsqlmodule N'[dbo].[vInventorySensors]';
 
 
 GO
-PRINT N'Refreshing View [dbo].[vLocations]...';
+PRINT N'Altering View [dbo].[vLocations]...';
 
 
 GO
@@ -237,9 +223,24 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vLocations]';
-
-
+ALTER VIEW [dbo].[vLocations]
+AS
+Select distinct
+  OrganisationID, OrganisationName, OrganisationUrl,
+  ProgrammeID, ProgrammeName, ProgrammeUrl,
+  ProjectID, ProjectName, ProjectUrl,
+  SiteID, SiteName, SiteUrl,
+  StationID, StationName, StationUrl,
+  [Count],  VerifiedCount, UnverifiedCount, 
+  (LatitudeNorth + LatitudeSouth) / 2 Latitude,
+  (LongitudeWest + LongitudeEast) / 2 Longitude,
+  (ElevationMaximum + ElevationMinimum) / 2 Elevation
+from
+  vInventoryDatasets
+where
+  (VerifiedCount > 0) and
+  (LatitudeNorth is not null) and (LatitudeSouth is not null) and
+  (LongitudeWest is not null) and (LongitudeEast is not null)
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
@@ -448,6 +449,31 @@ GO
 EXECUTE sp_refreshsqlmodule N'[dbo].[vStationObservations]';
 
 
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering View [dbo].[vFeatures]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vFeatures]
+AS 
+Select distinct
+  PhenomenonID, PhenomenonName, PhenomenonUrl,
+  PhenomenonOfferingID, OfferingID, OfferingName,
+  PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureUnit
+from
+  vInventoryDatasets
+where
+  (VerifiedCount > 0) and 
+  (LatitudeNorth is not null) and (LatitudeSouth is not null) and 
+  (LongitudeEast is not null) and (LongitudeWest is not null)
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
