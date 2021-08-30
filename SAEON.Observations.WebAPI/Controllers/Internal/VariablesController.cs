@@ -12,7 +12,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             VariableNode phenomenon = null;
             VariableNode offering = null;
             VariableNode unit = null;
-            foreach (var variable in DbContext.VFeatures.OrderBy(i => i.PhenomenonName).ThenBy(i => i.OfferingName).ThenBy(i => i.UnitName))
+            foreach (var variable in DbContext.VVariables.OrderBy(i => i.PhenomenonName).ThenBy(i => i.OfferingName).ThenBy(i => i.UnitName))
             {
                 if (phenomenon?.Id != variable.PhenomenonID)
                 {

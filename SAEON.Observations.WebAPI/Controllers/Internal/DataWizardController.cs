@@ -48,7 +48,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             //SAEONLogs.Verbose("Processed Input: {@Input}", input);
         }
 
-        private List<VImportBatchSummaries> GetSummary(ref DataWizardDataInput input)
+        private List<VImportBatchSummary> GetSummary(ref DataWizardDataInput input)
         {
             CleanInput(ref input);
             SAEONLogs.Verbose("Input: {@Input}", input);
@@ -58,18 +58,18 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var elevationMaximum = input.ElevationMaximum;
             var locations = input.Locations;
             var variables = input.Variables;
-            var result = DbContext.VImportBatchSummary
+            var result = DbContext.VImportBatchSummaries
                 .AsNoTracking()
                 //.AsNoTrackingWithIdentityResolution()
-                .Where(ibs => (ibs.Count > 0) && ((ibs.LatitudeNorth != null) && (ibs.LatitudeSouth != null) && (ibs.LongitudeEast != null) && (ibs.LongitudeWest != null)))
+                //.Where(ibs => (ibs.VerifiedCount > 0) && ibs.LatitudeNorth.HasValue && ibs.LatitudeSouth.HasValue && ibs.LongitudeEast.HasValue && ibs.LongitudeWest.HasValue)
                 .Distinct()
                 .AsEnumerable()
-                .Where(i =>
-                    (!locations.Any() || locations.Contains(new Location { StationId = i.StationId })) &&
-                    (!variables.Any() || variables.Contains(new Variable { PhenomenonId = i.PhenomenonId, OfferingId = i.OfferingId, UnitId = i.UnitId })))
-                .Where(i =>
-                    DateRangesOverlap(startDate, endDate, i.StartDate, i.EndDate) &&
-                    DoubleRangesOverlap(elevationMinimum, elevationMaximum, i.ElevationMinimum, i.ElevationMaximum))
+                //.Where(i =>
+                //    (!locations.Any() || locations.Contains(new Location { StationId = i.StationId })) &&
+                //    (!variables.Any() || variables.Contains(new Variable { PhenomenonId = i.PhenomenonId, OfferingId = i.OfferingId, UnitId = i.UnitId })))
+                //.Where(i =>
+                //    DateRangesOverlap(startDate, endDate, i.StartDate, i.EndDate) &&
+                //    DoubleRangesOverlap(elevationMinimum, elevationMaximum, i.ElevationMinimum, i.ElevationMaximum))
                 .Distinct()
                 .OrderBy(i => i.SiteName)
                 .ThenBy(i => i.StationName)
@@ -567,8 +567,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         result.ZipUrl = $"{baseUrl}/DownloadZip/{result.Id}";
                         // Create files
                         SAEONLogs.Verbose("Creating files");
-                        System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input, Formatting.Indented));
-                        //System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), metadata.ToJson());
                         switch (input.DownloadFormat)
                         {
                             case DownloadFormat.CSV:
@@ -581,14 +579,18 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                                 break;
                         }
                         // Create Zip
+                        ZipFile.CreateFromDirectory(dirInfo.FullName, Path.Combine(folder, $"{result.Id}.zip"));
+                        // Download info extras
+                        System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input, Formatting.Indented));
+                        //System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), metadata.ToJson());
                         System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Download.json"),
                             JsonConvert.SerializeObject(result, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
-                        ZipFile.CreateFromDirectory(dirInfo.FullName, Path.Combine(folder, $"{result.Id}.zip"));
-                        dirInfo.Delete(true);
                         // Generate Checksum
                         result.ZipCheckSum = GetChecksum(result.ZipFullName);
                         var jChecksum = new JObject(new JProperty("Checksum", result.ZipCheckSum));
-                        System.IO.File.WriteAllText(Path.Combine(folder, $"{result.Id} Checksum.json"), jChecksum.ToString());
+                        //System.IO.File.WriteAllText(Path.Combine(folder, $"{result.Id} Checksum.json"), jChecksum.ToString());
+                        System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, $"{result.Id} Checksum.json"), jChecksum.ToString());
+                        //dirInfo.Delete(true);
                         SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
                         await SaveChangesAsync();
                         transaction.Commit();

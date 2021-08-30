@@ -132,7 +132,7 @@
         </div>
         <footer id="Footer">
             <div class="row align-items-center">
-                <div class="col-6">
+                <div class="col-4">
                     <span class="d-none d-sm-block d-md-block">
                         <br />
                         &copy; @DateTime.Now.Year - South African Environmental Observation Network (SAEON)<br />
@@ -146,7 +146,12 @@
                         @Html.ActionLink("How to cite", "HowToCite", "Home")
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-4 text-center footer-center">
+                    @Html.ActionLink("Disclaimer", "Disclaimer", "Home")<br />
+                    @Html.ActionLink("Conditions of Use", "ConditionsOfUse", "Home")<br />
+                    @Html.ActionLink("Privacy", "Privacy", "Home")
+                </div>
+                <div class="col-4">
                     <div class="d-flex justify-content-end">
                         <a href="https://www.dst.gov.za/" target="_blank">
                             <img class="footer-image dsi-logo" src="~/Images/DSI logo.jpg" alt="Department of Science and Innovation logo" title="Department of Science and Innovation" />
@@ -157,13 +162,13 @@
         </footer>
     </div>
     <script type="text/javascript" src="/node_modules/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="~/node_modules/jquery-validation/dist/jquery.validate.js"></script>
-    <script type="text/javascript" src="~/node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript" src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="~/node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
     <script type="text/javascript" src="/node_modules/mdb-ui-kit/js/mdb.min.js"></script>
     @Scripts.Render("~/Scripts/jsrender.min.js")
     @Scripts.Render("~/Scripts/ej/web/ej.web.all.min.js")
     @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jqueryval")
+    @*@Scripts.Render("~/bundles/jqueryval")*@
     @RenderSection("Scripts", required: false)
     @Html.EJ().ScriptManager()
 </body>

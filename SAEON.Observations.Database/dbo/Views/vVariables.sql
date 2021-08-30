@@ -1,4 +1,4 @@
-﻿CREATE VIEW [dbo].[vFeatures]
+﻿CREATE VIEW [dbo].[vVariables]
 AS 
 Select distinct
   PhenomenonID, PhenomenonName, PhenomenonUrl,

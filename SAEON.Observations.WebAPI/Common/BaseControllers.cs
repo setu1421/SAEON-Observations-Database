@@ -296,5 +296,36 @@ namespace SAEON.Observations.WebAPI
         }
     }
     #endregion
+
+    #region MVCControllers
+    [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
+#if ResponseCaching
+    [ResponseCache(Duration = Defaults.CacheDuration)]
+    //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+#endif
+    public abstract class BaseMvcController : Controller
+    {
+        private IConfiguration config;
+        protected IConfiguration Config => config ??= HttpContext.RequestServices.GetRequiredService<IConfiguration>();
+        protected bool TrackChanges { get; set; } = false;
+        private ObservationsDbContext dbContext;
+        protected ObservationsDbContext DbContext
+        {
+            get
+            {
+                if (dbContext is null)
+                {
+                    dbContext = HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
+                    if (TrackChanges)
+                    {
+                        dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
+                    }
+                }
+                return dbContext;
+            }
+        }
+    }
+
+    #endregion
 }
 

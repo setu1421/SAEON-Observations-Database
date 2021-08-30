@@ -16,7 +16,7 @@ namespace SAEON.Observations.Core
     }
 
     [Table("vImportBatchSummary")]
-    public class VImportBatchSummaries : GuidIdEntity
+    public class VImportBatchSummary : GuidIdEntity
     {
         public Guid ImportBatchId { get; set; }
 
@@ -226,7 +226,7 @@ namespace SAEON.Observations.Core
     }
 
     [Keyless]
-    public class VFeature : BaseEntity
+    public class VVariable : BaseEntity
     {
         public Guid PhenomenonID { get; set; }
         public string PhenomenonName { get; set; }

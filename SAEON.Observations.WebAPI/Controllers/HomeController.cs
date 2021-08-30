@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SAEON.Logs;
+using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Models;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
@@ -8,7 +13,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 #if ResponseCaching
     [ResponseCache(Duration = Defaults.CacheDuration)]
 #endif
-    public class HomeController : Controller
+    public class HomeController : BaseMvcController
     {
         [Route("About")]
         public IActionResult About()
@@ -16,8 +21,20 @@ namespace SAEON.Observations.WebAPI.Controllers
             return View();
         }
 
+        [Route("ConditionsOfUse")]
+        public IActionResult ConditionsOfUse()
+        {
+            return View();
+        }
+
         [Route("Contact")]
         public IActionResult Contact()
+        {
+            return View();
+        }
+
+        [Route("Disclaimer")]
+        public IActionResult Disclaimer()
         {
             return View();
         }
@@ -36,7 +53,8 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var model = DbContext.HomeDashboards.First();
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -45,5 +63,46 @@ namespace SAEON.Observations.WebAPI.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        [Route("Privacy")]
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public JsonResult GetMapPoints()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    //SAEONLogs.Verbose("MapPoints: {@MapPoints}", SessionModel.MapPoints);
+                    var locationNodes = new List<LocationNode>();
+                    var mapPoints = new List<MapPoint>();
+                    var stationId = new Guid();
+                    foreach (var location in DbContext.VLocations.OrderBy(i => i.OrganisationName).ThenBy(i => i.ProgrammeName).ThenBy(i => i.ProjectName).ThenBy(i => i.SiteName).ThenBy(i => i.StationName))
+                    {
+                        if (location.StationID != stationId)
+                        {
+                            stationId = location.StationID;
+                            mapPoints.Add(new MapPoint
+                            {
+                                Title = location.StationName,
+                                Latitude = location.Latitude.Value,
+                                Longitude = location.Longitude.Value,
+                                Elevation = location.Elevation,
+                                Url = location.StationUrl
+                            });
+                        }
+                    }
+                    return new JsonResult(mapPoints);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
     }
 }

@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Microsoft.Extensions.Configuration;
+@model SAEON.Observations.Core.HomeDashboard
+@inject IConfiguration config
+@{
     ViewBag.Title = "Observations Database WebAPI";
 }
 @section MetaTags {
@@ -14,6 +17,39 @@
             managed by the National Research Foundation (<a href="https://www.nrf.ac.za/" target="_blank">NRF</a>).
             SAEON serves as a national platform for detecting, translating and predicting environmental change through scientifically designed observation systems and research.
         </p>
-        <img class=" img-fluid mx-auto d-block" src="~/Images/SMCRI Booklet-map.jpg" alt="SMCRI map" title="SMCRI map" />
+        <p>
+            Our network consists of @($"{Model.Sites:n0}") sites, @($"{Model.Stations:n0}") stations, @($"{Model.Instruments:n0}") instruments,
+            @($"{Model.Sensors:n0}") @Html.ActionLink("sensors", "Sensors", "Query"), @($"{Model.Phenomena:n0}") phenomena, @($"{Model.Offerings:n0}") offerings,
+            @($"{Model.UnitsOfMeasure:n0}") units of measure, @($"{Model.Variables:n0}") variables, @($"{Model.Datasets:n0}") @Html.ActionLink("datasets", "Datasets", "Query")
+            and @($"{Model.Observations:n0}") observations.
+        </p>
+        <p><i class="fas fa-search"></i> <a href="@config["QuerySiteUrl"]/Query/Data" target="_blank">Search our data</a></p>
+        <p><i class="fas fa-info"></i> @Html.ActionLink("More about SAEON", "About", "Home")</p>
     </div>
 </div>
+<div class="row">
+    <div class="col-md">
+        <div id="mapLocations" style="height:600px; width:100%"></div>
+    </div>
+</div>
+@section Scripts {
+    <script type="module">
+        import * as Home from "/js/Home.js";
+        window.Home = Home;
+    </script>
+    <script type="text/javascript">
+        function waitForMap() {
+            if (typeof Home !== "undefined") {
+                Home.InitMap();
+                setTimeout(function () { Home.FitMap(); }, 500);
+            }
+            else {
+                setTimeout(waitForMap, 250);
+            }
+        }
+        window.InitMap = function () {
+            waitForMap();
+        }
+    </script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=@config["GoogleMapsAPIKey"]&callback=InitMap"></script>
+}

@@ -2,9 +2,6 @@
   "name": "saeon.observations.webapi",
   "version": "1.0.0",
   "description": "SAEON Observations WebAPI",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/SAEON-Data/Observations-Database.git"
@@ -12,6 +9,9 @@
   "author": "Tim Parker-Nance",
   "license": "MIT",
   "dependencies": {
+    "@types/google-maps": "^3.2.3",
+    "@types/googlemaps": "^3.43.3",
+    "@types/jquery": "^3.5.6",
     "jquery": "^3.6.0",
     "jquery-validation-unobtrusive": "^3.2.12",
     "mdb-ui-kit": "^3.9.0"

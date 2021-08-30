@@ -49,8 +49,9 @@ namespace SAEON.Observations.WebAPI
 
         // Views
         public DbSet<VLocation> VLocations { get; set; }
-        public DbSet<VFeature> VFeatures { get; set; }
-        public DbSet<VImportBatchSummaries> VImportBatchSummary { get; set; }
+        public DbSet<VVariable> VVariables { get; set; }
+        public DbSet<HomeDashboard> HomeDashboards { get; set; }
+        public DbSet<VImportBatchSummary> VImportBatchSummaries { get; set; }
         public DbSet<InventoryDataset> InventoryDatasets { get; set; }
         public DbSet<InventorySensor> InventorySensors { get; set; }
         public DbSet<VObservationExpansion> VObservationExpansions { get; set; }
@@ -84,10 +85,13 @@ namespace SAEON.Observations.WebAPI
         {
             if (modelBuilder is null) throw new ArgumentNullException(nameof(modelBuilder));
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Dataset>().ToView("vStationDatasets");
             modelBuilder.Entity<InventoryDataset>().ToView("vInventoryDatasets");
             modelBuilder.Entity<InventorySensor>().ToView("vInventorySensors");
-            modelBuilder.Entity<Dataset>().ToView("vStationDatasets");
-            modelBuilder.Entity<VObservationExpansion>().ToView("vObservationExpansion");
+            //modelBuilder.Entity<VObservationExpansion>().ToView("vObservationExpansion");
+            //modelBuilder.Entity<VFeature>().ToView("VFeatures");
+            modelBuilder.Entity<HomeDashboard>().HasNoKey().ToView("VHomeDashboard");
+            //modelBuilder.Entity<VLocation>().ToView("VLocations");
             modelBuilder.Entity<DigitalObjectIdentifier>().Property("DOIType").HasConversion<byte>();
             modelBuilder.Entity<DigitalObjectIdentifier>().HasOne(i => i.Parent).WithMany(i => i.Children).HasForeignKey(i => i.ParentId);
             // Many to Many
