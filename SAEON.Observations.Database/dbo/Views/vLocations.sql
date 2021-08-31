@@ -6,7 +6,7 @@ Select distinct
   ProjectID, ProjectName, ProjectUrl,
   SiteID, SiteName, SiteUrl,
   StationID, StationName, StationUrl,
-  [Count],  VerifiedCount, UnverifiedCount, 
+  --[Count],  VerifiedCount, UnverifiedCount, 
   (LatitudeNorth + LatitudeSouth) / 2 Latitude,
   (LongitudeWest + LongitudeEast) / 2 Longitude,
   (ElevationMaximum + ElevationMinimum) / 2 Elevation

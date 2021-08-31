@@ -1,6 +1,6 @@
 ﻿CREATE VIEW [dbo].[vImportBatchSummary]
 AS 
-Select
+Select distinct
   ImportBatchSummary.*, 
   Phenomenon.ID PhenomenonID, Phenomenon.Code PhenomenonCode, Phenomenon.Name PhenomenonName, Phenomenon.Description PhenomenonDescription, Phenomenon.Url PhenomenonUrl,
   OfferingID OfferingID, Offering.Code OfferingCode, Offering.Name OfferingName, Offering.Description OfferingDescription, 

@@ -1,0 +1,16 @@
+Alter Database Observations Set Ansi_Nulls On;
+Alter Database ObservationsElwandle Set Ansi_Nulls On;
+Alter Database ObservationsFynbos Set Ansi_Nulls On;
+Alter Database ObservationsSACTN Set Ansi_Nulls On;
+use Observations;
+drop view vImportBatchSummary;
+drop table ImportBatchSummary;
+use ObservationsElwandle;
+drop view vImportBatchSummary;
+drop table ImportBatchSummary;
+use ObservationsFynbos;
+drop view vImportBatchSummary;
+drop table ImportBatchSummary;
+use ObservationsSACTN;
+drop view vImportBatchSummary;
+drop table ImportBatchSummary;

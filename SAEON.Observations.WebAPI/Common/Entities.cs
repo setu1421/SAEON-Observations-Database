@@ -217,9 +217,9 @@ namespace SAEON.Observations.Core
         public Guid StationID { get; set; }
         public string StationName { get; set; }
         public string StationUrl { get; set; }
-        public int Count { get; set; }
-        public int? VerifiedCount { get; set; }
-        public int? UnverifiedCount { get; set; }
+        //public int Count { get; set; }
+        //public int? VerifiedCount { get; set; }
+        //public int? UnverifiedCount { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public double? Elevation { get; set; }

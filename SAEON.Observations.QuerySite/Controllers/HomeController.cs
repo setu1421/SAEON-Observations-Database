@@ -33,7 +33,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             model.Variables = homeDashboard.Variables;
             model.Datasets = homeDashboard.Datasets;
             model.Observations = homeDashboard.Observations;
-            var locationNodes = await GetListAsync<LocationNode>("Internal/Locations");
+            var locationNodes = await GetListAsync<LocationTreeNode>("Internal/Locations");
             var mapPoints = locationNodes.Where(i => i.Key.StartsWith("STA~")).Select(
                 loc => new MapPoint { Key = loc.Key, Title = loc.Name, Latitude = loc.Latitude.Value, Longitude = loc.Longitude.Value, Elevation = loc.Elevation, Url = loc.Url });
             model.MapPoints.AddRange(mapPoints);

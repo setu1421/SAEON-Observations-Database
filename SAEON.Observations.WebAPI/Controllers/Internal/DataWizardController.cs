@@ -61,15 +61,14 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var result = DbContext.VImportBatchSummaries
                 .AsNoTracking()
                 //.AsNoTrackingWithIdentityResolution()
-                //.Where(ibs => (ibs.VerifiedCount > 0) && ibs.LatitudeNorth.HasValue && ibs.LatitudeSouth.HasValue && ibs.LongitudeEast.HasValue && ibs.LongitudeWest.HasValue)
-                .Distinct()
+                .Where(ibs => (ibs.VerifiedCount > 0) && ibs.LatitudeNorth.HasValue && ibs.LatitudeSouth.HasValue && ibs.LongitudeEast.HasValue && ibs.LongitudeWest.HasValue)
                 .AsEnumerable()
-                //.Where(i =>
-                //    (!locations.Any() || locations.Contains(new Location { StationId = i.StationId })) &&
-                //    (!variables.Any() || variables.Contains(new Variable { PhenomenonId = i.PhenomenonId, OfferingId = i.OfferingId, UnitId = i.UnitId })))
-                //.Where(i =>
-                //    DateRangesOverlap(startDate, endDate, i.StartDate, i.EndDate) &&
-                //    DoubleRangesOverlap(elevationMinimum, elevationMaximum, i.ElevationMinimum, i.ElevationMaximum))
+                .Where(i =>
+                    (!locations.Any() || locations.Contains(new LocationFilter { /*SiteId = i.SiteId,*/ StationId = i.StationId })) &&
+                    (!variables.Any() || variables.Contains(new VariableFilter { PhenomenonId = i.PhenomenonId, OfferingId = i.OfferingId, UnitId = i.UnitId })))
+                .Where(i =>
+                    DateRangesOverlap(startDate, endDate, i.StartDate, i.EndDate) &&
+                    DoubleRangesOverlap(elevationMinimum, elevationMaximum, i.ElevationMinimum, i.ElevationMaximum))
                 .Distinct()
                 .OrderBy(i => i.SiteName)
                 .ThenBy(i => i.StationName)
@@ -241,8 +240,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 .ThenBy(obs => obs.ValueDate)
                 .AsEnumerable() // Force fetch from database
                 .Where(ibs =>
-                    (!input.Locations.Any() || input.Locations.Contains(new Location { StationId = ibs.StationId })) &&
-                    (!input.Variables.Any() || input.Variables.Contains(new Variable { PhenomenonId = ibs.PhenomenonId, OfferingId = ibs.OfferingId, UnitId = ibs.UnitId })))
+                    (!input.Locations.Any() || input.Locations.Contains(new LocationFilter { /*SiteId = ibs.SiteId,*/ StationId = ibs.StationId })) &&
+                    (!input.Variables.Any() || input.Variables.Contains(new VariableFilter { PhenomenonId = ibs.PhenomenonId, OfferingId = ibs.OfferingId, UnitId = ibs.UnitId })))
                 .Distinct()
                 .ToList();
             SAEONLogs.Verbose("Observations: {Observations} Stage {Stage} Total {Total}", observations.Count, stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());

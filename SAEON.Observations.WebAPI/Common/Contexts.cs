@@ -88,10 +88,8 @@ namespace SAEON.Observations.WebAPI
             modelBuilder.Entity<Dataset>().ToView("vStationDatasets");
             modelBuilder.Entity<InventoryDataset>().ToView("vInventoryDatasets");
             modelBuilder.Entity<InventorySensor>().ToView("vInventorySensors");
-            //modelBuilder.Entity<VObservationExpansion>().ToView("vObservationExpansion");
-            //modelBuilder.Entity<VFeature>().ToView("VFeatures");
+            modelBuilder.Entity<VObservationExpansion>().ToView("vObservationExpansion");
             modelBuilder.Entity<HomeDashboard>().HasNoKey().ToView("VHomeDashboard");
-            //modelBuilder.Entity<VLocation>().ToView("VLocations");
             modelBuilder.Entity<DigitalObjectIdentifier>().Property("DOIType").HasConversion<byte>();
             modelBuilder.Entity<DigitalObjectIdentifier>().HasOne(i => i.Parent).WithMany(i => i.Children).HasForeignKey(i => i.ParentId);
             // Many to Many

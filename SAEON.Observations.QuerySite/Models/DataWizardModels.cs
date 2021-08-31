@@ -8,12 +8,12 @@ namespace SAEON.Observations.QuerySite.Models
 {
     public class DataWizardModel : BaseModel, IValidatableObject
     {
-        public List<LocationNode> LocationNodes { get; } = new List<LocationNode>();
-        public List<LocationNode> LocationNodesSelected { get; } = new List<LocationNode>();
-        public List<Location> Locations { get; } = new List<Location>();
-        public List<VariableNode> VariableNodes { get; } = new List<VariableNode>();
-        public List<VariableNode> VariableNodesSelected { get; } = new List<VariableNode>();
-        public List<Variable> Variables { get; } = new List<Variable>();
+        public List<LocationTreeNode> LocationNodes { get; } = new List<LocationTreeNode>();
+        public List<LocationTreeNode> LocationNodesSelected { get; } = new List<LocationTreeNode>();
+        public List<LocationFilter> Locations { get; } = new List<LocationFilter>();
+        public List<VariableTreeNode> VariableNodes { get; } = new List<VariableTreeNode>();
+        public List<VariableTreeNode> VariableNodesSelected { get; } = new List<VariableTreeNode>();
+        public List<VariableFilter> Variables { get; } = new List<VariableFilter>();
         public List<MapPoint> MapPoints { get; } = new List<MapPoint>();
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]

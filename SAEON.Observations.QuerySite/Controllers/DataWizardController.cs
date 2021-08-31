@@ -26,8 +26,8 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             if (model is null) throw new ArgumentNullException(nameof(model));
             model.Clear();
-            model.LocationNodes.AddRange(await GetListAsync<LocationNode>("Internal/Locations"));
-            model.VariableNodes.AddRange(await GetListAsync<VariableNode>("Internal/Variables"));
+            model.LocationNodes.AddRange(await GetListAsync<LocationTreeNode>("Internal/Locations"));
+            model.VariableNodes.AddRange(await GetListAsync<VariableTreeNode>("Internal/Variables"));
             var mapPoints = model.LocationNodes.Where(i => i.Key.StartsWith("STA~")).Select(
                 loc => new MapPoint { Key = loc.Key, Title = loc.Name, Latitude = loc.Latitude.Value, Longitude = loc.Longitude.Value, Elevation = loc.Elevation, Url = loc.Url });
             model.MapPoints.AddRange(mapPoints);
@@ -239,7 +239,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
                             var splits = stationKey.Split(new char[] { '|' });
                             var stationId = splits[0].Split(new char[] { '~' })[1];
-                            var location = new Location
+                            var location = new LocationFilter
                             {
                                 StationId = new Guid(stationId)
                             };
@@ -374,7 +374,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                             var unitId = splits[0].Split(new char[] { '~' })[1];
                             var offeringId = splits[1].Split(new char[] { '~' })[1];
                             var phenomenonId = splits[2].Split(new char[] { '~' })[1];
-                            var variable = new Variable
+                            var variable = new VariableFilter
                             {
                                 PhenomenonId = new Guid(phenomenonId),
                                 OfferingId = new Guid(offeringId),

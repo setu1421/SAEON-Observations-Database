@@ -77,7 +77,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 try
                 {
                     //SAEONLogs.Verbose("MapPoints: {@MapPoints}", SessionModel.MapPoints);
-                    var locationNodes = new List<LocationNode>();
+                    var locationNodes = new List<LocationTreeNode>();
                     var mapPoints = new List<MapPoint>();
                     var stationId = new Guid();
                     foreach (var location in DbContext.VLocations.OrderBy(i => i.OrganisationName).ThenBy(i => i.ProgrammeName).ThenBy(i => i.ProjectName).ThenBy(i => i.SiteName).ThenBy(i => i.StationName))
