@@ -561,6 +561,30 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarCount);
                 
+                TableSchema.TableColumn colvarValueCount = new TableSchema.TableColumn(schema);
+                colvarValueCount.ColumnName = "ValueCount";
+                colvarValueCount.DataType = DbType.Int32;
+                colvarValueCount.MaxLength = 0;
+                colvarValueCount.AutoIncrement = false;
+                colvarValueCount.IsNullable = true;
+                colvarValueCount.IsPrimaryKey = false;
+                colvarValueCount.IsForeignKey = false;
+                colvarValueCount.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarValueCount);
+                
+                TableSchema.TableColumn colvarNullCount = new TableSchema.TableColumn(schema);
+                colvarNullCount.ColumnName = "NullCount";
+                colvarNullCount.DataType = DbType.Int32;
+                colvarNullCount.MaxLength = 0;
+                colvarNullCount.AutoIncrement = false;
+                colvarNullCount.IsNullable = true;
+                colvarNullCount.IsPrimaryKey = false;
+                colvarNullCount.IsForeignKey = false;
+                colvarNullCount.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarNullCount);
+                
                 TableSchema.TableColumn colvarVerifiedCount = new TableSchema.TableColumn(schema);
                 colvarVerifiedCount.ColumnName = "VerifiedCount";
                 colvarVerifiedCount.DataType = DbType.Int32;
@@ -1319,6 +1343,34 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("ValueCount")]
+        [Bindable(true)]
+        public int? ValueCount 
+	    {
+		    get
+		    {
+			    return GetColumnValue<int?>("ValueCount");
+		    }
+            set 
+		    {
+			    SetColumnValue("ValueCount", value);
+            }
+        }
+	      
+        [XmlAttribute("NullCount")]
+        [Bindable(true)]
+        public int? NullCount 
+	    {
+		    get
+		    {
+			    return GetColumnValue<int?>("NullCount");
+		    }
+            set 
+		    {
+			    SetColumnValue("NullCount", value);
+            }
+        }
+	      
         [XmlAttribute("VerifiedCount")]
         [Bindable(true)]
         public int? VerifiedCount 
@@ -1549,6 +1601,10 @@ namespace SAEON.Observations.Data{
             public static string UnitOfMeasureSymbol = @"UnitOfMeasureSymbol";
             
             public static string Count = @"Count";
+            
+            public static string ValueCount = @"ValueCount";
+            
+            public static string NullCount = @"NullCount";
             
             public static string VerifiedCount = @"VerifiedCount";
             

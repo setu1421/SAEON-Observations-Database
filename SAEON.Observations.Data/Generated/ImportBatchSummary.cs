@@ -251,6 +251,58 @@ namespace SAEON.Observations.Data
 				colvarCount.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarCount);
 				
+				TableSchema.TableColumn colvarValueCount = new TableSchema.TableColumn(schema);
+				colvarValueCount.ColumnName = "ValueCount";
+				colvarValueCount.DataType = DbType.Int32;
+				colvarValueCount.MaxLength = 0;
+				colvarValueCount.AutoIncrement = false;
+				colvarValueCount.IsNullable = false;
+				colvarValueCount.IsPrimaryKey = false;
+				colvarValueCount.IsForeignKey = false;
+				colvarValueCount.IsReadOnly = false;
+				colvarValueCount.DefaultSetting = @"";
+				colvarValueCount.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarValueCount);
+				
+				TableSchema.TableColumn colvarNullCount = new TableSchema.TableColumn(schema);
+				colvarNullCount.ColumnName = "NullCount";
+				colvarNullCount.DataType = DbType.Int32;
+				colvarNullCount.MaxLength = 0;
+				colvarNullCount.AutoIncrement = false;
+				colvarNullCount.IsNullable = true;
+				colvarNullCount.IsPrimaryKey = false;
+				colvarNullCount.IsForeignKey = false;
+				colvarNullCount.IsReadOnly = true;
+				colvarNullCount.DefaultSetting = @"";
+				colvarNullCount.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarNullCount);
+				
+				TableSchema.TableColumn colvarVerifiedCount = new TableSchema.TableColumn(schema);
+				colvarVerifiedCount.ColumnName = "VerifiedCount";
+				colvarVerifiedCount.DataType = DbType.Int32;
+				colvarVerifiedCount.MaxLength = 0;
+				colvarVerifiedCount.AutoIncrement = false;
+				colvarVerifiedCount.IsNullable = false;
+				colvarVerifiedCount.IsPrimaryKey = false;
+				colvarVerifiedCount.IsForeignKey = false;
+				colvarVerifiedCount.IsReadOnly = false;
+				colvarVerifiedCount.DefaultSetting = @"";
+				colvarVerifiedCount.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarVerifiedCount);
+				
+				TableSchema.TableColumn colvarUnverifiedCount = new TableSchema.TableColumn(schema);
+				colvarUnverifiedCount.ColumnName = "UnverifiedCount";
+				colvarUnverifiedCount.DataType = DbType.Int32;
+				colvarUnverifiedCount.MaxLength = 0;
+				colvarUnverifiedCount.AutoIncrement = false;
+				colvarUnverifiedCount.IsNullable = false;
+				colvarUnverifiedCount.IsPrimaryKey = false;
+				colvarUnverifiedCount.IsForeignKey = false;
+				colvarUnverifiedCount.IsReadOnly = false;
+				colvarUnverifiedCount.DefaultSetting = @"";
+				colvarUnverifiedCount.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUnverifiedCount);
+				
 				TableSchema.TableColumn colvarMinimum = new TableSchema.TableColumn(schema);
 				colvarMinimum.ColumnName = "Minimum";
 				colvarMinimum.DataType = DbType.Double;
@@ -420,32 +472,6 @@ namespace SAEON.Observations.Data
 				colvarEndDate.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarEndDate);
 				
-				TableSchema.TableColumn colvarVerifiedCount = new TableSchema.TableColumn(schema);
-				colvarVerifiedCount.ColumnName = "VerifiedCount";
-				colvarVerifiedCount.DataType = DbType.Int32;
-				colvarVerifiedCount.MaxLength = 0;
-				colvarVerifiedCount.AutoIncrement = false;
-				colvarVerifiedCount.IsNullable = true;
-				colvarVerifiedCount.IsPrimaryKey = false;
-				colvarVerifiedCount.IsForeignKey = false;
-				colvarVerifiedCount.IsReadOnly = false;
-				colvarVerifiedCount.DefaultSetting = @"";
-				colvarVerifiedCount.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarVerifiedCount);
-				
-				TableSchema.TableColumn colvarUnverifiedCount = new TableSchema.TableColumn(schema);
-				colvarUnverifiedCount.ColumnName = "UnverifiedCount";
-				colvarUnverifiedCount.DataType = DbType.Int32;
-				colvarUnverifiedCount.MaxLength = 0;
-				colvarUnverifiedCount.AutoIncrement = false;
-				colvarUnverifiedCount.IsNullable = true;
-				colvarUnverifiedCount.IsPrimaryKey = false;
-				colvarUnverifiedCount.IsForeignKey = false;
-				colvarUnverifiedCount.IsReadOnly = false;
-				colvarUnverifiedCount.DefaultSetting = @"";
-				colvarUnverifiedCount.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarUnverifiedCount);
-				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -526,6 +552,38 @@ namespace SAEON.Observations.Data
 		{
 			get { return GetColumnValue<int>(Columns.Count); }
 			set { SetColumnValue(Columns.Count, value); }
+		}
+		  
+		[XmlAttribute("ValueCount")]
+		[Bindable(true)]
+		public int ValueCount 
+		{
+			get { return GetColumnValue<int>(Columns.ValueCount); }
+			set { SetColumnValue(Columns.ValueCount, value); }
+		}
+		  
+		[XmlAttribute("NullCount")]
+		[Bindable(true)]
+		public int? NullCount 
+		{
+			get { return GetColumnValue<int?>(Columns.NullCount); }
+			set { SetColumnValue(Columns.NullCount, value); }
+		}
+		  
+		[XmlAttribute("VerifiedCount")]
+		[Bindable(true)]
+		public int VerifiedCount 
+		{
+			get { return GetColumnValue<int>(Columns.VerifiedCount); }
+			set { SetColumnValue(Columns.VerifiedCount, value); }
+		}
+		  
+		[XmlAttribute("UnverifiedCount")]
+		[Bindable(true)]
+		public int UnverifiedCount 
+		{
+			get { return GetColumnValue<int>(Columns.UnverifiedCount); }
+			set { SetColumnValue(Columns.UnverifiedCount, value); }
 		}
 		  
 		[XmlAttribute("Minimum")]
@@ -630,22 +688,6 @@ namespace SAEON.Observations.Data
 		{
 			get { return GetColumnValue<DateTime?>(Columns.EndDate); }
 			set { SetColumnValue(Columns.EndDate, value); }
-		}
-		  
-		[XmlAttribute("VerifiedCount")]
-		[Bindable(true)]
-		public int? VerifiedCount 
-		{
-			get { return GetColumnValue<int?>(Columns.VerifiedCount); }
-			set { SetColumnValue(Columns.VerifiedCount, value); }
-		}
-		  
-		[XmlAttribute("UnverifiedCount")]
-		[Bindable(true)]
-		public int? UnverifiedCount 
-		{
-			get { return GetColumnValue<int?>(Columns.UnverifiedCount); }
-			set { SetColumnValue(Columns.UnverifiedCount, value); }
 		}
 		
 		#endregion
@@ -760,7 +802,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate,int? varVerifiedCount,int? varUnverifiedCount)
+		public static void Insert(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,int varValueCount,int? varNullCount,int varVerifiedCount,int varUnverifiedCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate)
 		{
 			ImportBatchSummary item = new ImportBatchSummary();
 			
@@ -781,6 +823,14 @@ namespace SAEON.Observations.Data
 			item.PhenomenonUOMID = varPhenomenonUOMID;
 			
 			item.Count = varCount;
+			
+			item.ValueCount = varValueCount;
+			
+			item.NullCount = varNullCount;
+			
+			item.VerifiedCount = varVerifiedCount;
+			
+			item.UnverifiedCount = varUnverifiedCount;
 			
 			item.Minimum = varMinimum;
 			
@@ -808,10 +858,6 @@ namespace SAEON.Observations.Data
 			
 			item.EndDate = varEndDate;
 			
-			item.VerifiedCount = varVerifiedCount;
-			
-			item.UnverifiedCount = varUnverifiedCount;
-			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -822,7 +868,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate,int? varVerifiedCount,int? varUnverifiedCount)
+		public static void Update(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,int varValueCount,int? varNullCount,int varVerifiedCount,int varUnverifiedCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate)
 		{
 			ImportBatchSummary item = new ImportBatchSummary();
 			
@@ -843,6 +889,14 @@ namespace SAEON.Observations.Data
 				item.PhenomenonUOMID = varPhenomenonUOMID;
 			
 				item.Count = varCount;
+			
+				item.ValueCount = varValueCount;
+			
+				item.NullCount = varNullCount;
+			
+				item.VerifiedCount = varVerifiedCount;
+			
+				item.UnverifiedCount = varUnverifiedCount;
 			
 				item.Minimum = varMinimum;
 			
@@ -869,10 +923,6 @@ namespace SAEON.Observations.Data
 				item.StartDate = varStartDate;
 			
 				item.EndDate = varEndDate;
-			
-				item.VerifiedCount = varVerifiedCount;
-			
-				item.UnverifiedCount = varUnverifiedCount;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -950,107 +1000,121 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn MinimumColumn
+        public static TableSchema.TableColumn ValueCountColumn
         {
             get { return Schema.Columns[9]; }
         }
         
         
         
-        public static TableSchema.TableColumn MaximumColumn
+        public static TableSchema.TableColumn NullCountColumn
         {
             get { return Schema.Columns[10]; }
         }
         
         
         
-        public static TableSchema.TableColumn AverageColumn
+        public static TableSchema.TableColumn VerifiedCountColumn
         {
             get { return Schema.Columns[11]; }
         }
         
         
         
-        public static TableSchema.TableColumn StandardDeviationColumn
+        public static TableSchema.TableColumn UnverifiedCountColumn
         {
             get { return Schema.Columns[12]; }
         }
         
         
         
-        public static TableSchema.TableColumn VarianceColumn
+        public static TableSchema.TableColumn MinimumColumn
         {
             get { return Schema.Columns[13]; }
         }
         
         
         
-        public static TableSchema.TableColumn LatitudeNorthColumn
+        public static TableSchema.TableColumn MaximumColumn
         {
             get { return Schema.Columns[14]; }
         }
         
         
         
-        public static TableSchema.TableColumn LatitudeSouthColumn
+        public static TableSchema.TableColumn AverageColumn
         {
             get { return Schema.Columns[15]; }
         }
         
         
         
-        public static TableSchema.TableColumn LongitudeWestColumn
+        public static TableSchema.TableColumn StandardDeviationColumn
         {
             get { return Schema.Columns[16]; }
         }
         
         
         
-        public static TableSchema.TableColumn LongitudeEastColumn
+        public static TableSchema.TableColumn VarianceColumn
         {
             get { return Schema.Columns[17]; }
         }
         
         
         
-        public static TableSchema.TableColumn ElevationMinimumColumn
+        public static TableSchema.TableColumn LatitudeNorthColumn
         {
             get { return Schema.Columns[18]; }
         }
         
         
         
-        public static TableSchema.TableColumn ElevationMaximumColumn
+        public static TableSchema.TableColumn LatitudeSouthColumn
         {
             get { return Schema.Columns[19]; }
         }
         
         
         
-        public static TableSchema.TableColumn StartDateColumn
+        public static TableSchema.TableColumn LongitudeWestColumn
         {
             get { return Schema.Columns[20]; }
         }
         
         
         
-        public static TableSchema.TableColumn EndDateColumn
+        public static TableSchema.TableColumn LongitudeEastColumn
         {
             get { return Schema.Columns[21]; }
         }
         
         
         
-        public static TableSchema.TableColumn VerifiedCountColumn
+        public static TableSchema.TableColumn ElevationMinimumColumn
         {
             get { return Schema.Columns[22]; }
         }
         
         
         
-        public static TableSchema.TableColumn UnverifiedCountColumn
+        public static TableSchema.TableColumn ElevationMaximumColumn
         {
             get { return Schema.Columns[23]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn StartDateColumn
+        {
+            get { return Schema.Columns[24]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn EndDateColumn
+        {
+            get { return Schema.Columns[25]; }
         }
         
         
@@ -1068,6 +1132,10 @@ namespace SAEON.Observations.Data
 			 public static string PhenomenonOfferingID = @"PhenomenonOfferingID";
 			 public static string PhenomenonUOMID = @"PhenomenonUOMID";
 			 public static string Count = @"Count";
+			 public static string ValueCount = @"ValueCount";
+			 public static string NullCount = @"NullCount";
+			 public static string VerifiedCount = @"VerifiedCount";
+			 public static string UnverifiedCount = @"UnverifiedCount";
 			 public static string Minimum = @"Minimum";
 			 public static string Maximum = @"Maximum";
 			 public static string Average = @"Average";
@@ -1081,8 +1149,6 @@ namespace SAEON.Observations.Data
 			 public static string ElevationMaximum = @"ElevationMaximum";
 			 public static string StartDate = @"StartDate";
 			 public static string EndDate = @"EndDate";
-			 public static string VerifiedCount = @"VerifiedCount";
-			 public static string UnverifiedCount = @"UnverifiedCount";
 						
 		}
 		#endregion
