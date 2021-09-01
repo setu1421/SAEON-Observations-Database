@@ -897,10 +897,14 @@
     <Content Include="Scripts\ej\web\ej.uploadbox.min.js" />
     <Content Include="Scripts\ej\web\ej.waitingpopup.min.js" />
     <Content Include="Scripts\ej\web\ej.web.all.min.js" />
-    <!--<Content Include="Scripts\DataWizard.js" />
+    <Content Include="Scripts\DataWizard.js" />
     <Content Include="Scripts\DataWizard.min.js">
       <DependentUpon>DataWizard.js</DependentUpon>
-    </Content>-->
+    </Content>
+    <Content Include="Scripts\Home.js" />
+    <Content Include="Scripts\Home.min.js">
+      <DependentUpon>Home.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.0.js" />
     <Content Include="Scripts\jquery-3.6.0.min.js" />

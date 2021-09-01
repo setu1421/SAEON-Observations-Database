@@ -21,7 +21,7 @@
             Our network consists of @($"{Model.Sites:n0}") sites, @($"{Model.Stations:n0}") stations, @($"{Model.Instruments:n0}") instruments,
             @($"{Model.Sensors:n0}") @Html.ActionLink("sensors", "Sensors", "Query"), @($"{Model.Phenomena:n0}") phenomena, @($"{Model.Offerings:n0}") offerings,
             @($"{Model.UnitsOfMeasure:n0}") units of measure, @($"{Model.Variables:n0}") variables, @($"{Model.Datasets:n0}") @Html.ActionLink("datasets", "Datasets", "Query")
-            and @($"{Model.Observations:n0}") observations.
+            and @($"{Model.Observations:n0}") verified observations.
         </p>
         <p><i class="fas fa-search"></i> <a href="@config["QuerySiteUrl"]/Query/Data" target="_blank">Search our data</a></p>
         <p><i class="fas fa-info"></i> @Html.ActionLink("More about SAEON", "About", "Home")</p>
@@ -38,17 +38,17 @@
         window.Home = Home;
     </script>
     <script type="text/javascript">
-        function waitForMap() {
+        function waitForHome() {
             if (typeof Home !== "undefined") {
                 Home.InitMap();
-                setTimeout(function () { Home.FitMap(); }, 500);
+                Home.WaitForMap();
             }
             else {
-                setTimeout(waitForMap, 250);
+                setTimeout(waitForHome, 250);
             }
         }
         window.InitMap = function () {
-            waitForMap();
+            waitForHome();
         }
     </script>
     <script async src="https://maps.googleapis.com/maps/api/js?key=@config["GoogleMapsAPIKey"]&callback=InitMap"></script>

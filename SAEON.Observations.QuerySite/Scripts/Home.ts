@@ -29,6 +29,15 @@ export function FitMap(override = false) {
     }
 }
 
+export function WaitForMap() {
+    if (typeof mapBounds !== "undefined") {
+        FitMap();
+    }
+    else {
+        setTimeout(WaitForMap, 250);
+    }
+}
+
 export function UpdateMap() {
     $.getJSON("/Home/GetMapPoints")
         .done(function (json) {
