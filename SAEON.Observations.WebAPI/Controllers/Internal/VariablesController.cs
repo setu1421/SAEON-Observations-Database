@@ -4,21 +4,21 @@ using System.Linq;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
-    public class VariablesController : InternalListController<VariableNode>
+    public class VariablesController : InternalListController<VariableTreeNode>
     {
-        protected override List<VariableNode> GetList()
+        protected override List<VariableTreeNode> GetList()
         {
             var result = base.GetList();
-            VariableNode phenomenon = null;
-            VariableNode offering = null;
-            VariableNode unit = null;
-            foreach (var variable in DbContext.VFeatures.OrderBy(i => i.PhenomenonName).ThenBy(i => i.OfferingName).ThenBy(i => i.UnitName))
+            VariableTreeNode phenomenon = null;
+            VariableTreeNode offering = null;
+            VariableTreeNode unit = null;
+            foreach (var variable in DbContext.VVariables.OrderBy(i => i.PhenomenonName).ThenBy(i => i.OfferingName).ThenBy(i => i.UnitName))
             {
                 if (phenomenon?.Id != variable.PhenomenonID)
                 {
                     offering = null;
                     unit = null;
-                    phenomenon = new VariableNode
+                    phenomenon = new VariableTreeNode
                     {
                         Id = variable.PhenomenonID,
                         Key = $"PHE~{variable.PhenomenonID}",
@@ -32,7 +32,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 if (offering?.Id != variable.PhenomenonOfferingID)
                 {
                     unit = null;
-                    offering = new VariableNode
+                    offering = new VariableTreeNode
                     {
                         Id = variable.OfferingID,
                         ParentId = phenomenon.Id,
@@ -47,7 +47,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 }
                 if (unit?.Id != variable.PhenomenonUnitID)
                 {
-                    unit = new VariableNode
+                    unit = new VariableTreeNode
                     {
                         Id = variable.UnitID,
                         ParentId = offering.Id,

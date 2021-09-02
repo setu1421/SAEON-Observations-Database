@@ -42,56 +42,13 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             input.Locations = input.Locations.Distinct().ToList();
             input.Variables = input.Variables.Distinct().ToList();
             if (input.StartDate > input.EndDate) throw new ArgumentException("StartDate after EndDate", nameof(input));
+            if (input.EndDate < input.StartDate) throw new ArgumentException("EndDate before StartDate", nameof(input));
             input.StartDate = input.StartDate.Date;
             input.EndDate = input.EndDate.Date.AddDays(1).AddMilliseconds(-1);
             //SAEONLogs.Verbose("Processed Input: {@Input}", input);
         }
 
-        //private IQueryable<VImportBatchSummaries> GetSummaryQuery(ref DataWizardDataInput input)
-        //{
-        //    CleanInput(ref input);
-        //    SAEONLogs.Verbose("Input: {@Input}", input);
-        //    var startDate = input.StartDate;
-        //    var endDate = input.EndDate;
-        //    var elevationMinimum = input.ElevationMinimum;
-        //    var elevationMaximum = input.ElevationMaximum;
-        //    var result = DbContext.VImportBatchSummary
-        //        .AsNoTracking()
-        //        //.AsNoTrackingWithIdentityResolution()
-        //        .Where(ibs =>
-        //        (ibs.Count > 0) &&
-        //        ((ibs.LatitudeNorth != null) && (ibs.LatitudeSouth != null) && (ibs.LongitudeEast != null) && (ibs.LongitudeWest != null)) &&
-        //        //((ibs.StartDate >= startDate) && (ibs.EndDate < endDate)) &&
-        //        ((startDate <= ibs.EndDate) && (endDate >= ibs.StartDate)) &&
-        //        !((ibs.EndDate <= startDate && ibs.StartDate <= startDate) || (endDate <= ibs.StartDate && startDate <= ibs.StartDate)) &&
-        //        (!ibs.ElevationMinimum.HasValue || (ibs.ElevationMinimum >= elevationMinimum)) &&
-        //        (!ibs.ElevationMaximum.HasValue || (ibs.ElevationMaximum <= elevationMaximum)))
-        //        .Distinct();
-        //    return result.AsQueryable();
-        //}
-
-        //private List<VImportBatchSummaries> GetSummary(ref DataWizardDataInput input)
-        //{
-        //    CleanInput(ref input);
-        //    SAEONLogs.Verbose("Input: {@Input}", input);
-        //    var locations = input.Locations;
-        //    var variables = input.Variables;
-        //    var result = GetSummaryQuery(ref input)
-        //        .AsEnumerable() // Force fetch from database
-        //        .Where(ibs =>
-        //            (!locations.Any() || locations.Contains(new Location { StationId = ibs.StationId })) &&
-        //            (!variables.Any() || variables.Contains(new Variable { PhenomenonId = ibs.PhenomenonId, OfferingId = ibs.OfferingId, UnitId = ibs.UnitId })))
-        //        .OrderBy(i => i.SiteName)
-        //        .ThenBy(i => i.StationName)
-        //        .ThenBy(i => i.InstrumentName)
-        //        .ThenBy(i => i.SensorName)
-        //        .Distinct()
-        //        .ToList();
-        //    SAEONLogs.Verbose("Summaries: {Count}", result.Count);
-        //    return result;
-        //}
-
-        private List<VImportBatchSummaries> GetSummary(ref DataWizardDataInput input)
+        private List<VImportBatchSummary> GetSummary(ref DataWizardDataInput input)
         {
             CleanInput(ref input);
             SAEONLogs.Verbose("Input: {@Input}", input);
@@ -101,15 +58,14 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var elevationMaximum = input.ElevationMaximum;
             var locations = input.Locations;
             var variables = input.Variables;
-            var result = DbContext.VImportBatchSummary
+            var result = DbContext.VImportBatchSummaries
                 .AsNoTracking()
                 //.AsNoTrackingWithIdentityResolution()
-                .Where(ibs => (ibs.Count > 0) && ((ibs.LatitudeNorth != null) && (ibs.LatitudeSouth != null) && (ibs.LongitudeEast != null) && (ibs.LongitudeWest != null)))
-                .Distinct()
+                .Where(ibs => (ibs.VerifiedCount > 0) && ibs.LatitudeNorth.HasValue && ibs.LatitudeSouth.HasValue && ibs.LongitudeEast.HasValue && ibs.LongitudeWest.HasValue)
                 .AsEnumerable()
                 .Where(i =>
-                    (!locations.Any() || locations.Contains(new Location { StationId = i.StationId })) &&
-                    (!variables.Any() || variables.Contains(new Variable { PhenomenonId = i.PhenomenonId, OfferingId = i.OfferingId, UnitId = i.UnitId })))
+                    (!locations.Any() || locations.Contains(new LocationFilter { /*SiteId = i.SiteId,*/ StationId = i.StationId })) &&
+                    (!variables.Any() || variables.Contains(new VariableFilter { PhenomenonId = i.PhenomenonId, OfferingId = i.OfferingId, UnitId = i.UnitId })))
                 .Where(i =>
                     DateRangesOverlap(startDate, endDate, i.StartDate, i.EndDate) &&
                     DoubleRangesOverlap(elevationMinimum, elevationMaximum, i.ElevationMinimum, i.ElevationMaximum))
@@ -284,8 +240,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 .ThenBy(obs => obs.ValueDate)
                 .AsEnumerable() // Force fetch from database
                 .Where(ibs =>
-                    (!input.Locations.Any() || input.Locations.Contains(new Location { StationId = ibs.StationId })) &&
-                    (!input.Variables.Any() || input.Variables.Contains(new Variable { PhenomenonId = ibs.PhenomenonId, OfferingId = ibs.OfferingId, UnitId = ibs.UnitId })))
+                    (!input.Locations.Any() || input.Locations.Contains(new LocationFilter { /*SiteId = ibs.SiteId,*/ StationId = ibs.StationId })) &&
+                    (!input.Variables.Any() || input.Variables.Contains(new VariableFilter { PhenomenonId = ibs.PhenomenonId, OfferingId = ibs.OfferingId, UnitId = ibs.UnitId })))
                 .Distinct()
                 .ToList();
             SAEONLogs.Verbose("Observations: {Observations} Stage {Stage} Total {Total}", observations.Count, stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
@@ -610,8 +566,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         result.ZipUrl = $"{baseUrl}/DownloadZip/{result.Id}";
                         // Create files
                         SAEONLogs.Verbose("Creating files");
-                        System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input, Formatting.Indented));
-                        //System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), metadata.ToJson());
                         switch (input.DownloadFormat)
                         {
                             case DownloadFormat.CSV:
@@ -624,14 +578,18 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                                 break;
                         }
                         // Create Zip
+                        ZipFile.CreateFromDirectory(dirInfo.FullName, Path.Combine(folder, $"{result.Id}.zip"));
+                        // Download info extras
+                        System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input, Formatting.Indented));
+                        //System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), metadata.ToJson());
                         System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Download.json"),
                             JsonConvert.SerializeObject(result, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
-                        ZipFile.CreateFromDirectory(dirInfo.FullName, Path.Combine(folder, $"{result.Id}.zip"));
-                        dirInfo.Delete(true);
                         // Generate Checksum
                         result.ZipCheckSum = GetChecksum(result.ZipFullName);
                         var jChecksum = new JObject(new JProperty("Checksum", result.ZipCheckSum));
-                        System.IO.File.WriteAllText(Path.Combine(folder, $"{result.Id} Checksum.json"), jChecksum.ToString());
+                        //System.IO.File.WriteAllText(Path.Combine(folder, $"{result.Id} Checksum.json"), jChecksum.ToString());
+                        System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, $"{result.Id} Checksum.json"), jChecksum.ToString());
+                        //dirInfo.Delete(true);
                         SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
                         await SaveChangesAsync();
                         transaction.Commit();

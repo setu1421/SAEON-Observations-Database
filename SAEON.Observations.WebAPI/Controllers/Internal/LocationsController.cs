@@ -5,17 +5,17 @@ using System.Linq;
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
 
-    public class LocationsController : InternalListController<LocationNode>
+    public class LocationsController : InternalListController<LocationTreeNode>
     {
-        protected override List<LocationNode> GetList()
+        protected override List<LocationTreeNode> GetList()
         {
             var result = base.GetList();
-            LocationNode organisation = null;
-            LocationNode programme = null;
-            LocationNode project = null;
-            LocationNode site = null;
-            LocationNode station = null;
-            foreach (var location in DbContext.VLocations.Where(i => i.Latitude != null && i.Longitude != null).OrderBy(i => i.OrganisationName).ThenBy(i => i.ProgrammeName).ThenBy(i => i.ProjectName).ThenBy(i => i.SiteName).ThenBy(i => i.StationName))
+            LocationTreeNode organisation = null;
+            LocationTreeNode programme = null;
+            LocationTreeNode project = null;
+            LocationTreeNode site = null;
+            LocationTreeNode station = null;
+            foreach (var location in DbContext.VLocations.OrderBy(i => i.OrganisationName).ThenBy(i => i.ProgrammeName).ThenBy(i => i.ProjectName).ThenBy(i => i.SiteName).ThenBy(i => i.StationName))
             {
                 if (organisation?.Id != location.OrganisationID)
                 {
@@ -23,7 +23,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     project = null;
                     site = null;
                     station = null;
-                    organisation = new LocationNode
+                    organisation = new LocationTreeNode
                     {
                         Id = location.OrganisationID,
                         Key = $"ORG~{location.OrganisationID}",
@@ -40,7 +40,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     project = null;
                     site = null;
                     station = null;
-                    programme = new LocationNode
+                    programme = new LocationTreeNode
                     {
                         Id = location.ProgrammeID,
                         ParentId = organisation.Id,
@@ -58,7 +58,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 {
                     site = null;
                     station = null;
-                    project = new LocationNode
+                    project = new LocationTreeNode
                     {
                         Id = location.ProjectID,
                         ParentId = programme.Id,
@@ -75,7 +75,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 if (site?.Id != location.SiteID)
                 {
                     station = null;
-                    site = new LocationNode
+                    site = new LocationTreeNode
                     {
                         Id = location.SiteID,
                         ParentId = project.Id,
@@ -91,7 +91,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 }
                 if (station?.Id != location.StationID)
                 {
-                    station = new LocationNode
+                    station = new LocationTreeNode
                     {
                         Id = location.StationID,
                         ParentId = site.Id,

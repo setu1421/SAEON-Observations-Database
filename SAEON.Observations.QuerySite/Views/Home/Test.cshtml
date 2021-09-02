@@ -1,0 +1,66 @@
+﻿@model SAEON.Observations.Core.DataWizardDataInput
+
+@{
+    ViewBag.Title = "Test";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    <div class="row">
+        <div class="col-md">
+            @Html.EJ().DatePicker("DatePick").DateFormat("MM/dd/yyyy").Locale("en-US").ValidationRules(r => r.AddRule("required", true)).ValidationMessage(m => m.AddMessage("required", "Date Value required "))
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            @Html.EJ().NumericTextbox("numeric").Value(100).ValidationRules(r => r.AddRule("min", 50)).ValidationMessage(m => m.AddMessage("min", "Value Should be greater than 50"))
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1">
+            @Html.LabelFor(i => i.Name)
+        </div>
+        <div class="col-md-11">
+            @Html.EJ().AutocompleteFor(i => i.Name).ValidationRules(r => r.AddRule("required", true))
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1">
+            @Html.LabelFor(i => i.StartDate)
+        </div>
+        <div class="col-md-11">
+            @Html.EJ().DatePickerFor(i => i.StartDate).DateFormat("yyyy-MM-dd").ValidationRules(r => r.AddRule("isbeforedate", "EndDate")).ValidationMessages(m => m.AddMessage("isbeforedate", "Start Date must be before End Date"))
+            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1">
+            @Html.LabelFor(i => i.EndDate)
+        </div>
+        <div class="col-md-11">
+            @Html.EJ().DatePickerFor(i => i.EndDate).DateFormat("yyyy-MM-dd").ValidationRules(r => r.AddRule("isafterdate", "StartDate")).ValidationMessages(m => m.AddMessage("isafterdate", "End Date must be after Start Date"))
+            @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+}
+@section scripts {
+    <script type="text/javascript" src="~/Scripts/CustomValidation.js"></script>
+    <script type="text/javascript">
+        $.validator.setDefaults({
+            //if we don’t set custom class, default “error” class will be added
+            errorClass: 'e-validation-error',
+            //it specifies the error message display position
+            errorPlacement: function (error, element) {
+                $(error).insertAfter(element.closest(".e-widget"));
+            }
+        });
+    </script>
+}
+

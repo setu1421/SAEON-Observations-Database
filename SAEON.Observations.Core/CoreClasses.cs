@@ -6,6 +6,8 @@ using SAEON.Core;
 using SAEON.OpenXML;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.IO;
 using System.Runtime.Serialization;
@@ -42,7 +44,7 @@ namespace SAEON.Observations.Core
         public LinkAttribute ToolTip { get; set; }
     }
 
-    public class LocationNode : TreeNode
+    public class LocationTreeNode : TreeNode
     {
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
@@ -50,7 +52,7 @@ namespace SAEON.Observations.Core
         public string Url { get; set; }
     }
 
-    public class VariableNode : TreeNode { }
+    public class VariableTreeNode : TreeNode { }
 
     #region Maps
     public class MapPoint
@@ -287,23 +289,31 @@ namespace SAEON.Observations.Core
         }
     }
 
-    public class Location
+    public class LocationFilter
     {
+        //public Guid OrganisationId { get; set; }
+        //public Guid ProgrammeId { get; set; }
+        //public Guid ProjectId { get; set; }
+        //public Guid SiteId { get; set; }
         public Guid StationId { get; set; }
 
         public override bool Equals(object obj)
         {
-            return obj is Location location &&
-                   StationId.Equals(location.StationId);
+            return obj is LocationFilter filter &&
+                   //OrganisationId.Equals(filter.OrganisationId) &&
+                   //ProgrammeId.Equals(filter.ProgrammeId) &&
+                   //ProjectId.Equals(filter.ProjectId) &&
+                   //SiteId.Equals(filter.SiteId) &&
+                   StationId.Equals(filter.StationId);
         }
 
         public override int GetHashCode()
         {
-            return -637447666 + StationId.GetHashCode();
+            return HashCode.Combine(/*OrganisationId, ProgrammeId, ProjectId, SiteId,*/ StationId);
         }
     }
 
-    public class Variable
+    public class VariableFilter
     {
         public Guid PhenomenonId { get; set; }
         public Guid OfferingId { get; set; }
@@ -311,7 +321,7 @@ namespace SAEON.Observations.Core
 
         public override bool Equals(object obj)
         {
-            return obj is Variable variable &&
+            return obj is VariableFilter variable &&
                    PhenomenonId.Equals(variable.PhenomenonId) &&
                    OfferingId.Equals(variable.OfferingId) &&
                    UnitId.Equals(variable.UnitId);
@@ -323,14 +333,34 @@ namespace SAEON.Observations.Core
         }
     }
 
-    public class DataWizardDataInput
+    public class DataWizardDataInput : IValidatableObject
     {
-        public List<Location> Locations { get; set; } = new List<Location>();
-        public List<Variable> Variables { get; set; } = new List<Variable>();
+        public List<LocationFilter> Locations { get; set; } = new List<LocationFilter>();
+        public List<VariableFilter> Variables { get; set; } = new List<VariableFilter>();
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [IsBeforeDate(nameof(EndDate))]
+        [DisplayName("Start Date")]
         public DateTime StartDate { get; set; } = DateTime.Now.AddYears(-100).Date;
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [IsAfterDate(nameof(StartDate))]
+        [DisplayName("End Date")]
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
         public double ElevationMinimum { get; set; } = -100; // m
         public double ElevationMaximum { get; set; } = 3000; // m
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (StartDate > EndDate)
+            {
+                yield return new ValidationResult("Start Date can't be after End Date");
+            }
+            if (EndDate < StartDate)
+            {
+                yield return new ValidationResult("End Date can't be before Start Date");
+            }
+        }
     }
 
     public class DataWizardDataOutput

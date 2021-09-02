@@ -105,8 +105,8 @@
                                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
                             </li>
                             @*<li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
-                            </li>*@
+                                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                                </li>*@
                         </ul>
                     </div>
                 </div>
@@ -139,7 +139,7 @@
 
         <footer id="Footer">
             <div class="row align-items-center">
-                <div class="col-6">
+                <div class="col-4">
                     <span class="d-none d-sm-block d-md-block">
                         <br />
                         &copy; @DateTime.Now.Year - South African Environmental Observation Network (SAEON)<br />
@@ -150,10 +150,15 @@
                     <br />
                     <div class="d-none d-sm-block d-md-block" style="clear: both">
                         Observations Database is licensed under a <a rel="license" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a><br />
-                        @Html.ActionLink("How to cite", "HowToCite", "Home")
+                        <a asp-action="HowToCite" asp-controller="Home">How to cite</a>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-4 text-center footer-center">
+                    <a asp-action="Disclaimer" asp-controller="Home">Disclaimer</a><br />
+                    <a asp-action="ConditionsOfUse" asp-controller="Home">Conditions of Use</a><br />
+                    <a asp-action="Privacy" asp-controller="Home">Privacy</a>
+                </div>
+                <div class="col-4">
                     <div class="d-flex justify-content-end">
                         <a href="https://www.dst.gov.za/" target="_blank">
                             <img class="footer-image dsi-logo" src="~/Images/DSI logo.jpg" alt="Department of Science and Innovation logo" title="Department of Science and Innovation" />

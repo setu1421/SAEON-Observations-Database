@@ -71,7 +71,16 @@ tabs.Add().ID("ChartTab").Text("Chart").ContentTemplate(
         import * as DataWizard from "/Scripts/DataWizard.js";
         window.DataWizard = DataWizard;
     </script>
+    <script type="text/javascript" src="~/Scripts/CustomValidation.js"></script>
     <script type="text/javascript">
+        $.validator.setDefaults({
+            //if we don’t set custom class, default “error” class will be added
+            errorClass: 'e-validation-error',
+            //it specifies the error message display position
+            errorPlacement: function (error, element) {
+                $(error).insertAfter(element.closest(".e-widget"));
+            }
+        });
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();
             //DataWizard.Testing();

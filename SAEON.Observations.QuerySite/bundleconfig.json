@@ -12,6 +12,12 @@
     ]
   },
   {
+    "outputFileName": "Scripts/Home.min.js",
+    "inputFiles": [
+      "Scripts/Home.js"
+    ]
+  },
+  {
     "outputFileName": "Content/SAEON.min.css",
     "inputFiles": [
       "Content/SAEON.css"

@@ -13,6 +13,8 @@
        [dbo].[ImportBatchSummary] (Table)
        [dbo].[Observation] (Table)
        [dbo].[vInventoryDatasets] (View)
+       [dbo].[vLocations] (View)
+       [dbo].[vFeatures] (View)
      Create
        [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_UnverifiedCount] (Index)
        [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_VerifiedCount] (Index)
@@ -26,9 +28,7 @@
        [dbo].[Observation].[IX_Observation_ValueYear] (Index)
      Refresh
        [dbo].[vImportBatchSummary] (View)
-       [dbo].[vFeatures] (View)
        [dbo].[vInventorySensors] (View)
-       [dbo].[vLocations] (View)
        [dbo].[vStationDatasets] (View)
        [dbo].[vSensorThingsAPIDatastreams] (View)
        [dbo].[vSensorThingsAPILocations] (View)

@@ -1080,4 +1080,21 @@ namespace SAEON.Observations.Core
         public DateTime? UpdatedAt { get; set; }
     }
 
+    public class HomeDashboard : BaseEntity
+    {
+        public int Organisations { get; set; }
+        public int Programmes { get; set; }
+        public int Projects { get; set; }
+        public int Sites { get; set; }
+        public int Stations { get; set; }
+        public int Instruments { get; set; }
+        public int Sensors { get; set; }
+        public int Phenomena { get; set; }
+        public int Offerings { get; set; }
+        public int UnitsOfMeasure { get; set; }
+        public int Variables { get; set; }
+        public int Datasets { get; set; }
+        public int Observations { get; set; }
+    }
+
 }

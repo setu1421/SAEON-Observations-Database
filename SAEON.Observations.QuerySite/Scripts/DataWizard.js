@@ -158,6 +158,8 @@ export function UpdateMap() {
         mapBounds = new google.maps.LatLngBounds();
         for (let i = 0; i < mapPoints.length; i++) {
             const mapPoint = mapPoints[i];
+            if (mapPoint.Latitude === null || mapPoint.Longitude === null)
+                alert("Null");
             const marker = new google.maps.Marker({
                 position: { lat: mapPoint.Latitude, lng: mapPoint.Longitude },
                 map: map,

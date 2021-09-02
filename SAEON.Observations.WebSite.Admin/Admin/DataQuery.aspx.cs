@@ -49,7 +49,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 {
                     var col = new Select()
                                 .From(Organisation.Schema)
-                                .InnerJoin(VLocation.Schema.TableName, VLocation.Columns.OrganisationID, Organisation.Schema.TableName, Organisation.Columns.Id)
+                                .InnerJoin(VInventoryDataset.Schema.TableName, VInventoryDataset.Columns.OrganisationID, Organisation.Schema.TableName, Organisation.Columns.Id)
                                 .Distinct()
                                 .OrderAsc(Organisation.Columns.Name)
                                 .ExecuteAsCollection<OrganisationCollection>();
@@ -71,8 +71,8 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                     var organisation = new Organisation(e.NodeID.Split('|')[0].Split('_')[1]);
                     var col = new Select()
                                 .From(SAEON.Observations.Data.Site.Schema)
-                                .InnerJoin(VLocation.Schema.TableName, VLocation.Columns.SiteID, SAEON.Observations.Data.Site.Schema.TableName, SAEON.Observations.Data.Site.Columns.Id)
-                                .Where(VLocation.Columns.OrganisationID)
+                                .InnerJoin(VInventoryDataset.Schema.TableName, VInventoryDataset.Columns.SiteID, SAEON.Observations.Data.Site.Schema.TableName, SAEON.Observations.Data.Site.Columns.Id)
+                                .Where(VInventoryDataset.Columns.OrganisationID)
                                 .IsEqualTo(organisation.Id)
                                 .Distinct()
                                 .OrderAsc(SAEON.Observations.Data.Site.Columns.Name)
@@ -98,8 +98,8 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                     var site = new SAEON.Observations.Data.Site(e.NodeID.Split('|')[0].Split('_')[1]);
                     var col = new Select()
                                 .From(Station.Schema)
-                                .InnerJoin(VLocation.Schema.TableName, VLocation.Columns.StationID, Station.Schema.TableName, Station.Columns.Id)
-                                .Where(VLocation.Columns.SiteID)
+                                .InnerJoin(VInventoryDataset.Schema.TableName, VInventoryDataset.Columns.StationID, Station.Schema.TableName, Station.Columns.Id)
+                                .Where(VInventoryDataset.Columns.SiteID)
                                 .IsEqualTo(site.Id)
                                 .Distinct()
                                 .OrderAsc(Station.Columns.Name)
@@ -243,7 +243,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         FilterTree.Root.Add(rootOrganisations);
         var colOrganisations = new Select()
             .From(Organisation.Schema)
-            .InnerJoin(VLocation.Schema.TableName, VLocation.Columns.OrganisationID, Organisation.Schema.TableName, Organisation.Columns.Id)
+            .InnerJoin(VInventoryDataset.Schema.TableName, VInventoryDataset.Columns.OrganisationID, Organisation.Schema.TableName, Organisation.Columns.Id)
             .Distinct()
             .OrderAsc(Organisation.Columns.Name)
             .ExecuteAsCollection<OrganisationCollection>();
@@ -258,8 +258,8 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             nodeOrganisation.Nodes.Add(rootSites);
             var colSites = new Select()
                 .From(SAEON.Observations.Data.Site.Schema)
-                .InnerJoin(VLocation.Schema.TableName, VLocation.Columns.SiteID, SAEON.Observations.Data.Site.Schema.TableName, SAEON.Observations.Data.Site.Columns.Id)
-                .Where(VLocation.Columns.OrganisationID)
+                .InnerJoin(VInventoryDataset.Schema.TableName, VInventoryDataset.Columns.SiteID, SAEON.Observations.Data.Site.Schema.TableName, SAEON.Observations.Data.Site.Columns.Id)
+                .Where(VInventoryDataset.Columns.OrganisationID)
                 .IsEqualTo(organisation.Id)
                 .Distinct()
                 .OrderAsc(SAEON.Observations.Data.Site.Columns.Name)
@@ -278,8 +278,8 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 nodeSite.Nodes.Add(rootStations);
                 var colStations = new Select()
                     .From(Station.Schema)
-                    .InnerJoin(VLocation.Schema.TableName, VLocation.Columns.StationID, Station.Schema.TableName, Station.Columns.Id)
-                    .Where(VLocation.Columns.SiteID)
+                    .InnerJoin(VInventoryDataset.Schema.TableName, VInventoryDataset.Columns.StationID, Station.Schema.TableName, Station.Columns.Id)
+                    .Where(VInventoryDataset.Columns.SiteID)
                     .IsEqualTo(site.Id)
                     .Distinct()
                     .OrderAsc(Station.Columns.Name)

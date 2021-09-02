@@ -6,6 +6,8 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1EFF8888-CAFA-4642-ABC4-4B9A65E3683A}"
 	ProjectSection(SolutionItems) = preProject
 		..\Data cleanup\ImportBatchesSummary create.sql = ..\Data cleanup\ImportBatchesSummary create.sql
+		Observations 2.0.67-1.publish.sql = Observations 2.0.67-1.publish.sql
+		Observations 2.0.67-1.publish.txt = Observations 2.0.67-1.publish.txt
 		Observations 2.0.67.publish.sql = Observations 2.0.67.publish.sql
 		Observations 2.0.67.publish.txt = Observations 2.0.67.publish.txt
 		ObservationsElwandle 2.0.67.publish.sql = ObservationsElwandle 2.0.67.publish.sql
@@ -21,7 +23,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D251C818-8D3F-4E9F-8396-64FFF369DDFC}.Default|Default.ActiveCfg = Default
+		{26056177-7945-465F-8306-2BF3A7A6769C}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

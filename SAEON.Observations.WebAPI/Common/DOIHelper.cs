@@ -74,9 +74,9 @@ namespace SAEON.Observations.WebAPI
                             return doi;
                         }
 
-                        IQueryable<VImportBatchSummaries> GetImportBatchSummaries()
+                        IQueryable<VImportBatchSummary> GetImportBatchSummaries()
                         {
-                            return dbContext.VImportBatchSummary
+                            return dbContext.VImportBatchSummaries
                                 .Where(i =>
                                     i.LatitudeNorth.HasValue && i.LatitudeSouth.HasValue &&
                                     i.LongitudeWest.HasValue && i.LongitudeEast.HasValue &&

@@ -1,0 +1,65 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Alter
+       [dbo].[Observation] (Table)
+       [dbo].[vInventoryDatasets] (View)
+     Create
+       [dbo].[ImportBatchSummary] (Table)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ImportBatchID] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_SensorID] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_InstrumentID] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_StationID] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_SiteID] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_PhenomenonOfferingID] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_PhenomenonUOMID] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_Count] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ValueCount] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_NullCount] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_VerifiedCount] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_UnverifiedCount] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_StartDate] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_EndDate] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LatitudeSouth] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LatitudeNorth] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LongitudeWest] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_LongitudeEast] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ElevationMinimum] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ElevationMaximum] (Index)
+       [dbo].[DF_ImportBatchSummary_ID] (Default Constraint)
+       [dbo].[FK_ImportBatchSummary_ImportBatchID] (Foreign Key)
+       [dbo].[FK_ImportBatchSummary_SensorID] (Foreign Key)
+       [dbo].[FK_ImportBatchSummary_InstrumentID] (Foreign Key)
+       [dbo].[FK_ImportBatchSummary_StationID] (Foreign Key)
+       [dbo].[FK_ImportBatchSummary_SiteID] (Foreign Key)
+       [dbo].[FK_ImportBatchSummary_PhenomenonOfferingID] (Foreign Key)
+       [dbo].[FK_ImportBatchSummary_PhenomenonUOMID] (Foreign Key)
+       [dbo].[vImportBatchSummary] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Create
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Refresh
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vSensorThingsAPIObservations] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationJSON] (View)
+       [dbo].[vStationObservations] (View)
+       [dbo].[vLocations] (View)
+       [dbo].[vVariables] (View)
+       [dbo].[vHomeDashboard] (View)
+
+If this deployment is executed, changes to [dbo].[vObservationExpansion] might introduce run-time errors in [dbo].[vSensorObservations].
+

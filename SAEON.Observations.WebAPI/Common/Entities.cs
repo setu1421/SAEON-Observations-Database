@@ -16,7 +16,7 @@ namespace SAEON.Observations.Core
     }
 
     [Table("vImportBatchSummary")]
-    public class VImportBatchSummaries : GuidIdEntity
+    public class VImportBatchSummary : GuidIdEntity
     {
         public Guid ImportBatchId { get; set; }
 
@@ -217,13 +217,16 @@ namespace SAEON.Observations.Core
         public Guid StationID { get; set; }
         public string StationName { get; set; }
         public string StationUrl { get; set; }
+        //public int Count { get; set; }
+        //public int? VerifiedCount { get; set; }
+        //public int? UnverifiedCount { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public double? Elevation { get; set; }
     }
 
     [Keyless]
-    public class VFeature : BaseEntity
+    public class VVariable : BaseEntity
     {
         public Guid PhenomenonID { get; set; }
         public string PhenomenonName { get; set; }
