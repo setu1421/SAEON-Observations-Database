@@ -136,7 +136,10 @@ namespace SAEON.Observations.Core
         [Column("UnitOfMeasureUnit")]
         public string UnitName { get; set; }
         public int Count { get; set; }
+        public int ValueCount { get; set; }
+        public int NullCount { get; set; }
         public int VerifiedCount { get; set; }
+        public int UnverifiedCount { get; set; }
         public double? LatitudeNorth { get; set; } // +N to -S
         public double? LatitudeSouth { get; set; } // +N to -S
         public double? LongitudeWest { get; set; } // -W to +E
@@ -191,6 +194,10 @@ namespace SAEON.Observations.Core
         [Column("UnitOfMeasureUnit")]
         public string UnitName { get; set; }
         public int Count { get; set; }
+        public int ValueCount { get; set; }
+        public int NullCount { get; set; }
+        public int VerifiedCount { get; set; }
+        public int UnverifiedCount { get; set; }
         public double? LatitudeNorth { get; set; } // +N to -S
         public double? LatitudeSouth { get; set; } // +N to -S
         public double? LongitudeWest { get; set; } // -W to +E

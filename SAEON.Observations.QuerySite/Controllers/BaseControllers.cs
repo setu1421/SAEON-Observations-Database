@@ -29,7 +29,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 var tenant = Session[Constants.SessionKeyTenant]?.ToString();
                 if (string.IsNullOrWhiteSpace(tenant))
                 {
-                    tenant = ConfigurationManager.AppSettings[Constants.ConfigKeyDefaultTenant] ?? "Fynbos";
+                    tenant = ConfigurationManager.AppSettings[Constants.ConfigKeyDefaultTenant] ?? "SAEON";
                     Session[Constants.SessionKeyTenant] = tenant;
                 }
                 return tenant;
