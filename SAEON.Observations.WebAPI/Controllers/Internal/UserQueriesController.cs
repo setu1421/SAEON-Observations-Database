@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
-    public class UserQueriesController : InternalWriteController<UserQuery>
+    public class UserQueriesController : InternalWriteController<UserQuery, UserQueryPatch>
     {
         protected override List<Expression<Func<UserQuery, bool>>> GetWheres()
         {
@@ -39,6 +39,16 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             return (isPost || (item.UserId == userId));
         }
 
+        protected override bool IsEntityPatchOk(UserQueryPatch item)
+        {
+            var userId = User.UserId();
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new NullReferenceException("Not logged in");
+            }
+            return (item.UserId == userId);
+        }
+
         protected override void SetEntity(ref UserQuery item, bool isPost)
         {
             if (isPost && (item.Id == Guid.Empty))
@@ -61,15 +71,26 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             item.UpdatedAt = now;
         }
 
-        protected override void UpdateEntity(ref UserQuery item, UserQuery delta)
+        protected override void UpdateEntity(ref UserQuery item, UserQuery updateItem)
         {
-            if (!string.IsNullOrEmpty(item.Name)) item.Name = delta.Name;
-            if (!string.IsNullOrEmpty(item.Description)) item.Description = delta.Description;
+            if (!string.IsNullOrEmpty(updateItem.Name)) item.Name = updateItem.Name;
+            if (!string.IsNullOrEmpty(updateItem.Description)) item.Description = updateItem.Description;
         }
 
-        public override Task<ActionResult> PutById(Guid id, [FromBody, Bind("Id", "Name", "Description", "UserId")] UserQuery delta)
+        protected override void PatchEntity(ref UserQuery item, UserQueryPatch patchItem)
         {
-            return base.PutById(id, delta);
+            if (!string.IsNullOrEmpty(patchItem.Name)) item.Name = patchItem.Name;
+            if (!string.IsNullOrEmpty(patchItem.Description)) item.Description = patchItem.Description;
+        }
+
+        public override Task<ActionResult> PutById(Guid id, [FromBody, Bind("Id", "Name", "Description", "UserId")] UserQuery updateItem)
+        {
+            return base.PutById(id, updateItem);
+        }
+
+        public override Task<ActionResult> PatchById(Guid id, [FromBody, Bind("Id", "Name", "Description", "UserId")] UserQueryPatch patchItem)
+        {
+            return base.PatchById(id, patchItem);
         }
     }
 }
