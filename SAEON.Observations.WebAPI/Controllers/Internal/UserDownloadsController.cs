@@ -75,7 +75,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             //if (!string.IsNullOrEmpty(item.Description)) item.Description = delta.Description;
         }
 
-        public override Task<ActionResult> PutById(Guid id, [FromBody, Bind("Id", "Name", "Description", "UserId")] UserDownload delta)
+        public override Task<ActionResult> PutById(Guid id, [FromBody, Bind("Id", "Name", "UserId")] UserDownload delta)
         {
             return base.PutById(id, delta);
         }

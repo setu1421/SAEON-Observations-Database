@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -61,7 +62,6 @@ namespace SAEON.Observations.WebAPI
 #if ResponseCaching
                     services.AddResponseCaching();
 #endif
-                    services.AddAutoMapper(typeof(Startup));
                     services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                         .AddCookie();
                     services
@@ -157,6 +157,10 @@ namespace SAEON.Observations.WebAPI
                         //});
                     });
                     services.AddSignalR();
+                    services.Configure<ApiBehaviorOptions>(options =>
+                    {
+                        options.SuppressModelStateInvalidFilter = true;
+                    });
                     services.AddControllers();
                     services.AddControllersWithViews();
                     services.AddOData();

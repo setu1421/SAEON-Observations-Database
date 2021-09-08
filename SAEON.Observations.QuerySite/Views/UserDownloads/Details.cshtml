@@ -13,34 +13,22 @@
                     @Html.DisplayFor(model => model.Name)
                 </dd>
                 <dt>
+                    @Html.DisplayNameFor(model => model.Title)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Title)
+                </dd>
+                <dt>
                     @Html.DisplayNameFor(model => model.Description)
                 </dt>
                 <dd>
                     @Html.DisplayFor(model => model.Description)
                 </dd>
                 <dt>
-                    @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.Title)
+                    @Html.DisplayNameFor(model => model.Citation)
                 </dt>
                 <dd>
-                    @Html.DisplayFor(model => model.DigitalObjectIdentifier.Title)
-                </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.CitationText)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.DigitalObjectIdentifier.CitationText)
-                </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.DOI)
-                </dt>
-                <dd>
-                    <a href="@Model.DigitalObjectIdentifier.DOIUrl">@Html.DisplayFor(model => model.DigitalObjectIdentifier.DOIUrl)</a>
-                </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.MetadataUrl)
-                </dt>
-                <dd>
-                    <a href="@Model.DigitalObjectIdentifier.MetadataUrl">@Html.DisplayFor(model => model.DigitalObjectIdentifier.MetadataUrl)</a>
+                    @Html.Raw(Model.CitationHtml)
                 </dd>
                 <dt>
                     @Html.DisplayNameFor(model => model.DownloadUrl)

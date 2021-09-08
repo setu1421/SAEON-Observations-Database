@@ -11,13 +11,10 @@
                     @Html.DisplayNameFor(model => model.Name)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.DOI)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.MetadataUrl)
                 </th>
                 <th>&nbsp;</th>
             </tr>
@@ -29,17 +26,14 @@
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DigitalObjectIdentifier.DOIUrl)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DigitalObjectIdentifier.MetadataUrl)
-                    </td>
-                    <td>
                         @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.Id }) 
+                        @Html.ActionLink("Details", "Details", new { id = item.Id })
                     </td>
                 </tr>
             }

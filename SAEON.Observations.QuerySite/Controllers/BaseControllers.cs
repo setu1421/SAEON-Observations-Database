@@ -509,12 +509,12 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     SAEONLogs.Verbose("Delta: {@Delta}", delta);
-                    if (!ModelState.IsValid)
-                    {
-                        SAEONLogs.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);
-                        return View(delta);
-                    }
-                    else
+                    //if (!ModelState.IsValid)
+                    //{
+                    //    SAEONLogs.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);
+                    //    return View(delta);
+                    //}
+                    //else
                     {
                         using (var client = await GetWebAPIClientAsync())
                         {

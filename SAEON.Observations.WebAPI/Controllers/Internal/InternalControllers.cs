@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -54,22 +53,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     [Authorize(Policy = ODPAuthenticationDefaults.IdTokenPolicy)]
     public abstract class InternalWriteController<TEntity> : BaseIdedReadController<TEntity> where TEntity : NamedEntity
     {
-        protected IMapper Mapper { get; private set; }
+        //protected IMapper Mapper { get; private set; }
 
         public InternalWriteController() : base()
         {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<UserDownload, UserDownload>()
-                    .ForMember(dest => dest.Id, opt => opt.Ignore());
-                //.ForMember(dest => dest.AddedBy, opt => opt.Ignore())
-                //.ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
-                cfg.CreateMap<UserQuery, UserQuery>()
-                    .ForMember(dest => dest.Id, opt => opt.Ignore());
-                //.ForMember(dest => dest.AddedBy, opt => opt.Ignore())
-                //.ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
-            });
-            Mapper = config.CreateMapper();
             TrackChanges = true;
         }
 
