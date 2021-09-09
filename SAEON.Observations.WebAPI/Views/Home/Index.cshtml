@@ -1,4 +1,5 @@
-﻿@using Microsoft.Extensions.Configuration;
+﻿@using Humanizer;
+@using Microsoft.Extensions.Configuration;
 @model SAEON.Observations.Core.HomeDashboard
 @inject IConfiguration config
 @{
@@ -18,10 +19,11 @@
             SAEON serves as a national platform for detecting, translating and predicting environmental change through scientifically designed observation systems and research.
         </p>
         <p>
-            Our network consists of @($"{Model.Sites:n0}") sites, @($"{Model.Stations:n0}") stations, @($"{Model.Instruments:n0}") instruments,
-            @($"{Model.Sensors:n0}") @Html.ActionLink("sensors", "Sensors", "Query"), @($"{Model.Phenomena:n0}") phenomena, @($"{Model.Offerings:n0}") offerings,
-            @($"{Model.UnitsOfMeasure:n0}") units of measure, @($"{Model.Variables:n0}") variables, @($"{Model.Datasets:n0}") @Html.ActionLink("datasets", "Datasets", "Query")
-            and @($"{Model.Observations:n0}") verified observations.
+            Our network consists of @("sites".ToQuantity(Model.Sites,"n0")), @("stations".ToQuantity(Model.Stations,"n0")), @("instruments".ToQuantity(Model.Instruments, "n0")),
+            @($"{Model.Sensors:n0}") @Html.ActionLink("sensors".ToQuantity(Model.Sensors, ShowQuantityAs.None), "Sensors", "Query"),
+            @("phenomena".ToQuantity(Model.Phenomena,"n0")), @("offerings".ToQuantity(Model.Offerings,"n0")), @("units".ToQuantity(Model.UnitsOfMeasure,"n0")) of measure,
+            @("variables".ToQuantity(Model.Variables,"n0")), @($"{Model.Datasets:n0}") @Html.ActionLink("datasets".ToQuantity(Model.Datasets, ShowQuantityAs.None), "Datasets", "Query")
+            and @("verified observations".ToQuantity(Model.Observations,"n0")).
         </p>
         <p><i class="fas fa-search"></i> <a href="@config["QuerySiteUrl"]/Query/Data" target="_blank">Search our data</a></p>
         <p><i class="fas fa-info"></i> @Html.ActionLink("More about SAEON", "About", "Home")</p>
