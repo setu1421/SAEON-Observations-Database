@@ -53,7 +53,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         public IActionResult Index()
         {
-            var model = DbContext.HomeDashboards.First();
+            var model = DbContext.InventorySnapshots.OrderByDescending(i => i.When).First();
             return View(model);
         }
 

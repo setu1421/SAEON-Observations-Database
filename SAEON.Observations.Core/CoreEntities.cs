@@ -1092,8 +1092,9 @@ namespace SAEON.Observations.Core
         public string Description { get; set; }
     }
 
-    public class HomeDashboard : BaseEntity
+    public class InventorySnapshot : GuidIdEntity
     {
+        public DateTime When { get; set; }
         public int Organisations { get; set; }
         public int Programmes { get; set; }
         public int Projects { get; set; }

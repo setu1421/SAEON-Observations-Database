@@ -1033,6 +1033,26 @@ namespace SAEON.Observations.Data{
             return sp;
         }
         
+        /// <summary>
+        /// Creates an object wrapper for the spCreateImportBatchSummaries Procedure
+        /// </summary>
+        public static StoredProcedure SpCreateImportBatchSummaries()
+        {
+            SubSonic.StoredProcedure sp = new SubSonic.StoredProcedure("spCreateImportBatchSummaries", DataService.GetInstance("ObservationsDB"), "dbo");
+        	
+            return sp;
+        }
+        
+        /// <summary>
+        /// Creates an object wrapper for the spCreateInventorySnapshot Procedure
+        /// </summary>
+        public static StoredProcedure SpCreateInventorySnapshot()
+        {
+            SubSonic.StoredProcedure sp = new SubSonic.StoredProcedure("spCreateInventorySnapshot", DataService.GetInstance("ObservationsDB"), "dbo");
+        	
+            return sp;
+        }
+        
     }
     
 }

@@ -32,6 +32,7 @@ namespace SAEON.Observations.WebAPI
         public DbSet<ImportBatch> ImportBatches { get; set; }
         public DbSet<ImportBatchSummary> ImportBatchSummaries { get; set; }
         public DbSet<Instrument> Instruments { get; set; }
+        public DbSet<InventorySnapshot> InventorySnapshots { get; set; }
         public DbSet<Offering> Offerings { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<OrganisationRole> OrganisationRoles { get; set; }
@@ -50,7 +51,6 @@ namespace SAEON.Observations.WebAPI
         // Views
         public DbSet<VLocation> VLocations { get; set; }
         public DbSet<VVariable> VVariables { get; set; }
-        public DbSet<HomeDashboard> HomeDashboards { get; set; }
         public DbSet<VImportBatchSummary> VImportBatchSummaries { get; set; }
         public DbSet<InventoryDataset> InventoryDatasets { get; set; }
         public DbSet<InventorySensor> InventorySensors { get; set; }
@@ -89,7 +89,6 @@ namespace SAEON.Observations.WebAPI
             modelBuilder.Entity<InventoryDataset>().ToView("vInventoryDatasets");
             modelBuilder.Entity<InventorySensor>().ToView("vInventorySensors");
             modelBuilder.Entity<VObservationExpansion>().ToView("vObservationExpansion");
-            modelBuilder.Entity<HomeDashboard>().HasNoKey().ToView("VHomeDashboard");
             modelBuilder.Entity<DigitalObjectIdentifier>().Property("DOIType").HasConversion<byte>();
             modelBuilder.Entity<DigitalObjectIdentifier>().HasOne(i => i.Parent).WithMany(i => i.Children).HasForeignKey(i => i.ParentId);
             // Many to Many
