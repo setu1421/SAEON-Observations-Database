@@ -5,13 +5,14 @@
     <div class="col-md">
         @(Html.EJ().Grid<object>("SensorsGrid")
             .Datasource(datasource => datasource.URL(ViewBag.WebAPIUrl + "/OData/InventorySensors")
-                .Headers(new { Tenant = ViewBag.Tenant, Authorization = ViewBag.Authorization})
+                .Headers(new { Tenant = ViewBag.Tenant, Authorization = ViewBag.Authorization })
                 .CrossDomain(true)
                 .Adaptor(AdaptorType.ODataV4Adaptor))
             .IsResponsive()
             .AllowPaging()
             .PageSettings(p => p.PageSize(25))
             .AllowSorting()
+            .AllowResizing()
             .AllowFiltering()
             .FilterSettings(filter => { filter.FilterType(FilterType.Excel); })
             .Columns(col =>

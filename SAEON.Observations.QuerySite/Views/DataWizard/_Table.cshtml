@@ -9,10 +9,9 @@
     .AllowPaging()
     .PageSettings(p => p.PageSize(25))
     .AllowSorting()
-    .AllowFiltering()
     .AllowResizing()
-    .AllowScrolling()
     .MinWidth(1024)
+    .AllowFiltering()
     .FilterSettings(filter => { filter.FilterType(FilterType.Excel); })
     .Columns(col =>
     {

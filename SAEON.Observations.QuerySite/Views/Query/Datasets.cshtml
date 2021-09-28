@@ -12,6 +12,7 @@
             .AllowPaging()
             .PageSettings(p => p.PageSize(25))
             .AllowSorting()
+            .AllowResizing()
             .AllowFiltering()
             .FilterSettings(filter => { filter.FilterType(FilterType.Excel); })
             .Columns(col =>
