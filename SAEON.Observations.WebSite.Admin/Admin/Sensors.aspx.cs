@@ -93,6 +93,22 @@ public partial class Admin_Sensors : System.Web.UI.Page
                 e.ErrorMessage = errorMessage;
             }
         }
+        if (e.ID == "dfInstrumentStartDate" && dfInstrumentStartDate.HasValue() && dfInstrumentEndDate.HasValue())
+        {
+            if (dfInstrumentStartDate.SelectedDate > dfInstrumentEndDate.SelectedDate)
+            {
+                e.Success = false;
+                e.ErrorMessage = "Start Date must be before End Date";
+            }
+        }
+        if (e.ID == "dfInstrumentEndDate" && dfInstrumentStartDate.HasValue() && dfInstrumentEndDate.HasValue())
+        {
+            if (dfInstrumentStartDate.SelectedDate > dfInstrumentEndDate.SelectedDate)
+            {
+                e.Success = false;
+                e.ErrorMessage = "End Date must be after Start Date";
+            }
+        }
     }
 
     protected void Save(object sender, DirectEventArgs e)
