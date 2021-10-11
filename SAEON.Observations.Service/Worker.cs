@@ -23,13 +23,25 @@ namespace SAEON.Observations.Service
 
         public Worker(IConfiguration config)
         {
-            this.config = config;
-            adminHubConnection = new HubConnectionBuilder()
-                .WithUrl(this.config["WebAPIUrl"].AddTrailingForwardSlash() + "AdminHub")
-                .Build();
-            adminHubConnection.On<string>(SignalRDefaults.CreateDOIsStatusUpdate, CreateDOIsStatusUpdate);
-            adminHubConnection.On<string>(SignalRDefaults.CreateMetadataStatusUpdate, CreateMetadataStatusUpdate);
-            adminHubConnection.On<string>(SignalRDefaults.CreateODPMetadataStatusUpdate, CreateODPMetadataStatusUpdate);
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    SAEONLogs.Information("Starting worker");
+                    this.config = config;
+                    adminHubConnection = new HubConnectionBuilder()
+                        .WithUrl(config["WebAPIUrl"].AddTrailingForwardSlash() + "AdminHub")
+                        .Build();
+                    adminHubConnection.On<string>(SignalRDefaults.CreateDOIsStatusUpdate, CreateDOIsStatusUpdate);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateMetadataStatusUpdate, CreateMetadataStatusUpdate);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateODPMetadataStatusUpdate, CreateODPMetadataStatusUpdate);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
         }
 
         private void CreateDOIsStatusUpdate(string status)
@@ -172,14 +184,14 @@ namespace SAEON.Observations.Service
                     using (var client = await GetWebAPIClientAsync(cancellationToken))
                     {
                         SAEONLogs.Information("Creating ImportBatchSummaries");
-                        //var response = await client.PostAsync("Internal/Admin/CreateImportBatchSummaries", null, cancellationToken);
-                        //if (!response.IsSuccessStatusCode)
-                        //{
-                        //    SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
-                        //    SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync(cancellationToken));
-                        //}
-                        //response.EnsureSuccessStatusCode();
-                        //var result = await response.Content.ReadAsStringAsync(cancellationToken);
+                        var response = await client.PostAsync("Internal/Admin/CreateImportBatchSummaries", null, cancellationToken);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                            SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync(cancellationToken));
+                        }
+                        response.EnsureSuccessStatusCode();
+                        var result = await response.Content.ReadAsStringAsync(cancellationToken);
                         //SAEONLogs.Verbose("Snapshots: {Result}", result);
                         stopWatch.Stop();
                         SAEONLogs.Information("Done: {Elapsed}", stopWatch.Elapsed.TimeStr());

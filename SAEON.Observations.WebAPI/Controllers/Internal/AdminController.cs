@@ -144,7 +144,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     var sb = new StringBuilder();
                     SAEONLogs.Information("CreateImportBatchSummaries");
                     sb.AppendLine("CreateImportBatchSummaries");
-                    _ = (await DbContext.InventorySnapshots.FromSqlRaw("spCreateImportBatchSummaries").ToListAsync());
+                    _ = (await DbContext.ImportBatchSummaries.FromSqlRaw("spCreateImportBatchSummaries").ToListAsync());
                     SAEONLogs.Information("Done");
                     sb.AppendLine("Done");
                     return Content(sb.ToString());

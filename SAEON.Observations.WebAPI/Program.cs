@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using SAEON.Core;
 using SAEON.Logs;
 using System;
 
@@ -13,6 +14,7 @@ namespace SAEON.Observations.WebAPI
             SAEONLogs.CreateConfiguration().Initialize();
             try
             {
+                SAEONLogs.Information("Starting {Application}", ApplicationHelper.ApplicationName);
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)
