@@ -569,10 +569,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         switch (input.DownloadFormat)
                         {
                             case DownloadFormat.CSV:
-                                System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, $"Data {output.Date:yyyyMMdd HHmmss}.csv"), output.DataMatrix.ToCSV());
+                                System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, $"SAEON Observations Database Download {output.Date:yyyyMMdd HHmmss}.csv"), output.DataMatrix.ToCSV());
                                 break;
                             case DownloadFormat.Excel:
-                                System.IO.File.WriteAllBytes(Path.Combine(dirInfo.FullName, $"Data {output.Date:yyyyMMdd HHmmss}.xlsx"), output.DataMatrix.ToExcel());
+                                System.IO.File.WriteAllBytes(Path.Combine(dirInfo.FullName, $"SAEON Observations Database Download {output.Date:yyyyMMdd HHmmss}.xlsx"), output.DataMatrix.ToExcel());
                                 break;
                             case DownloadFormat.NetCDF:
                                 break;

@@ -61,7 +61,38 @@ public partial class Admin_Projects : System.Web.UI.Page
                 e.ErrorMessage = errorMessage;
             }
         }
-
+        if (e.ID == "dfStartDate" && dfStartDate.HasValue() && dfEndDate.HasValue())
+        {
+            if (dfStartDate.SelectedDate > dfEndDate.SelectedDate)
+            {
+                e.Success = false;
+                e.ErrorMessage = "Start Date must be before End Date";
+            }
+        }
+        if (e.ID == "dfEndDate" && dfStartDate.HasValue() && dfEndDate.HasValue())
+        {
+            if (dfStartDate.SelectedDate > dfEndDate.SelectedDate)
+            {
+                e.Success = false;
+                e.ErrorMessage = "End Date must be after Start Date";
+            }
+        }
+        if (e.ID == "dfStationStartDate" && dfStationStartDate.HasValue() && dfStationEndDate.HasValue())
+        {
+            if (dfStationStartDate.SelectedDate > dfStationEndDate.SelectedDate)
+            {
+                e.Success = false;
+                e.ErrorMessage = "Start Date must be before End Date";
+            }
+        }
+        if (e.ID == "dfStationEndDate" && dfStationStartDate.HasValue() && dfStationEndDate.HasValue())
+        {
+            if (dfStationStartDate.SelectedDate > dfStationEndDate.SelectedDate)
+            {
+                e.Success = false;
+                e.ErrorMessage = "End Date must be after Start Date";
+            }
+        }
     }
 
     protected void Save(object sender, DirectEventArgs e)

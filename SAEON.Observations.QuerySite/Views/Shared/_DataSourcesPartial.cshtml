@@ -11,7 +11,7 @@
 }
 @if ((Session != null) && tenants.Any() && Request.IsLocal && (User.IsInRole("admin") || User.IsInRole("'Admin")))
 {
-    var sessionTenant = Session[Constants.SessionKeyTenant]?.ToString() ?? ConfigurationManager.AppSettings[Constants.ConfigKeyDefaultTenant] ?? "Fynbos";
+    var sessionTenant = Session[Constants.SessionKeyTenant]?.ToString() ?? ConfigurationManager.AppSettings[Constants.ConfigKeyDefaultTenant] ?? "SAEON";
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDataSource" role="button" data-mdb-toggle="dropdown" aria-expanded="false">Data Source</a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownDataSource">

@@ -3,6 +3,8 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using SAEON.Logs;
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 
@@ -15,7 +17,8 @@ namespace SAEON.Observations.QuerySite.Controllers
         [Authorize]
         public ActionResult LogIn()
         {
-            return Redirect("/");
+            var redirectUrl = (User as ClaimsPrincipal)?.Claims.FirstOrDefault(i => i.Type == "LoginReferer")?.Value ?? "/";
+            return Redirect(redirectUrl);
         }
 
         public ActionResult LogOut()

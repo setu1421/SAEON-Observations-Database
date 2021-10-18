@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -52,24 +51,12 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     [ApiExplorerSettings(IgnoreApi = true)]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = ODPAuthenticationDefaults.IdTokenPolicy)]
-    public abstract class InternalWriteController<TEntity> : BaseIdedReadController<TEntity> where TEntity : NamedEntity
+    public abstract class InternalWriteController<TEntity, TEntityPatch> : BaseIdedReadController<TEntity> where TEntity : NamedEntity where TEntityPatch : NamedEntity
     {
-        protected IMapper Mapper { get; private set; }
+        //protected IMapper Mapper { get; private set; }
 
         public InternalWriteController() : base()
         {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<UserDownload, UserDownload>()
-                    .ForMember(dest => dest.Id, opt => opt.Ignore());
-                //.ForMember(dest => dest.AddedBy, opt => opt.Ignore())
-                //.ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
-                cfg.CreateMap<UserQuery, UserQuery>()
-                    .ForMember(dest => dest.Id, opt => opt.Ignore());
-                //.ForMember(dest => dest.AddedBy, opt => opt.Ignore())
-                //.ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
-            });
-            Mapper = config.CreateMapper();
             TrackChanges = true;
         }
 
@@ -79,9 +66,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         protected abstract bool IsEntityOk(TEntity item, bool isPost);
-
+        protected abstract bool IsEntityPatchOk(TEntityPatch item);
         protected abstract void SetEntity(ref TEntity item, bool isPost);
-        protected abstract void UpdateEntity(ref TEntity item, TEntity delta);
+        protected abstract void UpdateEntity(ref TEntity item, TEntity updateItem);
+        protected abstract void PatchEntity(ref TEntity item, TEntityPatch patchItem);
 
         public List<string> ModelStateErrors
         {
@@ -92,95 +80,90 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpPost]
-        public async Task<ActionResult<TEntity>> Post([FromBody] TEntity item)
+        public async Task<ActionResult<TEntity>> Post([FromBody] TEntity newItem)
         {
-            using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "item", item } }))
+            using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { nameof(newItem), newItem } }))
             {
                 try
                 {
                     UpdateRequest();
-                    if (item is null)
+                    if (newItem is null)
                     {
-                        SAEONLogs.Error("item cannot be null");
-                        return BadRequest("item cannot be null");
+                        SAEONLogs.Error($"{nameof(newItem)} cannot be null");
+                        return BadRequest($"{nameof(newItem)} cannot be null");
                     }
-                    SAEONLogs.Verbose("Adding {Name} {@item}", item.Name, item);
+                    SAEONLogs.Verbose("Adding {Name} {@item}", newItem.Name, newItem);
                     if (!ModelState.IsValid)
                     {
                         SAEONLogs.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);
                         return BadRequest(ModelState);
                     }
-                    if (!IsEntityOk(item, true))
+                    if (!IsEntityOk(newItem, true))
                     {
-                        SAEONLogs.Error("{Name} invalid", item.Name);
-                        return BadRequest($"{item.Name} invalid");
+                        SAEONLogs.Error($"NewItem {newItem.Name} invalid");
+                        return BadRequest($"NewItem {newItem.Name} invalid");
                     }
                     try
                     {
-                        SetEntity(ref item, true);
-                        SAEONLogs.Verbose("Add {@item}", item);
-                        DbContext.Set<TEntity>().Add(item);
+                        SetEntity(ref newItem, true);
+                        SAEONLogs.Verbose("Add {@item}", newItem);
+                        DbContext.Set<TEntity>().Add(newItem);
                         await DbContext.SaveChangesAsync();
                     }
                     catch (DbUpdateException ex)
                     {
-                        if (await GetQuery().Where(i => i.Name == item.Name).AnyAsync())
+                        if (await GetQuery().Where(i => i.Name == newItem.Name).AnyAsync())
                         {
-                            SAEONLogs.Error("{Name} conflict", item.Name);
+                            SAEONLogs.Error("{Name} conflict", newItem.Name);
                             return Conflict();
                         }
                         else
                         {
-                            SAEONLogs.Exception(ex, "Unable to add {Name}", item.Name);
+                            SAEONLogs.Exception(ex, "Unable to add {Name}", newItem.Name);
                             return BadRequest(ex.Message);
                         }
                     }
                     catch (Exception ex)
                     {
-                        SAEONLogs.Exception(ex, "Unable to add {Name}", item.Name);
-                        return BadRequest($"Unable to add {item.Name}");
+                        SAEONLogs.Exception(ex, "Unable to add {Name}", newItem.Name);
+                        return BadRequest($"Unable to add {newItem.Name}");
                     }
-                    var location = $"{typeof(TEntity).Name}/{item.Id}";
-                    SAEONLogs.Verbose("Location: {location} Id: {Id} Item: {@item}", location, item.Id, item);
-                    return CreatedAtAction(nameof(GetById), new { id = item.Id }, item);
+                    var location = $"{typeof(TEntity).Name}/{newItem.Id}";
+                    SAEONLogs.Verbose("Location: {location} Id: {Id} Item: {@item}", location, newItem.Id, newItem);
+                    return CreatedAtAction(nameof(GetById), new { id = newItem.Id }, newItem);
                 }
                 catch (Exception ex)
                 {
-                    SAEONLogs.Exception(ex, "Unable to add {Name}", item.Name);
+                    SAEONLogs.Exception(ex, "Unable to add {Name}", newItem.Name);
                     throw;
                 }
             }
         }
 
         [HttpPut("{id:guid}")]
-        public virtual async Task<ActionResult> PutById(Guid id, [FromBody] TEntity delta)
+        public virtual async Task<ActionResult> PutById(Guid id, [FromBody] TEntity updateItem)
         {
-            using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "id", id }, { "delta", delta } }))
+            using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { nameof(id), id }, { nameof(updateItem), updateItem } }))
             {
                 try
                 {
                     UpdateRequest();
                     SAEONLogs.Information("Put: {id}", id);
-                    if (delta is null)
+                    if (updateItem is null)
                     {
-                        SAEONLogs.Error("delta cannot be null");
-                        return BadRequest("delta cannot be null");
+                        SAEONLogs.Error($"{nameof(updateItem)} cannot be null");
+                        return BadRequest($"{nameof(updateItem)} cannot be null");
                     }
-                    SAEONLogs.Verbose("Updating {id} {@delta}", id, delta);
+                    SAEONLogs.Verbose("Updating {id} {@updateItem}", id, updateItem);
                     //if (!ModelState.IsValid)
                     //{
                     //    SAEONLogs.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);
                     //    return BadRequest(ModelState);
                     //}
-                    if (id != delta.Id)
+                    if (id != updateItem.Id)
                     {
                         SAEONLogs.Error("{id} Id not same", id);
                         return BadRequest($"{id} Id not same");
-                    }
-                    if (!IsEntityOk(delta, false))
-                    {
-                        SAEONLogs.Error("{delta.Name} invalid", delta);
-                        return BadRequest($"{delta.Name} invalid");
                     }
                     var item = await GetQuery().Where(i => i.Id == id).FirstOrDefaultAsync();
                     if (item is null)
@@ -188,12 +171,22 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         SAEONLogs.Error("{id} not found", id);
                         return NotFound();
                     }
+                    if (!IsEntityOk(item, false))
+                    {
+                        SAEONLogs.Error($"Item  {item.Name} invalid");
+                        return BadRequest($"Item {item.Name} invalid");
+                    }
+                    if (!IsEntityOk(updateItem, false))
+                    {
+                        SAEONLogs.Error($"UpdateItem {updateItem.Name} invalid");
+                        return BadRequest($"UpdateItem {updateItem.Name} invalid");
+                    }
                     try
                     {
-                        //SAEONLogs.Verbose("Loaded {@item}", item);
+                        SAEONLogs.Verbose("Loaded {@item} {@updateItem}", item, updateItem);
                         //Mapper.Map(delta, item);
                         //SAEONLogs.Verbose("Mapped delta {@item}", item);
-                        UpdateEntity(ref item, delta);
+                        UpdateEntity(ref item, updateItem);
                         SetEntity(ref item, false);
                         SAEONLogs.Verbose("Set {@item}", item);
                         await DbContext.SaveChangesAsync();
@@ -208,6 +201,67 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 catch (Exception ex)
                 {
                     SAEONLogs.Exception(ex, "Unable to update {id}", id);
+                    throw;
+                }
+            }
+        }
+
+        [HttpPatch("{id:guid}")]
+        public virtual async Task<ActionResult> PatchById(Guid id, [FromBody] TEntityPatch patchItem)
+        {
+            using (SAEONLogs.MethodCall<TEntity>(GetType(), new MethodCallParameters { { nameof(id), id }, { nameof(patchItem), patchItem } }))
+            {
+                try
+                {
+                    UpdateRequest();
+                    SAEONLogs.Information("Patch: {id}", id);
+                    if (patchItem is null)
+                    {
+                        SAEONLogs.Error($"{nameof(patchItem)} cannot be null");
+                        return BadRequest($"{nameof(patchItem)} cannot be null");
+                    }
+                    SAEONLogs.Verbose("Updating {id} {@patchItem}", id, patchItem);
+                    if (id != patchItem.Id)
+                    {
+                        SAEONLogs.Error("{id} Id not same", id);
+                        return BadRequest($"{id} Id not same");
+                    }
+
+                    var item = await GetQuery().Where(i => i.Id == id).FirstOrDefaultAsync();
+                    if (item is null)
+                    {
+                        SAEONLogs.Error("{id} not found", id);
+                        return NotFound();
+                    }
+                    if (!IsEntityOk(item, false))
+                    {
+                        SAEONLogs.Error($"Item {item.Name} invalid");
+                        return BadRequest($"Item {item.Name} invalid");
+                    }
+                    if (!IsEntityPatchOk(patchItem))
+                    {
+                        SAEONLogs.Error($"PatchItem {patchItem.Name} invalid");
+                        return BadRequest($"PatchItem {patchItem.Name} invalid");
+                    }
+                    try
+                    {
+                        SAEONLogs.Verbose("Loaded {@oldItem} {@patchItem}", item, patchItem);
+                        PatchEntity(ref item, patchItem);
+                        SetEntity(ref item, false);
+                        SAEONLogs.Verbose("Set {@item}", item);
+                        await DbContext.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        SAEONLogs.Exception(ex, "Unable to patch {id}", id);
+                        return BadRequest(ex.Message);
+                    }
+
+                    return NoContent();
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex, "Unable to patch {id}", id);
                     throw;
                 }
             }

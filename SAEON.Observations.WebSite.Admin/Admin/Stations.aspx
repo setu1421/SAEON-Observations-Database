@@ -539,14 +539,16 @@
                             <ext:Container ID="Container13" runat="server" Layout="Form" ColumnWidth=".48">
                                 <Items>
                                     <ext:DateField ID="dfStartDate" DataIndex="StartDate" runat="server" FieldLabel="Start Date" AnchorHorizontal="98%"
-                                        BlankText="Start Date is required." Format="dd MMM yyyy" ClientIDMode="Static">
+                                        BlankText="Start Date is required." Format="dd MMM yyyy" ClientIDMode="Static" IsRemoteValidation="true">
+                                        <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                                     </ext:DateField>
                                 </Items>
                             </ext:Container>
                             <ext:Container ID="Container14" runat="server" Layout="Form" ColumnWidth=".48">
                                 <Items>
                                     <ext:DateField ID="dfEndDate" DataIndex="EndDate" runat="server" FieldLabel="End Date" AnchorHorizontal="100%"
-                                        BlankText="End Date is required." Format="dd MMM yyyy" ClientIDMode="Static">
+                                        BlankText="End Date is required." Format="dd MMM yyyy" ClientIDMode="Static" IsRemoteValidation="true">
+                                        <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                                     </ext:DateField>
                                 </Items>
                             </ext:Container>
@@ -558,7 +560,7 @@
                     </ext:Container>
                 </Items>
                 <Buttons>
-                     <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
+                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
                         <Listeners>
                             <Click Handler="GetInvalidFields(#{DetailsFormPanel});" />
                         </Listeners>
@@ -641,7 +643,8 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfOrganisationStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
-                                FieldLabel="Start Date" AnchorHorizontal="96%" Format="dd MMM yyyy" ClientIDMode="Static">
+                                FieldLabel="Start Date" AnchorHorizontal="96%" Format="dd MMM yyyy" ClientIDMode="Static" IsRemoteValidation="true">
+                                <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -653,7 +656,8 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfOrganisationEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
-                                FieldLabel="End Date" AnchorHorizontal="96%" Format="dd MMM yyyy" ClientIDMode="Static">
+                                FieldLabel="End Date" AnchorHorizontal="96%" Format="dd MMM yyyy" ClientIDMode="Static" IsRemoteValidation="true">
+                                <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -717,7 +721,8 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfProjectStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="96%" Format="dd MMM yyyy" IsRemoteValidation="true">
+                                <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -729,7 +734,8 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfProjectEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="End Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="96%" Format="dd MMM yyyy" IsRemoteValidation="true">
+                                <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -808,14 +814,16 @@
                     <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
                             <ext:DateField ID="dfInstrumentStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="96%" Format="dd MMM yyyy" IsRemoteValidation="true">
+                                <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
                     <ext:Panel ID="Panel9" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
                             <ext:DateField ID="dfInstrumentEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="End Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="96%" Format="dd MMM yyyy" IsRemoteValidation="true">
+                                <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                             </ext:DateField>
                         </Items>
                     </ext:Panel>

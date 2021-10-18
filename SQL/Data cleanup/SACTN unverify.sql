@@ -18,7 +18,7 @@ Update
   Observation
 set
   StatusID = @StatusID,
-  @StatusReasonID = @StatusReasonID
+  StatusReasonID = @StatusReasonID
 from
   vImportBatchSummary
   inner join Observation

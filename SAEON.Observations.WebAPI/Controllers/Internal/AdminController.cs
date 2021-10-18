@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using SAEON.AspNet.Auth;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -96,6 +98,55 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     SAEONLogs.Information("CreateODPMetadata");
                     sb.AppendLine("CreateODPMetadata");
                     sb.AppendLine(await ODPMetadataHelper.CreateMetadata(DbContext, AdminHub, Config));
+                    return Content(sb.ToString());
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpPost("[action]")]
+        [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+        public async Task<IActionResult> CreateSnapshots()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    var sb = new StringBuilder();
+                    SAEONLogs.Information("CreateInventorySnapshot");
+                    sb.AppendLine("CreateInventorySnapshot");
+                    var inventorySnapshot = (await DbContext.InventorySnapshots.FromSqlRaw("spCreateInventorySnapshot").ToListAsync()).FirstOrDefault();
+                    SAEONLogs.Information("InventorySnapshot: {InventorySnapshot}", inventorySnapshot);
+                    SAEONLogs.Information("Done");
+                    sb.AppendLine("Done");
+                    return Content(sb.ToString());
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpPost("[action]")]
+        [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+        public async Task<IActionResult> CreateImportBatchSummaries()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    var sb = new StringBuilder();
+                    SAEONLogs.Information("CreateImportBatchSummaries");
+                    sb.AppendLine("CreateImportBatchSummaries");
+                    _ = (await DbContext.ImportBatchSummaries.FromSqlRaw("spCreateImportBatchSummaries").ToListAsync());
+                    SAEONLogs.Information("Done");
+                    sb.AppendLine("Done");
                     return Content(sb.ToString());
                 }
                 catch (Exception ex)

@@ -247,8 +247,7 @@
                 <Items>
                     <ext:Hidden ID="tfID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
-                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="FormLayout"
-                        >
+                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
                             <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50"
                                 runat="server" FieldLabel="Code" AnchorHorizontal="96%" ClientIDMode="Static"
@@ -261,8 +260,7 @@
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="FormLayout"
-                        >
+                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
                             <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true"
                                 runat="server" FieldLabel="Name" AnchorHorizontal="96%" ClientIDMode="Static"
@@ -271,7 +269,7 @@
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="FormLayout" >
+                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
                             <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="5000" runat="server"
                                 FieldLabel="Description" AnchorHorizontal="96%" ClientIDMode="Static"
@@ -279,7 +277,7 @@
                             </ext:TextArea>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel9" runat="server" Border="false" Header="false" Layout="FormLayout" >
+                    <ext:Panel ID="Panel9" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
                             <ext:ComboBox ID="cbProgramme" runat="server" StoreID="ProgrammeStore" Editable="true"
                                 BlankText="Programme is required" MsgTarget="Side" DisplayField="Name" ValueField="Id"
@@ -295,7 +293,7 @@
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="FormLayout" >
+                    <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
                             <ext:TextField ID="tfUrl" DataIndex="Url" MaxLength="150" runat="server" ClientIDMode="Static"
                                 FieldLabel="Url" AnchorHorizontal="96%">
@@ -304,17 +302,19 @@
                     </ext:Panel>
                     <ext:Container ID="Container1" runat="server" Layout="ColumnLayout" Height="50">
                         <Items>
-                            <ext:Container ID="Container3" runat="server"  Layout="Form" ColumnWidth=".48">
+                            <ext:Container ID="Container3" runat="server" Layout="Form" ColumnWidth=".48">
                                 <Items>
                                     <ext:DateField ID="dfStartDate" DataIndex="StartDate" runat="server" FieldLabel="Start Date" AnchorHorizontal="98%"
-                                        BlankText="Start Date is required." Format="dd MMM yyyy" ClientIDMode="Static">
+                                        BlankText="Start Date is required." Format="dd MMM yyyy" ClientIDMode="Static" IsRemoteValidation="true">
+                                        <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                                     </ext:DateField>
                                 </Items>
                             </ext:Container>
-                            <ext:Container ID="Container5" runat="server"  Layout="Form" ColumnWidth=".48">
+                            <ext:Container ID="Container5" runat="server" Layout="Form" ColumnWidth=".48">
                                 <Items>
                                     <ext:DateField ID="dfEndDate" DataIndex="EndDate" runat="server" FieldLabel="End Date" AnchorHorizontal="100%"
-                                        BlankText="End Date is required." Format="dd MMM yyyy" ClientIDMode="Static">
+                                        BlankText="End Date is required." Format="dd MMM yyyy" ClientIDMode="Static" IsRemoteValidation="true">
+                                        <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                                     </ext:DateField>
                                 </Items>
                             </ext:Container>
@@ -348,7 +348,7 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="StationLinkWindow" runat="server" Width="450" Height="260" Closable="true" Hidden="true" Collapsible="false" Title="Link Station" LabelAlign="Top" 
+    <ext:Window ID="StationLinkWindow" runat="server" Width="450" Height="260" Closable="true" Hidden="true" Collapsible="false" Title="Link Station" LabelAlign="Top"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
             <Hide Fn="ClearStationLinkForm" />
@@ -361,8 +361,7 @@
                 <Items>
                     <ext:Hidden ID="ProjectStationLinkID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
-                    <ext:Panel ID="Panel8" runat="server" Border="false" Header="false" Layout="FormLayout"
-                        >
+                    <ext:Panel ID="Panel8" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
                             <ext:Parameter Name="blankText" Value="Station is a required" Mode="Value" />
@@ -382,7 +381,7 @@
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel12" runat="server" Border="false" Header="false" Layout="FormLayout" >
+                    <ext:Panel ID="Panel12" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
                             <ext:Parameter Name="blankText" Value="Start Date is required" Mode="Value" />
@@ -390,11 +389,12 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfStationStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="96%" Format="dd MMM yyyy" IsRemoteValidation="true">
+                                <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel13" runat="server" Border="false" Header="false" Layout="FormLayout" >
+                    <ext:Panel ID="Panel13" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
                             <ext:Parameter Name="blankText" Value="End Date is required" Mode="Value" />
@@ -402,7 +402,8 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfStationEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="End Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="96%" Format="dd MMM yyyy" IsRemoteValidation="true">
+                                <RemoteValidation OnValidation="ValidateField" ValidationEvent="blur" />
                             </ext:DateField>
                         </Items>
                     </ext:Panel>

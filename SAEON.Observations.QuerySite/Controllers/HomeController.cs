@@ -19,20 +19,20 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             if (model is null) throw new ArgumentNullException(nameof(model));
             model.Clear();
-            var homeDashboard = (await GetListAsync<HomeDashboard>("Internal/HomeDashboard")).First();
-            model.Organisations = homeDashboard.Organisations;
-            model.Programmes = homeDashboard.Programmes;
-            model.Projects = homeDashboard.Projects;
-            model.Sites = homeDashboard.Sites;
-            model.Stations = homeDashboard.Stations;
-            model.Instruments = homeDashboard.Instruments;
-            model.Sensors = homeDashboard.Sensors;
-            model.Phenomena = homeDashboard.Phenomena;
-            model.Offerings = homeDashboard.Offerings;
-            model.UnitsOfMeasure = homeDashboard.UnitsOfMeasure;
-            model.Variables = homeDashboard.Variables;
-            model.Datasets = homeDashboard.Datasets;
-            model.Observations = homeDashboard.Observations;
+            var inventorySample = (await GetListAsync<InventorySnapshot>("Internal/InventorySnapshots")).First();
+            model.Organisations = inventorySample.Organisations;
+            model.Programmes = inventorySample.Programmes;
+            model.Projects = inventorySample.Projects;
+            model.Sites = inventorySample.Sites;
+            model.Stations = inventorySample.Stations;
+            model.Instruments = inventorySample.Instruments;
+            model.Sensors = inventorySample.Sensors;
+            model.Phenomena = inventorySample.Phenomena;
+            model.Offerings = inventorySample.Offerings;
+            model.UnitsOfMeasure = inventorySample.UnitsOfMeasure;
+            model.Variables = inventorySample.Variables;
+            model.Datasets = inventorySample.Datasets;
+            model.Observations = inventorySample.Observations;
             var locationNodes = await GetListAsync<LocationTreeNode>("Internal/Locations");
             var mapPoints = locationNodes.Where(i => i.Key.StartsWith("STA~")).Select(
                 loc => new MapPoint { Key = loc.Key, Title = loc.Name, Latitude = loc.Latitude.Value, Longitude = loc.Longitude.Value, Elevation = loc.Elevation, Url = loc.Url });

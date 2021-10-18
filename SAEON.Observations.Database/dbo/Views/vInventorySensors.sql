@@ -15,7 +15,12 @@ Select
   PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription, PhenomenonUrl,
   PhenomenonOfferingID, OfferingCode, OfferingName, OfferingDescription,
   PhenomenonUOMID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
-  Sum(Count) Count, Min(StartDate) StartDate, Max(EndDate) EndDate,
+  Sum(Count) Count, 
+  Sum(ValueCount) ValueCount,
+  Sum(NullCount) NullCount,
+  Sum(VerifiedCount) VerifiedCount,
+  Sum(UnverifiedCount) UnverifiedCount,
+  Min(StartDate) StartDate, Max(EndDate) EndDate,
   Max(LatitudeNorth) LatitudeNorth, Min(LatitudeSouth) LatitudeSouth,
   Min(LongitudeWest) LongitudeWest, Max(LongitudeEast) LongitudeEast
 from

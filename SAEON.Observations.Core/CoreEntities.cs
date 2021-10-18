@@ -1037,6 +1037,11 @@ namespace SAEON.Observations.Core
         //public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
     }
 
+    public class UserDownloadPatch : NamedEntity
+    {
+        public new string UserId { get; set; }
+    }
+
     /// <summary>
     /// UserQuery entity
     /// </summary>
@@ -1080,8 +1085,16 @@ namespace SAEON.Observations.Core
         public DateTime? UpdatedAt { get; set; }
     }
 
-    public class HomeDashboard : BaseEntity
+    public class UserQueryPatch : NamedEntity
     {
+        public new string UserId { get; set; }
+        [StringLength(5000)]
+        public string Description { get; set; }
+    }
+
+    public class InventorySnapshot : GuidIdEntity
+    {
+        public DateTime When { get; set; }
         public int Organisations { get; set; }
         public int Programmes { get; set; }
         public int Projects { get; set; }

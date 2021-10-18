@@ -12,6 +12,7 @@
             .AllowPaging()
             .PageSettings(p => p.PageSize(25))
             .AllowSorting()
+            .AllowResizing()
             .AllowFiltering()
             .FilterSettings(filter => { filter.FilterType(FilterType.Excel); })
             .Columns(col =>
@@ -24,7 +25,7 @@
                 col.Field("PhenomenonName").HeaderText("Phenomenon").Add();
                 col.Field("OfferingName").HeaderText("Offering").Add();
                 col.Field("UnitName").HeaderText("Unit").Add();
-                col.Field("Count").Format("{0:n0}").HeaderText("Count").TextAlign(TextAlign.Right).Add();
+                col.Field("VerifiedCount").Format("{0:n0}").HeaderText("Count").TextAlign(TextAlign.Right).Add();
                 col.Field("StartDate").Format("{0:dd MMM yyyy}").HeaderText("Start").Add();
                 col.Field("EndDate").Format("{0:dd MMM yyyy}").HeaderText("End").Add();
             })

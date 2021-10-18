@@ -41,7 +41,7 @@ namespace SAEON.Observations.QuerySite
             {
                 try
                 {
-                    var tenant = ConfigurationManager.AppSettings[Constants.ConfigKeyDefaultTenant] ?? "Fynbos";
+                    var tenant = ConfigurationManager.AppSettings[Constants.ConfigKeyDefaultTenant] ?? "SAEON";
                     SAEONLogs.Verbose("Starting Session, Tenant: {Tenant}", tenant);
                     Session[Constants.SessionKeyTenant] = tenant;
                 }

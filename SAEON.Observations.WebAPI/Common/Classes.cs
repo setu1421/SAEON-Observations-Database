@@ -1,6 +1,5 @@
 ﻿namespace SAEON.Observations.WebAPI
 {
-
     #region SpacialCoverage
     /*
     public class SpacialCoverageInput : DataQueryInput { }

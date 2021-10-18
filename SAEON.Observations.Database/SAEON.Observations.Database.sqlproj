@@ -531,7 +531,9 @@
     <Build Include="dbo\Views\vStationDatasets.sql" />
     <Build Include="dbo\Views\vStationObservations.sql" />
     <Build Include="dbo\Views\vInventoryDatasets.sql" />
-    <Build Include="dbo\Views\vHomeDashboard.sql" />
+    <Build Include="dbo\Stored Procedures\spCreateInventorySnapshot.sql" />
+    <Build Include="dbo\Tables\InventorySnapshots.sql" />
+    <Build Include="dbo\Stored Procedures\spCreateImportBatchSummaries.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

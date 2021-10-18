@@ -66,6 +66,70 @@ public partial class Admin_Stations : System.Web.UI.Page
                 e.ErrorMessage = errorMessage;
             }
         }
+        if (e.ID == "dfStartDate" && dfStartDate.HasValue() && dfEndDate.HasValue())
+        {
+            if (dfStartDate.SelectedDate > dfEndDate.SelectedDate)
+            {
+                e.Success = false;
+                e.ErrorMessage = "Start Date must be before End Date";
+            }
+        }
+        if (e.ID == "dfEndDate" && dfStartDate.HasValue() && dfEndDate.HasValue())
+        {
+            if (dfStartDate.SelectedDate > dfEndDate.SelectedDate)
+            {
+                e.Success = false;
+                e.ErrorMessage = "End Date must be after Start Date";
+            }
+        }
+        if (e.ID == "dfOrganisationStartDate" && dfOrganisationStartDate.HasValue() && dfOrganisationEndDate.HasValue())
+        {
+            if (dfOrganisationStartDate.SelectedDate > dfOrganisationEndDate.SelectedDate)
+            {
+                e.Success = false;
+                e.ErrorMessage = "Start Date must be before End Date";
+            }
+        }
+        if (e.ID == "dfOrganisationEndDate" && dfOrganisationStartDate.HasValue() && dfOrganisationEndDate.HasValue())
+        {
+            if (dfOrganisationStartDate.SelectedDate > dfOrganisationEndDate.SelectedDate)
+            {
+                e.Success = false;
+                e.ErrorMessage = "End Date must be after Start Date";
+            }
+        }
+        if (e.ID == "dfProjectStartDate" && dfProjectStartDate.HasValue() && dfProjectEndDate.HasValue())
+        {
+            if (dfProjectStartDate.SelectedDate > dfProjectEndDate.SelectedDate)
+            {
+                e.Success = false;
+                e.ErrorMessage = "Start Date must be before End Date";
+            }
+        }
+        if (e.ID == "dfProjectEndDate" && dfProjectStartDate.HasValue() && dfProjectEndDate.HasValue())
+        {
+            if (dfProjectStartDate.SelectedDate > dfProjectEndDate.SelectedDate)
+            {
+                e.Success = false;
+                e.ErrorMessage = "End Date must be after Start Date";
+            }
+        }
+        if (e.ID == "dfInstrumentStartDate" && dfInstrumentStartDate.HasValue() && dfInstrumentEndDate.HasValue())
+        {
+            if (dfInstrumentStartDate.SelectedDate > dfInstrumentEndDate.SelectedDate)
+            {
+                e.Success = false;
+                e.ErrorMessage = "Start Date must be before End Date";
+            }
+        }
+        if (e.ID == "dfInstrumentEndDate" && dfInstrumentStartDate.HasValue() && dfInstrumentEndDate.HasValue())
+        {
+            if (dfInstrumentStartDate.SelectedDate > dfInstrumentEndDate.SelectedDate)
+            {
+                e.Success = false;
+                e.ErrorMessage = "End Date must be after Start Date";
+            }
+        }
     }
     protected void Save(object sender, DirectEventArgs e)
     {

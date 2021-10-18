@@ -17,19 +17,31 @@ namespace SAEON.Observations.Service
 {
     public class Worker : BackgroundService
     {
-        private DateTime lastRun = DateTime.MinValue;
+        private DateTime lastRun = DateTime.Now.Date;
         private readonly IConfiguration config;
         private readonly HubConnection adminHubConnection;
 
         public Worker(IConfiguration config)
         {
-            this.config = config;
-            adminHubConnection = new HubConnectionBuilder()
-                .WithUrl(this.config["WebAPIUrl"].AddTrailingForwardSlash() + "AdminHub")
-                .Build();
-            adminHubConnection.On<string>(SignalRDefaults.CreateDOIsStatusUpdate, CreateDOIsStatusUpdate);
-            adminHubConnection.On<string>(SignalRDefaults.CreateMetadataStatusUpdate, CreateMetadataStatusUpdate);
-            adminHubConnection.On<string>(SignalRDefaults.CreateODPMetadataStatusUpdate, CreateODPMetadataStatusUpdate);
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    SAEONLogs.Information("Starting worker");
+                    this.config = config;
+                    adminHubConnection = new HubConnectionBuilder()
+                        .WithUrl(config["WebAPIUrl"].AddTrailingForwardSlash() + "AdminHub")
+                        .Build();
+                    adminHubConnection.On<string>(SignalRDefaults.CreateDOIsStatusUpdate, CreateDOIsStatusUpdate);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateMetadataStatusUpdate, CreateMetadataStatusUpdate);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateODPMetadataStatusUpdate, CreateODPMetadataStatusUpdate);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
         }
 
         private void CreateDOIsStatusUpdate(string status)
@@ -104,11 +116,25 @@ namespace SAEON.Observations.Service
                         var currentTime = DateTime.Now;
                         var elapsedMinutes = (currentTime - lastRun).TotalMinutes;
                         //SAEONLogs.Verbose("Last: {Last} Current: {Current} Elapsed: {ElapsedMinutes}", lastRun, currentTime, elapsedMinutes);
-                        if (elapsedMinutes >= Convert.ToInt32(config["RunEveryMins"] ?? "5"))
+                        var runEveryMins = Convert.ToInt32(config["RunEveryMins"] ?? "5");
+                        if (elapsedMinutes >= runEveryMins)
                         {
                             SAEONLogs.Information("Worker running at: {time}", currentTime);
-                            lastRun = currentTime.Date.AddHours(currentTime.Hour).AddMinutes(currentTime.Minute);
-                            await UpdateODP();
+                            var newDay = (currentTime.Date != lastRun.Date);
+                            var newHour = (currentTime.Hour != lastRun.Hour) || newDay;
+                            if (newHour)
+                            {
+                                SAEONLogs.Information("New Hour: {Hour}", currentTime.Hour);
+                                await CreateSnapshots();
+                            }
+                            if (newDay)
+                            {
+                                SAEONLogs.Information("New Day: {Date}", currentTime.Date);
+                                await CreateImportBatchSummaries();
+                                //await UpdateODP();
+                            }
+                            var minute = (int)(Math.Floor(currentTime.Minute * 1.0 / runEveryMins) * runEveryMins);
+                            lastRun = currentTime.Date.AddHours(currentTime.Hour).AddMinutes(minute);
                         }
                         await Task.Delay(1000 * Convert.ToInt32(config["DelaySecs"] ?? "15"), cancellationToken);
                     }
@@ -117,6 +143,63 @@ namespace SAEON.Observations.Service
                 {
                     SAEONLogs.Exception(ex);
                     throw;
+                }
+            }
+
+            async Task CreateSnapshots()
+            {
+                try
+                {
+                    var stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    using (var client = await GetWebAPIClientAsync(cancellationToken))
+                    {
+                        SAEONLogs.Information("Creating snapshots");
+                        var response = await client.PostAsync("Internal/Admin/CreateSnapshots", null, cancellationToken);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                            SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync(cancellationToken));
+                        }
+                        response.EnsureSuccessStatusCode();
+                        var result = await response.Content.ReadAsStringAsync(cancellationToken);
+                        SAEONLogs.Verbose("Snapshots: {Result}", result);
+                        stopWatch.Stop();
+                        SAEONLogs.Information("Done: {Elapsed}", stopWatch.Elapsed.TimeStr());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                }
+            }
+
+
+            async Task CreateImportBatchSummaries()
+            {
+                try
+                {
+                    var stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    using (var client = await GetWebAPIClientAsync(cancellationToken))
+                    {
+                        SAEONLogs.Information("Creating ImportBatchSummaries");
+                        var response = await client.PostAsync("Internal/Admin/CreateImportBatchSummaries", null, cancellationToken);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                            SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync(cancellationToken));
+                        }
+                        response.EnsureSuccessStatusCode();
+                        var result = await response.Content.ReadAsStringAsync(cancellationToken);
+                        //SAEONLogs.Verbose("Snapshots: {Result}", result);
+                        stopWatch.Stop();
+                        SAEONLogs.Information("Done: {Elapsed}", stopWatch.Elapsed.TimeStr());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
                 }
             }
 

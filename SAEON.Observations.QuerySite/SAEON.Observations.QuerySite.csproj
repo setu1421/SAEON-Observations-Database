@@ -167,38 +167,38 @@
     <Reference Include="Serilog.Sinks.Seq, Version=5.0.1.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.Seq.5.0.1\lib\net45\Serilog.Sinks.Seq.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Compression.Base, Version=19.2450.0.59, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.19.2.0.59\lib\net45\Syncfusion.Compression.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Compression.Base, Version=19.2450.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.19.2.0.62\lib\net45\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.DocIO.Base, Version=19.2450.0.59, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.DocIO.AspNet.Mvc5.19.2.0.59\lib\net45\Syncfusion.DocIO.Base.dll</HintPath>
+    <Reference Include="Syncfusion.DocIO.Base, Version=19.2450.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.DocIO.AspNet.Mvc5.19.2.0.62\lib\net45\Syncfusion.DocIO.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.EJ, Version=19.2450.0.59, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.19.2.0.59\lib\net45\Syncfusion.EJ.dll</HintPath>
+    <Reference Include="Syncfusion.EJ, Version=19.2450.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.19.2.0.62\lib\net45\Syncfusion.EJ.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.EJ.Export, Version=19.2450.0.59, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.19.2.0.59\lib\net45\Syncfusion.EJ.Export.dll</HintPath>
+    <Reference Include="Syncfusion.EJ.Export, Version=19.2450.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.19.2.0.62\lib\net45\Syncfusion.EJ.Export.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.EJ.MVC, Version=19.2500.0.59, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.19.2.0.59\lib\net45\Syncfusion.EJ.MVC.dll</HintPath>
+    <Reference Include="Syncfusion.EJ.MVC, Version=19.2500.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.19.2.0.62\lib\net45\Syncfusion.EJ.MVC.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Licensing, Version=19.2450.0.59, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.XlsIO.AspNet.Mvc5.19.2.0.59\lib\net45\Syncfusion.Licensing.dll</HintPath>
+    <Reference Include="Syncfusion.Licensing, Version=19.2450.0.62, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.XlsIO.AspNet.Mvc5.19.2.0.62\lib\net45\Syncfusion.Licensing.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Linq.Base, Version=19.2450.0.59, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.19.2.0.59\lib\net45\Syncfusion.Linq.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Linq.Base, Version=19.2450.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.19.2.0.62\lib\net45\Syncfusion.Linq.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.OfficeChart.Base, Version=19.2450.0.59, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.19.2.0.59\lib\net45\Syncfusion.OfficeChart.Base.dll</HintPath>
+    <Reference Include="Syncfusion.OfficeChart.Base, Version=19.2450.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.19.2.0.62\lib\net45\Syncfusion.OfficeChart.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Pdf.Base, Version=19.2450.0.59, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Pdf.AspNet.Mvc5.19.2.0.59\lib\net45\Syncfusion.Pdf.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Pdf.Base, Version=19.2450.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Pdf.AspNet.Mvc5.19.2.0.62\lib\net45\Syncfusion.Pdf.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Presentation.Base, Version=19.2450.0.59, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Presentation.AspNet.Mvc5.19.2.0.59\lib\net45\Syncfusion.Presentation.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Presentation.Base, Version=19.2450.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Presentation.AspNet.Mvc5.19.2.0.62\lib\net45\Syncfusion.Presentation.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.XlsIO.Base, Version=19.2450.0.59, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.XlsIO.AspNet.Mvc5.19.2.0.59\lib\net45\Syncfusion.XlsIO.Base.dll</HintPath>
+    <Reference Include="Syncfusion.XlsIO.Base, Version=19.2450.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.XlsIO.AspNet.Mvc5.19.2.0.62\lib\net45\Syncfusion.XlsIO.Base.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -761,6 +761,10 @@
       <DependentUpon>Admin.js</DependentUpon>
     </Content>
     <Content Include="Scripts\CustomValidation.js" />
+    <Content Include="Scripts\DataWizard.js" />
+    <Content Include="Scripts\DataWizard.min.js">
+      <DependentUpon>DataWizard.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\ej\common\ej.core.min.js" />
     <Content Include="Scripts\ej\common\ej.data.min.js" />
     <Content Include="Scripts\ej\common\ej.draggable.min.js" />
@@ -897,10 +901,6 @@
     <Content Include="Scripts\ej\web\ej.uploadbox.min.js" />
     <Content Include="Scripts\ej\web\ej.waitingpopup.min.js" />
     <Content Include="Scripts\ej\web\ej.web.all.min.js" />
-    <Content Include="Scripts\DataWizard.js" />
-    <Content Include="Scripts\DataWizard.min.js">
-      <DependentUpon>DataWizard.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\Home.js" />
     <Content Include="Scripts\Home.min.js">
       <DependentUpon>Home.js</DependentUpon>

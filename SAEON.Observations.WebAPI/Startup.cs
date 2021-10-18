@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -21,6 +22,7 @@ using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -60,7 +62,6 @@ namespace SAEON.Observations.WebAPI
 #if ResponseCaching
                     services.AddResponseCaching();
 #endif
-                    services.AddAutoMapper(typeof(Startup));
                     services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                         .AddCookie();
                     services
@@ -104,6 +105,33 @@ namespace SAEON.Observations.WebAPI
                         });
                         options.IncludeXmlComments("SAEON.Observations.WebAPI.xml");
                         options.SchemaFilter<SwaggerIgnoreFilter>();
+                        options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                        {
+                            Type = SecuritySchemeType.OAuth2,
+                            Flows = new OpenApiOAuthFlows
+                            {
+                                AuthorizationCode = new OpenApiOAuthFlow
+                                {
+                                    //AuthorizationUrl = new Uri(Configuration["AuthenticationServerUrl"]),
+                                    TokenUrl = new Uri(Configuration["AuthenticationServerUrl"] + "/oauth2/token"),
+                                    Scopes = new Dictionary<string, string>
+                                    {
+                                        //    //{"openid", "Demo API - full access"},
+                                        {"SAEON.Observations.WebAPI","Swagger" }
+                                    }
+                                }
+                            }
+                        });
+                        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                        {
+                            {
+                                new OpenApiSecurityScheme
+                                {
+                                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+                                },
+                                new[] { "SAEON.Observations.WebAPI"}
+                            }
+                        });
                         //options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                         //{
                         //    Name = "Authorization",
@@ -129,6 +157,10 @@ namespace SAEON.Observations.WebAPI
                         //});
                     });
                     services.AddSignalR();
+                    services.Configure<ApiBehaviorOptions>(options =>
+                    {
+                        options.SuppressModelStateInvalidFilter = true;
+                    });
                     services.AddControllers();
                     services.AddControllersWithViews();
                     services.AddOData();
@@ -224,6 +256,9 @@ namespace SAEON.Observations.WebAPI
                     app.UseSwaggerUI(options =>
                     {
                         options.SwaggerEndpoint("/swagger/v1/swagger.json", "SAEON.Observations.WebAPI");
+                        options.OAuthClientId(Configuration["SwaggerClientId"]);
+                        options.OAuthClientSecret(Configuration["SwaggerClientSecret"]);
+                        options.OAuthUseBasicAuthenticationWithAccessCodeGrant();
                     });
 
                     app.UseEndpoints(endpoints =>

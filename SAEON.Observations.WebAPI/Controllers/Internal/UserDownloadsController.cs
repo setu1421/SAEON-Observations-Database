@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
-    public class UserDownloadsController : InternalWriteController<UserDownload>
+    public class UserDownloadsController : InternalWriteController<UserDownload, UserDownloadPatch>
     {
         protected override List<Expression<Func<UserDownload, object>>> GetIncludes()
         {
@@ -46,6 +46,16 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             return (isPost || (item.UserId == userId));
         }
 
+        protected override bool IsEntityPatchOk(UserDownloadPatch item)
+        {
+            var userId = User.UserId();
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new NullReferenceException("Not logged in");
+            }
+            return (item.UserId == userId);
+        }
+
         protected override void SetEntity(ref UserDownload item, bool isPost)
         {
             if (isPost && (item.Id == Guid.Empty))
@@ -68,16 +78,24 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             item.UpdatedAt = now;
         }
 
-        protected override void UpdateEntity(ref UserDownload item, UserDownload delta)
+        protected override void UpdateEntity(ref UserDownload item, UserDownload newItem)
         {
-            if (!string.IsNullOrEmpty(item.Name)) item.Name = delta.Name;
-            // No longer editable
-            //if (!string.IsNullOrEmpty(item.Description)) item.Description = delta.Description;
+            if (!string.IsNullOrEmpty(newItem.Name)) item.Name = newItem.Name;
         }
 
-        public override Task<ActionResult> PutById(Guid id, [FromBody, Bind("Id", "Name", "Description", "UserId")] UserDownload delta)
+        protected override void PatchEntity(ref UserDownload item, UserDownloadPatch patchItem)
         {
-            return base.PutById(id, delta);
+            if (!string.IsNullOrEmpty(patchItem.Name)) item.Name = patchItem.Name;
+        }
+
+        public override Task<ActionResult> PutById(Guid id, [FromBody, Bind("Id", "Name", "UserId")] UserDownload updateItem)
+        {
+            return base.PutById(id, updateItem);
+        }
+
+        public override Task<ActionResult> PatchById(Guid id, [FromBody, Bind("Id", "Name", "UserId")] UserDownloadPatch patchItem)
+        {
+            return base.PatchById(id, patchItem);
         }
     }
 }

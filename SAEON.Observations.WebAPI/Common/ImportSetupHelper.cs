@@ -51,7 +51,6 @@ namespace SAEON.Observations.WebAPI
                                     await AddLineAsync($"Updating Organisation {OrganisationCode}, {OrganisationName}");
                                     Organisation.Name = OrganisationName;
                                     Organisation.Description = GetString(OrganisationsList, rOrganisation, 2);
-                                    Organisation.Url = GetString(OrganisationsData, rOrganisation, 3);
                                     dbContext.SaveChanges();
                                 }
                             else
@@ -385,6 +384,7 @@ namespace SAEON.Observations.WebAPI
                             if (string.IsNullOrWhiteSpace(dataSourceCode)) continue;
                             var dataSourceName = GetString(dataSourcesList, rInstrument, 1);
                             var dataSource = await dbContext.DataSources.FirstOrDefaultAsync(i => i.Code == dataSourceCode);
+                            var dataSchemaCode = GetString(dataSchemasList, rInstrument, 0);
                             if (dataSource is not null)
                                 if (!UpdateData)
                                 {
@@ -393,7 +393,6 @@ namespace SAEON.Observations.WebAPI
                                 else
                                 {
                                     await AddLineAsync($"Updating DataSource {dataSourceCode}, {dataSourceName}");
-                                    var dataSchemaCode = dataSourceName;
                                     dataSource.Name = GetString(dataSourcesList, rInstrument, 1);
                                     dataSource.Description = GetString(dataSourcesList, rInstrument, 2);
                                     dataSource.DataSchemaId = (await dbContext.DataSchemas.FirstAsync(i => i.Code == dataSchemaCode)).Id;
@@ -405,7 +404,6 @@ namespace SAEON.Observations.WebAPI
                             else
                             {
                                 await AddLineAsync($"Adding DataSource {dataSourceCode}, {dataSourceName}");
-                                var dataSchemaCode = GetString(dataSchemasList, rInstrument, 0);
                                 dataSource = new DataSource
                                 {
                                     Code = dataSourceCode,

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SAEON.Core;
@@ -41,6 +42,10 @@ namespace SAEON.Observations.Service
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostContext, config) =>
+                {
+                    config.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
+                })
                 .UseSAEONLogs()
                 .ConfigureServices((hostContext, services) =>
                 {
