@@ -28,7 +28,7 @@ namespace SAEON.Observations.WebAPI
             return result;
         }
 
-        public static async Task<string> CreateMetadataV2(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, bool isTest)
+        public static async Task<string> CreateMetadataV2(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub)
         {
             using (SAEONLogs.MethodCall(typeof(MetadataHelper)))
             {
@@ -64,6 +64,7 @@ namespace SAEON.Observations.WebAPI
                         byte[] oldSha256;
                         foreach (var doiDataset in await dbContext.DigitalObjectIdentifiers.Where(i => i.DOIType == DOIType.Dataset).ToListAsync())
                         {
+                            doiDataset.SetUrls();
                             var splits = doiDataset.Code.Split('~', StringSplitOptions.RemoveEmptyEntries);
                             var dataset = await dbContext.Datasets.Where(i =>
                                 i.StationCode == splits[0] &&
@@ -109,7 +110,6 @@ namespace SAEON.Observations.WebAPI
                             doiDataset.DescriptionHtml = metaDataset.DescriptionHtml;
                             doiDataset.Citation = metaDataset.Citation;
                             doiDataset.CitationHtml = metaDataset.CitationHtml;
-                            doiDataset.SetUrls(isTest);
                             doiDataset.MetadataJson = metaDataset.ToJson();
                             oldSha256 = doiDataset.MetadataJsonSha256;
                             doiDataset.MetadataJsonSha256 = doiDataset.MetadataJson.Sha256();

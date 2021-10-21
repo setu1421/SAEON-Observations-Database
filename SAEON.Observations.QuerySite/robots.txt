@@ -4,4 +4,4 @@ Allow: /
 Disallow: /Admin/
 Disallow: /Account/
 
-Sitemap: https://observations-test.saeon.ac.za/sitemap.xml
+Sitemap: https://observations.saeon.ac.za/sitemap.xml

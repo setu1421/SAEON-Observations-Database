@@ -34,7 +34,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await DOIHelper.CreateDOIsV2(DbContext, AdminHub, HttpContext, AnalyticsHelper.IsTest(Request)));
+                    return Content(await DOIHelper.CreateDOIsV2(DbContext, AdminHub, HttpContext/*, AnalyticsHelper.IsTest(Request)*/));
                 }
                 catch (Exception ex)
                 {
@@ -52,7 +52,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await MetadataHelper.CreateMetadataV2(DbContext, AdminHub, AnalyticsHelper.IsTest(Request)));
+                    return Content(await MetadataHelper.CreateMetadataV2(DbContext, AdminHub/*, AnalyticsHelper.IsTest(Request)*/));
                 }
                 catch (Exception ex)
                 {
@@ -91,10 +91,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     var sb = new StringBuilder();
                     SAEONLogs.Information("CreateDOIs");
                     sb.AppendLine("CreateDOIs");
-                    sb.AppendLine(await DOIHelper.CreateDOIsV2(DbContext, AdminHub, HttpContext, AnalyticsHelper.IsTest(Request)));
+                    sb.AppendLine(await DOIHelper.CreateDOIsV2(DbContext, AdminHub, HttpContext/*, AnalyticsHelper.IsTest(Request)*/));
                     SAEONLogs.Information("CreateMetadata");
                     sb.AppendLine("CreateMetadata");
-                    sb.AppendLine(await MetadataHelper.CreateMetadataV2(DbContext, AdminHub, AnalyticsHelper.IsTest(Request)));
+                    sb.AppendLine(await MetadataHelper.CreateMetadataV2(DbContext, AdminHub/*, AnalyticsHelper.IsTest(Request)*/));
                     SAEONLogs.Information("CreateODPMetadata");
                     sb.AppendLine("CreateODPMetadata");
                     sb.AppendLine(await ODPMetadataHelper.CreateMetadata(DbContext, AdminHub, Config));

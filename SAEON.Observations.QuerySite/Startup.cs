@@ -31,7 +31,7 @@ namespace SAEON.Observations.QuerySite
                 try
                 {
                     SAEONLogs.Verbose("AuthenticationServer: {AuthenticationServer}", ConfigurationManager.AppSettings["AuthenticationServerUrl"]);
-                    SyncfusionLicenseProvider.RegisterLicense("NDczOTQ5QDMxMzkyZTMyMmUzME1LdUlFQWJPZWNkN3NuOUNzeVZPVUVOWU5pNFVEalBHV0VsODh0eWtkQ289;NDczOTUwQDMxMzkyZTMyMmUzMEJoOUpDMzloVDFHOWgvdHJOTjY2U3JidWRxM21xclBSaUQyTk02MlNpMTQ9;NDczOTUxQDMxMzkyZTMyMmUzMFU4cHdXUUJtVU5NZGsvVnNBZHUvOVZ1RU9ycmlwRHFnTXlDbFBLVFY3QXM9;NDczOTUyQDMxMzkyZTMyMmUzMGk4czFUdFh0bHQ2cEMxYlNFcUZkbTg1c1JrV25DT1lVTUlkaWxQNk1UcDA9");
+                    SyncfusionLicenseProvider.RegisterLicense("NTIwNzMxQDMxMzkyZTMzMmUzMFJqb2lQcHZPd3hXVjljVElZQlYwZVNwU2E2d1BtTUVuV3JBbEdBS1BzczQ9;NTIwNzMyQDMxMzkyZTMzMmUzMEd6VzkzMS96d0pBWThHblA0N3MzNGJiL01LY2hxOU5kMkVueHFjWVZJQXc9");
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.AntiForgeryClaim;
                     //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
