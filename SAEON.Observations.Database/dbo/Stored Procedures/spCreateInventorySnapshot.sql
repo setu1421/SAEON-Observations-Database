@@ -27,7 +27,7 @@ BEGIN
 	  (LongitudeEast is not null) and (LongitudeWest is not null)
 	)
 	Insert into InventorySnapshots
-	  (Organisations, Programmes, Projects, Sites, Stations, Instruments, Sensors, Phenomena, Offerings, UnitsOfMeasure, Variables, Datasets, Observations)
+	  (Organisations, Programmes, Projects, Sites, Stations, Instruments, Sensors, Phenomena, Offerings, UnitsOfMeasure, Variables, Datasets, Observations, Downloads)
 	Select 
 	  (Select Count(distinct OrganisationCode) from VerifiedDatasets) Organisations,
 	  (Select Count(distinct ProgrammeCode) from VerifiedDatasets) Programmes,
@@ -41,6 +41,7 @@ BEGIN
 	  (Select Count(distinct UnitOfMeasureCode) from VerifiedDatasets) UnitsOfMeasure,
 	  (Select Count(*) from vVariables) Variables,
 	  (Select Count(*) from VerifiedDatasets) Datasets,
-	  (Select Sum(VerifiedCount) from VerifiedImportBatchSummaries) Observations;
+	  (Select Sum(VerifiedCount) from VerifiedImportBatchSummaries) Observations,
+	  (Select Count(*) from UserDownloads) Downloads;
 	Select top(1) * from InventorySnapshots order by [When] Desc
 END
