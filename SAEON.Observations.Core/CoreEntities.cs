@@ -1108,6 +1108,7 @@ namespace SAEON.Observations.Core
         public int Variables { get; set; }
         public int Datasets { get; set; }
         public int Observations { get; set; }
+        public int Downloads { get; set; }
     }
 
 }
