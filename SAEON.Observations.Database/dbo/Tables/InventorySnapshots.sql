@@ -15,6 +15,9 @@
     [Variables] INT NOT NULL, 
     [Datasets] INT NOT NULL, 
     [Observations] INT NOT NULL,
+    [Downloads] INT NOT NULL, 
     CONSTRAINT [PK_InventorySnapshots] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_InventorySnapshots_ID_When] UNIQUE ([ID],[When]),
 )
+GO
+CREATE INDEX [IX_InventorySnapshots_When] ON [dbo].[InventorySnapshots] ([When])

@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://observationsapi-test.saeon.ac.za/sitemap.xml
+Sitemap: https://observationsapi.saeon.ac.za/sitemap.xml

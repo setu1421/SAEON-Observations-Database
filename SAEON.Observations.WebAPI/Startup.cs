@@ -105,6 +105,7 @@ namespace SAEON.Observations.WebAPI
                         });
                         options.IncludeXmlComments("SAEON.Observations.WebAPI.xml");
                         options.SchemaFilter<SwaggerIgnoreFilter>();
+
                         options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                         {
                             Type = SecuritySchemeType.OAuth2,
@@ -112,14 +113,21 @@ namespace SAEON.Observations.WebAPI
                             {
                                 AuthorizationCode = new OpenApiOAuthFlow
                                 {
-                                    //AuthorizationUrl = new Uri(Configuration["AuthenticationServerUrl"]),
-                                    TokenUrl = new Uri(Configuration["AuthenticationServerUrl"] + "/oauth2/token"),
+                                    AuthorizationUrl = new Uri(Configuration["AuthenticationServerUrl"].AddTrailingForwardSlash() + "oauth2/auth"),
+                                    TokenUrl = new Uri(Configuration["AuthenticationServerUrl"].AddTrailingForwardSlash() + "oauth2/token"),
                                     Scopes = new Dictionary<string, string>
                                     {
-                                        //    //{"openid", "Demo API - full access"},
-                                        {"SAEON.Observations.WebAPI","Swagger" }
+                                        {"SAEON.Observations.WebAPI","" }
                                     }
-                                }
+                                },
+                                ClientCredentials = new OpenApiOAuthFlow
+                                {
+                                    TokenUrl = new Uri(Configuration["AuthenticationServerUrl"].AddTrailingForwardSlash() + "oauth2/token"),
+                                    Scopes = new Dictionary<string, string>
+                                    {
+                                        {"SAEON.Observations.WebAPI","" }
+                                    }
+                                },
                             }
                         });
                         options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -127,34 +135,11 @@ namespace SAEON.Observations.WebAPI
                             {
                                 new OpenApiSecurityScheme
                                 {
-                                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+                                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" },
                                 },
                                 new[] { "SAEON.Observations.WebAPI"}
                             }
                         });
-                        //options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-                        //{
-                        //    Name = "Authorization",
-                        //    Type = SecuritySchemeType.ApiKey,
-                        //    Scheme = "Bearer",
-                        //    In = ParameterLocation.Header,
-                        //    Description = "Authorization header using the Bearer scheme. \r\n\r\n Enter 'bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"bearer 12345abcdef\"",
-                        //});
-                        //options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                        //{
-                        //    {
-                        //          new OpenApiSecurityScheme
-                        //            {
-                        //                Reference = new OpenApiReference
-                        //                {
-                        //                    Type = ReferenceType.SecurityScheme,
-                        //                    Id = "Bearer"
-                        //                }
-                        //            },
-                        //            new string[] {}
-
-                        //    }
-                        //});
                     });
                     services.AddSignalR();
                     services.Configure<ApiBehaviorOptions>(options =>
@@ -258,6 +243,7 @@ namespace SAEON.Observations.WebAPI
                         options.SwaggerEndpoint("/swagger/v1/swagger.json", "SAEON.Observations.WebAPI");
                         options.OAuthClientId(Configuration["SwaggerClientId"]);
                         options.OAuthClientSecret(Configuration["SwaggerClientSecret"]);
+                        options.OAuthScopes("SAEON.Observations.WebAPI");
                         options.OAuthUseBasicAuthenticationWithAccessCodeGrant();
                     });
 

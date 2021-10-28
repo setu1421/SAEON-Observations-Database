@@ -25,7 +25,7 @@ namespace SAEON.Observations.WebAPI
         public static readonly string PeriodicDOIsCode = "PeriodicDOIs";
         public static readonly string AdHocDOIsCode = "AddHocDOIs";
 
-        public static async Task<string> CreateDOIsV2(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext, bool isTest)
+        public static async Task<string> CreateDOIsV2(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext)
         {
             using (SAEONLogs.MethodCall(typeof(DOIHelper)))
             {
@@ -69,7 +69,7 @@ namespace SAEON.Observations.WebAPI
                             };
                             await dbContext.DigitalObjectIdentifiers.AddAsync(doi);
                             await dbContext.SaveChangesAsync();
-                            doi.SetUrls(isTest);
+                            doi.SetUrls();
                             await dbContext.SaveChangesAsync();
                             return doi;
                         }
