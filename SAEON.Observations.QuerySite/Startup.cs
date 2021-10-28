@@ -5,6 +5,7 @@ using Microsoft.Owin.Security.OpenIdConnect;
 using Newtonsoft.Json.Linq;
 using Owin;
 using SAEON.AspNet.Auth;
+using SAEON.Core;
 using SAEON.Logs;
 using Syncfusion.Licensing;
 using System;
@@ -45,8 +46,8 @@ namespace SAEON.Observations.QuerySite
                         ClientId = ConfigurationManager.AppSettings["QuerySiteClientId"],
                         ClientSecret = ConfigurationManager.AppSettings["QuerySiteClientSecret"],
                         Scope = $"openid {ConfigurationManager.AppSettings["WebAPIClientId"]}",
-                        RedirectUri = ConfigurationManager.AppSettings["QuerySiteUrl"] + "/signin-oidc",
-                        PostLogoutRedirectUri = ConfigurationManager.AppSettings["QuerySiteUrl"] + "/",
+                        RedirectUri = ConfigurationManager.AppSettings["QuerySiteUrl"].AddTrailingForwardSlash() + "signin-oidc",
+                        PostLogoutRedirectUri = ConfigurationManager.AppSettings["QuerySiteUrl"].AddTrailingForwardSlash(),
                         ResponseType = "code",
                         SignInAsAuthenticationType = "Cookies",
                         SaveTokens = true,
