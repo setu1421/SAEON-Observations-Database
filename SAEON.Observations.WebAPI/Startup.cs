@@ -20,6 +20,7 @@ using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
+using SAEON.Observations.WebAPI.Common;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.Collections.Generic;
@@ -106,7 +107,22 @@ namespace SAEON.Observations.WebAPI
                         options.IncludeXmlComments("SAEON.Observations.WebAPI.xml");
                         options.SchemaFilter<SwaggerIgnoreFilter>();
 
-                        options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                        options.AddSecurityDefinition("AccessToken", new OpenApiSecurityScheme
+                        {
+                            Type = SecuritySchemeType.OAuth2,
+                            Flows = new OpenApiOAuthFlows
+                            {
+                                ClientCredentials = new OpenApiOAuthFlow
+                                {
+                                    TokenUrl = new Uri(Configuration["AuthenticationServerUrl"].AddTrailingForwardSlash() + "oauth2/token"),
+                                    Scopes = new Dictionary<string, string>
+                                    {
+                                        {"SAEON.Observations.WebAPI","" }
+                                    }
+                                },
+                            }
+                        });
+                        options.AddSecurityDefinition("IdToken", new OpenApiSecurityScheme
                         {
                             Type = SecuritySchemeType.OAuth2,
                             Flows = new OpenApiOAuthFlows
@@ -119,27 +135,11 @@ namespace SAEON.Observations.WebAPI
                                     {
                                         {"SAEON.Observations.WebAPI","" }
                                     }
-                                },
-                                ClientCredentials = new OpenApiOAuthFlow
-                                {
-                                    TokenUrl = new Uri(Configuration["AuthenticationServerUrl"].AddTrailingForwardSlash() + "oauth2/token"),
-                                    Scopes = new Dictionary<string, string>
-                                    {
-                                        {"SAEON.Observations.WebAPI","" }
-                                    }
-                                },
+                                }
                             }
                         });
-                        options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                        {
-                            {
-                                new OpenApiSecurityScheme
-                                {
-                                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" },
-                                },
-                                new[] { "SAEON.Observations.WebAPI"}
-                            }
-                        });
+                        options.OperationFilter<AccessTokenOperationFilter>();
+                        options.OperationFilter<IdTokenOperationFilter>();
                     });
                     services.AddSignalR();
                     services.Configure<ApiBehaviorOptions>(options =>

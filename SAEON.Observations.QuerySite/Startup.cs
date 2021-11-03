@@ -56,12 +56,12 @@ namespace SAEON.Observations.QuerySite
                         {
                             SecurityTokenReceived = (context) =>
                             {
-                                SAEONLogs.Information("*** SecurityTokenReceived {@ProtocolMessage}", context.ProtocolMessage);
+                                SAEONLogs.Verbose("*** SecurityTokenReceived {@ProtocolMessage}", context.ProtocolMessage);
                                 return Task.FromResult(0);
                             },
                             SecurityTokenValidated = async (context) =>
                             {
-                                SAEONLogs.Information("*** SecurityTokenValidated {@ProtocolMessage}", context.ProtocolMessage);
+                                SAEONLogs.Verbose("*** SecurityTokenValidated {@ProtocolMessage}", context.ProtocolMessage);
                                 var loginReferer = context.Response.Headers["LoginReferer"];
                                 //SAEONLogs.Information("LoginReferer: {LoginReferer}", loginReferer);
                                 var accessToken = context.ProtocolMessage.AccessToken;
@@ -76,7 +76,7 @@ namespace SAEON.Observations.QuerySite
                                 //    SAEONLogs.Error("ODPAuthorization Failed, no id token");
                                 //    throw new SecurityTokenValidationException("ODPAuthorization Failed, no id token");
                                 //}
-                                SAEONLogs.Debug("AccessToken: {AccessToken} IdToken: {IdToken}", accessToken, idToken);
+                                SAEONLogs.Verbose("AccessToken: {AccessToken} IdToken: {IdToken}", accessToken, idToken);
                                 // Validate token
                                 using (var client = new HttpClient())
                                 {
@@ -150,14 +150,14 @@ namespace SAEON.Observations.QuerySite
                                                 }
                                             }
                                             //context.AuthenticationTicket.Identity.AddClaims(claims);
-                                            SAEONLogs.Debug("ODPAuthentication id token succeeded Claims: {@Claims}", claims.ToClaimsList());
+                                            SAEONLogs.Verbose("ODPAuthentication id token succeeded Claims: {@Claims}", claims.ToClaimsList());
                                         }
                                     }
                                 }
                             },
                             RedirectToIdentityProvider = (context) =>
                             {
-                                SAEONLogs.Information("*** RedirectToIdentityProvider {@ProtocolMessage}", context.ProtocolMessage);
+                                SAEONLogs.Verbose("*** RedirectToIdentityProvider {@ProtocolMessage}", context.ProtocolMessage);
                                 if (context.ProtocolMessage.RequestType == OpenIdConnectRequestType.Authentication)
                                 {
                                     var loginReferer = context.Request.Headers["Referer"];
@@ -170,37 +170,37 @@ namespace SAEON.Observations.QuerySite
                                     context.ProtocolMessage.State = stateQueryString[0] + "=" + context.Options.StateDataFormat.Protect(state);
                                     if (context.OwinContext.Authentication.AuthenticationResponseChallenge?.Properties.Dictionary.ContainsKey("ODPRegister") ?? false)
                                     {
-                                        SAEONLogs.Information("Enabling registration");
+                                        SAEONLogs.Verbose("Enabling registration");
                                         context.ProtocolMessage.SetParameter("mode", "signup");
                                     }
                                 }
                                 else if (context.ProtocolMessage.RequestType == OpenIdConnectRequestType.Logout)
                                 {
-                                    SAEONLogs.Information("Claims: {claims}", context.OwinContext.Authentication.User.Claims.ToClaimsList());
+                                    SAEONLogs.Verbose("Claims: {claims}", context.OwinContext.Authentication.User.Claims.ToClaimsList());
                                     var idTokenHint = context.OwinContext.Authentication.User.FindFirst(Constants.IdTokenClaim)?.Value;
                                     context.ProtocolMessage.IdTokenHint = idTokenHint;
                                 }
-                                SAEONLogs.Information("*** RedirectToIdentityProvider {@ProtocolMessage}", context.ProtocolMessage);
+                                SAEONLogs.Verbose("*** RedirectToIdentityProvider {@ProtocolMessage}", context.ProtocolMessage);
                                 return Task.FromResult(0);
                             },
                             MessageReceived = (context) =>
                             {
-                                SAEONLogs.Information("*** MessageReceived {@ProtocolMessage}", context.ProtocolMessage);
+                                SAEONLogs.Verbose("*** MessageReceived {@ProtocolMessage}", context.ProtocolMessage);
                                 return Task.FromResult(0);
                             },
                             AuthorizationCodeReceived = (context) =>
                             {
-                                SAEONLogs.Information("*** AuthorizationCodeReceived {@ProtocolMessage}", context.ProtocolMessage);
+                                SAEONLogs.Verbose("*** AuthorizationCodeReceived {@ProtocolMessage}", context.ProtocolMessage);
                                 return Task.FromResult(0);
                             },
                             AuthenticationFailed = (context) =>
                             {
-                                SAEONLogs.Information("*** AuthenticationFailed {@ProtocolMessage}", context.ProtocolMessage);
+                                SAEONLogs.Verbose("*** AuthenticationFailed {@ProtocolMessage}", context.ProtocolMessage);
                                 return Task.FromResult(0);
                             },
                             TokenResponseReceived = (context) =>
                             {
-                                SAEONLogs.Information("*** TokenResponseReceived {@ProtocolMessage}", context.ProtocolMessage);
+                                SAEONLogs.Verbose("*** TokenResponseReceived {@ProtocolMessage}", context.ProtocolMessage);
                                 var protectedState = context.ProtocolMessage.State.Split('=')[1];
                                 var state = context.Options.StateDataFormat.Unprotect(protectedState);
                                 state.Dictionary.TryGetValue("LoginReferer", out string loginReferer);

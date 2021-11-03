@@ -419,6 +419,13 @@
             <param name="id">Id of the Station</param>
             <returns>ListOf(Project)</returns>
         </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetDatasets(System.Guid)">
+            <summary>
+            Datasets of the Station
+            </summary>
+            <param name="id">Id of the Station</param>
+            <returns>ListOf(DataStream)</returns>
+        </member>
         <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.UnitsController.GetAll">
             <summary>
             All Units
