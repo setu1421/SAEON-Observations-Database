@@ -10,13 +10,13 @@
     <ApplicationIcon>SAEON.ico</ApplicationIcon>
     <LangVersion>9.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.19</Version>
+    <Version>1.0.20</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Humanizer.Core" Version="2.11.10" />
     <PackageReference Include="SAEON.Core" Version="1.0.40" />
-    <PackageReference Include="SAEON.OpenXML" Version="1.0.108" />
+    <PackageReference Include="SAEON.OpenXML" Version="1.0.109" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
