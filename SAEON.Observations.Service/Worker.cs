@@ -131,7 +131,7 @@ namespace SAEON.Observations.Service
                             {
                                 SAEONLogs.Information("New Day: {Date}", currentTime.Date);
                                 await CreateImportBatchSummaries();
-                                //await UpdateODP();
+                                await UpdateODP();
                             }
                             var minute = (int)(Math.Floor(currentTime.Minute * 1.0 / runEveryMins) * runEveryMins);
                             lastRun = currentTime.Date.AddHours(currentTime.Hour).AddMinutes(minute);
