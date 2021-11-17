@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Humanizer;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SAEON.Core;
 using SAEON.Observations.Core;
@@ -222,7 +223,7 @@ namespace SAEON.Observations.WebAPI
             sbHtml.AppendHtmlDTDD("Publisher", $"{Publisher} {PublicationYear}");
             if (StartDate.HasValue || EndDate.HasValue)
             {
-                sbHtml.AppendHtmlDTDD("Dates", Dates(true));
+                sbHtml.AppendHtmlDTDD("Dates", Dates(true).Trim().Transform(To.SentenceCase));
             }
             if (Rights.Any())
             {
