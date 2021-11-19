@@ -8,12 +8,12 @@
 {
     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
     <div class="row">
-        <div class="col-md">
+        <div class="col-lg">
             @Html.EJ().DatePicker("DatePick").DateFormat("MM/dd/yyyy").Locale("en-US").ValidationRules(r => r.AddRule("required", true)).ValidationMessage(m => m.AddMessage("required", "Date Value required "))
         </div>
     </div>
     <div class="row">
-        <div class="col-md">
+        <div class="col-lg">
             @Html.EJ().NumericTextbox("numeric").Value(100).ValidationRules(r => r.AddRule("min", 50)).ValidationMessage(m => m.AddMessage("min", "Value Should be greater than 50"))
         </div>
     </div>
@@ -45,7 +45,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md">
+        <div class="col-lg">
             <input type="submit" value="Save" class="btn btn-default" />
         </div>
     </div>
