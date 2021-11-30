@@ -1,3 +1,4 @@
+use Observations;
 with 
 VerifiedDatasets
 as
@@ -40,3 +41,4 @@ Select
 	(Select Count(*) from VerifiedDatasets) Datasets,
 	(Select Sum(VerifiedCount) from VerifiedImportBatchSummaries) Observations,
 	(Select Count(*) from UserDownloads) Downloads;
+

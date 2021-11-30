@@ -21,7 +21,7 @@ namespace SAEON.Observations.Service
         private readonly IConfiguration config;
         private readonly HubConnection adminHubConnection;
 
-        public Worker(IConfiguration config)
+        public Worker(IConfiguration config) : base()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -122,6 +122,7 @@ namespace SAEON.Observations.Service
                             SAEONLogs.Information("Worker running at: {time}", currentTime);
                             var newDay = (currentTime.Date != lastRun.Date);
                             var newHour = (currentTime.Hour != lastRun.Hour) || newDay;
+                            if (config["CreateImportBatchSummaries"].IsTrue()) await CreateImportBatchSummaries();
                             if (newHour)
                             {
                                 SAEONLogs.Information("New Hour: {Hour}", currentTime.Hour);

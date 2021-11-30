@@ -31,6 +31,9 @@ namespace SAEON.Observations.WebAPI
     {
         private IConfiguration config;
         protected IConfiguration Config => config ??= HttpContext.RequestServices.GetRequiredService<IConfiguration>();
+        protected int CommandTimeout { get; set; } = 30;
+        protected string CommandTimeoutKey { get; set; } = "CommandTimeoutInMins";
+
         protected bool TrackChanges { get; set; } = false;
         private ObservationsDbContext dbContext;
         protected ObservationsDbContext DbContext
@@ -40,6 +43,11 @@ namespace SAEON.Observations.WebAPI
                 if (dbContext is null)
                 {
                     dbContext = HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
+                    if (int.TryParse(Config[CommandTimeoutKey] ?? "30", out int commandTimeout))
+                    {
+                        CommandTimeout = commandTimeout;
+                    }
+                    dbContext.Database.SetCommandTimeout(CommandTimeout * 60);
                     if (TrackChanges)
                     {
                         dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
@@ -47,6 +55,9 @@ namespace SAEON.Observations.WebAPI
                 }
                 return dbContext;
             }
+        }
+        public BaseApiController() : base()
+        {
         }
     }
 
@@ -216,6 +227,7 @@ namespace SAEON.Observations.WebAPI
     public abstract class BaseODataController<TEntity> : ODataController where TEntity : BaseEntity
     {
         public static string BaseUrl { get; set; }
+        protected int CommandTimeout { get; set; } = 30;
 
         private ObservationsDbContext _dbContext;
         protected ObservationsDbContext DbContext => _dbContext ??= HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();

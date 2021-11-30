@@ -28,7 +28,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     public class DataWizardController : InternalApiController
     {
-        public DataWizardController()
+        public DataWizardController() : base()
         {
             TrackChanges = true;
         }
