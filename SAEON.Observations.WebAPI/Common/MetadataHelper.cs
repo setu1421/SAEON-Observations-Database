@@ -64,14 +64,28 @@ namespace SAEON.Observations.WebAPI
                         byte[] oldSha256;
                         foreach (var doiDataset in await dbContext.DigitalObjectIdentifiers.Where(i => i.DOIType == DOIType.Dataset).ToListAsync())
                         {
+                            SAEONLogs.Verbose($"{doiDataset.DOIType} {doiDataset.Code}, {doiDataset.Name}");
                             doiDataset.SetUrls();
                             var splits = doiDataset.Code.Split('~', StringSplitOptions.RemoveEmptyEntries);
-                            var dataset = await dbContext.Datasets.Where(i =>
+                            var dataset = await dbContext.Datasets.SingleOrDefaultAsync(i =>
                                 i.StationCode == splits[0] &&
                                 i.PhenomenonCode == splits[1] &&
                                 i.OfferingCode == splits[2] &&
-                                i.UnitCode == splits[3])
-                                .SingleAsync();
+                                i.UnitCode == splits[3]);
+                            if (dataset == null)
+                            {
+                                SAEONLogs.Warning($"Ignoring (No dataset) {doiDataset.DOIType} {doiDataset.Code}, {doiDataset.Name}");
+                                await AddLineAsync($"Ignoring (No dataset) {doiDataset.DOIType} {doiDataset.Code}, {doiDataset.Name}");
+                                continue;
+                            }
+                            // Box with point Lat or Lon
+                            if ((dataset.LatitudeNorth != dataset.LatitudeSouth) && (dataset.LongitudeEast == dataset.LongitudeWest) ||
+                                (dataset.LatitudeNorth == dataset.LatitudeSouth) && (dataset.LongitudeEast != dataset.LongitudeWest))
+                            {
+                                SAEONLogs.Warning($"Ignoring (Bad box) {doiDataset.DOIType} {doiDataset.Code}, {doiDataset.Name}");
+                                await AddLineAsync($"Ignoring (Bad box) {doiDataset.DOIType} {doiDataset.Code}, {doiDataset.Name}");
+                                continue;
+                            }
                             var metaDataset = MetadataForDOI(doiDataset, null);
                             metaDataset.StartDate = dataset.StartDate;
                             metaDataset.EndDate = dataset.EndDate;

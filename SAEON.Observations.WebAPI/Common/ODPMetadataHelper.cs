@@ -26,6 +26,13 @@ namespace SAEON.Observations.WebAPI
             {
                 async Task GenerateODPMetadataForDOI(DigitalObjectIdentifier doi, string collection)
                 {
+                    // No MetadataJson
+                    if (doi.MetadataJson == DOIHelper.BlankJson)
+                    {
+                        SAEONLogs.Warning($"Ignoring (Bad MetadataJson) {doi.DOIType} {doi.Code}, {doi.Name}");
+                        await AddLineAsync($"Ignoring (Bad MetadataJson) {doi.DOIType} {doi.Code}, {doi.Name}");
+                        return;
+                    }
                     var needsUpdate = doi.ODPMetadataNeedsUpdate ?? false;
                     var needsPublish = !doi.ODPMetadataIsPublished ?? true;
                     //SAEONLogs.Verbose("NeedsUpdate: {NeedsUpdate} NeedsPublish: {NeedsPublish}", needsUpdate, needsPublish);
