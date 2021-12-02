@@ -111,6 +111,10 @@ namespace SAEON.Observations.Service
             {
                 try
                 {
+                    // Start-up overrides
+                    if (config["CreateSnapshots"]?.IsTrue() ?? false) await CreateSnapshots();
+                    if (config["CreateImportBatchSummaries"]?.IsTrue() ?? false) await CreateImportBatchSummaries();
+                    if (config["UpdateODP"]?.IsTrue() ?? false) await UpdateODP();
                     while (!cancellationToken.IsCancellationRequested)
                     {
                         var currentTime = DateTime.Now;
@@ -122,7 +126,6 @@ namespace SAEON.Observations.Service
                             SAEONLogs.Information("Worker running at: {time}", currentTime);
                             var newDay = (currentTime.Date != lastRun.Date);
                             var newHour = (currentTime.Hour != lastRun.Hour) || newDay;
-                            if (config["CreateImportBatchSummaries"].IsTrue()) await CreateImportBatchSummaries();
                             if (newHour)
                             {
                                 SAEONLogs.Information("New Hour: {Hour}", currentTime.Hour);
