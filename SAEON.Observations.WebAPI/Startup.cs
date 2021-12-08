@@ -146,7 +146,10 @@ namespace SAEON.Observations.WebAPI
                     {
                         options.SuppressModelStateInvalidFilter = true;
                     });
-                    services.AddControllers();
+                    services.AddControllers().AddJsonOptions(options =>
+                    {
+                        options.JsonSerializerOptions.IgnoreNullValues = true;
+                    });
                     services.AddControllersWithViews();
                     services.AddOData();
                     SetODataFormatters(services);

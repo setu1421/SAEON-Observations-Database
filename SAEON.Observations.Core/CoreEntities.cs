@@ -889,6 +889,8 @@ namespace SAEON.Observations.Core
         public List<Instrument> Instruments { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public List<Dataset> Datasets { get; set; }
+        [JsonIgnore, SwaggerIgnore]
+        public List<Observation> Observations { get; set; }
 
         public Station() : base()
         {
@@ -898,8 +900,63 @@ namespace SAEON.Observations.Core
             Links.Add("Projects");
             Links.Add("Instruments");
             Links.Add("Datasets");
-            //Links.Add("Observations"); @@
+            Links.Add("Observations");
         }
+    }
+
+    [Table("vStationObservations")]
+    public class Observation : IntIdEntity
+    {
+        //public Guid ImportBatchId { get; set; } 
+        public Guid StationId { get; set; }
+        public Guid InstrumentId { get; set; }
+        public string InstrumentCode { get; set; }
+        public string InstrumentName { get; set; }
+        public string InstrumentDescription { get; set; }
+        public Guid SensorId { get; set; }
+        public string SensorCode { get; set; }
+        public string SensorName { get; set; }
+        public string SensorDescription { get; set; }
+        public DateTime ValueDate { get; set; }
+        //public double? RawValue { get; set; }
+        public double? DataValue { get; set; }
+        public string TextValue { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+        public double? Elevation { get; set; }
+        public Guid PhenomenonId { get; set; }
+        public string PhenomenonCode { get; set; }
+        public string PhenomenonName { get; set; }
+        public string PhenomenonDescription { get; set; }
+        //public Guid PhenomenonOfferingId { get; set; }
+        public Guid OfferingId { get; set; }
+        public string OfferingCode { get; set; }
+        public string OfferingName { get; set; }
+        public string OfferingDescription { get; set; }
+        //[Column("PhenomenonUOMID")]
+        //public Guid PhenomenonUnitId { get; set; }
+        [Column("UnitOfMeasureID")]
+        public Guid UnitId { get; set; }
+        [Column("UnitOfMeasureCode")]
+        public string UnitCode { get; set; }
+        [Column("UnitOfMeasureUnit")]
+        public string UnitName { get; set; }
+        [Column("UnitOfMeasureSymbol")]
+        public string UnitSymbol { get; set; }
+        public string Comment { get; set; }
+        public Guid? CorrelationId { get; set; }
+        //public Guid? StatusId { get; set; }
+        public string StatusCode { get; set; }
+        public string StatusName { get; set; }
+        public string StatusDescription { get; set; }
+        //public Guid? StatusReasonId { get; set; }
+        public string StatusReasonCode { get; set; }
+        public string StatusReasonName { get; set; }
+        public string StatusReasonDescription { get; set; }
+
+        // Navigation
+        [JsonIgnore, SwaggerIgnore]
+        public Station Station { get; set; }
     }
 
     /// <summary>

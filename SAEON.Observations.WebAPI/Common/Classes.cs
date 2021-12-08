@@ -1,5 +1,34 @@
-﻿namespace SAEON.Observations.WebAPI
+﻿using System;
+
+namespace SAEON.Observations.WebAPI
 {
+    /// <summary>
+    /// Input for an observations query
+    /// </summary>
+    public class ObservationInput
+    {
+        /// <summary>
+        /// PhenomenonId for the observations
+        /// </summary>
+        public Guid PhenomenonId { get; set; }
+        /// <summary>
+        /// OfferingId for the observations
+        /// </summary>
+        public Guid OfferingId { get; set; }
+        /// <summary>
+        /// UnitId for the observations
+        /// </summary>
+        public Guid UnitId { get; set; }
+        /// <summary>
+        /// Start date for the observations
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+        /// <summary>
+        /// End date for the observations
+        /// </summary>
+        public DateTime? EndDate { get; set; }
+    }
+
     #region SpacialCoverage
     /*
     public class SpacialCoverageInput : DataQueryInput { }
