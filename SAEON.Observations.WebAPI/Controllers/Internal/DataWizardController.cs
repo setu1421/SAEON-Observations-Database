@@ -592,6 +592,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         //dirInfo.Delete(true);
                         SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
                         await SaveChangesAsync();
+                        await RequestLogger.LogAsync(DbContext, Request, result.Id.ToString());
                         transaction.Commit();
                         return result;
                     }

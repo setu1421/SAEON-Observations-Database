@@ -102,7 +102,6 @@ namespace SAEON.Observations.WebAPI
                             Description = "SAEON Observations Database WebAPI",
                             Contact = new OpenApiContact { Name = "Tim Parker-Nance", Email = "timpn@saeon.ac.za", Url = new Uri("http://www.saeon.ac.za") },
                             License = new OpenApiLicense { Name = "Creative Commons Attribution-ShareAlike 4.0 International License", Url = new Uri("https://creativecommons.org/licenses/by-sa/4.0/") }
-
                         });
                         options.IncludeXmlComments("SAEON.Observations.WebAPI.xml");
                         options.SchemaFilter<SwaggerIgnoreFilter>();

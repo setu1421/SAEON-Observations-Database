@@ -14,6 +14,21 @@ namespace SAEON.Observations.Core
         //public List<Organisation> Organisations { get; set; }
     }
 
+    public class RequestLog : IntIdEntity
+    {
+        public DateTime Time { get; set; } = DateTime.Now;
+        public string Method { get; set; }
+        public string Path { get; set; }
+        public string QueryString { get; set; }
+        public string Headers { get; set; }
+        public string Body { get; set; }
+        public string IPAddress { get; set; }
+        public string Description { get; set; }
+        //public long BytesSent { get; set; }
+        //public Guid? UserId { get; set; }
+    }
+
+
     [Table("vImportBatchSummary")]
     public class VImportBatchSummary : GuidIdEntity
     {

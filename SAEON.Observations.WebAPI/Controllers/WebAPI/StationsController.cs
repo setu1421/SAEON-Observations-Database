@@ -123,9 +123,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>ListOf(Observation)</returns>
         [HttpGet("{id:guid}/Observations/{phenomenonId:guid}/{offeringId:guid}/{unitId:guid}")]
         [Authorize(Policy = ODPAuthenticationDefaults.IdTokenPolicy)]
-        public List<Observation> GetObservations(Guid id, Guid phenomenonId, Guid offeringId, Guid unitId)
+        public async Task<List<Observation>> GetObservations(Guid id, Guid phenomenonId, Guid offeringId, Guid unitId)
         {
-            return GetManyWithIntId<Observation>(id, s => s.Observations).Where(i => (i.PhenomenonId == phenomenonId) && (i.OfferingId == offeringId) && (i.UnitId == unitId)).ToList();
+            var result = GetManyWithIntId<Observation>(id, s => s.Observations).Where(i => (i.PhenomenonId == phenomenonId) && (i.OfferingId == offeringId) && (i.UnitId == unitId)).ToList();
+            await RequestLogger.LogAsync(DbContext, Request);
+            return result;
         }
 
         /// <summary>
@@ -136,7 +138,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>ListOf(Observation)</returns>
         [HttpPost("{id:guid}/Observations")]
         [Authorize(Policy = ODPAuthenticationDefaults.IdTokenPolicy)]
-        public List<Observation> GetObservationsDateRange(Guid id, [FromBody] ObservationInput input)
+        public async Task<List<Observation>> GetObservationsDateRange(Guid id, [FromBody] ObservationInput input)
         {
             Guard.IsNotNull(input, nameof(input));
             var q = GetManyWithIntId<Observation>(id, s => s.Observations).Where(i => (i.PhenomenonId == input.PhenomenonId) && (i.OfferingId == input.OfferingId));
@@ -152,7 +154,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 q = q.Where(i => (i.ValueDate <= input.EndDate));
             }
-            return q.ToList();
+            var result = q.ToList();
+            await RequestLogger.LogAsync(DbContext, Request);
+            return result;
         }
     }
 }
