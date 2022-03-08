@@ -1,3 +1,4 @@
+use Observations
 -- 6 Digit
 Select
   Instrument.Code, Sensor.Code

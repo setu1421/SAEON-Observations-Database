@@ -11,9 +11,8 @@ namespace SAEON.Observations.Core
 {
     public static class DataTableExtensions
     {
-        public static byte[] ToCSV(this DataTable dataTable, bool utf16 = false)
+        public static string ToCSV(this DataTable dataTable, string separator)
         {
-            var separator = utf16 ? "/t" : ",";
             var sb = new StringBuilder();
             IEnumerable<String> headerValues = dataTable
                 .Columns
@@ -52,10 +51,16 @@ namespace SAEON.Observations.Core
                 }
                 sb.AppendLine(string.Join(separator, values));
             }
+            return sb.ToString();
+        }
+
+        public static byte[] ToCSV(this DataTable dataTable, bool utf16 = false)
+        {
+            var separator = utf16 ? "/t" : ",";
             if (!utf16)
-                return Encoding.UTF8.GetBytes(sb.ToString());
+                return Encoding.UTF8.GetBytes(dataTable.ToCSV(separator));
             else
-                return Encoding.Unicode.GetPreamble().Concat(Encoding.Unicode.GetBytes(sb.ToString())).ToArray();
+                return Encoding.Unicode.GetPreamble().Concat(Encoding.Unicode.GetBytes(dataTable.ToCSV(separator))).ToArray();
         }
 
         public static byte[] ToExcel(this DataTable dataTable)

@@ -197,7 +197,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             //    var reader = cmd.ExecuteReader();
             //    var dt = new DataTable();
             //    dt.Load(reader);
-            //    SAEONLogs.Information(dt.Dump());
+            //    SAEONLogs.Information("ImportBatchSummaries: {ImportBatchSummaries}", dt.DumpCSV());
             //}
             var sql =
                 "Insert Into ImportBatchSummary" + Environment.NewLine +
@@ -599,7 +599,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 }
                             stageStopwatch.Stop();
                             SAEONLogs.Information("Created DataTable {count:n0} bad observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
-                            SAEONLogs.Verbose("BadValues: {BadValues}", dtBadValues.Dump().Replace("<br />", Environment.NewLine));
+                            //SAEONLogs.Verbose("BadValues: {BadValues}", dtBadValues.Dump());
                         }
                         if (goodValues.Any())
                         {
@@ -672,7 +672,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 }
                             stageStopwatch.Stop();
                             SAEONLogs.Information("Created DataTable {count:n0} good observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
-                            SAEONLogs.Verbose("GoodValues: {GoodValues}", dtGoodValues.Dump().Replace("<br />", Environment.NewLine));
+                            //SAEONLogs.Verbose("GoodValues: {GoodValues}", dtGoodValues.Dump());
                         }
                     }
                     try

@@ -17,4 +17,4 @@ from
 group by
   Date, Phenomenon, Offering, Unit
 order by 
-  Date, Phenomenon, Offering, Unit
+  Date Desc, Phenomenon, Offering, Unit

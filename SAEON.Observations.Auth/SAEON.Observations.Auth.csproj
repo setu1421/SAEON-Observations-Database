@@ -9,7 +9,7 @@
     <Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <ApplicationIcon>SAEON.ico</ApplicationIcon>
-    <Version>1.0.38</Version>
+    <Version>1.0.41</Version>
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
@@ -26,9 +26,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="[5.0.12,6.0.0)" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="[5.0.14,6.0.0)" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
-    <PackageReference Include="SAEON.AspNet.Auth" Version="1.0.15" />
+    <PackageReference Include="SAEON.AspNet.Auth" Version="1.0.17" />
   </ItemGroup>
 
 </Project>
