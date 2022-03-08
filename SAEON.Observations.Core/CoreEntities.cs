@@ -887,6 +887,10 @@ namespace SAEON.Observations.Core
         public List<Project> Projects { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public List<Instrument> Instruments { get; set; }
+        [JsonIgnore, SwaggerIgnore]
+        public List<Dataset> Datasets { get; set; }
+        [JsonIgnore, SwaggerIgnore]
+        public List<Observation> Observations { get; set; }
 
         public Station() : base()
         {
@@ -895,9 +899,64 @@ namespace SAEON.Observations.Core
             Links.Add("Organisations");
             Links.Add("Projects");
             Links.Add("Instruments");
-            //Links.Add("Datasets"); @@
-            //Links.Add("Observations"); @@
+            Links.Add("Datasets");
+            Links.Add("Observations");
         }
+    }
+
+    [Table("vStationObservations")]
+    public class Observation : IntIdEntity
+    {
+        //public Guid ImportBatchId { get; set; } 
+        public Guid StationId { get; set; }
+        public Guid InstrumentId { get; set; }
+        public string InstrumentCode { get; set; }
+        public string InstrumentName { get; set; }
+        public string InstrumentDescription { get; set; }
+        public Guid SensorId { get; set; }
+        public string SensorCode { get; set; }
+        public string SensorName { get; set; }
+        public string SensorDescription { get; set; }
+        public DateTime ValueDate { get; set; }
+        //public double? RawValue { get; set; }
+        public double? DataValue { get; set; }
+        public string TextValue { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+        public double? Elevation { get; set; }
+        public Guid PhenomenonId { get; set; }
+        public string PhenomenonCode { get; set; }
+        public string PhenomenonName { get; set; }
+        public string PhenomenonDescription { get; set; }
+        //public Guid PhenomenonOfferingId { get; set; }
+        public Guid OfferingId { get; set; }
+        public string OfferingCode { get; set; }
+        public string OfferingName { get; set; }
+        public string OfferingDescription { get; set; }
+        //[Column("PhenomenonUOMID")]
+        //public Guid PhenomenonUnitId { get; set; }
+        [Column("UnitOfMeasureID")]
+        public Guid UnitId { get; set; }
+        [Column("UnitOfMeasureCode")]
+        public string UnitCode { get; set; }
+        [Column("UnitOfMeasureUnit")]
+        public string UnitName { get; set; }
+        [Column("UnitOfMeasureSymbol")]
+        public string UnitSymbol { get; set; }
+        public string Comment { get; set; }
+        public Guid? CorrelationId { get; set; }
+        //public Guid? StatusId { get; set; }
+        public string StatusCode { get; set; }
+        public string StatusName { get; set; }
+        public string StatusDescription { get; set; }
+        //public Guid? StatusReasonId { get; set; }
+        public string StatusReasonCode { get; set; }
+        public string StatusReasonName { get; set; }
+        public string StatusReasonDescription { get; set; }
+
+        // Navigation
+        [JsonIgnore, SwaggerIgnore]
+        public Station Station { get; set; }
     }
 
     /// <summary>
@@ -1111,4 +1170,61 @@ namespace SAEON.Observations.Core
         public int Downloads { get; set; }
     }
 
+    public class Dataset : LongIdEntity
+    {
+        public Guid OrganisationId { get; set; }
+        public string OrganisationCode { get; set; }
+        public string OrganisationName { get; set; }
+        public string OrganisationDescription { get; set; }
+        public string OrganisationUrl { get; set; }
+        public Guid ProgrammeId { get; set; }
+        public string ProgrammeCode { get; set; }
+        public string ProgrammeName { get; set; }
+        public string ProgrammeDescription { get; set; }
+        public string ProgrammeUrl { get; set; }
+        public Guid ProjectId { get; set; }
+        public string ProjectCode { get; set; }
+        public string ProjectName { get; set; }
+        public string ProjectDescription { get; set; }
+        public string ProjectUrl { get; set; }
+        public Guid SiteId { get; set; }
+        public string SiteCode { get; set; }
+        public string SiteName { get; set; }
+        public Guid StationId { get; set; }
+        public string StationCode { get; set; }
+        public string StationName { get; set; }
+        public string StationDescription { get; set; }
+        public Guid PhenomenonId { get; set; }
+        public string PhenomenonCode { get; set; }
+        public string PhenomenonName { get; set; }
+        public string PhenomenonDescription { get; set; }
+        //public Guid PhenomenonOfferingID { get; set; }
+        public Guid OfferingId { get; set; }
+        public string OfferingCode { get; set; }
+        public string OfferingName { get; set; }
+        public string OfferingDescription { get; set; }
+        //[Column("PhenomenonUOMID")]
+        //public Guid PhenomenonUnitID { get; set; }
+        [Column("UnitOfMeasureID")]
+        public Guid UnitId { get; set; }
+        [Column("UnitOfMeasureCode")]
+        public string UnitCode { get; set; }
+        [Column("UnitOfMeasureUnit")]
+        public string UnitName { get; set; }
+        [Column("UnitOfMeasureSymbol")]
+        public string UnitSymbol { get; set; }
+        public int? Count { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public double? LatitudeNorth { get; set; }
+        public double? LatitudeSouth { get; set; }
+        public double? LongitudeWest { get; set; }
+        public double? LongitudeEast { get; set; }
+        public double? ElevationMinimum { get; set; }
+        public double? ElevationMaximum { get; set; }
+
+        // Navigation
+        [JsonIgnore, SwaggerIgnore]
+        public Station Station { get; set; }
+    }
 }

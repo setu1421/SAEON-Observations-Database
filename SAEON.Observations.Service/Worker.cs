@@ -21,7 +21,7 @@ namespace SAEON.Observations.Service
         private readonly IConfiguration config;
         private readonly HubConnection adminHubConnection;
 
-        public Worker(IConfiguration config)
+        public Worker(IConfiguration config) : base()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -111,6 +111,10 @@ namespace SAEON.Observations.Service
             {
                 try
                 {
+                    // Start-up overrides
+                    if (config["CreateSnapshots"]?.IsTrue() ?? false) await CreateSnapshots();
+                    if (config["CreateImportBatchSummaries"]?.IsTrue() ?? false) await CreateImportBatchSummaries();
+                    if (config["UpdateODP"]?.IsTrue() ?? false) await UpdateODP();
                     while (!cancellationToken.IsCancellationRequested)
                     {
                         var currentTime = DateTime.Now;
@@ -131,7 +135,7 @@ namespace SAEON.Observations.Service
                             {
                                 SAEONLogs.Information("New Day: {Date}", currentTime.Date);
                                 await CreateImportBatchSummaries();
-                                //await UpdateODP();
+                                await UpdateODP();
                             }
                             var minute = (int)(Math.Floor(currentTime.Minute * 1.0 / runEveryMins) * runEveryMins);
                             lastRun = currentTime.Date.AddHours(currentTime.Hour).AddMinutes(minute);

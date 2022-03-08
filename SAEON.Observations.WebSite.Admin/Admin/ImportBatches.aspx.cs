@@ -177,6 +177,28 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             stopwatch.Start();
             SAEONLogs.Information("Creating Summary");
             ImportBatchSummary.Delete("ImportBatchID", importBatchId);
+            //var sqlTest =
+            //    "Select" + Environment.NewLine +
+            //    "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(ID) Count" + Environment.NewLine +
+            //    "from" + Environment.NewLine +
+            //    "  vObservationExpansion" + Environment.NewLine +
+            //    "where" + Environment.NewLine +
+            //    "  (ImportBatchID = @ImportBatchID)" + Environment.NewLine +
+            //    "group by" + Environment.NewLine +
+            //    "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID";
+            //using (var cmd = connScope.CurrentConnection.CreateCommand())
+            //{
+            //    cmd.CommandText = sqlTest;
+            //    var param = cmd.CreateParameter();
+            //    param.DbType = DbType.Guid;
+            //    param.ParameterName = "@ImportBatchID";
+            //    param.Value = importBatchId;
+            //    cmd.Parameters.Add(param);
+            //    var reader = cmd.ExecuteReader();
+            //    var dt = new DataTable();
+            //    dt.Load(reader);
+            //    SAEONLogs.Information("ImportBatchSummaries: {ImportBatchSummaries}", dt.DumpCSV());
+            //}
             var sql =
                 "Insert Into ImportBatchSummary" + Environment.NewLine +
                 "  (ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, Count, ValueCount, Minimum, Maximum, Average, StandardDeviation, Variance," + Environment.NewLine +
@@ -577,7 +599,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 }
                             stageStopwatch.Stop();
                             SAEONLogs.Information("Created DataTable {count:n0} bad observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
-                            SAEONLogs.Verbose("BadValues: {BadValues}", dtBadValues.Dump().Replace("<br />", Environment.NewLine));
+                            //SAEONLogs.Verbose("BadValues: {BadValues}", dtBadValues.Dump());
                         }
                         if (goodValues.Any())
                         {
@@ -650,7 +672,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 }
                             stageStopwatch.Stop();
                             SAEONLogs.Information("Created DataTable {count:n0} good observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
-                            SAEONLogs.Verbose("GoodValues: {GoodValues}", dtGoodValues.Dump().Replace("<br />", Environment.NewLine));
+                            //SAEONLogs.Verbose("GoodValues: {GoodValues}", dtGoodValues.Dump());
                         }
                     }
                     try

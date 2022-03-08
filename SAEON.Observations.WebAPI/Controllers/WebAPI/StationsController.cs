@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Toolkit.Diagnostics;
+using SAEON.AspNet.Auth;
 using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
@@ -99,7 +102,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             return GetManyWithGuidId<Project>(id, s => s.Projects);
         }
 
-        /* @@
         /// <summary>
         /// Datasets of the Station
         /// </summary>
@@ -112,7 +114,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
 
         /// <summary>
-        /// Observations of the Station
+        /// Observations of a variable (phenomenon, offering, unit) at the Station
         /// </summary>
         /// <param name="id">Id of the Station</param>
         /// <param name="phenomenonId">PhenomenonId of the Observations</param>
@@ -120,10 +122,41 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="unitId">UnitId of the Observations</param>
         /// <returns>ListOf(Observation)</returns>
         [HttpGet("{id:guid}/Observations/{phenomenonId:guid}/{offeringId:guid}/{unitId:guid}")]
-        public IQueryable<Observation> GetObservations(Guid id, Guid phenomenonId, Guid offeringId, Guid unitId)
+        [Authorize(Policy = ODPAuthenticationDefaults.IdTokenPolicy)]
+        public async Task<List<Observation>> GetObservations(Guid id, Guid phenomenonId, Guid offeringId, Guid unitId)
         {
-            return GetManyWithIntId<Observation>(id, s => s.Observations).Where(i => (i.PhenomenonId == phenomenonId) && (i.OfferingId == offeringId) && (i.UnitId == unitId));
+            var result = GetManyWithIntId<Observation>(id, s => s.Observations).Where(i => (i.PhenomenonId == phenomenonId) && (i.OfferingId == offeringId) && (i.UnitId == unitId)).ToList();
+            await RequestLogger.LogAsync(DbContext, Request);
+            return result;
         }
-        */
+
+        /// <summary>
+        /// Observations of a variable (phenomenon, offering, unit) at the Station over a date range
+        /// </summary>
+        /// <param name="id">Id of the Station</param>
+        /// <param name="input">Input of the range of observations</param>
+        /// <returns>ListOf(Observation)</returns>
+        [HttpPost("{id:guid}/Observations")]
+        [Authorize(Policy = ODPAuthenticationDefaults.IdTokenPolicy)]
+        public async Task<List<Observation>> GetObservationsDateRange(Guid id, [FromBody] ObservationInput input)
+        {
+            Guard.IsNotNull(input, nameof(input));
+            var q = GetManyWithIntId<Observation>(id, s => s.Observations).Where(i => (i.PhenomenonId == input.PhenomenonId) && (i.OfferingId == input.OfferingId));
+            if (input.StartDate.HasValue && input.EndDate.HasValue)
+            {
+                q = q.Where(i => (i.ValueDate >= input.StartDate) && (i.ValueDate <= input.EndDate));
+            }
+            else if (input.StartDate.HasValue)
+            {
+                q = q.Where(i => (i.ValueDate >= input.StartDate));
+            }
+            else if (input.EndDate.HasValue)
+            {
+                q = q.Where(i => (i.ValueDate <= input.EndDate));
+            }
+            var result = q.ToList();
+            await RequestLogger.LogAsync(DbContext, Request);
+            return result;
+        }
     }
 }

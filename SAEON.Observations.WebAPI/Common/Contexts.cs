@@ -21,7 +21,6 @@ namespace SAEON.Observations.WebAPI
         {
             _config = config;
             _httpContectAccessor = httpContextAccessor;
-            Database.SetCommandTimeout(30 * 60);
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
@@ -39,6 +38,7 @@ namespace SAEON.Observations.WebAPI
         public DbSet<Phenomenon> Phenomena { get; set; }
         public DbSet<Programme> Programmes { get; set; }
         public DbSet<Project> Projects { get; set; }
+        public DbSet<RequestLog> RequestLogs { get; set; }
         public DbSet<Sensor> Sensors { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Station> Stations { get; set; }

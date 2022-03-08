@@ -16,7 +16,7 @@ namespace SAEON.Observations.WebAPI
 {
     public static class DOIHelper
     {
-        private static readonly string blankJson = "{}";
+        public static readonly string BlankJson = "{}";
         public static readonly string BlankHtml = "<>";
         public static readonly string BlankText = "()";
 
@@ -59,8 +59,8 @@ namespace SAEON.Observations.WebAPI
                                 DescriptionHtml = BlankHtml,
                                 Citation = BlankText,
                                 CitationHtml = BlankHtml,
-                                MetadataJson = blankJson,
-                                MetadataJsonSha256 = blankJson.Sha256(),
+                                MetadataJson = BlankJson,
+                                MetadataJsonSha256 = BlankJson.Sha256(),
                                 MetadataUrl = "https://catalogue.saeon.ac.za/records/",
                                 MetadataHtml = BlankHtml,
                                 QueryUrl = "https://observations.saeon.ac.za/",

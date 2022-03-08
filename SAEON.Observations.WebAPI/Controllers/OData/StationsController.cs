@@ -34,16 +34,16 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return GetManyWithGuidId(id, s => s.Instruments);
         }
 
-        //[ODataRoute("({id})/DataStreams")] @@
-        //public IQueryable<Dataset> GetDatasets(Guid id)
-        //{
-        //    return GetManyWithLongId(id, s => s.Datastreams);
-        //}
+        [ODataRoute("({id})/Datasets")]
+        public IQueryable<Dataset> GetDatasets(Guid id)
+        {
+            return GetManyWithLongId(id, s => s.Datasets);
+        }
 
-        //[ODataRoute("({id})/Observations")] @@
-        //public IQueryable<Observation> GetObservations(Guid id)
+        //[ODataRoute("({id})/Observations/{phenomenonId}/{offeringId}/{unitId}")]
+        //public List<Observation> GetObservations(Guid id, Guid phenomenonId, Guid offeringId, Guid unitId)
         //{
-        //    return GetManyWithIntId(id, s => s.Observations);
+        //    return GetManyWithIntId<Observation>(id, s => s.Observations).Where(i => (i.PhenomenonId == phenomenonId) && (i.OfferingId == offeringId) && (i.UnitId == unitId)).ToList();
         //}
 
     }

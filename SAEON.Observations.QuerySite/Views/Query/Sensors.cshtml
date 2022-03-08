@@ -2,7 +2,7 @@
     ViewBag.Title = "Sensors";
 }
 <div class="row">
-    <div class="col-md">
+    <div class="col-lg">
         @(Html.EJ().Grid<object>("SensorsGrid")
             .Datasource(datasource => datasource.URL(ViewBag.WebAPIUrl + "/OData/InventorySensors")
                 .Headers(new { Tenant = ViewBag.Tenant, Authorization = ViewBag.Authorization })

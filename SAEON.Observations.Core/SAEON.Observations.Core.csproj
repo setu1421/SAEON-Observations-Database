@@ -10,13 +10,14 @@
     <ApplicationIcon>SAEON.ico</ApplicationIcon>
     <LangVersion>9.0</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.17</Version>
+    <Version>1.0.25</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Humanizer.Core" Version="2.11.10" />
-    <PackageReference Include="SAEON.Core" Version="1.0.37" />
-    <PackageReference Include="SAEON.OpenXML" Version="1.0.104" />
+    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	  <PackageReference Include="SAEON.Core" Version="1.0.42" />
+    <PackageReference Include="SAEON.OpenXML" Version="1.0.114" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
@@ -24,13 +25,12 @@
     <Reference Include="System.Data.Entity" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
-    <PackageReference Include="SAEON.Logs.NetCore" Version="1.0.60" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.2.2" />
-    <PackageReference Include="System.Text.Json" Version="5.0.2" />
+    <PackageReference Include="SAEON.Logs.NetCore" Version="1.0.69" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.3.0" />
+    <PackageReference Include="System.Text.Json" Version="[5.0.2,6.0.0)" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

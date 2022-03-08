@@ -1,9 +1,11 @@
 ﻿using SAEON.Logs;
+using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Globalization;
+using System.Linq;
 using System.Transactions;
 
 /// <summary>
@@ -36,11 +38,10 @@ public static class Utilities
         {
             result.Add($"{col.ColumnName}: {dataRow[col.ColumnName]}");
         }
-
-        return string.Join(oneLine ? "; " : "<br />", result);
+        return string.Join(oneLine ? "; " : Environment.NewLine, result);
     }
 
-    public static string Dump(this DataTable dataTable, string name = "")
+    public static List<string> Dump(this DataTable dataTable, string name = "")
     {
         List<string> result = new List<string>();
         if (!string.IsNullOrEmpty(name))
@@ -52,8 +53,13 @@ public static class Utilities
         {
             result.Add(row.Dump());
         }
+        return result;
+        //return string.Join(Environment.NewLine, result);
+    }
 
-        return string.Join("<br />", result);
+    public static List<string> DumpCSV(this DataTable dataTable, string name = "")
+    {
+        return dataTable.ToCSV(",").Split(new string[] { Environment.NewLine }, StringSplitOptions.None).ToList();
     }
 
     public static TransactionScope NewTransactionScope()

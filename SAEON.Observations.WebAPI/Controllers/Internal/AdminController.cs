@@ -20,10 +20,11 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     {
         private readonly IHubContext<AdminHub> AdminHub;
 
-        public AdminController(IHubContext<AdminHub> webApiHub)
+        public AdminController(IHubContext<AdminHub> webApiHub) : base()
         {
             AdminHub = webApiHub;
             TrackChanges = true;
+            CommandTimeoutKey = "AdminCommandTimeoutInMins";
         }
 
         [HttpPost("[action]")]

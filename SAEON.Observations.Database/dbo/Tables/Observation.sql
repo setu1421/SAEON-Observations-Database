@@ -34,20 +34,11 @@
 );
 GO
 CREATE INDEX [IX_Observation_ImportBatchID] ON [dbo].[Observation]([ImportBatchID])
-INCLUDE ([ValueDate],[RawValue],[DataValue],[Comment],[CorrelationID])
+  INCLUDE ([DataValue],[PhenomenonOfferingID],[PhenomenonUOMID],[SensorID],[StatusID],[StatusReasonID],[Elevation],[Latitude],[Longitude],[ValueDate],[ValueDay])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO
 CREATE INDEX [IX_Observation_SensorID] ON [dbo].[Observation] ([SensorID])
-  INCLUDE ([ValueDate],[DataValue],[PhenomenonOfferingID],[PhenomenonUOMID],[ImportBatchID],[Elevation],[Latitude],[Longitude],[ValueDay])
-  WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
-GO
-CREATE INDEX [IX_Observation_SensorID_PhenomenonOfferingID] ON [dbo].[Observation] ([SensorID],[PhenomenonOfferingID])
-  WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
-GO
-CREATE INDEX [IX_Observation_SensorID_PhenomenonOfferingID_PhenomenonUOMID_ImportBatchID] ON [dbo].[Observation] ([SensorID],[PhenomenonOfferingID],[PhenomenonUOMID],[ImportBatchID])
-  WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
-GO
-CREATE INDEX [IX_Observation_SensorID_PhenomenonUOMID] ON [dbo].[Observation] ([SensorID],[PhenomenonUOMID])
+  --INCLUDE ([ValueDate],[DataValue],[PhenomenonOfferingID],[PhenomenonUOMID],[ImportBatchID],[StatusID],[StatusReasonID],[Elevation],[Latitude],[Longitude],[ValueDay])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO
 CREATE INDEX [IX_Observation_PhenomenonOfferingID] ON [dbo].[Observation] ([PhenomenonOfferingID])
@@ -75,7 +66,6 @@ CREATE INDEX [IX_Observation_ValueDecade] ON [dbo].[Observation] ([ValueDecade])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO
 CREATE INDEX [IX_Observation_StatusID] ON [dbo].[Observation] ([StatusID])
-  INCLUDE ([SensorID],[PhenomenonOfferingID],[PhenomenonUOMID],[ImportBatchID])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO
 CREATE INDEX [IX_Observation_StatusReasonID] ON [dbo].[Observation] ([StatusReasonID])
@@ -91,15 +81,6 @@ CREATE INDEX [IX_Observation_Longitude] ON [dbo].[Observation] ([Longitude])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO
 CREATE INDEX [IX_Observation_Elevation] ON [dbo].[Observation] ([Elevation])
-  WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
-GO
-CREATE INDEX [IX_Observation_SensorID_ValueDate_Latitude] on [dbo].[Observation] ([SensorID],[ValueDate],[Latitude])
-  WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
-GO
-CREATE INDEX [IX_Observation_SensorID_ValueDate_Longitude] on [dbo].[Observation] ([SensorID],[ValueDate],[Longitude])
-  WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
-GO
-CREATE INDEX [IX_Observation_SensorID_ValueDate_Elevation] on [dbo].[Observation] ([SensorID],[ValueDate],[Elevation])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO
 CREATE TRIGGER [dbo].[TR_Observation_Insert] ON [dbo].[Observation]

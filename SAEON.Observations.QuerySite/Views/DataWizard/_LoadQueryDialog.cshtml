@@ -1,7 +1,7 @@
 ﻿@using SAEON.Observations.QuerySite.Models
 @model DataWizardModel
 <div class="row">
-    <div class="col-md">
+    <div class="col-lg">
         @(Html.EJ()
             .Autocomplete("editLoadQueryName")
             .Datasource(ds => ds.URL("/DataWizard/GetUserQueries")
@@ -17,11 +17,11 @@
     </div>
 </div>
 <div class="row ErrorRow">
-    <div class="col-md" id="LoadError">
+    <div class="col-lg" id="LoadError">
     </div>
 </div>
 <div class="row ButtonRow">
-    <div class="col-md">
+    <div class="col-lg">
         @(Html.EJ()
             .Button("btnLoadQueryLoad")
             .Text("Load")

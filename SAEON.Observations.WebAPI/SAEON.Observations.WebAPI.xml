@@ -10,6 +10,36 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:SAEON.Observations.WebAPI.ObservationInput">
+            <summary>
+            Input for an observations query
+            </summary>
+        </member>
+        <member name="P:SAEON.Observations.WebAPI.ObservationInput.PhenomenonId">
+            <summary>
+            PhenomenonId for the observations
+            </summary>
+        </member>
+        <member name="P:SAEON.Observations.WebAPI.ObservationInput.OfferingId">
+            <summary>
+            OfferingId for the observations
+            </summary>
+        </member>
+        <member name="P:SAEON.Observations.WebAPI.ObservationInput.UnitId">
+            <summary>
+            UnitId for the observations
+            </summary>
+        </member>
+        <member name="P:SAEON.Observations.WebAPI.ObservationInput.StartDate">
+            <summary>
+            Start date for the observations
+            </summary>
+        </member>
+        <member name="P:SAEON.Observations.WebAPI.ObservationInput.EndDate">
+            <summary>
+            End date for the observations
+            </summary>
+        </member>
         <member name="M:SAEON.Observations.WebAPI.Controllers.OData.IDEntityODataController`1.GetById(System.Guid)">
             <summary>
             Get a TEntity by Id
@@ -418,6 +448,31 @@
             </summary>
             <param name="id">Id of the Station</param>
             <returns>ListOf(Project)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetDatasets(System.Guid)">
+            <summary>
+            Datasets of the Station
+            </summary>
+            <param name="id">Id of the Station</param>
+            <returns>ListOf(DataStream)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetObservations(System.Guid,System.Guid,System.Guid,System.Guid)">
+            <summary>
+            Observations of a variable (phenomenon, offering, unit) at the Station
+            </summary>
+            <param name="id">Id of the Station</param>
+            <param name="phenomenonId">PhenomenonId of the Observations</param>
+            <param name="offeringId">OfferingId of the Observations</param>
+            <param name="unitId">UnitId of the Observations</param>
+            <returns>ListOf(Observation)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetObservationsDateRange(System.Guid,SAEON.Observations.WebAPI.ObservationInput)">
+            <summary>
+            Observations of a variable (phenomenon, offering, unit) at the Station over a date range
+            </summary>
+            <param name="id">Id of the Station</param>
+            <param name="input">Input of the range of observations</param>
+            <returns>ListOf(Observation)</returns>
         </member>
         <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.UnitsController.GetAll">
             <summary>

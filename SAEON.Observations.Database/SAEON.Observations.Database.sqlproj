@@ -244,44 +244,44 @@
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Views\vModuleRoleModule.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
+      <AnsiNulls>ProjectDefault</AnsiNulls>
+      <QuotedIdentifier>ProjectDefault</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Views\vDataSource.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
+      <AnsiNulls>ProjectDefault</AnsiNulls>
+      <QuotedIdentifier>ProjectDefault</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Views\vDataLog.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
+      <AnsiNulls>ProjectDefault</AnsiNulls>
+      <QuotedIdentifier>ProjectDefault</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Views\vDataSourceTransformation.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
+      <AnsiNulls>ProjectDefault</AnsiNulls>
+      <QuotedIdentifier>ProjectDefault</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Views\vSensor.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
+      <AnsiNulls>ProjectDefault</AnsiNulls>
+      <QuotedIdentifier>ProjectDefault</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Views\vUserInfo.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
+      <AnsiNulls>ProjectDefault</AnsiNulls>
+      <QuotedIdentifier>ProjectDefault</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Views\vDataSchema.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
+      <AnsiNulls>ProjectDefault</AnsiNulls>
+      <QuotedIdentifier>ProjectDefault</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Views\vImportBatch.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
+      <AnsiNulls>ProjectDefault</AnsiNulls>
+      <QuotedIdentifier>ProjectDefault</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Views\vStation.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
+      <AnsiNulls>ProjectDefault</AnsiNulls>
+      <QuotedIdentifier>ProjectDefault</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Views\vInventorySensors.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
+      <AnsiNulls>ProjectDefault</AnsiNulls>
+      <QuotedIdentifier>ProjectDefault</QuotedIdentifier>
     </Build>
     <Build Include="Security\aspnet_Membership_FullAccess.sql" />
     <Build Include="Security\aspnet_Membership_BasicAccess.sql" />
@@ -534,6 +534,8 @@
     <Build Include="dbo\Stored Procedures\spCreateInventorySnapshot.sql" />
     <Build Include="dbo\Tables\InventorySnapshots.sql" />
     <Build Include="dbo\Stored Procedures\spCreateImportBatchSummaries.sql" />
+    <Build Include="dbo\Views\vInventorySnapshots.sql" />
+    <Build Include="dbo\Tables\RequestLogs.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

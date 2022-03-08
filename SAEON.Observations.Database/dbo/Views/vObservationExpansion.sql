@@ -25,11 +25,11 @@ from
   inner join Sensor
     on (Observation.SensorID = Sensor.ID)
   inner join Instrument_Sensor
-    on (Observation.SensorID = Instrument_Sensor.SensorID) 
+    on (Sensor.ID = Instrument_Sensor.SensorID) 
   inner join Instrument
     on (Instrument_Sensor.InstrumentID = Instrument.ID) 
   inner join Station_Instrument
-    on (Station_Instrument.InstrumentID = Instrument_Sensor.InstrumentID) 
+    on (Station_Instrument.InstrumentID = Instrument.ID) 
   inner join Station
     on (Station_Instrument.StationID = Station.ID) 
   inner join Site

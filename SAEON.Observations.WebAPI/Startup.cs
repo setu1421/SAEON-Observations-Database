@@ -20,6 +20,7 @@ using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
+using SAEON.Observations.WebAPI.Common;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.Collections.Generic;
@@ -101,12 +102,26 @@ namespace SAEON.Observations.WebAPI
                             Description = "SAEON Observations Database WebAPI",
                             Contact = new OpenApiContact { Name = "Tim Parker-Nance", Email = "timpn@saeon.ac.za", Url = new Uri("http://www.saeon.ac.za") },
                             License = new OpenApiLicense { Name = "Creative Commons Attribution-ShareAlike 4.0 International License", Url = new Uri("https://creativecommons.org/licenses/by-sa/4.0/") }
-
                         });
                         options.IncludeXmlComments("SAEON.Observations.WebAPI.xml");
                         options.SchemaFilter<SwaggerIgnoreFilter>();
 
-                        options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                        options.AddSecurityDefinition("AccessToken", new OpenApiSecurityScheme
+                        {
+                            Type = SecuritySchemeType.OAuth2,
+                            Flows = new OpenApiOAuthFlows
+                            {
+                                ClientCredentials = new OpenApiOAuthFlow
+                                {
+                                    TokenUrl = new Uri(Configuration["AuthenticationServerUrl"].AddTrailingForwardSlash() + "oauth2/token"),
+                                    Scopes = new Dictionary<string, string>
+                                    {
+                                        {"SAEON.Observations.WebAPI","" }
+                                    }
+                                },
+                            }
+                        });
+                        options.AddSecurityDefinition("IdToken", new OpenApiSecurityScheme
                         {
                             Type = SecuritySchemeType.OAuth2,
                             Flows = new OpenApiOAuthFlows
@@ -119,34 +134,21 @@ namespace SAEON.Observations.WebAPI
                                     {
                                         {"SAEON.Observations.WebAPI","" }
                                     }
-                                },
-                                ClientCredentials = new OpenApiOAuthFlow
-                                {
-                                    TokenUrl = new Uri(Configuration["AuthenticationServerUrl"].AddTrailingForwardSlash() + "oauth2/token"),
-                                    Scopes = new Dictionary<string, string>
-                                    {
-                                        {"SAEON.Observations.WebAPI","" }
-                                    }
-                                },
+                                }
                             }
                         });
-                        options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                        {
-                            {
-                                new OpenApiSecurityScheme
-                                {
-                                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" },
-                                },
-                                new[] { "SAEON.Observations.WebAPI"}
-                            }
-                        });
+                        options.OperationFilter<AccessTokenOperationFilter>();
+                        options.OperationFilter<IdTokenOperationFilter>();
                     });
                     services.AddSignalR();
                     services.Configure<ApiBehaviorOptions>(options =>
                     {
                         options.SuppressModelStateInvalidFilter = true;
                     });
-                    services.AddControllers();
+                    services.AddControllers().AddJsonOptions(options =>
+                    {
+                        options.JsonSerializerOptions.IgnoreNullValues = true;
+                    });
                     services.AddControllersWithViews();
                     services.AddOData();
                     SetODataFormatters(services);
