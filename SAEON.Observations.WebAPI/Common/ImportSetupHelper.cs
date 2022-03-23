@@ -376,7 +376,7 @@ namespace SAEON.Observations.WebAPI
                             }
                         }
                         // DataSources
-                        SAEONLogs.Information("Adding DataSources");
+                        await AddLineAsync("Adding DataSources");
                         var dataSourcesList = ExcelHelper.GetNameValues(doc, "DataSourcesList");
                         for (int rInstrument = 0; rInstrument < instrumentsList.GetUpperBound(0) + 1; rInstrument++)
                         {
@@ -457,6 +457,7 @@ namespace SAEON.Observations.WebAPI
                             }
                         }
                         // Sensors
+                        await AddLineAsync("Adding Sensors");
                         var sensorInstruments = ExcelHelper.GetNameValues(doc, "SensorsInstruments");
                         var sensorPhenomena = ExcelHelper.GetNameValues(doc, "SensorsPhenomena");
                         var sensorsData = ExcelHelper.GetNameValues(doc, "SensorsData");
