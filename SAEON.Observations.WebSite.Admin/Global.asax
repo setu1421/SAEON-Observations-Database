@@ -27,18 +27,10 @@
     void Session_Start(object sender, EventArgs e)
     {
         // Code that runs when a new session is started
-        if (Request.IsLocal || Request.Url.DnsSafeHost.ToLowerInvariant().Contains("-test"))
-        {
-            Session.Add("GA4Key", "G-ZG93KDRT46");
-            Session.Add("ClarityKey","6j3zwxohjo");
-            Session.Add("AppInsightsKey","29c1b7fd-89da-4cb9-8bd0-df6526e78dc2");
-        }
-        else
-        {
-            Session.Add("GA4Key", "G-5QHD56BYB0");
-            Session.Add("ClarityKey","6dewe0cje3");
-            Session.Add("AppInsightsKey","cb428f42-2a0c-4825-a0dc-1c6ec69fada8");
-        }
+        Session.Add("AppInsightsKey", ConfigurationManager.AppSettings["ApplicationInsightsConnectionString"]);
+        Session.Add("GA4Key", ConfigurationManager.AppSettings["GA4Key"]);
+        Session.Add("ClarityKey", ConfigurationManager.AppSettings["ClarityKey"]);
+        //SAEONLogs.Information("GA4Key: {GA4Key} Clarity: {ClarityKey}", ConfigurationManager.AppSettings["GA4Key"], ConfigurationManager.AppSettings["ClarityKey"]);
     }
 
     void Session_End(object sender, EventArgs e)
