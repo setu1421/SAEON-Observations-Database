@@ -302,7 +302,6 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Common\AnalyticsHelper.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\HttpContextExtensions.cs" />
     <Compile Include="Common\StringExtensions.cs" />
