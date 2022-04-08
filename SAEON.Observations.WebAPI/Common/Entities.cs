@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace SAEON.Observations.Core
 {
@@ -138,13 +139,18 @@ namespace SAEON.Observations.Core
         public Guid StationId { get; set; }
         public string StationCode { get; set; }
         public string StationName { get; set; }
+        public Guid PhenomenonId { get; set; }
         public string PhenomenonCode { get; set; }
         public string PhenomenonName { get; set; }
+        [JsonIgnore, SwaggerIgnore]
         public Guid PhenomenonOfferingId { get; set; }
+        public Guid OfferingId { get; set; }
         public string OfferingCode { get; set; }
         public string OfferingName { get; set; }
-        [Column("PhenomenonUOMID")]
+        [Column("PhenomenonUOMID"), JsonIgnore, SwaggerIgnore]
         public Guid PhenomenonUnitId { get; set; }
+        [Column("UnitOfMeasureID")]
+        public Guid UnitId { get; set; }
         [Column("UnitOfMeasureCode")]
         public string UnitCode { get; set; }
         [Column("UnitOfMeasureUnit")]

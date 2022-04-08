@@ -27,7 +27,7 @@
     void Session_Start(object sender, EventArgs e)
     {
         // Code that runs when a new session is started
-        Session.Add("AppInsightsKey", ConfigurationManager.AppSettings["ApplicationInsightsConnectionString"]);
+        Session.Add("AppInsightsKey", ConfigurationManager.AppSettings["APPINSIGHTS_CONNECTIONSTRING"]);
         Session.Add("GA4Key", ConfigurationManager.AppSettings["GA4Key"]);
         Session.Add("ClarityKey", ConfigurationManager.AppSettings["ClarityKey"]);
         //SAEONLogs.Information("GA4Key: {GA4Key} Clarity: {ClarityKey}", ConfigurationManager.AppSettings["GA4Key"], ConfigurationManager.AppSettings["ClarityKey"]);

@@ -36,7 +36,7 @@
     CONSTRAINT [FK_ImportBatchSummary_PhenomenonOfferingID] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [PhenomenonOffering]([ID]), 
     CONSTRAINT [FK_ImportBatchSummary_PhenomenonUOMID] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [PhenomenonUOM]([ID]),
     --Constraint [FK_ImportBatchSummary_DigitalObjectIdentifierID] Foreign Key ([DigitalObjectIdentifierID]) References [dbo].[DigitalObjectIdentifiers] ([ID]),
-    CONSTRAINT [UX_ImportBatchSummary] UNIQUE (ImportBatchID,SensorID,PhenomenonOfferingID,PhenomenonUOMID),
+    CONSTRAINT [UX_ImportBatchSummary] UNIQUE (ImportBatchID,StationID,SensorID,PhenomenonOfferingID,PhenomenonUOMID),
 )
 
 GO
