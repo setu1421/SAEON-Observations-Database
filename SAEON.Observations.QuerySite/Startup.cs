@@ -163,6 +163,7 @@ namespace SAEON.Observations.QuerySite
                                     var loginReferer = context.Request.Headers["Referer"];
                                     context.Response.Headers["LoginReferer"] = loginReferer;
                                     //SAEONLogs.Information("LoginReferer: {LoginReferer}", loginReferer);
+                                    SAEONLogs.Verbose("State: {State}", context.ProtocolMessage.State);
                                     var stateQueryString = context.ProtocolMessage.State.Split('=');
                                     var protectedState = stateQueryString[1];
                                     var state = context.Options.StateDataFormat.Unprotect(protectedState);

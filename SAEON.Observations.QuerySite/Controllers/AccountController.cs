@@ -40,6 +40,17 @@ namespace SAEON.Observations.QuerySite.Controllers
             return Redirect("/");
         }
 
+        public class BearerToken
+        {
+            public string Token { get; set; }
+        }
+
+        public ActionResult Token()
+        {
+            var result = new BearerToken { Token = (string)HttpContext.ApplicationInstance.Context.Session[Constants.SessionKeyODPAccessToken] };
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         /*
         //[Authorize]
         public ActionResult Claims()
