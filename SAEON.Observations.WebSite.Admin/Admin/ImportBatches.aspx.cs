@@ -179,7 +179,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             ImportBatchSummary.Delete("ImportBatchID", importBatchId);
             var sqlTest =
                 "Select" + Environment.NewLine +
-                "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(ID) Count" + Environment.NewLine +
+                "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(ID) Count, Min(ValueDate) StartDate, Max(ValueDate) EndDate" + Environment.NewLine +
                 "from" + Environment.NewLine +
                 "  vObservationExpansion" + Environment.NewLine +
                 "where" + Environment.NewLine +

@@ -406,11 +406,11 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 else
                     stationInstrument.Elevation = nfStationElevation.Number;
                 if (!dfStationStartDate.IsEmpty && (dfStationStartDate.SelectedDate.Year >= 1900))
-                    stationInstrument.StartDate = dfStationStartDate.SelectedDate;
+                    stationInstrument.StartDate = DateTime.Parse(dfStationStartDate.RawText);
                 else
                     stationInstrument.StartDate = null;
                 if (!dfStationEndDate.IsEmpty && (dfStationEndDate.SelectedDate.Year >= 1900))
-                    stationInstrument.EndDate = dfStationEndDate.SelectedDate;
+                    stationInstrument.EndDate = DateTime.Parse(dfStationEndDate.RawText);
                 else
                     stationInstrument.EndDate = null;
                 stationInstrument.UserId = AuthHelper.GetLoggedInUserId;

@@ -69,11 +69,38 @@ DROP INDEX [IX_Observation_ValueYear]
 
 
 GO
-PRINT N'Dropping Unique Constraint [dbo].[UX_ImportBatchSummary]...';
+PRINT N'Dropping Index [dbo].[Station_Instrument].[IX_Station_Instrument_EndDate]...';
 
 
 GO
-ALTER TABLE [dbo].[ImportBatchSummary] DROP CONSTRAINT [UX_ImportBatchSummary];
+DROP INDEX [IX_Station_Instrument_EndDate]
+    ON [dbo].[Station_Instrument];
+
+
+GO
+PRINT N'Dropping Index [dbo].[Station_Instrument].[IX_Station_Instrument_StartDateEndDate]...';
+
+
+GO
+DROP INDEX [IX_Station_Instrument_StartDateEndDate]
+    ON [dbo].[Station_Instrument];
+
+
+GO
+PRINT N'Dropping Index [dbo].[Station_Instrument].[IX_Station_Instrument_StartDate]...';
+
+
+GO
+DROP INDEX [IX_Station_Instrument_StartDate]
+    ON [dbo].[Station_Instrument];
+
+
+GO
+PRINT N'Dropping Unique Constraint [dbo].[UX_Station_Instrument]...';
+
+
+GO
+ALTER TABLE [dbo].[Station_Instrument] DROP CONSTRAINT [UX_Station_Instrument];
 
 
 GO
@@ -111,16 +138,7 @@ CREATE NONCLUSTERED INDEX [IX_Observation_ValueYear]
 
 
 GO
-PRINT N'Creating Unique Constraint [dbo].[UX_ImportBatchSummary]...';
-
-
-GO
-ALTER TABLE [dbo].[ImportBatchSummary]
-    ADD CONSTRAINT [UX_ImportBatchSummary] UNIQUE NONCLUSTERED ([ImportBatchID] ASC, [StationID] ASC, [SensorID] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC);
-
-
-GO
-PRINT N'Refreshing View [dbo].[vObservationExpansion]...';
+PRINT N'Altering Table [dbo].[Station_Instrument]...';
 
 
 GO
@@ -130,9 +148,180 @@ SET QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vObservationExpansion]';
+ALTER TABLE [dbo].[Station_Instrument] ALTER COLUMN [EndDate] DATETIME NULL;
+
+ALTER TABLE [dbo].[Station_Instrument] ALTER COLUMN [StartDate] DATETIME NULL;
 
 
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating Unique Constraint [dbo].[UX_Station_Instrument]...';
+
+
+GO
+ALTER TABLE [dbo].[Station_Instrument]
+    ADD CONSTRAINT [UX_Station_Instrument] UNIQUE NONCLUSTERED ([StationID] ASC, [InstrumentID] ASC, [StartDate] ASC, [EndDate] ASC);
+
+
+GO
+PRINT N'Creating Index [dbo].[Station_Instrument].[IX_Station_Instrument_EndDate]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Station_Instrument_EndDate]
+    ON [dbo].[Station_Instrument]([EndDate] ASC);
+
+
+GO
+PRINT N'Creating Index [dbo].[Station_Instrument].[IX_Station_Instrument_StartDateEndDate]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Station_Instrument_StartDateEndDate]
+    ON [dbo].[Station_Instrument]([StartDate] ASC, [EndDate] ASC);
+
+
+GO
+PRINT N'Creating Index [dbo].[Station_Instrument].[IX_Station_Instrument_StartDate]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Station_Instrument_StartDate]
+    ON [dbo].[Station_Instrument]([StartDate] ASC);
+
+
+GO
+PRINT N'Creating Table [dbo].[RequestLogs]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TABLE [dbo].[RequestLogs] (
+    [ID]          INT            IDENTITY (1, 1) NOT NULL,
+    [Time]        DATETIME       NOT NULL,
+    [Method]      VARCHAR (50)   NOT NULL,
+    [Path]        VARCHAR (1024) NOT NULL,
+    [QueryString] VARCHAR (1024) NULL,
+    [Headers]     VARCHAR (MAX)  NULL,
+    [Body]        VARCHAR (MAX)  NULL,
+    [IPAddress]   VARCHAR (45)   NULL,
+    [Description] VARCHAR (8000) NULL,
+    [RowVersion]  ROWVERSION     NOT NULL,
+    CONSTRAINT [PK_RequestLogs] PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating Index [dbo].[RequestLogs].[IX_RequestLogs_Time]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_RequestLogs_Time]
+    ON [dbo].[RequestLogs]([Time] ASC);
+
+
+GO
+PRINT N'Creating Index [dbo].[RequestLogs].[IX_RequestLogs_Method]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_RequestLogs_Method]
+    ON [dbo].[RequestLogs]([Method] ASC);
+
+
+GO
+PRINT N'Creating Index [dbo].[RequestLogs].[IX_RequestLogs_Path]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_RequestLogs_Path]
+    ON [dbo].[RequestLogs]([Path] ASC);
+
+
+GO
+PRINT N'Altering View [dbo].[vObservationExpansion]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vObservationExpansion]
+AS
+Select distinct
+  Observation.ID, Observation.ImportBatchID, ImportBatch.Code ImportBatchCode, ImportBatch.ImportDate ImportBatchDate, 
+  Observation.ValueDate, Observation.ValueDay, Observation.ValueYear, Observation.ValueDecade, 
+  Observation.RawValue, Observation.DataValue, Observation.TextValue, 
+  Observation.Comment, Observation.CorrelationID,
+  Site.ID SiteID, Site.Code SiteCode, Site.Name SiteName, Site.Description SiteDescription, Site.Url SiteUrl,
+  Station.ID StationID, Station.Code StationCode, Station.Name StationName, Station.Description StationDescription, Station.Url StationUrl,
+  Instrument.ID InstrumentID, Instrument.Code InstrumentCode, Instrument.Name InstrumentName, Instrument.Description InstrumentDescription, Instrument.Url InstrumentUrl,
+  Observation.SensorID, Sensor.Code SensorCode, Sensor.Name SensorName, Sensor.Description SensorDescription, Sensor.Url SensorUrl,
+  Coalesce(Observation.Latitude, Sensor.Latitude, Instrument_Sensor.Latitude, Instrument.Latitude, Station_Instrument.Latitude, Station.Latitude) Latitude,
+  Coalesce(Observation.Longitude, Sensor.Longitude, Instrument_Sensor.Longitude, Instrument.Longitude, Station_Instrument.Longitude, Station.Longitude) Longitude,
+  Coalesce(Observation.Elevation, Sensor.Elevation, Instrument_Sensor.Elevation, Instrument.Elevation, Station_Instrument.Elevation, Station.Elevation) Elevation,
+  Observation.PhenomenonOfferingID, Phenomenon.ID PhenomenonID, Phenomenon.Code PhenomenonCode, Phenomenon.Name PhenomenonName, Phenomenon.Description PhenomenonDescription, Phenomenon.Url PhenomenonUrl,
+  Offering.ID OfferingID, Offering.Code OfferingCode, Offering.Name OfferingName, Offering.Description OfferingDescription,
+  Observation.PhenomenonUOMID, UnitOfMeasure.ID UnitOfMeasureID, UnitOfMeasure.Code UnitOfMeasureCode, UnitOfMeasure.Unit UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
+  Observation.StatusID, Status.Code StatusCode, Status.Name StatusName, Status.Description StatusDescription,
+  Observation.StatusReasonID, StatusReason.Code StatusReasonCode, StatusReason.Name StatusReasonName, StatusReason.Description StatusReasonDescription,
+  Observation.UserId, Observation.AddedDate, Observation.AddedAt, Observation.UpdatedAt
+from
+  Observation
+  inner join ImportBatch
+    on (Observation.ImportBatchID = ImportBatch.ID)
+  inner join Sensor
+    on (Observation.SensorID = Sensor.ID)
+  inner join Instrument_Sensor
+    on (Sensor.ID = Instrument_Sensor.SensorID) 
+  inner join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) 
+  inner join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID) 
+  inner join Station
+    on (Station_Instrument.StationID = Station.ID) 
+  inner join Site
+    on (Station.SiteID = Site.ID) 
+  inner join PhenomenonOffering
+    on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
+  inner join Phenomenon
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join PhenomenonUOM
+    on (Observation.PhenomenonUOMID = PhenomenonUOM.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+  left join Status
+    on (Observation.StatusID = Status.ID)
+  left join StatusReason
+    on (Observation.StatusReasonID = StatusReason.ID)
+Where
+  ((Instrument_Sensor.StartDate is null) or (Observation.ValueDate >= Instrument_Sensor.StartDate)) and
+  ((Instrument_Sensor.EndDate is null) or (Observation.ValueDate <= Instrument_Sensor.EndDate)) and
+  ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate)) and
+  ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate)) and
+  ((Station_Instrument.StartDate is null) or (Observation.ValueDate >= Station_Instrument.StartDate)) and
+  ((Station_Instrument.EndDate is null) or (Observation.ValueDate <= Station_Instrument.EndDate)) and
+  ((Station.StartDate is null) or (Observation.ValueDay >= Station.StartDate))  and
+  ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate)) and
+  ((Site.StartDate is null) or (Observation.ValueDay >= Site.StartDate)) and
+  ((Site.EndDate is null) or (Observation.ValueDay <= Site.EndDate))
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
@@ -210,6 +399,549 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
+PRINT N'Altering View [dbo].[vDataLog]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vDataLog]
+AS
+
+SELECT 
+d.ID, 
+d.ImportDate,
+Site.Name SiteName,
+Station.Name StationName,
+Instrument.Name InstrumentName,
+d.SensorID,
+Sensor.Name SensorName,
+CASE 
+    WHEN d.SensorID is null then 1
+    ELSE 0
+END SensorInvalid,
+
+d.ValueDate,
+d.InvalidDateValue, 
+CASE 
+    WHEN ValueDate is null then 1
+    ELSE 0
+END DateValueInvalid,
+
+d.InvalidTimeValue, 
+CASE 
+    WHEN InvalidTimeValue is not null then 1
+    ELSE 0
+END TimeValueInvalid,
+
+CASE 
+    WHEN InvalidDateValue is null AND InvalidTimeValue IS NULL Then ValueDate
+    WHEN ValueTime is not null then ValueTime 
+END ValueTime,
+
+
+d.RawValue,
+d.ValueText,
+CASE
+    WHEN d.RawValue is null then 1
+    ELSE 0
+END RawValueInvalid,	
+
+d.DataValue,
+d.TransformValueText, 
+CASE
+    WHEN d.DataValue is null then 1
+    ELSE 0
+END DataValueInvalid,
+
+d.PhenomenonOfferingID, 
+CASE
+    WHEN d.PhenomenonOfferingID is null then 1
+    ELSE 0
+END OfferingInvalid,
+
+d.PhenomenonUOMID, 
+CASE
+    WHEN d.PhenomenonUOMID is null then 1
+    ELSE 0
+END UOMInvalid,
+
+p.Name PhenomenonName,
+o.Name OfferingName,
+uom.Unit,
+
+d.DataSourceTransformationID,
+tt.Name Transformation,
+d.StatusID,
+s.Name [Status],
+d.ImportBatchID,
+d.RawFieldValue,
+d.Comment
+
+FROM DataLog d
+  left join Sensor 
+    on (d.SensorID = Sensor.ID) 
+  left join Instrument_Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID) 
+  left join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) 
+  left join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID) 
+  left join Station 
+    on (Station_Instrument.StationID = Station.ID) 
+  left join Site
+    on (Station.SiteID = Site.ID) 
+  LEFT JOIN PhenomenonOffering po
+    ON d.PhenomenonOfferingID = po.ID
+  LEFT JOIN Phenomenon p
+    on po.PhenomenonID = p.ID
+  LEFT JOIN Offering o
+    on po.OfferingID = o.ID
+  LEFT JOIN PhenomenonUOM pu
+    on d.PhenomenonUOMID = pu.ID
+  LEFT JOIN UnitOfMeasure uom
+    on pu.UnitOfMeasureID = uom.ID
+  LEFT JOIN DataSourceTransformation ds
+    on d.DataSourceTransformationID = ds.ID
+  LEFT JOIN TransformationType tt
+    on ds.TransformationTypeID = tt.ID
+  INNER JOIN [Status] s
+    on d.StatusID = s.ID
+-- Need out of date observations in datalog
+--WHERE
+--  ((Instrument_Sensor.StartDate is null) or (d.ValueDate >= Instrument_Sensor.StartDate)) and
+--  ((Instrument_Sensor.EndDate is null) or (d.ValueDate <= Instrument_Sensor.EndDate)) and
+--  ((Instrument.StartDate is null) or (d.ValueDay >= Instrument.StartDate )) and
+--  ((Instrument.EndDate is null) or (d.ValueDay <= Instrument.EndDate)) and
+--  ((Station_Instrument.StartDate is null) or (d.ValueDate >= Station_Instrument.StartDate)) and
+--  ((Station_Instrument.EndDate is null) or (d.ValueDate <= Station_Instrument.EndDate)) and
+--  ((Station.StartDate is null) or (d.ValueDay >= Station.StartDate)) and
+--  ((Station.EndDate is null) or (d.ValueDay <= Station.EndDate)) and
+--  ((Site.StartDate is null) or  (d.ValueDay >= Site.StartDate)) and
+--  ((Site.EndDate is null) or  (d.ValueDay <= Site.EndDate))
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vInstrumentOrganisation]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vInstrumentOrganisation]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vSensor]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensor]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vSensorDates]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorDates]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vSensorLocation]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorLocation]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vSensorThingsAPIInstrumentDates]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIInstrumentDates]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vSensorThingsAPIStationDates]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIStationDates]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vSiteOrganisation]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSiteOrganisation]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vStationInstrument]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vStationInstrument]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vStationOrganisation]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vStationOrganisation]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vImportBatchSummary]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vImportBatchSummary]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vInventoryDatasets]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vInventoryDatasets]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vInventorySensors]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vInventorySensors]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vStationDatasets]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vStationDatasets]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vLocations]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vLocations]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vVariables]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vVariables]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vSensorThingsAPIDatastreams]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIDatastreams]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vSensorThingsAPIObservedProperties]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIObservedProperties]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vSensorThingsAPISensors]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPISensors]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vSensorThingsAPILocations]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPILocations]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vSensorThingsAPIThings]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIThings]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vSensorThingsAPIFeaturesOfInterest]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIFeaturesOfInterest]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vSensorThingsAPIHistoricalLocations]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsAPIHistoricalLocations]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing View [dbo].[vInventorySnapshots]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vInventorySnapshots]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
 PRINT N'Refreshing Procedure [dbo].[spCreateImportBatchSummaries]...';
 
 
@@ -221,6 +953,24 @@ SET QUOTED_IDENTIFIER OFF;
 
 GO
 EXECUTE sp_refreshsqlmodule N'[dbo].[spCreateImportBatchSummaries]';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing Procedure [dbo].[spCreateInventorySnapshot]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[spCreateInventorySnapshot]';
 
 
 GO

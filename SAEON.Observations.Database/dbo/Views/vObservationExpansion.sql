@@ -53,8 +53,8 @@ Where
   ((Instrument_Sensor.EndDate is null) or (Observation.ValueDate <= Instrument_Sensor.EndDate)) and
   ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate)) and
   ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate)) and
-  ((Station_Instrument.StartDate is null) or (Observation.ValueDay >= Station_Instrument.StartDate)) and
-  ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate)) and
+  ((Station_Instrument.StartDate is null) or (Observation.ValueDate >= Station_Instrument.StartDate)) and
+  ((Station_Instrument.EndDate is null) or (Observation.ValueDate <= Station_Instrument.EndDate)) and
   ((Station.StartDate is null) or (Observation.ValueDay >= Station.StartDate))  and
   ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate)) and
   ((Site.StartDate is null) or (Observation.ValueDay >= Site.StartDate)) and

@@ -106,8 +106,8 @@ FROM DataLog d
 --  ((Instrument_Sensor.EndDate is null) or (d.ValueDate <= Instrument_Sensor.EndDate)) and
 --  ((Instrument.StartDate is null) or (d.ValueDay >= Instrument.StartDate )) and
 --  ((Instrument.EndDate is null) or (d.ValueDay <= Instrument.EndDate)) and
---  ((Station_Instrument.StartDate is null) or (d.ValueDay >= Station_Instrument.StartDate)) and
---  ((Station_Instrument.EndDate is null) or (d.ValueDay <= Station_Instrument.EndDate)) and
+--  ((Station_Instrument.StartDate is null) or (d.ValueDate >= Station_Instrument.StartDate)) and
+--  ((Station_Instrument.EndDate is null) or (d.ValueDate <= Station_Instrument.EndDate)) and
 --  ((Station.StartDate is null) or (d.ValueDay >= Station.StartDate)) and
 --  ((Station.EndDate is null) or (d.ValueDay <= Station.EndDate)) and
 --  ((Site.StartDate is null) or  (d.ValueDay >= Site.StartDate)) and

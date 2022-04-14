@@ -1,4 +1,13 @@
-use Observations;
+Update
+  Station_Instrument
+set
+  EndDate = DateAdd(Second,-1,DateAdd(Day,1,EndDate))
+where
+  (EndDate is not null) and
+  (DatePart(Hour,EndDate) = 0)  and
+  (DatePart(Minute,EndDate) = 0)  and
+  (DatePart(Second,EndDate) = 0)
+
 Declare @Code VarChar(100) = '%-126929'
 Select * from Instrument where code like @Code
 Select * from Sensor where code like @Code+'_EOV-SEATEMP-SUB'
