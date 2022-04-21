@@ -29,7 +29,6 @@
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-
         gtag('config', '<%=Session["GA4Key"]%>');
     </script>
     <!-- Clarity tracking code for http://observationsadmin.saeon.ac.za -->
