@@ -71,7 +71,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         token = Session[Constants.SessionKeyODPAccessToken]?.ToString();
                         if (string.IsNullOrWhiteSpace(token))
                         {
-                            using (var client = new HttpClient() { BaseAddress = new Uri(ConfigurationManager.AppSettings["AuthenticationServerUrl"].AddTrailingForwardSlash()) })
+                            using (var client = new HttpClient() { BaseAddress = new Uri(ConfigurationManager.AppSettings["AuthenticationServerUrl"].AddEndForwardSlash()) })
                             {
                                 using (var formContent = new FormUrlEncodedContent(new[] {
                                 new KeyValuePair<string, string>("grant_type", "client_credentials"),
@@ -128,7 +128,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var client = new HttpClient();
                     client.DefaultRequestHeaders.Add(Constants.HeaderKeyTenant, Tenant);
-                    client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebAPIUrl"].AddTrailingForwardSlash());
+                    client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebAPIUrl"].AddEndForwardSlash());
                     client.Timeout = TimeSpan.FromMinutes(Convert.ToInt32(ConfigurationManager.AppSettings["WebAPITimeoutMins"] ?? "15"));
                     return client;
                 }

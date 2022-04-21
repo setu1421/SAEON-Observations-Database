@@ -113,7 +113,7 @@ namespace SAEON.Observations.WebAPI
                             {
                                 ClientCredentials = new OpenApiOAuthFlow
                                 {
-                                    TokenUrl = new Uri(Configuration["AuthenticationServerUrl"].AddTrailingForwardSlash() + "oauth2/token"),
+                                    TokenUrl = new Uri(Configuration["AuthenticationServerUrl"].AddEndForwardSlash() + "oauth2/token"),
                                     Scopes = new Dictionary<string, string>
                                     {
                                         {"SAEON.Observations.WebAPI","" }
@@ -128,8 +128,8 @@ namespace SAEON.Observations.WebAPI
                             {
                                 AuthorizationCode = new OpenApiOAuthFlow
                                 {
-                                    AuthorizationUrl = new Uri(Configuration["AuthenticationServerUrl"].AddTrailingForwardSlash() + "oauth2/auth"),
-                                    TokenUrl = new Uri(Configuration["AuthenticationServerUrl"].AddTrailingForwardSlash() + "oauth2/token"),
+                                    AuthorizationUrl = new Uri(Configuration["AuthenticationServerUrl"].AddEndForwardSlash() + "oauth2/auth"),
+                                    TokenUrl = new Uri(Configuration["AuthenticationServerUrl"].AddEndForwardSlash() + "oauth2/token"),
                                     Scopes = new Dictionary<string, string>
                                     {
                                         {"SAEON.Observations.WebAPI","" }

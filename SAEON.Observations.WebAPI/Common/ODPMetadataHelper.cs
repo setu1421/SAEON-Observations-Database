@@ -181,7 +181,7 @@ namespace SAEON.Observations.WebAPI
         {
             var client = new HttpClient
             {
-                BaseAddress = new Uri(config["ODPMetadataUrl"].AddTrailingForwardSlash())
+                BaseAddress = new Uri(config["ODPMetadataUrl"].AddEndForwardSlash())
             };
             client.SetBearerToken(await GetTokenAsync());
             return client;
@@ -192,7 +192,7 @@ namespace SAEON.Observations.WebAPI
                 {
                     try
                     {
-                        using (var client = new HttpClient() { BaseAddress = new Uri(config["AuthenticationServerUrl"].AddTrailingForwardSlash()) })
+                        using (var client = new HttpClient() { BaseAddress = new Uri(config["AuthenticationServerUrl"].AddEndForwardSlash()) })
                         {
                             using (var formContent = new FormUrlEncodedContent(new[] {
                                 new KeyValuePair<string, string>("grant_type", "client_credentials"),

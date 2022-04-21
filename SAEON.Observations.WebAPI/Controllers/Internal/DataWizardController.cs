@@ -311,7 +311,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
             if (SAEONLogs.Level == LogEventLevel.Verbose && Config["SaveSearches"].IsTrue())
             {
-                var folder = $"{HostEnvironment.ContentRootPath.AddTrailingForwardSlash()}Searches/{result.Date:yyyyMM}";
+                var folder = $"{HostEnvironment.ContentRootPath.AddEndForwardSlash()}Searches/{result.Date:yyyyMM}";
                 Directory.CreateDirectory(folder);
                 System.IO.File.WriteAllText(Path.Combine(folder, $"{result.Date:yyyyMMdd HHmmss}.csv"), result.DataMatrix.ToCSV());
             }
@@ -531,7 +531,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         metadata.Generate();
                         SAEONLogs.Verbose("Metadata: {@Metadata}", metadata);
                         SAEONLogs.Verbose("Adding UserDownload");
-                        var baseUrl = $"{Config["QuerySiteUrl"].AddTrailingForwardSlash()}Query/Data";
+                        var baseUrl = $"{Config["QuerySiteUrl"].AddEndForwardSlash()}Query/Data";
                         var result = new UserDownload
                         {
                             UserId = User.UserId(),
@@ -546,7 +546,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                             Input = JsonConvert.SerializeObject(input),
                             RequeryUrl = $"{baseUrl}/Requery",
                             DownloadUrl = $"{baseUrl}/ViewDownload",
-                            ZipFullName = $"{HostEnvironment.ContentRootPath.AddTrailingForwardSlash()}Downloads/{output.Date:yyyyMM}",
+                            ZipFullName = $"{HostEnvironment.ContentRootPath.AddEndForwardSlash()}Downloads/{output.Date:yyyyMM}",
                             ZipCheckSum = "ABCD",
                             ZipUrl = $"{baseUrl}/DownloadZip",
                             AddedBy = User.UserId(),
@@ -560,7 +560,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         //result.Description += Environment.NewLine + "Please cite as follows:" + Environment.NewLine + metadata.CitationText;
                         result.RequeryUrl = $"{baseUrl}/Requery/{result.Id}";
                         result.DownloadUrl = $"{baseUrl}/ViewDownload/{result.Id}";
-                        var folder = $"{HostEnvironment.ContentRootPath.AddTrailingBackSlash()}Downloads\\{output.Date:yyyyMM}";
+                        var folder = $"{HostEnvironment.ContentRootPath.AddEndBackSlash()}Downloads\\{output.Date:yyyyMM}";
                         var dirInfo = Directory.CreateDirectory(Path.Combine(folder, result.Id.ToString()));
                         result.ZipFullName = Path.Combine(folder, $"{result.Id}.zip");
                         result.ZipUrl = $"{baseUrl}/DownloadZip/{result.Id}";
