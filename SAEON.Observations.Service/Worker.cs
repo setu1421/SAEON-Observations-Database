@@ -30,7 +30,7 @@ namespace SAEON.Observations.Service
                     SAEONLogs.Information("Starting worker");
                     this.config = config;
                     adminHubConnection = new HubConnectionBuilder()
-                        .WithUrl(config["WebAPIUrl"].AddTrailingForwardSlash() + "AdminHub")
+                        .WithUrl(config["WebAPIUrl"].AddEndForwardSlash() + "AdminHub")
                         .Build();
                     adminHubConnection.On<string>(SignalRDefaults.CreateDOIsStatusUpdate, CreateDOIsStatusUpdate);
                     adminHubConnection.On<string>(SignalRDefaults.CreateMetadataStatusUpdate, CreateMetadataStatusUpdate);
@@ -253,7 +253,7 @@ namespace SAEON.Observations.Service
             {
                 try
                 {
-                    using (var client = new HttpClient() { BaseAddress = new Uri(config["AuthenticationServerUrl"].AddTrailingForwardSlash()) })
+                    using (var client = new HttpClient() { BaseAddress = new Uri(config["AuthenticationServerUrl"].AddEndForwardSlash()) })
                     {
                         using (var formContent = new FormUrlEncodedContent(new[] {
                                 new KeyValuePair<string, string>("grant_type", "client_credentials"),
@@ -302,7 +302,7 @@ namespace SAEON.Observations.Service
                     var client = new HttpClient
                     {
                         //client.DefaultRequestHeaders.Add(Constants.HeaderKeyTenant, Tenant);
-                        BaseAddress = new Uri(config["WebAPIUrl"].AddTrailingForwardSlash()),
+                        BaseAddress = new Uri(config["WebAPIUrl"].AddEndForwardSlash()),
                         Timeout = TimeSpan.FromMinutes(Convert.ToInt32(config["WebAPITimeoutMins"] ?? "15"))
                     };
                     var token = await GetAccessTokenAsync(cancellationToken);

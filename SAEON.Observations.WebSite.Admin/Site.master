@@ -30,6 +30,7 @@
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', '<%=Session["GA4Key"]%>');
+        gtag('config', '<%=Session["GAUKey"]%>');
     </script>
     <!-- Clarity tracking code for http://observationsadmin.saeon.ac.za -->
     <script type="text/javascript">
