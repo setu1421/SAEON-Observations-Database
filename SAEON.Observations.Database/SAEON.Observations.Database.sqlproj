@@ -536,6 +536,7 @@
     <Build Include="dbo\Stored Procedures\spCreateImportBatchSummaries.sql" />
     <Build Include="dbo\Views\vInventorySnapshots.sql" />
     <Build Include="dbo\Tables\RequestLogs.sql" />
+    <Build Include="dbo\Views\vSensorExpansion.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

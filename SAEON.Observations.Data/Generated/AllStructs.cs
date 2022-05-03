@@ -364,6 +364,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VSensorDate = @"vSensorDates";
         
+		public static readonly string VSensorExpansion = @"vSensorExpansion";
+        
 		public static readonly string VSensorLocation = @"vSensorLocation";
         
 		public static readonly string VSiteOrganisation = @"vSiteOrganisation";

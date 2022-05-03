@@ -475,7 +475,7 @@
                                                     <ext:Parameter Name="ImportBatchID" Value="Ext.getCmp('#{ImportBatchesGrid}') && #{ImportBatchesGrid}.getSelectionModel().hasSelection() ? #{ImportBatchesGrid}.getSelectionModel().getSelected().id : -1"
                                                         Mode="Raw" />
                                                     <ext:Parameter Name="start" Value="0" Mode="Raw" />
-                                                    <ext:Parameter Name="limit" Value="25" Mode="Raw" />
+                                                    <ext:Parameter Name="limit" Value="250" Mode="Raw" />
                                                     <ext:Parameter Name="sort" Value="" />
                                                     <ext:Parameter Name="dir" Value="" />
                                                 </BaseParams>

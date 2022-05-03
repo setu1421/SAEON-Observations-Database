@@ -1703,7 +1703,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 {
                     Observation obs = new Observation(row.RecordID)
                     {
-                        StatusID = Utilities.MakeGuid(cbStatus.SelectedItem.Value)
+                        StatusID = Utilities.MakeGuid(cbStatus.SelectedItem.Value),
+                        VerifiedBy = AuthHelper.GetLoggedInUserId,
+                        VerifiedAt = DateTime.Now
                     };
                     if (cbStatus.SelectedItem.Text == "Verified")
                     {
@@ -1713,7 +1715,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     {
                         obs.StatusReasonID = Utilities.MakeGuid(cbStatusReason.SelectedItem.Value);
                     }
-
                     obs.Save();
                 }
                 sm.ClearSelections();
@@ -1765,6 +1766,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             new Update(Observation.Schema)
                                 .Set(Observation.Columns.StatusID).EqualTo(Utilities.MakeGuid(cbStatus.SelectedItem.Value))
                                 .Set(Observation.Columns.StatusReasonID).EqualTo(null)
+                                .Set(Observation.Columns.VerifiedBy).EqualTo(AuthHelper.GetLoggedInUserId)
+                                .Set(Observation.Columns.VerifiedAt).EqualTo(DateTime.Now)
                                 .Where(Observation.Columns.ImportBatchID).IsEqualTo(batch.Id)
                                 .And(Observation.Columns.StatusID).IsNull()
                                 .Execute();
@@ -1774,6 +1777,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             new Update(Observation.Schema)
                                 .Set(Observation.Columns.StatusID).EqualTo(Utilities.MakeGuid(cbStatus.SelectedItem.Value))
                                 .Set(Observation.Columns.StatusReasonID).EqualTo(Utilities.MakeGuid(cbStatusReason.SelectedItem.Value))
+                                .Set(Observation.Columns.VerifiedBy).EqualTo(AuthHelper.GetLoggedInUserId)
+                                .Set(Observation.Columns.VerifiedAt).EqualTo(DateTime.Now)
                                 .Where(Observation.Columns.ImportBatchID).IsEqualTo(batch.Id)
                                 .And(Observation.Columns.StatusID).IsNull()
                                 .Execute();
@@ -1848,6 +1853,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             new Update(Observation.Schema)
                                 .Set(Observation.Columns.StatusID).EqualTo(Utilities.MakeGuid(cbStatus.SelectedItem.Value))
                                 .Set(Observation.Columns.StatusReasonID).EqualTo(null)
+                                .Set(Observation.Columns.VerifiedBy).EqualTo(AuthHelper.GetLoggedInUserId)
+                                .Set(Observation.Columns.VerifiedAt).EqualTo(DateTime.Now)
                                 .Where(Observation.Columns.ImportBatchID).IsEqualTo(batch.Id)
                                 .Execute();
                         }
@@ -1856,6 +1863,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             new Update(Observation.Schema)
                                 .Set(Observation.Columns.StatusID).EqualTo(Utilities.MakeGuid(cbStatus.SelectedItem.Value))
                                 .Set(Observation.Columns.StatusReasonID).EqualTo(Utilities.MakeGuid(cbStatusReason.SelectedItem.Value))
+                                .Set(Observation.Columns.VerifiedBy).EqualTo(AuthHelper.GetLoggedInUserId)
+                                .Set(Observation.Columns.VerifiedAt).EqualTo(DateTime.Now)
                                 .Where(Observation.Columns.ImportBatchID).IsEqualTo(batch.Id)
                                 .Execute();
                         }
@@ -1904,7 +1913,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     Observation obs = new Observation(row.RecordID)
                     {
                         StatusID = null,
-                        StatusReasonID = null
+                        StatusReasonID = null,
+                        UnverifiedBy = AuthHelper.GetLoggedInUserId,
+                        UnverifiedAt = DateTime.Now
                     };
                     obs.Save();
                 }
@@ -1947,6 +1958,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         new Update(Observation.Schema)
                             .Set(Observation.Columns.StatusID).EqualTo(null)
                             .Set(Observation.Columns.StatusReasonID).EqualTo(null)
+                            .Set(Observation.Columns.UnverifiedBy).EqualTo(AuthHelper.GetLoggedInUserId)
+                            .Set(Observation.Columns.UnverifiedAt).EqualTo(DateTime.Now)
                             .Where(Observation.Columns.ImportBatchID).IsEqualTo(batch.Id)
                             .Execute();
                         ts.Complete();

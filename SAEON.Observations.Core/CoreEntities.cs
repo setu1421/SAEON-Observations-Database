@@ -444,9 +444,9 @@ namespace SAEON.Observations.Core
     {
         public Guid ImportBatchId { get; set; }
         public Guid SensorId { get; set; }
-        public Guid InstrumentId { get; set; }
-        public Guid StationId { get; set; }
-        public Guid SiteId { get; set; }
+        //public Guid InstrumentId { get; set; }
+        //public Guid StationId { get; set; }
+        //public Guid SiteId { get; set; }
         public Guid PhenomenonOfferingId { get; set; }
         [Column("PhenomenonUOMID")]
         public Guid PhenomenonUnitId { get; set; }
@@ -471,15 +471,19 @@ namespace SAEON.Observations.Core
         // Navigation
         [JsonIgnore, SwaggerIgnore]
         public ImportBatch ImportBatch { get; set; }
-        //public Sensor Sensor { get; set; }
+        [JsonIgnore, SwaggerIgnore]
+        public Sensor Sensor { get; set; }
         //public Instrument Instrument { get; set; }
         //public Station Station { get; set; }
         //public Site Site { get; set; }
+        //[JsonIgnore, SwaggerIgnore]
         //public PhenomenonOffering PhenomenonOffering { get; set; }
+        //[JsonIgnore, SwaggerIgnore]
         //public PhenomenonUnit PhenomenonUnit { get; set; }
         //[JsonIgnore, SwaggerIgnore, IgnoreDataMember]
         //public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
     }
+
     /// <summary>
     /// Instrument entity
     /// </summary>
