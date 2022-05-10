@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
+using SAEON.AspNet.Auth;
+using SAEON.Logs;
 using SAEON.Observations.Core;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
@@ -34,17 +38,27 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return GetManyWithGuidId(id, s => s.Instruments);
         }
 
-        [ODataRoute("({id})/Datasets")]
-        public IQueryable<Dataset> GetDatasets(Guid id)
-        {
-            return GetManyWithLongId(id, s => s.Datasets);
-        }
-
-        //[ODataRoute("({id})/Observations/{phenomenonId}/{offeringId}/{unitId}")]
-        //public List<Observation> GetObservations(Guid id, Guid phenomenonId, Guid offeringId, Guid unitId)
+        //@@@@
+        //[ODataRoute("({id})/Datasets")]
+        //public IQueryable<Dataset> GetDatasets(Guid id)
         //{
-        //    return GetManyWithIntId<Observation>(id, s => s.Observations).Where(i => (i.PhenomenonId == phenomenonId) && (i.OfferingId == offeringId) && (i.UnitId == unitId)).ToList();
+        //    return GetManyWithLongId(id, s => s.Datasets);
         //}
 
+        [ODataRoute("({id})/Observations")]
+        [Authorize(Policy = ODPAuthenticationDefaults.IdTokenPolicy)]
+        public async Task<IQueryable<Observation>> GetObservations(Guid id)
+        {
+            var result = GetManyWithIntId<Observation>(id, s => s.Observations).Take(100); //@@@
+            try
+            {
+                await RequestLogger.LogAsync(DbContext, Request);
+            }
+            catch (Exception ex)
+            {
+                SAEONLogs.Exception(ex);
+            }
+            return result;
+        }
     }
 }

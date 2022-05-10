@@ -74,100 +74,150 @@ namespace SAEON.Observations.WebAPI
                             return doi;
                         }
 
-                        IQueryable<VImportBatchSummary> GetImportBatchSummaries()
-                        {
-                            return dbContext.VImportBatchSummaries
-                                .Where(i =>
-                                    i.LatitudeNorth.HasValue && i.LatitudeSouth.HasValue &&
-                                    i.LongitudeWest.HasValue && i.LongitudeEast.HasValue &&
-                                    i.VerifiedCount > 0)
-                                .OrderBy(i => i.OrganisationName)
-                                .ThenBy(i => i.ProgrammeName)
-                                .ThenBy(i => i.ProjectName)
-                                .ThenBy(i => i.SiteName)
-                                .ThenBy(i => i.StationName)
-                                .ThenBy(i => i.PhenomenonName)
-                                .ThenBy(i => i.OfferingName)
-                                .ThenBy(i => i.UnitName)
-                                .ThenBy(i => i.StartDate);
-                        }
+                        //IQueryable<VImportBatchSummary> GetImportBatchSummaries()
+                        //{
+                        //    return dbContext.VImportBatchSummaries
+                        //        .Where(i =>
+                        //            i.LatitudeNorth.HasValue && i.LatitudeSouth.HasValue &&
+                        //            i.LongitudeWest.HasValue && i.LongitudeEast.HasValue &&
+                        //            i.VerifiedCount > 0)
+                        //        .OrderBy(i => i.OrganisationName)
+                        //        .ThenBy(i => i.ProgrammeName)
+                        //        .ThenBy(i => i.ProjectName)
+                        //        .ThenBy(i => i.SiteName)
+                        //        .ThenBy(i => i.StationName)
+                        //        .ThenBy(i => i.PhenomenonName)
+                        //        .ThenBy(i => i.OfferingName)
+                        //        .ThenBy(i => i.UnitName)
+                        //        .ThenBy(i => i.StartDate);
+                        //}
 
-                        async Task<DigitalObjectIdentifier> EnsureDatasetDOI(Station station, InventoryDataset dataset)
+                        async Task<DigitalObjectIdentifier> EnsureDatasetDOI(InventoryDataset dataset)
                         {
-                            var code = $"{station.Code}~{dataset.PhenomenonCode}~{dataset.OfferingCode}~{dataset.UnitCode}";
-                            var name = $"{station.Name}, {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName}";
+                            var code = $"{dataset.StationCode}~{dataset.PhenomenonCode}~{dataset.OfferingCode}~{dataset.UnitCode}";
+                            var name = $"{dataset.StationName}, {dataset.PhenomenonName}, {dataset.OfferingName}, {dataset.UnitName}";
                             var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code == code);
                             if (doi is null)
                             {
-                                doi = await AddDOI(DOIType.Dataset, code, name, null);
+                                // Recycle SACTN hourly
+                                doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_H~DEGC"));
+                                UpdateDOI();
+                                // Recycle SACTN daily
+                                if (doi is null)
+                                {
+                                    doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_D~DEGC"));
+                                    UpdateDOI();
+                                }
+                                // Recycle SACTN monthly
+                                if (doi is null)
+                                {
+                                    doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_M~DEGC"));
+                                    UpdateDOI();
+                                }
+                                // Recycle SACTN yearly
+                                if (doi is null)
+                                {
+                                    doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_Y~DEGC"));
+                                    UpdateDOI();
+                                }
+                                // None to recycle
+                                if (doi is null)
+                                    doi = await AddDOI(DOIType.Dataset, code, name, null);
                                 await dbContext.SaveChangesAsync();
                             }
                             return doi;
+
+                            void UpdateDOI()
+                            {
+                                if (doi is not null)
+                                {
+                                    doi.Code = code;
+                                    doi.Name = name;
+                                    doi.ODPMetadataNeedsUpdate = true;
+                                    doi.ODPMetadataIsValid = false;
+                                    doi.ODPMetadataIsPublished = false;
+                                }
+                            }
                         }
 
                         await AddLineAsync("Generating DOIs");
                         // Preload ImportBatchSummaries
-                        var importBatchSummaries = GetImportBatchSummaries();
+                        //var importBatchSummaries = GetImportBatchSummaries();
                         // We only create Dynamic DOIs for SAEON, SMCRI and EFTEON
                         var orgCodes = new string[] { "SAEON", "SMCRI", "EFTEON" };
-                        foreach (var organisation in await dbContext.Organisations.Where(i => orgCodes.Contains(i.Code)).OrderBy(i => i.Name).ToListAsync())
+                        foreach (var dataset in await dbContext.InventoryDatasets.Where(
+                            i => orgCodes.Contains(i.OrganisationCode) &&
+                            i.LatitudeNorth.HasValue && i.LongitudeEast.HasValue &&
+                            i.VerifiedCount > 0)
+                            .OrderBy(i => i.OrganisationName)
+                            .ThenBy(i => i.ProgrammeName)
+                            .ThenBy(i => i.ProgrammeName)
+                            .ThenBy(i => i.SiteName)
+                            .ThenBy(i => i.StationName)
+                            .ToListAsync())
                         {
-                            var programmeCodes = importBatchSummaries
-                                .Where(i => i.OrganisationCode == organisation.Code)
-                                .Select(i => i.ProgrammeCode)
-                                .Distinct();
-                            foreach (var programme in await dbContext.Programmes
-                                .Where(i => programmeCodes.Contains(i.Code))
-                                .ToListAsync())
-                            {
-                                var projectCodes = importBatchSummaries
-                                    .Where(i =>
-                                        i.OrganisationCode == organisation.Code &&
-                                        i.ProgrammeCode == programme.Code)
-                                    .Select(i => i.ProjectCode)
-                                    .Distinct();
-                                foreach (var project in await dbContext.Projects
-                                    .Where(i => projectCodes.Contains(i.Code))
-                                    .ToListAsync())
-                                {
-                                    var siteCodes = importBatchSummaries
-                                        .Where(i =>
-                                            i.OrganisationCode == organisation.Code &&
-                                            i.ProgrammeCode == programme.Code &&
-                                            i.ProjectCode == project.Code)
-                                        .Select(i => i.SiteCode)
-                                        .Distinct();
-                                    foreach (var site in await dbContext.Sites
-                                        .Where(i => siteCodes.Contains(i.Code))
-                                       .ToListAsync())
-                                    {
-                                        var stationCodes = importBatchSummaries
-                                            .Where(i =>
-                                                i.OrganisationCode == organisation.Code &&
-                                                i.ProgrammeCode == programme.Code &&
-                                                i.ProjectCode == project.Code &&
-                                                i.SiteCode == site.Code)
-                                           .Select(i => i.StationCode)
-                                           .Distinct();
-                                        foreach (var station in await dbContext.Stations.Where(i => stationCodes.Contains(i.Code))
-                                            .ToListAsync())
-                                        {
-                                            foreach (var dataset in await dbContext.InventoryDatasets.Where(i =>
-                                                i.OrganisationCode == organisation.Code &&
-                                                i.ProgrammeCode == programme.Code &&
-                                                i.ProjectCode == project.Code &&
-                                                i.SiteCode == site.Code &&
-                                                i.StationCode == station.Code &&
-                                                i.LatitudeNorth.HasValue && i.LongitudeEast.HasValue &&
-                                                i.VerifiedCount > 0).ToListAsync())
-                                            {
-                                                var doiDataset = await EnsureDatasetDOI(station, dataset);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            var doiDataset = await EnsureDatasetDOI(dataset);
                         }
+
+
+                        //foreach (var organisation in await dbContext.Organisations.Where(i => orgCodes.Contains(i.Code)).OrderBy(i => i.Name).ToListAsync())
+                        //{
+                        //    var programmeCodes = importBatchSummaries
+                        //        .Where(i => i.OrganisationCode == organisation.Code)
+                        //        .Select(i => i.ProgrammeCode)
+                        //        .Distinct();
+                        //    foreach (var programme in await dbContext.Programmes
+                        //        .Where(i => programmeCodes.Contains(i.Code))
+                        //        .ToListAsync())
+                        //    {
+                        //        var projectCodes = importBatchSummaries
+                        //            .Where(i =>
+                        //                i.OrganisationCode == organisation.Code &&
+                        //                i.ProgrammeCode == programme.Code)
+                        //            .Select(i => i.ProjectCode)
+                        //            .Distinct();
+                        //        foreach (var project in await dbContext.Projects
+                        //            .Where(i => projectCodes.Contains(i.Code))
+                        //            .ToListAsync())
+                        //        {
+                        //            var siteCodes = importBatchSummaries
+                        //                .Where(i =>
+                        //                    i.OrganisationCode == organisation.Code &&
+                        //                    i.ProgrammeCode == programme.Code &&
+                        //                    i.ProjectCode == project.Code)
+                        //                .Select(i => i.SiteCode)
+                        //                .Distinct();
+                        //            foreach (var site in await dbContext.Sites
+                        //                .Where(i => siteCodes.Contains(i.Code))
+                        //               .ToListAsync())
+                        //            {
+                        //                var stationCodes = importBatchSummaries
+                        //                    .Where(i =>
+                        //                        i.OrganisationCode == organisation.Code &&
+                        //                        i.ProgrammeCode == programme.Code &&
+                        //                        i.ProjectCode == project.Code &&
+                        //                        i.SiteCode == site.Code)
+                        //                   .Select(i => i.StationCode)
+                        //                   .Distinct();
+                        //                foreach (var station in await dbContext.Stations.Where(i => stationCodes.Contains(i.Code))
+                        //                    .ToListAsync())
+                        //                {
+                        //                    foreach (var dataset in await dbContext.InventoryDatasets.Where(i =>
+                        //                        i.OrganisationCode == organisation.Code &&
+                        //                        i.ProgrammeCode == programme.Code &&
+                        //                        i.ProjectCode == project.Code &&
+                        //                        i.SiteCode == site.Code &&
+                        //                        i.StationCode == station.Code &&
+                        //                        i.LatitudeNorth.HasValue && i.LongitudeEast.HasValue &&
+                        //                        i.VerifiedCount > 0).ToListAsync())
+                        //                    {
+                        //                        var doiDataset = await EnsureDatasetDOI(station, dataset);
+                        //                    }
+                        //                }
+                        //            }
+                        //        }
+                        //    }
+                        //}
                     }
                 }
                 catch (Exception ex)

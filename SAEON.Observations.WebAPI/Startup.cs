@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -16,6 +17,7 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.OData.Edm;
 using Microsoft.OpenApi.Models;
 using SAEON.AspNet.Auth;
+using SAEON.AspNetCore.Formatters;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Auth;
@@ -27,7 +29,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-
 
 namespace SAEON.Observations.WebAPI
 {
@@ -59,7 +60,11 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     services.AddCors(o => o.AddSAEONCorsPolicies());
-                    services.AddResponseCompression(options => options.EnableForHttps = true);
+                    services.AddResponseCompression(options =>
+                    {
+                        options.EnableForHttps = true;
+                        options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "text/csv" });
+                    });
 #if ResponseCaching
                     services.AddResponseCaching();
 #endif
@@ -151,6 +156,7 @@ namespace SAEON.Observations.WebAPI
                     });
                     services.AddControllersWithViews();
                     services.AddOData();
+                    services.AddMvcCore().AddCSVFormatters(new CSVFormatterOptions { Culture = CultureInfo.CreateSpecificCulture("en-za") });
                     SetODataFormatters(services);
                     services.AddApplicationInsightsTelemetry();
                     IFileProvider physicalProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
@@ -260,7 +266,7 @@ namespace SAEON.Observations.WebAPI
                         endpoints.MapControllers();
                         endpoints.MapHub<AdminHub>("/AdminHub").RequireCors(ObsDBAuthenticationDefaults.CorsAllowSignalRPolicy);
                         //endpoints.MapODataRoute("Internal", "Internal", GetInternalEdmModel()).Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop);
-                        endpoints.MapODataRoute("OData", "OData", GetODataEdmModel()).Select().Filter().OrderBy().Count().Expand().MaxTop(ODataDefaults.MaxTop); ;
+                        endpoints.MapODataRoute("OData", "OData", GetODataEdmModel()).Select().Filter().OrderBy().Count().Expand()/*.SkipToken().MaxTop(ODataDefaults.MaxTop)*/;
                     });
                 }
                 catch (Exception ex)
@@ -305,6 +311,13 @@ namespace SAEON.Observations.WebAPI
                 builder.EntitySet<Phenomenon>("Phenomena");
                 builder.EntitySet<Offering>("Offerings");
                 builder.EntitySet<Unit>("Units");
+                //builder.Namespace = "ObsDBService";
+                //var func = builder.EntityType<Station>()
+                //    .Function("Observations")
+                //    .ReturnsCollectionFromEntitySet<Observation>("Observations");
+                //func.Parameter<Guid>("phenomenonId");
+                //func.Parameter<Guid>("offeringId");
+                //func.Parameter<Guid>("unitId");
                 return builder.GetEdmModel();
             }
         }

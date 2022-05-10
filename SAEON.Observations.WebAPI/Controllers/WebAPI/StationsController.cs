@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Toolkit.Diagnostics;
 using SAEON.AspNet.Auth;
+using SAEON.Logs;
 using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
@@ -102,16 +103,17 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             return GetManyWithGuidId<Project>(id, s => s.Projects);
         }
 
-        /// <summary>
-        /// Datasets of the Station
-        /// </summary>
-        /// <param name="id">Id of the Station</param>
-        /// <returns>ListOf(DataStream)</returns>
-        [HttpGet("{id:guid}/Datasets")]
-        public IQueryable<Dataset> GetDatasets(Guid id)
-        {
-            return GetManyWithLongId<Dataset>(id, s => s.Datasets);
-        }
+        ///// <summary>
+        ///// Datasets of the Station
+        ///// </summary>
+        ///// <param name="id">Id of the Station</param>
+        ///// <returns>ListOf(DataStream)</returns>
+        //@@@
+        //[HttpGet("{id:guid}/Datasets")]
+        //public IQueryable<Dataset> GetDatasets(Guid id)
+        //{
+        //    return GetManyWithLongId<Dataset>(id, s => s.Datasets);
+        //}
 
         /// <summary>
         /// Observations of a variable (phenomenon, offering, unit) at the Station
@@ -125,8 +127,15 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Authorize(Policy = ODPAuthenticationDefaults.IdTokenPolicy)]
         public async Task<List<Observation>> GetObservations(Guid id, Guid phenomenonId, Guid offeringId, Guid unitId)
         {
-            var result = GetManyWithIntId<Observation>(id, s => s.Observations).Where(i => (i.PhenomenonId == phenomenonId) && (i.OfferingId == offeringId) && (i.UnitId == unitId)).ToList();
-            await RequestLogger.LogAsync(DbContext, Request);
+            var result = GetManyWithIntId<Observation>(id, s => s.Observations).Where(i => (i.PhenomenonId == phenomenonId) && (i.OfferingId == offeringId) && (i.UnitId == unitId)).Take(100).ToList(); //@@@
+            try
+            {
+                await RequestLogger.LogAsync(DbContext, Request);
+            }
+            catch (Exception ex)
+            {
+                SAEONLogs.Exception(ex);
+            }
             return result;
         }
 
@@ -154,8 +163,15 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 q = q.Where(i => (i.ValueDate <= input.EndDate));
             }
-            var result = q.ToList();
-            await RequestLogger.LogAsync(DbContext, Request);
+            var result = q.Take(100).ToList(); //@@@
+            try
+            {
+                await RequestLogger.LogAsync(DbContext, Request);
+            }
+            catch (Exception ex)
+            {
+                SAEONLogs.Exception(ex);
+            }
             return result;
         }
     }
