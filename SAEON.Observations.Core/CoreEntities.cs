@@ -45,7 +45,7 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Navigation links of this Entity
         /// </summary>
-        [NotMapped]
+        [NotMapped, JsonIgnore, SwaggerIgnore]
         public Dictionary<string, string> NavigationLinks
         {
             get
@@ -83,7 +83,7 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Navigation links of this Entity
         /// </summary>
-        [NotMapped]
+        [NotMapped, JsonIgnore, SwaggerIgnore]
         public Dictionary<string, string> NavigationLinks
         {
             get
@@ -121,7 +121,7 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Navigation links of this Entity
         /// </summary>
-        [NotMapped]
+        [NotMapped, JsonIgnore, SwaggerIgnore]
         public Dictionary<string, string> NavigationLinks
         {
             get
@@ -149,11 +149,11 @@ namespace SAEON.Observations.Core
     /// </summary>
     public abstract class IdedEntity : GuidIdEntity
     {
-        [JsonIgnore, Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore, Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false)]
         //[HiddenInput]
         [IgnoreDataMember]
         public byte[] RowVersion { get; set; }
-        [JsonIgnore, Required]
+        [JsonIgnore, SwaggerIgnore, Required]
         [IgnoreDataMember]
         public Guid UserId { get; set; }
     }
@@ -173,7 +173,7 @@ namespace SAEON.Observations.Core
         /// Name of the Entity
         /// </summary>
         [Required, StringLength(150)]
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
     }
 
     public abstract class CodedNamedEntity : IdedEntity
@@ -187,7 +187,7 @@ namespace SAEON.Observations.Core
         /// Name of the Entity
         /// </summary>
         [Required, StringLength(150)]
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
     }
 
     /// <summary>
@@ -277,6 +277,190 @@ namespace SAEON.Observations.Core
         public List<DataSchema> DataSchemas { get; set; }
     }
 
+    public abstract class DatasetBase : CodedNamedEntity
+    {
+        [StringLength(200)]
+        public override string Code { get => base.Code; set => base.Code = value; }
+        [StringLength(500)]
+        public override string Name { get => base.Name; set => base.Name = value; }
+        /// <summary>
+        /// Title of the Dataset
+        /// </summary>
+        [StringLength(5000)]
+        public string Title { get; set; }
+        /// <summary>
+        /// Description of the Dataset
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+        /// <summary>
+        /// StationId of the dataset
+        /// </summary>
+        public Guid? StationId { get; set; }
+        /// <summary>
+        /// PhenomenonOfferingId of the dataset
+        /// </summary>
+        public Guid? PhenomenonOfferingId { get; set; }
+        /// <summary>
+        /// PhenomenonUOMId of the dataset
+        /// </summary>
+        [Column("PhenomenonUOMId")]
+        public Guid? PhenomenonUnitId { get; set; }
+        /// <summary>
+        /// DigitalObjectIdentifierId of the dataset
+        /// </summary>
+        public int? DigitalObjectIdentifierId { get; set; }
+        /// <summary>
+        /// Count of observations in the dataset
+        /// </summary>
+        public int? Count { get; set; }
+        /// <summary>
+        /// Count of observations with values in the dataset
+        /// </summary>
+        public int? ValueCount { get; set; }
+        /// <summary>
+        /// Count of observations of null in the dataset
+        /// </summary>
+        public int? NullCount { get; set; }
+        /// <summary>
+        /// Count of verified observations in the dataset
+        /// </summary>
+        public int? VerifiedCount { get; set; }
+        /// <summary>
+        /// Count of unverified observations in the dataset
+        /// </summary>
+        public int? UnverifiedCount { get; set; }
+        /// <summary>
+        /// StartDate of the dataset
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+        /// <summary>
+        /// EndDate of the dataset
+        /// </summary>
+        public DateTime? EndDate { get; set; }
+        /// <summary>
+        /// LatitudeNorth of the dataset
+        /// </summary>
+        public double? LatitudeNorth { get; set; }
+        /// <summary>
+        /// LatitudeSouth of the dataset
+        /// </summary>
+        public double? LatitudeSouth { get; set; }
+        /// <summary>
+        /// LongitudeWest of the dataset
+        /// </summary>
+        public double? LongitudeWest { get; set; }
+        /// <summary>
+        /// LongitudeEast of the dataset
+        /// </summary>
+        public double? LongitudeEast { get; set; }
+        /// <summary>
+        /// ElevationMinimum of the dataset
+        /// </summary>
+        public double? ElevationMinimum { get; set; }
+        /// <summary>
+        /// ElevationMaximum of the dataset
+        /// </summary>
+        public double? ElevationMaximum { get; set; }
+        /// <summary>
+        /// If CSV for dataset needs to be rebuilt
+        /// </summary>
+        public bool? NeedsUpdate { get; set; } // CSV needs to be rebuild
+        /// <summary> 
+        /// UserId of user who added the DigitalObjectIdentifier   
+        /// </summary>
+        [StringLength(36), ScaffoldColumn(false)]
+        public string AddedBy { get; set; }
+        /// <summary>
+        /// UserId of user who last updated the DigitalObjectIdentifier 
+        /// </summary>
+        [StringLength(36), ScaffoldColumn(false)]
+        public string UpdatedBy { get; set; }
+        [JsonIgnore, SwaggerIgnore]
+        /// <summary>
+        /// HashCode of the dataset
+        /// </summary>
+        public int HashCode { get; set; }
+
+        public int CreateHashCode()
+        {
+            var hashCode = new HashCode();
+            hashCode.Add(StationId);
+            hashCode.Add(PhenomenonOfferingId);
+            hashCode.Add(PhenomenonUnitId);
+            hashCode.Add(Count);
+            hashCode.Add(StartDate);
+            hashCode.Add(EndDate);
+            hashCode.Add(LatitudeNorth);
+            hashCode.Add(LatitudeSouth);
+            hashCode.Add(LongitudeWest);
+            hashCode.Add(LongitudeEast);
+            hashCode.Add(ElevationMinimum);
+            hashCode.Add(ElevationMaximum);
+            return hashCode.ToHashCode();
+        }
+
+        // Navigation
+        [JsonIgnore, SwaggerIgnore]
+        public Station Station { get; set; }
+        [JsonIgnore, SwaggerIgnore]
+        public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
+    }
+
+    /// <summary>
+    /// Dataset entity
+    /// </summary>
+    public class Dataset : DatasetBase { }
+
+    public class VDatasetExpansion : DatasetBase
+    {
+        public Guid OrganisationId { get; set; }
+        public string OrganisationCode { get; set; }
+        public string OrganisationName { get; set; }
+        public string OrganisationDescription { get; set; }
+        public string OrganisationUrl { get; set; }
+        public Guid ProgrammeId { get; set; }
+        public string ProgrammeCode { get; set; }
+        public string ProgrammeName { get; set; }
+        public string ProgrammeDescription { get; set; }
+        public string ProgrammeUrl { get; set; }
+        public Guid ProjectId { get; set; }
+        public string ProjectCode { get; set; }
+        public string ProjectName { get; set; }
+        public string ProjectDescription { get; set; }
+        public string ProjectUrl { get; set; }
+        public Guid SiteId { get; set; }
+        public string SiteCode { get; set; }
+        public string SiteName { get; set; }
+        public string SiteDescription { get; set; }
+        public string SiteUrl { get; set; }
+        public string StationCode { get; set; }
+        public string StationName { get; set; }
+        public string StationDescription { get; set; }
+        public string StationUrl { get; set; }
+        public Guid PhenomenonId { get; set; }
+        public string PhenomenonCode { get; set; }
+        public string PhenomenonName { get; set; }
+        public string PhenomenonDescription { get; set; }
+        //public Guid PhenomenonOfferingID { get; set; }
+        public Guid OfferingId { get; set; }
+        public string OfferingCode { get; set; }
+        public string OfferingName { get; set; }
+        public string OfferingDescription { get; set; }
+        //[Column("PhenomenonUOMID")]
+        //public Guid PhenomenonUnitID { get; set; }
+        [Column("UnitOfMeasureID")]
+        public Guid UnitId { get; set; }
+        [Column("UnitOfMeasureCode")]
+        public string UnitCode { get; set; }
+        [Column("UnitOfMeasureUnit")]
+        public string UnitName { get; set; }
+        [Column("UnitOfMeasureSymbol")]
+        public string UnitSymbol { get; set; }
+
+        public string Variable => $"{PhenomenonName.Replace(", ", "_")}, {OfferingName.Replace(", ", "_")}, {UnitName.Replace(", ", "_")}";
+    }
+
     public enum DOIType { /*ObservationsDb, Collection, Organisation, Programme, Project, Site, Station,*/ Dataset = 7/*, Periodic, AdHoc*/ }
 
     /// <summary>
@@ -285,9 +469,9 @@ namespace SAEON.Observations.Core
     public class DigitalObjectIdentifier : IntIdEntity
     {
         //[HiddenInput]
-        public int? ParentId { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid? AlternateId { get; set; }
+        //public int? ParentId { get; set; }
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //public Guid? AlternateId { get; set; }
         [Required]
         [DisplayName("DOI Type")]
         public DOIType DOIType { get; set; }
@@ -296,6 +480,7 @@ namespace SAEON.Observations.Core
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [Display(Name = "DOI Url"), Url]
         public string DOIUrl { get; set; }
+        public Guid? DatasetId { get; set; }
         /// <summary>
         /// Code of the DigitalObjectIdentifier
         /// </summary>
@@ -314,6 +499,7 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Description of the DigitalObjectIdentifier
         /// </summary>
+        [StringLength(5000)]
         public string Description { get; set; }
         /// <summary>
         /// Description of the DigitalObjectIdentifier as Html 
@@ -377,22 +563,24 @@ namespace SAEON.Observations.Core
         /// <summary> 
         /// UserId of user who added the DigitalObjectIdentifier   
         /// </summary>
-        [StringLength(128), ScaffoldColumn(false)]
+        [StringLength(36), ScaffoldColumn(false)]
         public string AddedBy { get; set; }
         /// <summary>
         /// UserId of user who last updated the DigitalObjectIdentifier 
         /// </summary>
-        [StringLength(128), ScaffoldColumn(false)]
+        [StringLength(36), ScaffoldColumn(false)]
         public string UpdatedBy { get; set; }
         [Timestamp, ConcurrencyCheck, ScaffoldColumn(false)]
         //[HiddenInput]
         public byte[] RowVersion { get; set; }
 
         // Navigation
-        [JsonIgnore, SwaggerIgnore, IgnoreDataMember]
-        public DigitalObjectIdentifier Parent { get; set; }
         [JsonIgnore, SwaggerIgnore]
-        public List<DigitalObjectIdentifier> Children { get; set; }
+        public Dataset Dataset { get; set; }
+        //[JsonIgnore, SwaggerIgnore, IgnoreDataMember]
+        //public DigitalObjectIdentifier Parent { get; set; }
+        //[JsonIgnore, SwaggerIgnore]
+        //public List<DigitalObjectIdentifier> Children { get; set; }
         //[JsonIgnore, SwaggerIgnore]
         //public List<Organisation> Organisations { get; set; }
         //[JsonIgnore, SwaggerIgnore]
@@ -1068,6 +1256,8 @@ namespace SAEON.Observations.Core
         /// </summary>
         [Required, StringLength(2000), Display(Name = "Zip Url"), Url]
         public string ZipUrl { get; set; }
+        [JsonIgnore, SwaggerIgnore]
+        public string IPAddress { get; set; }
         ///// <summary>
         ///// UserId of the UserDownload
         ///// </summary>
@@ -1174,61 +1364,4 @@ namespace SAEON.Observations.Core
         public int Downloads { get; set; }
     }
 
-    public class Dataset : LongIdEntity
-    {
-        public Guid OrganisationId { get; set; }
-        public string OrganisationCode { get; set; }
-        public string OrganisationName { get; set; }
-        public string OrganisationDescription { get; set; }
-        public string OrganisationUrl { get; set; }
-        public Guid ProgrammeId { get; set; }
-        public string ProgrammeCode { get; set; }
-        public string ProgrammeName { get; set; }
-        public string ProgrammeDescription { get; set; }
-        public string ProgrammeUrl { get; set; }
-        public Guid ProjectId { get; set; }
-        public string ProjectCode { get; set; }
-        public string ProjectName { get; set; }
-        public string ProjectDescription { get; set; }
-        public string ProjectUrl { get; set; }
-        public Guid SiteId { get; set; }
-        public string SiteCode { get; set; }
-        public string SiteName { get; set; }
-        public Guid StationId { get; set; }
-        public string StationCode { get; set; }
-        public string StationName { get; set; }
-        public string StationDescription { get; set; }
-        public Guid PhenomenonId { get; set; }
-        public string PhenomenonCode { get; set; }
-        public string PhenomenonName { get; set; }
-        public string PhenomenonDescription { get; set; }
-        //public Guid PhenomenonOfferingID { get; set; }
-        public Guid OfferingId { get; set; }
-        public string OfferingCode { get; set; }
-        public string OfferingName { get; set; }
-        public string OfferingDescription { get; set; }
-        //[Column("PhenomenonUOMID")]
-        //public Guid PhenomenonUnitID { get; set; }
-        [Column("UnitOfMeasureID")]
-        public Guid UnitId { get; set; }
-        [Column("UnitOfMeasureCode")]
-        public string UnitCode { get; set; }
-        [Column("UnitOfMeasureUnit")]
-        public string UnitName { get; set; }
-        [Column("UnitOfMeasureSymbol")]
-        public string UnitSymbol { get; set; }
-        public int? Count { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public double? LatitudeNorth { get; set; }
-        public double? LatitudeSouth { get; set; }
-        public double? LongitudeWest { get; set; }
-        public double? LongitudeEast { get; set; }
-        public double? ElevationMinimum { get; set; }
-        public double? ElevationMaximum { get; set; }
-
-        // Navigation
-        [JsonIgnore, SwaggerIgnore]
-        public Station Station { get; set; }
-    }
 }

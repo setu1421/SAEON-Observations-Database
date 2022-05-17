@@ -118,6 +118,8 @@ namespace SAEON.Observations.Core
         // Remove once OData allows Keyless views
         //[Key]
         public long Id { get; set; }
+        public string Code => $"{StationCode}~{PhenomenonCode}~{OfferingCode}~{UnitCode}";
+        public string Name => $"{StationName}, {PhenomenonName}, {OfferingName}, {UnitName}";
         public Guid OrganisationId { get; set; }
         public string OrganisationCode { get; set; }
         public string OrganisationName { get; set; }
@@ -160,12 +162,14 @@ namespace SAEON.Observations.Core
         public int NullCount { get; set; }
         public int VerifiedCount { get; set; }
         public int UnverifiedCount { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public double? LatitudeNorth { get; set; } // +N to -S
         public double? LatitudeSouth { get; set; } // +N to -S
         public double? LongitudeWest { get; set; } // -W to +E
         public double? LongitudeEast { get; set; } // -W to +E
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public double? ElevationMinimum { get; set; } // Negative for below sea level
+        public double? ElevationMaximum { get; set; } // Negative for below sea level
     }
 
     //[Table("vInventorySensors")]

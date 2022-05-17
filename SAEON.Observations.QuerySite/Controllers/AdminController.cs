@@ -102,6 +102,36 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpPost]
+        public async Task<ActionResult> APICreateDatasets()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    SAEONLogs.Information("Calling WebAPI");
+                    using (var client = await GetWebAPIClientAsync())
+                    {
+                        var response = await client.PostAsync("Internal/Admin/CreateDatasets", null);
+                        response.EnsureSuccessStatusCode();
+                    }
+                    return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public ActionResult CreateDatasets()
+        {
+            return View();
+        }
+
+
+
+        [HttpPost]
         public async Task<ActionResult> APIImportSetup(HttpPostedFileBase formFile)
         {
             using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "FileName", formFile?.FileName } }))

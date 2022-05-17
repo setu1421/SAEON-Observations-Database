@@ -1,4 +1,12 @@
 Update
+  Station
+set
+  Elevation = -Elevation 
+from 
+  Station
+where 
+  (Code like 'ELW_%') and (Elevation > 0)
+Update
   Station_Instrument
 set
   Elevation = -Station_Instrument.Elevation 
@@ -7,8 +15,15 @@ from
   inner join Station
     on (Station_Instrument.StationID = Station.ID)
 where 
-  (Left(Station.Code,4) = 'ELW_') and
-  (Station_Instrument.Elevation > 0)
+  (Code like 'ELW_%') and (Station_Instrument.Elevation > 0)
+Update
+  Instrument
+set
+  Elevation = -Elevation 
+from 
+  Instrument
+where 
+  (Code like 'ELW_%') and (Elevation > 0)
 update
   Observation
 set
@@ -18,4 +33,4 @@ from
   inner join vObservationExpansion
     on (Observation.ID = vObservationExpansion.ID)
 where
-  (Left(StationCode,4) = 'ELW_') and (Observation.Elevation > 0)
+  (StationCode like 'ELW_%') and (Observation.Elevation > 0)

@@ -537,6 +537,8 @@
     <Build Include="dbo\Views\vInventorySnapshots.sql" />
     <Build Include="dbo\Tables\RequestLogs.sql" />
     <Build Include="dbo\Views\vSensorExpansion.sql" />
+    <Build Include="dbo\Tables\Datasets.sql" />
+    <Build Include="dbo\Views\vDatasetsExpansion.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

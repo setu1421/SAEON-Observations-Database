@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -19,10 +20,12 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     public class AdminController : InternalApiController
     {
         private readonly IHubContext<AdminHub> AdminHub;
+        private readonly IWebHostEnvironment env;
 
-        public AdminController(IHubContext<AdminHub> webApiHub) : base()
+        public AdminController(IHubContext<AdminHub> webApiHub, IWebHostEnvironment env) : base()
         {
             AdminHub = webApiHub;
+            this.env = env;
             TrackChanges = true;
             CommandTimeoutKey = "AdminCommandTimeoutInMins";
         }
@@ -35,7 +38,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await DOIHelper.CreateDOIsV2(DbContext, AdminHub, HttpContext/*, AnalyticsHelper.IsTest(Request)*/));
+                    return Content(await DOIHelper.CreateDOIs(DbContext, AdminHub, HttpContext/*, AnalyticsHelper.IsTest(Request)*/));
                 }
                 catch (Exception ex)
                 {
@@ -53,7 +56,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await MetadataHelper.CreateMetadataV2(DbContext, AdminHub/*, AnalyticsHelper.IsTest(Request)*/));
+                    return Content(await MetadataHelper.CreateMetadata(DbContext, AdminHub, HttpContext/*, AnalyticsHelper.IsTest(Request)*/));
                 }
                 catch (Exception ex)
                 {
@@ -71,7 +74,25 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await ODPMetadataHelper.CreateMetadata(DbContext, AdminHub, Config));
+                    return Content(await ODPMetadataHelper.CreateMetadata(DbContext, AdminHub, HttpContext, Config));
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpPost("[action]")]
+        [Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
+        public async Task<IActionResult> CreateDatasets()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    return Content(await DatasetHelper.CreateDatasets(DbContext, AdminHub, HttpContext, env));
                 }
                 catch (Exception ex)
                 {
@@ -92,13 +113,13 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     var sb = new StringBuilder();
                     SAEONLogs.Information("CreateDOIs");
                     sb.AppendLine("CreateDOIs");
-                    sb.AppendLine(await DOIHelper.CreateDOIsV2(DbContext, AdminHub, HttpContext/*, AnalyticsHelper.IsTest(Request)*/));
+                    sb.AppendLine(await DOIHelper.CreateDOIs(DbContext, AdminHub, HttpContext/*, AnalyticsHelper.IsTest(Request)*/));
                     SAEONLogs.Information("CreateMetadata");
                     sb.AppendLine("CreateMetadata");
-                    sb.AppendLine(await MetadataHelper.CreateMetadataV2(DbContext, AdminHub/*, AnalyticsHelper.IsTest(Request)*/));
+                    sb.AppendLine(await MetadataHelper.CreateMetadata(DbContext, AdminHub, HttpContext/*, AnalyticsHelper.IsTest(Request)*/));
                     SAEONLogs.Information("CreateODPMetadata");
                     sb.AppendLine("CreateODPMetadata");
-                    sb.AppendLine(await ODPMetadataHelper.CreateMetadata(DbContext, AdminHub, Config));
+                    sb.AppendLine(await ODPMetadataHelper.CreateMetadata(DbContext, AdminHub, HttpContext, Config));
                     return Content(sb.ToString());
                 }
                 catch (Exception ex)

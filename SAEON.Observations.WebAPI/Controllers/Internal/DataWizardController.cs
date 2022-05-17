@@ -590,6 +590,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         //System.IO.File.WriteAllText(Path.Combine(folder, $"{result.Id} Checksum.json"), jChecksum.ToString());
                         System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, $"{result.Id} Checksum.json"), jChecksum.ToString());
                         //dirInfo.Delete(true);
+                        result.IPAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
                         SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
                         await SaveChangesAsync();
                         await RequestLogger.LogAsync(DbContext, Request, result.Id.ToString());

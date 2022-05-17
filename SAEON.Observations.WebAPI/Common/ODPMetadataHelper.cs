@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
@@ -20,7 +21,7 @@ namespace SAEON.Observations.WebAPI
 {
     public static class ODPMetadataHelper
     {
-        public static async Task<string> CreateMetadata(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, IConfiguration config)
+        public static async Task<string> CreateMetadata(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext, IConfiguration config)
         {
             async Task GenerateODPMetadata(HttpClient client)
             {
@@ -86,6 +87,10 @@ namespace SAEON.Observations.WebAPI
                         var errors = jODP["errors"];
                         doi.ODPMetadataPublishErrors = errors.ToString();
                         doi.ODPMetadataIsPublished = jODP["success"].ToString().IsTrue() && !errors.HasValues;
+                    }
+                    if (dbContext.Entry(doi).State != EntityState.Unchanged)
+                    {
+                        doi.UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString();
                     }
                     await dbContext.SaveChangesAsync();
                 }

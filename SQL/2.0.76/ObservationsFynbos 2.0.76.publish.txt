@@ -1,0 +1,60 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The type for column AddedBy in table [dbo].[DigitalObjectIdentifiers] is currently  VARCHAR (128) NOT NULL but is being
+         changed to  VARCHAR (36) NOT NULL. Data loss could occur and deployment may fail if the column contains data that is
+         incompatible with type  VARCHAR (36) NOT NULL.
+       The type for column UpdatedBy in table [dbo].[DigitalObjectIdentifiers] is currently  VARCHAR (128) NOT NULL but is
+         being changed to  VARCHAR (36) NOT NULL. Data loss could occur and deployment may fail if the column contains data that
+         is incompatible with type  VARCHAR (36) NOT NULL.
+
+** User actions
+     Alter
+       [dbo].[DigitalObjectIdentifiers] (Table)
+       [dbo].[Observation] (Table)
+       [dbo].[UserDownloads] (Table)
+     Create
+       [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_DatasetID] (Index)
+       [dbo].[Datasets] (Table)
+       [dbo].[Datasets].[IX_Datasets_DigitalObjectIdentifierID] (Index)
+       [dbo].[Datasets].[IX_Datasets_StationID] (Index)
+       [dbo].[Datasets].[IX_Datasets_PhenomenonOfferingID] (Index)
+       [dbo].[Datasets].[IX_Datasets_PhenomenonUOMID] (Index)
+       [dbo].[DF_Datasets_ID] (Default Constraint)
+       [dbo].[DF_Dataset_AddedAt] (Default Constraint)
+       [dbo].[DF_Datasets_UpdatedAt] (Default Constraint)
+       [dbo].[FK_Datasets_StationID] (Foreign Key)
+       [dbo].[FK_Datasets_PhenomenonOfferingID] (Foreign Key)
+       [dbo].[FK_Datasets_PhenomenonUOMID] (Foreign Key)
+       [dbo].[FK_Datasets_DigitalObjectIdentifierID] (Foreign Key)
+       [dbo].[FK_DigitalObjectIdentifiers_DatasetID] (Foreign Key)
+       [dbo].[TR_Datasets_Insert] (Trigger)
+       [dbo].[TR_Datasets_Update] (Trigger)
+       [dbo].[vDatasetsExpansion] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Create
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Refresh
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vSensorThingsAPIObservations] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationJSON] (View)
+       [dbo].[vStationObservations] (View)
+       [dbo].[vInventorySnapshots] (View)
+       [dbo].[spCreateImportBatchSummaries] (Procedure)
+       [dbo].[spCreateInventorySnapshot] (Procedure)
+
+The type for column AddedBy in table [dbo].[DigitalObjectIdentifiers] is currently  VARCHAR (128) NOT NULL but is being changed to  VARCHAR (36) NOT NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible with type  VARCHAR (36) NOT NULL.
+The type for column UpdatedBy in table [dbo].[DigitalObjectIdentifiers] is currently  VARCHAR (128) NOT NULL but is being changed to  VARCHAR (36) NOT NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible with type  VARCHAR (36) NOT NULL.
+If this deployment is executed, changes to [dbo].[vObservationExpansion] might introduce run-time errors in [dbo].[vSensorObservations].
+
