@@ -307,7 +307,7 @@ namespace SAEON.Observations.WebAPI
         protected abstract void UpdateRequest();
 
         [HttpGet]
-        [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
+        //[EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
         public virtual ActionResult<IQueryable<TEntity>> Get()
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType()))

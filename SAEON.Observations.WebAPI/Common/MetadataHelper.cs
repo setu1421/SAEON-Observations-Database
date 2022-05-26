@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SAEON.AspNet.Auth;
 using SAEON.Logs;
-using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
@@ -37,6 +36,7 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     var sb = new StringBuilder();
+                    await AddLineAsync("Creating Metadata");
                     await GenerateMetadata();
                     await AddLineAsync("Done");
                     return sb.ToString();
@@ -62,13 +62,13 @@ namespace SAEON.Observations.WebAPI
                             return metadata;
                         }
 
-                        await AddLineAsync("Generating metadata");
                         byte[] oldSha256;
                         foreach (var doiDataset in await dbContext.DigitalObjectIdentifiers.Include(i => i.Dataset).Where(i => i.DOIType == DOIType.Dataset).ToListAsync())
                         {
+                            if (doiDataset.Code.StartsWith("SACTN")) continue;
                             SAEONLogs.Verbose($"{doiDataset.DOIType} {doiDataset.Code}, {doiDataset.Name}");
                             doiDataset.SetUrls();
-                            var datasetExpansion = await dbContext.DatasetExpansions.FirstOrDefaultAsync(i => i.Id == doiDataset.DatasetId);
+                            var datasetExpansion = await dbContext.VDatasetsExpansion.FirstOrDefaultAsync(i => i.Id == doiDataset.DatasetId);
                             if (datasetExpansion is null)
                             {
                                 SAEONLogs.Warning($"Ignoring (No dataset) {doiDataset.DOIType} {doiDataset.Code}, {doiDataset.Name}");
@@ -139,7 +139,7 @@ namespace SAEON.Observations.WebAPI
                             if (dbContext.Entry(doiDataset).State != EntityState.Unchanged)
                             {
                                 doiDataset.UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString();
-                                await AddLineAsync("{doiDataset.DOIType} {doiDataset.Code}, {doiDataset.Name}");
+                                await AddLineAsync($"{doiDataset.DOIType} {doiDataset.Code}, {doiDataset.Name}");
                             }
                             if (dbContext.Entry(doiDataset.Dataset).State != EntityState.Unchanged)
                             {

@@ -9,11 +9,11 @@
     <Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <ApplicationIcon>SAEON.ico</ApplicationIcon>
-    <Version>1.0.46</Version>
+    <Version>1.0.47</Version>
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="echo rd /s /q &quot;$(DevDir)NuGet\$(ProjectName)&quot;&#xD;&#xA;rd /s /q &quot;$(DevDir)NuGet\$(ProjectName)&quot;&#xD;&#xA;echo nuget init &quot;$(ProjectDir)bin\Release&quot; &quot;$(DevDir)NuGet&quot;&#xD;&#xA;nuget init &quot;$(ProjectDir)bin\Release&quot; &quot;$(DevDir)NuGet&quot;" />
+    <Exec Command="rd /s /q &quot;$(DevDir)NuGet\$(ProjectName)&quot;&#xD;&#xA;nuget init &quot;$(ProjectDir)bin\Release&quot; &quot;$(DevDir)NuGet&quot;" />
   </Target>
 
   <ItemGroup>

@@ -40,12 +40,92 @@
             End date for the observations
             </summary>
         </member>
+        <member name="P:SAEON.Observations.WebAPI.ObservationInput.ElevationMinimum">
+            <summary>
+            Minimum Elevation of the observations
+            </summary>
+        </member>
+        <member name="P:SAEON.Observations.WebAPI.ObservationInput.ElevationMaximum">
+            <summary>
+            Maximum Elevation of the observations
+            </summary>
+        </member>
         <member name="M:SAEON.Observations.WebAPI.Controllers.OData.IDEntityODataController`1.GetById(System.Guid)">
             <summary>
             Get a TEntity by Id
             </summary>
             <param name="id">The Id of the TEntity</param>
             <returns>TEntity</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.DatasetsController.GetAll">
+            <summary>
+            All Datasets
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.DatasetsController.GetByIdAsync(System.Guid)">
+            <summary>
+            Dataset by Id
+            </summary>
+            <param name="id">The Id of the Dataset</param>
+            <returns>Dataset</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.DatasetsController.GetByCodeAsync(System.String)">
+            <summary>
+            Dataset by Code
+            </summary>
+            <param name="code">The Code of the Dataset</param>
+            <returns>Dataset</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.DatasetsController.GetByNameAsync(System.String)">
+            <summary>
+            Dataset by Name
+            </summary>
+            <param name="name">The Name of the Dataset</param>
+            <returns>Dataset</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.DatasetsController.GetStationAsync(System.Guid)">
+            <summary>
+            Station of the Dataset
+            </summary>
+            <param name="id">The Id of the Dataset</param>
+            <returns>Site</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.DatasetsController.GetPhenomenonAsync(System.Guid)">
+            <summary>
+            Phenomenon of the Dataset
+            </summary>
+            <param name="id">The Id of the Dataset</param>
+            <returns>Site</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.DatasetsController.GetOfferingAsync(System.Guid)">
+            <summary>
+            Offering of the Dataset
+            </summary>
+            <param name="id">The Id of the Dataset</param>
+            <returns>Site</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.DatasetsController.GetUnitAsync(System.Guid)">
+            <summary>
+            Unit of the Dataset
+            </summary>
+            <param name="id">The Id of the Dataset</param>
+            <returns>Site</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.DatasetsController.GetObservations(System.Guid)">
+            <summary>
+            Observations of the Dataset
+            </summary>
+            <param name="id">Id of the Dataset</param>
+            <returns>ListOf(DataStream)</returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.DatasetsController.GetObservationsRanges(System.Guid,SAEON.Observations.WebAPI.ObservationInput)">
+            <summary>
+            Observations of the Datatset over ranges
+            </summary>
+            <param name="id">Id of the Dataset</param>
+            <param name="input">Input of the range of observations</param>
+            <returns>ListOf(Observation)</returns>
         </member>
         <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InstrumentsController.GetAll">
             <summary>
@@ -94,12 +174,6 @@
             </summary>
             <param name="id">Id of the Instrument</param>
             <returns>ListOf(Sensor)</returns>
-        </member>
-        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InventoryDatasetsController.GetAll">
-            <summary>
-            All Datasets
-            </summary>
-            <returns></returns>
         </member>
         <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InventorySensorsController.GetAll">
             <summary>
@@ -423,7 +497,7 @@
         </member>
         <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetSiteAsync(System.Guid)">
             <summary>
-            Site of a Station
+            Site of the Station
             </summary>
             <param name="id">The Id of the Station</param>
             <returns>Site</returns>
@@ -449,23 +523,12 @@
             <param name="id">Id of the Station</param>
             <returns>ListOf(Project)</returns>
         </member>
-        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetObservations(System.Guid,System.Guid,System.Guid,System.Guid)">
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetDatasets(System.Guid)">
             <summary>
-            Observations of a variable (phenomenon, offering, unit) at the Station
+            Datasets of the Station
             </summary>
             <param name="id">Id of the Station</param>
-            <param name="phenomenonId">PhenomenonId of the Observations</param>
-            <param name="offeringId">OfferingId of the Observations</param>
-            <param name="unitId">UnitId of the Observations</param>
-            <returns>ListOf(Observation)</returns>
-        </member>
-        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.StationsController.GetObservationsDateRange(System.Guid,SAEON.Observations.WebAPI.ObservationInput)">
-            <summary>
-            Observations of a variable (phenomenon, offering, unit) at the Station over a date range
-            </summary>
-            <param name="id">Id of the Station</param>
-            <param name="input">Input of the range of observations</param>
-            <returns>ListOf(Observation)</returns>
+            <returns>ListOf(DataStream)</returns>
         </member>
         <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.UnitsController.GetAll">
             <summary>

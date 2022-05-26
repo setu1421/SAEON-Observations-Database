@@ -66,7 +66,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select TRelated</param>
         /// <returns>TaskOf(IHttpActionResult)</returns>
-//[HttpGet("{id:guid}/TRelated")] Required in calling classes
+        //[HttpGet("{id:guid}/TRelated")] Required in calling classes
 #if ResponseCaching
         [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "id" })]
 #endif
@@ -100,7 +100,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select TRelated</param>
         /// <returns>TaskOf(IHttpActionResult)</returns>
-//[HttpGet("{id:guid}/TRelated")] Required in calling classes
+        //[HttpGet("{id:guid}/TRelated")] Required in calling classes
 #if ResponseCaching
         [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "id" })]
 #endif
@@ -147,6 +147,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 try
                 {
                     UpdateRequest();
+                    if (!GetQuery(i => (i.Id == id)).Any())
+                    {
+                        SAEONLogs.Error("{id} not found", id);
+                        throw new ArgumentException($"{id} not found");
+                    }
                     return GetQuery(i => i.Id == id).SelectMany(select);
                 }
                 catch (Exception ex)
@@ -176,6 +181,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 try
                 {
                     UpdateRequest();
+                    if (!GetQuery(i => (i.Id == id)).Any())
+                    {
+                        SAEONLogs.Error("{id} not found", id);
+                        throw new ArgumentException($"{id} not found");
+                    }
                     return GetQuery(i => i.Id == id).SelectMany(select);
                 }
                 catch (Exception ex)
@@ -205,6 +215,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 try
                 {
                     UpdateRequest();
+                    if (!GetQuery(i => (i.Id == id)).Any())
+                    {
+                        SAEONLogs.Error("{id} not found", id);
+                        throw new ArgumentException($"{id} not found");
+                    }
                     return GetQuery(i => i.Id == id).SelectMany(select);
                 }
                 catch (Exception ex)

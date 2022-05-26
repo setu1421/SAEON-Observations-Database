@@ -83,7 +83,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     var input = new DataWizardDataInput();
                     input.Locations.Add(new LocationFilter { StationId = station.Id });
                     input.Variables.Add(new VariableFilter { PhenomenonId = phenomenon.Id, OfferingId = offering.Id, UnitId = unit.Id });
-                    var dataset = await DbContext.InventoryDatasets.SingleAsync(i => (i.StationId == station.Id) && (i.PhenomenonCode == phenomenon.Code) &&
+                    var dataset = await DbContext.VDatasetsExpansion.SingleAsync(i => (i.StationId == station.Id) && (i.PhenomenonCode == phenomenon.Code) &&
                         (i.OfferingCode == offering.Code) && (i.UnitCode == unit.Code));
                     if (dataset.StartDate.HasValue) input.StartDate = dataset.StartDate.Value;
                     if (dataset.EndDate.HasValue) input.EndDate = dataset.EndDate.Value;

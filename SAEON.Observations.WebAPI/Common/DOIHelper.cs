@@ -3,11 +3,9 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SAEON.AspNet.Auth;
 using SAEON.Logs;
-using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
-using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +30,7 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     var sb = new StringBuilder();
+                    await AddLineAsync("Creating DOIs");
                     await GenerateDOIs();
                     await AddLineAsync("Done");
                     return sb.ToString();
@@ -73,7 +72,7 @@ namespace SAEON.Observations.WebAPI
                             return doi;
                         }
 
-                        async Task<Dataset> EnsureDataset(InventoryDataset inventoryDataset)
+                        async Task<Dataset> EnsureDataset(VInventoryDataset inventoryDataset)
                         {
                             var dataset = await dbContext.Datasets.FirstOrDefaultAsync(i =>
                                 i.StationId == inventoryDataset.StationId &&
@@ -110,16 +109,17 @@ namespace SAEON.Observations.WebAPI
                             dataset.ElevationMinimum = inventoryDataset.ElevationMinimum;
                             dataset.ElevationMaximum = inventoryDataset.ElevationMaximum;
                             var oldHashCode = dataset.HashCode;
-                            var newHasCode = dataset.CreateHashCode();
-                            if (oldHashCode != newHasCode)
+                            var newHashCode = dataset.CreateHashCode();
+                            SAEONLogs.Verbose("OldHashCode: {OldHashCode} NewHashCode: {NewHashCode}", oldHashCode, newHashCode);
+                            if (oldHashCode != newHashCode)
                             {
-                                dataset.HashCode = newHasCode;
+                                dataset.HashCode = newHashCode;
                                 dataset.NeedsUpdate = true;
                             }
                             return dataset;
                         }
 
-                        async Task<DigitalObjectIdentifier> EnsureDatasetDOI(InventoryDataset inventoryDataset)
+                        async Task<DigitalObjectIdentifier> EnsureDatasetDOI(VInventoryDataset inventoryDataset)
                         {
                             var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code == inventoryDataset.Code);
                             if (doi is null)
@@ -165,13 +165,11 @@ namespace SAEON.Observations.WebAPI
                             }
                         }
 
-                        await AddLineAsync("Generating DOIs");
-                        // We only create Dynamic DOIs for SAEON, SMCRI and EFTEON
+                        // We only create Dynamic DOIs for SAEON, SMCRI and EFTEON, and exclude SACTN
                         var orgCodes = new string[] { "SAEON", "SMCRI", "EFTEON" };
-                        foreach (var inventoryDataset in await dbContext.InventoryDatasets.Where(
+                        foreach (var inventoryDataset in await dbContext.VInventoryDatasets.Where(
                             i => orgCodes.Contains(i.OrganisationCode) &&
-                            i.LatitudeNorth.HasValue && i.LongitudeEast.HasValue &&
-                            i.VerifiedCount > 0)
+                            i.LatitudeNorth.HasValue && i.LongitudeEast.HasValue && i.VerifiedCount > 0)
                             .OrderBy(i => i.OrganisationName)
                             .ThenBy(i => i.ProgrammeName)
                             .ThenBy(i => i.ProgrammeName)
@@ -179,20 +177,23 @@ namespace SAEON.Observations.WebAPI
                             .ThenBy(i => i.StationName)
                             .ToListAsync())
                         {
-                            var dataset = await EnsureDataset(inventoryDataset);
-                            var doiDataset = await EnsureDatasetDOI(inventoryDataset);
-                            dataset.DigitalObjectIdentifierId = doiDataset.Id;
-                            doiDataset.DatasetId = dataset.Id;
-                            if (dbContext.Entry(doiDataset).State != EntityState.Unchanged)
+                            if (!inventoryDataset.Code.StartsWith("SACTN"))
                             {
-                                doiDataset.UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString();
+                                var dataset = await EnsureDataset(inventoryDataset);
+                                var doiDataset = await EnsureDatasetDOI(inventoryDataset);
+                                dataset.DigitalObjectIdentifierId = doiDataset.Id;
+                                doiDataset.DatasetId = dataset.Id;
+                                if (dbContext.Entry(doiDataset).State != EntityState.Unchanged)
+                                {
+                                    doiDataset.UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString();
+                                }
+                                if (dbContext.Entry(dataset).State != EntityState.Unchanged)
+                                {
+                                    dataset.UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString();
+                                    dataset.UserId = new Guid(httpContext?.User?.UserId() ?? Guid.Empty.ToString());
+                                }
+                                await dbContext.SaveChangesAsync();
                             }
-                            if (dbContext.Entry(dataset).State != EntityState.Unchanged)
-                            {
-                                dataset.UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString();
-                                dataset.UserId = new Guid(httpContext?.User?.UserId() ?? Guid.Empty.ToString());
-                            }
-                            await dbContext.SaveChangesAsync();
                         }
                     }
                 }

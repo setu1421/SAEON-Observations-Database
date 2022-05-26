@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 #if NET5_0
@@ -296,16 +297,16 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// StationId of the dataset
         /// </summary>
-        public Guid? StationId { get; set; }
+        public Guid StationId { get; set; }
         /// <summary>
         /// PhenomenonOfferingId of the dataset
         /// </summary>
-        public Guid? PhenomenonOfferingId { get; set; }
+        public Guid PhenomenonOfferingId { get; set; }
         /// <summary>
         /// PhenomenonUOMId of the dataset
         /// </summary>
         [Column("PhenomenonUOMId")]
-        public Guid? PhenomenonUnitId { get; set; }
+        public Guid PhenomenonUnitId { get; set; }
         /// <summary>
         /// DigitalObjectIdentifierId of the dataset
         /// </summary>
@@ -381,23 +382,25 @@ namespace SAEON.Observations.Core
         /// HashCode of the dataset
         /// </summary>
         public int HashCode { get; set; }
+        public string FileName => $"{Code.Replace(Path.GetInvalidFileNameChars(), '_')}.csv";
 
         public int CreateHashCode()
         {
-            var hashCode = new HashCode();
-            hashCode.Add(StationId);
-            hashCode.Add(PhenomenonOfferingId);
-            hashCode.Add(PhenomenonUnitId);
-            hashCode.Add(Count);
-            hashCode.Add(StartDate);
-            hashCode.Add(EndDate);
-            hashCode.Add(LatitudeNorth);
-            hashCode.Add(LatitudeSouth);
-            hashCode.Add(LongitudeWest);
-            hashCode.Add(LongitudeEast);
-            hashCode.Add(ElevationMinimum);
-            hashCode.Add(ElevationMaximum);
-            return hashCode.ToHashCode();
+            var hash = new StableHash();
+            hash.Add(Code);
+            hash.Add(StationId);
+            hash.Add(PhenomenonOfferingId);
+            hash.Add(PhenomenonUnitId);
+            hash.Add(Count);
+            hash.Add(StartDate);
+            hash.Add(EndDate);
+            hash.Add(LatitudeNorth);
+            hash.Add(LatitudeSouth);
+            hash.Add(LongitudeWest);
+            hash.Add(LongitudeEast);
+            hash.Add(ElevationMinimum);
+            hash.Add(ElevationMaximum);
+            return hash.HashCode;
         }
 
         // Navigation
@@ -459,6 +462,14 @@ namespace SAEON.Observations.Core
         public string UnitSymbol { get; set; }
 
         public string Variable => $"{PhenomenonName.Replace(", ", "_")}, {OfferingName.Replace(", ", "_")}, {UnitName.Replace(", ", "_")}";
+
+        // Navigation
+        [JsonIgnore, SwaggerIgnore]
+        public Phenomenon Phenomenon { get; set; }
+        [JsonIgnore, SwaggerIgnore]
+        public Offering Offering { get; set; }
+        [JsonIgnore, SwaggerIgnore]
+        public Unit Unit { get; set; }
     }
 
     public enum DOIType { /*ObservationsDb, Collection, Organisation, Programme, Project, Site, Station,*/ Dataset = 7/*, Periodic, AdHoc*/ }
@@ -581,20 +592,6 @@ namespace SAEON.Observations.Core
         //public DigitalObjectIdentifier Parent { get; set; }
         //[JsonIgnore, SwaggerIgnore]
         //public List<DigitalObjectIdentifier> Children { get; set; }
-        //[JsonIgnore, SwaggerIgnore]
-        //public List<Organisation> Organisations { get; set; }
-        //[JsonIgnore, SwaggerIgnore]
-        //public List<Programme> Programmes { get; set; }
-        //[JsonIgnore, SwaggerIgnore]
-        //public List<Project> Projects { get; set; }
-        //[JsonIgnore, SwaggerIgnore]
-        //public List<Site> Sites { get; set; }
-        //[JsonIgnore, SwaggerIgnore]
-        //public List<Station> Stations { get; set; }
-        //[JsonIgnore, SwaggerIgnore]
-        //public List<ImportBatchSummary> ImportBatchSummaries { get; set; }
-        //[JsonIgnore, SwaggerIgnore]
-        //public List<UserDownload> UserDownloads { get; set; }
 
         public void SetUrls()
         {
@@ -1081,8 +1078,9 @@ namespace SAEON.Observations.Core
         public List<Instrument> Instruments { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public List<Dataset> Datasets { get; set; }
-        [JsonIgnore, SwaggerIgnore]
-        public List<Observation> Observations { get; set; }
+        public List<VDatasetExpansion> DatasetsExpansion { get; set; }
+        //[JsonIgnore, SwaggerIgnore]
+        //public List<Observation> Observations { get; set; }
 
         public Station() : base()
         {
@@ -1096,6 +1094,7 @@ namespace SAEON.Observations.Core
         }
     }
 
+    /*
     [Table("vStationObservations")]
     public class Observation : IntIdEntity
     {
@@ -1150,6 +1149,7 @@ namespace SAEON.Observations.Core
         [JsonIgnore, SwaggerIgnore]
         public Station Station { get; set; }
     }
+    */
 
     /// <summary>
     /// Unit Entity

@@ -27,6 +27,30 @@ namespace SAEON.Observations.WebAPI
         /// End date for the observations
         /// </summary>
         public DateTime? EndDate { get; set; }
+        /// <summary>
+        /// Minimum Elevation of the observations
+        /// </summary>
+        public double? ElevationMinimum { get; set; }
+        /// <summary>
+        /// Maximum Elevation of the observations
+        /// </summary>
+        public double? ElevationMaximum { get; set; }
+    }
+
+    public class ObservationDTO
+    {
+        public string Station { get; set; }
+        public string Variable => $"{Phenomenon.Replace(", ", "_")}, {Offering.Replace(", ", "_")}, {Unit.Replace(", ", "_")}";
+        public double? Elevation { get; set; }
+        public DateTime Date { get; set; }
+        public double? Value { get; set; }
+        public string Comment { get; set; }
+        public string Site { get; set; }
+        public string Phenomenon { get; set; }
+        public string Offering { get; set; }
+        public string Unit { get; set; }
+        public string Instrument { get; set; }
+        public string Sensor { get; set; }
     }
 
     #region SpacialCoverage

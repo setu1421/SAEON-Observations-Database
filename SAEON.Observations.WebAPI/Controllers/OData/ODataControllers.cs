@@ -14,7 +14,8 @@ using System.Linq.Expressions;
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     [EnableCors(ObsDBAuthenticationDefaults.CorsAllowAllPolicy)]
-    [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
+    [EnableQuery]
+    //[EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
     public abstract class ODataController<TEntity> : BaseODataController<TEntity> where TEntity : BaseEntity
     {
         protected override void UpdateRequest()

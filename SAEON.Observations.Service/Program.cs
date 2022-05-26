@@ -15,7 +15,7 @@ namespace SAEON.Observations.Service
             SAEONLogs.CreateConfiguration().Initialize();
             try
             {
-                SAEONLogs.Information("Starting {ApplicationName}", ApplicationHelper.ApplicationName);
+                SAEONLogs.Information("Starting {ApplicationName} Log: {LogLevel}", ApplicationHelper.ApplicationName, SAEONLogs.Level);
                 using (Mutex mutex = new Mutex(true, ApplicationHelper.ApplicationName, out bool isFirst))
                 {
                     if (isFirst)

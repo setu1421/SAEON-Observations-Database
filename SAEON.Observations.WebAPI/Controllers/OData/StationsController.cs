@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNet.OData.Routing;
-using Microsoft.AspNetCore.Authorization;
-using SAEON.AspNet.Auth;
-using SAEON.Logs;
 using SAEON.Observations.Core;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
@@ -38,27 +34,10 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return GetManyWithGuidId(id, s => s.Instruments);
         }
 
-        //@@@@
-        //[ODataRoute("({id})/Datasets")]
-        //public IQueryable<Dataset> GetDatasets(Guid id)
-        //{
-        //    return GetManyWithLongId(id, s => s.Datasets);
-        //}
-
-        [ODataRoute("({id})/Observations")]
-        [Authorize(Policy = ODPAuthenticationDefaults.IdTokenPolicy)]
-        public async Task<IQueryable<Observation>> GetObservations(Guid id)
+        [ODataRoute("({id})/Datasets")]
+        public IQueryable<VDatasetExpansion> GetDatasets(Guid id)
         {
-            var result = GetManyWithIntId<Observation>(id, s => s.Observations).Take(100); //@@@
-            try
-            {
-                await RequestLogger.LogAsync(DbContext, Request);
-            }
-            catch (Exception ex)
-            {
-                SAEONLogs.Exception(ex);
-            }
-            return result;
+            return GetManyWithGuidId(id, s => s.DatasetsExpansion);
         }
     }
 }

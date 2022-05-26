@@ -1,5 +1,5 @@
 ﻿@using SAEON.Core
-@using SAEON.Observations.Auth
+@using SAEON.Observations.Core
 @using System.Configuration
 @{
     ViewData["Title"] = "Create Datasets";
@@ -27,6 +27,6 @@
 
     <script>
         "use strict";
-        setupHub('@ConfigurationManager.AppSettings["WebAPIUrl"].AddEndForwardSlash()' + 'AdminHub', '@SignalRDefaults.CreateDOIsStatusUpdate');
+        setupHub('@ConfigurationManager.AppSettings["WebAPIUrl"].AddEndForwardSlash()' + 'AdminHub', '@SignalRDefaults.CreateDatasetsStatusUpdate');
     </script>
 }

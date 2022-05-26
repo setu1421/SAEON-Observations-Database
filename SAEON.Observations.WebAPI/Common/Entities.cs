@@ -113,7 +113,7 @@ namespace SAEON.Observations.Core
 
     //[Table("vInventoryDatasets")]
     [Keyless]
-    public class InventoryDataset : BaseEntity
+    public class VInventoryDataset : BaseEntity
     {
         // Remove once OData allows Keyless views
         //[Key]
@@ -174,7 +174,7 @@ namespace SAEON.Observations.Core
 
     //[Table("vInventorySensors")]
     [Keyless]
-    public class InventorySensor : BaseEntity
+    public class VInventorySensor : BaseEntity
     {
         // Remove once OData allows Keyless views
         //[Key]

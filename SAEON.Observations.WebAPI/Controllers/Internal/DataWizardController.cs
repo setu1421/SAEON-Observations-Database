@@ -224,7 +224,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             SAEONLogs.Verbose("Features: Stage {Stage} Total {Total}", stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
             stageStopwatch.Restart();
             var importBatchIDs = summaries.Select(i => i.ImportBatchId).Distinct();
-            var observations = DbContext.VObservationExpansions.AsNoTracking()
+            var observations = DbContext.VObservationsExpansion.AsNoTracking()
                 .Where(i =>
                     importBatchIDs.Contains(i.ImportBatchId) &&
                     ((i.StatusId == null) || (i.StatusName == "Verified")) &&

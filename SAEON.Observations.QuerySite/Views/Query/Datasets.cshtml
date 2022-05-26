@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-lg">
         @(Html.EJ().Grid<object>("DatasetsGrid")
-            .Datasource(datasource => datasource.URL(ViewBag.WebAPIUrl + "/OData/InventoryDatasets")
+            .Datasource(datasource => datasource.URL(ViewBag.WebAPIUrl + "/OData/Datasets")
                 .Headers(new { Tenant = ViewBag.Tenant, Authorization = ViewBag.Authorization})
                 .CrossDomain(true)
                 .Adaptor(AdaptorType.ODataV4Adaptor))

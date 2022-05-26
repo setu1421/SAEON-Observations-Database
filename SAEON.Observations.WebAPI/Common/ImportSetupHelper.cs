@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SAEON.Logs;
-using SAEON.Observations.Auth;
 using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Hubs;
 using SAEON.OpenXML;
@@ -631,45 +630,4 @@ namespace SAEON.Observations.WebAPI
         }
     }
 
-    //public class ImportSetupService : IHostedService
-    //{
-    //    private readonly IServiceScopeFactory scopeFactory;
-
-    //    public ImportSetupService(IServiceScopeFactory scopeFactory)
-    //    {
-    //        this.scopeFactory = scopeFactory;
-    //    }
-
-    //    public Task StartAsync(CancellationToken cancellationToken)
-    //    {
-    //        using (SAEONLogs.MethodCall(GetType()))
-    //        {
-    //            try
-    //            {
-    //                DoWork()
-
-    //            }
-    //            catch (Exception ex)
-    //            {
-    //                SAEONLogs.Exception(ex);
-    //                throw;
-    //            }
-
-    //        }
-    //    }
-
-    //    public Task StopAsync(CancellationToken cancellationToken)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-
-    //    private void DoWork()
-    //    {
-    //        using (var scope = scopeFactory.CreateScope())
-    //        {
-    //            var dbContext = scope.ServiceProvider.GetRequiredService<ObservationsDbContext>();
-    //            var adminGub = scope.ServiceProvider.GetRequiredService<IHubContext<AdminHub>>();
-    //        }
-    //    }
-    //}
 }
