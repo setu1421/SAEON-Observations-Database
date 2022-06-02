@@ -11,7 +11,6 @@ using SAEON.AspNet.Auth;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Core;
-using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -48,7 +47,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             //SAEONLogs.Verbose("Processed Input: {@Input}", input);
         }
 
-        private List<VImportBatchSummary> GetSummary(ref DataWizardDataInput input)
+        private List<VDatasetExpansion> GetDatasets(ref DataWizardDataInput input)
         {
             CleanInput(ref input);
             SAEONLogs.Verbose("Input: {@Input}", input);
@@ -58,24 +57,23 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var elevationMaximum = input.ElevationMaximum;
             var locations = input.Locations;
             var variables = input.Variables;
-            var result = DbContext.VImportBatchSummaries
+            var result = DbContext.VDatasetsExpansion
+                .Include(i => i.DigitalObjectIdentifier)
                 .AsNoTracking()
                 //.AsNoTrackingWithIdentityResolution()
-                .Where(ibs => (ibs.VerifiedCount > 0) && ibs.LatitudeNorth.HasValue && ibs.LatitudeSouth.HasValue && ibs.LongitudeEast.HasValue && ibs.LongitudeWest.HasValue)
                 .AsEnumerable()
                 .Where(i =>
                     (!locations.Any() || locations.Contains(new LocationFilter { /*SiteId = i.SiteId,*/ StationId = i.StationId })) &&
-                    (!variables.Any() || variables.Contains(new VariableFilter { PhenomenonId = i.PhenomenonId, OfferingId = i.OfferingId, UnitId = i.UnitId })))
-                .Where(i =>
+                    (!variables.Any() || variables.Contains(new VariableFilter { PhenomenonId = i.PhenomenonId, OfferingId = i.OfferingId, UnitId = i.UnitId })) &&
                     DateRangesOverlap(startDate, endDate, i.StartDate, i.EndDate) &&
                     DoubleRangesOverlap(elevationMinimum, elevationMaximum, i.ElevationMinimum, i.ElevationMaximum))
                 .Distinct()
                 .OrderBy(i => i.SiteName)
                 .ThenBy(i => i.StationName)
-                .ThenBy(i => i.InstrumentName)
-                .ThenBy(i => i.SensorName)
+                //.ThenBy(i => i.InstrumentName)
+                //.ThenBy(i => i.SensorName)
                 .ToList();
-            SAEONLogs.Verbose("Summaries: {Count}", result.Count);
+            SAEONLogs.Verbose("Datasets: {Count}", result.Count);
             return result;
 
             bool DateRangesOverlap(DateTime startA, DateTime endA, DateTime? startB, DateTime? endB)
@@ -97,7 +95,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 try
                 {
                     SAEONLogs.Verbose("Input: {@Input}", input);
-                    var q = GetSummary(ref input);
+                    var q = GetDatasets(ref input);
                     var rows = q.Sum(i => i.VerifiedCount ?? 0);
                     var result = new DataWizardApproximation
                     {
@@ -166,27 +164,27 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
-        private class DataFeature
-        {
-            public Guid StationId { get; set; }
-            public Guid PhenomenonOfferingId { get; set; }
-            public Guid PhenomenonUnitId { get; set; }
-            public string Name { get; set; }
-            public string Caption { get; set; }
+        //private class DataFeature
+        //{
+        //    public Guid StationId { get; set; }
+        //    public Guid PhenomenonOfferingId { get; set; }
+        //    public Guid PhenomenonUnitId { get; set; }
+        //    public string Name { get; set; }
+        //    public string Caption { get; set; }
 
-            public override bool Equals(object obj)
-            {
-                return obj is DataFeature feature &&
-                       StationId.Equals(feature.StationId) &&
-                       PhenomenonOfferingId.Equals(feature.PhenomenonOfferingId) &&
-                       PhenomenonUnitId.Equals(feature.PhenomenonUnitId);
-            }
+        //    public override bool Equals(object obj)
+        //    {
+        //        return obj is DataFeature feature &&
+        //               StationId.Equals(feature.StationId) &&
+        //               PhenomenonOfferingId.Equals(feature.PhenomenonOfferingId) &&
+        //               PhenomenonUnitId.Equals(feature.PhenomenonUnitId);
+        //    }
 
-            public override int GetHashCode()
-            {
-                return HashCode.Combine(StationId, PhenomenonOfferingId, PhenomenonUnitId);
-            }
-        }
+        //    public override int GetHashCode()
+        //    {
+        //        return HashCode.Combine(StationId, PhenomenonOfferingId, PhenomenonUnitId);
+        //    }
+        //}
 
         private DataWizardDataOutput GetData(DataWizardDataInput input, bool includeChart)
         {
@@ -200,167 +198,92 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 return $"{MetadataHelper.CleanPrefixes(stationName.Replace(", ", "_"))}, {phenomenonName.Replace(", ", "_")}, {offeringName.Replace(", ", "_")}, {unitName.Replace(", ", "_")}";
             }
 
-            string GetVariableName(string phenomenonName, string offeringName, string unitName)
-            {
-                return $"{phenomenonName.Replace(", ", "_")}, {offeringName.Replace(", ", "_")}, {unitName.Replace(", ", "_")}";
-            }
-
             var stopwatch = new Stopwatch();
             var stageStopwatch = new Stopwatch();
             stopwatch.Start();
             stageStopwatch.Start();
             var result = new DataWizardDataOutput();
-            var summaries = GetSummary(ref input);
-            SAEONLogs.Verbose("Summaries: Stage {Stage} Total {Total}", stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
+            var datasets = GetDatasets(ref input);
+            SAEONLogs.Verbose("Datasets: Stage {Stage} Total {Total}", stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
             stageStopwatch.Restart();
-            var features = summaries.Select(i => new DataFeature
+            //var features = datasets.Select(i => new DataFeature
+            //{
+            //    StationId = i.StationId,
+            //    PhenomenonOfferingId = i.PhenomenonOfferingId,
+            //    PhenomenonUnitId = i.PhenomenonUnitId,
+            //    Name = GetCode(i.StationCode, i.PhenomenonCode, i.OfferingCode, i.UnitCode),
+            //    Caption = GetName(i.StationName, i.PhenomenonName, i.OfferingName, i.UnitName)
+            //}).Distinct().ToList();
+            //SAEONLogs.Verbose("Features: Stage {Stage} Total {Total}", stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
+            stageStopwatch.Restart();
+            var observations = new List<ObservationDTO>();
+            foreach (var dataset in datasets)
             {
-                StationId = i.StationId,
-                PhenomenonOfferingId = i.PhenomenonOfferingId,
-                PhenomenonUnitId = i.PhenomenonUnitId,
-                Name = GetCode(i.StationCode, i.PhenomenonCode, i.OfferingCode, i.UnitCode),
-                Caption = GetName(i.StationName, i.PhenomenonName, i.OfferingName, i.UnitName)
-            }).Distinct().ToList();
-            SAEONLogs.Verbose("Features: Stage {Stage} Total {Total}", stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
-            stageStopwatch.Restart();
-            var importBatchIDs = summaries.Select(i => i.ImportBatchId).Distinct();
-            var observations = DbContext.VObservationsExpansion.AsNoTracking()
-                .Where(i =>
-                    importBatchIDs.Contains(i.ImportBatchId) &&
-                    ((i.StatusId == null) || (i.StatusName == "Verified")) &&
-                    ((i.ValueDate >= input.StartDate) && (i.ValueDate <= input.EndDate)) &&
-                    (!i.Elevation.HasValue || (i.Elevation >= input.ElevationMinimum)) &&
-                    (!i.Elevation.HasValue || (i.Elevation <= input.ElevationMaximum)))
-                .OrderBy(obs => obs.SiteName)
-                .ThenBy(obs => obs.StationName)
-                .ThenBy(obs => obs.Elevation)
-                .ThenBy(obs => obs.PhenomenonName)
-                .ThenBy(obs => obs.OfferingName)
-                .ThenBy(obs => obs.UnitName)
-                .ThenBy(obs => obs.ValueDate)
-                .AsEnumerable() // Force fetch from database
-                .Where(ibs =>
-                    (!input.Locations.Any() || input.Locations.Contains(new LocationFilter { /*SiteId = ibs.SiteId,*/ StationId = ibs.StationId })) &&
-                    (!input.Variables.Any() || input.Variables.Contains(new VariableFilter { PhenomenonId = ibs.PhenomenonId, OfferingId = ibs.OfferingId, UnitId = ibs.UnitId })))
+                var datasetObservations = DatasetHelper.Load(DbContext, Config, dataset.Id)
+                    .Where(i =>
+                        ((i.Date >= input.StartDate) && (i.Date <= input.EndDate)) &&
+                        (!i.Elevation.HasValue || (i.Elevation >= input.ElevationMinimum)) &&
+                        (!i.Elevation.HasValue || (i.Elevation <= input.ElevationMaximum)))
+                    .Distinct();
+                observations.AddRange(datasetObservations);
+            }
+            observations = observations
                 .Distinct()
+                .OrderBy(obs => obs.Site)
+                .ThenBy(obs => obs.Station)
+                .ThenBy(obs => obs.Elevation)
+                .ThenBy(obs => obs.Phenomenon)
+                .ThenBy(obs => obs.Offering)
+                .ThenBy(obs => obs.Unit)
+                .ThenBy(obs => obs.Date)
                 .ToList();
+            result.Data.AddRange(observations);
             SAEONLogs.Verbose("Observations: {Observations} Stage {Stage} Total {Total}", observations.Count, stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
-            stageStopwatch.Restart();
-            var siteId = new Guid();
-            var stationId = new Guid();
-            double? elevation = null;
-            var phenomenonId = new Guid();
-            var offeringId = new Guid();
-            var unitId = new Guid();
-            var date = DateTime.MinValue;
-            DataMatrixRow row = null;
-            // Data Matrix
-            result.DataMatrix.AddColumn("Site", MaxtixDataType.mdtString);
-            result.DataMatrix.AddColumn("Station", MaxtixDataType.mdtString);
-            result.DataMatrix.AddColumn("Elevation", MaxtixDataType.mdtDouble);
-            result.DataMatrix.AddColumn("Phenomenon", MaxtixDataType.mdtString);
-            result.DataMatrix.AddColumn("Offering", MaxtixDataType.mdtString);
-            result.DataMatrix.AddColumn("Unit", MaxtixDataType.mdtString);
-            result.DataMatrix.AddColumn("Variable", MaxtixDataType.mdtString);
-            result.DataMatrix.AddColumn("Date", MaxtixDataType.mdtDate);
-            result.DataMatrix.AddColumn("Value", MaxtixDataType.mdtDouble);
-            result.DataMatrix.AddColumn("Instrument", MaxtixDataType.mdtString);
-            result.DataMatrix.AddColumn("Sensor", MaxtixDataType.mdtString);
-            result.DataMatrix.AddColumn("Comment", MaxtixDataType.mdtString);
-            int nRow = 0;
-            foreach (var obs in observations)
-            {
-                if (++nRow % 10000 == 0)
-                {
-                    SAEONLogs.Verbose("DataMatrix.Row: {Row}", nRow);
-                }
-                if ((row is null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.Elevation != elevation) || (obs.PhenomenonId != phenomenonId) || (obs.OfferingId != offeringId) || (obs.UnitId != unitId) || (obs.ValueDate != date))
-                {
-                    row = result.DataMatrix.AddRow();
-                    row["Site"] = obs.SiteName;
-                    row["Station"] = obs.StationName;
-                    //var siteName = MetadataHelper.CleanPrefixes(obs.SiteName);
-                    //var stationName = MetadataHelper.CleanPrefixes(obs.StationName);
-                    //if (obs.StationName.StartsWith("ELW, "))
-                    //{
-                    //    if (stationName.EndsWith(siteName))
-                    //    {
-                    //        stationName = stationName.Substring(0, stationName.Length - siteName.Length - 2);
-                    //    }
-                    //}
-                    //row["Site"] = siteName;
-                    //row["Station"] = stationName;
-                    row["Phenomenon"] = obs.PhenomenonName;
-                    row["Offering"] = obs.OfferingName;
-                    row["Unit"] = obs.UnitName;
-                    row["Variable"] = GetVariableName(obs.PhenomenonName, obs.OfferingName, obs.UnitName);
-                    row["Date"] = obs.ValueDate;
-                    row["Elevation"] = obs.Elevation;
-                    row["Instrument"] = obs.InstrumentName;
-                    row["Sensor"] = obs.SensorName;
-                    row["Comment"] = obs.Comment;
-                    siteId = obs.SiteId;
-                    stationId = obs.StationId;
-                    phenomenonId = obs.PhenomenonId;
-                    offeringId = obs.OfferingId;
-                    unitId = obs.UnitId;
-                    date = obs.ValueDate;
-                    elevation = obs.Elevation;
-                }
-                row["Value"] = obs.DataValue;
-            }
-            if (SAEONLogs.Level == LogEventLevel.Verbose && Config["SaveSearches"].IsTrue())
-            {
-                var folder = $"{HostEnvironment.ContentRootPath.AddEndForwardSlash()}Searches/{result.Date:yyyyMM}";
-                Directory.CreateDirectory(folder);
-                System.IO.File.WriteAllText(Path.Combine(folder, $"{result.Date:yyyyMMdd HHmmss}.csv"), result.DataMatrix.ToCSV());
-            }
-            SAEONLogs.Verbose("DataMatrix: Rows: {Rows} Cols: {Cols} Stage {Stage} Total {Total}", result.DataMatrix.Rows.Count, result.DataMatrix.Columns.Count, stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
             stageStopwatch.Restart();
             // Metadata
             result.Metadata.PublicationDate = result.Date;
-            var titles = observations.Where(i => i.StationName.StartsWith("ELW, ")).Select(i =>
+            var titles = observations.Where(i => i.Station.StartsWith("ELW, ")).Select(i =>
             {
-                var variable = $"{MetadataHelper.CleanPrefixes(i.PhenomenonName)}, {i.OfferingName}, {i.UnitName}";
-                var siteName = MetadataHelper.CleanPrefixes(i.SiteName);
-                var stationName = MetadataHelper.CleanPrefixes(i.StationName);
+                var variable = $"{MetadataHelper.CleanPrefixes(i.Phenomenon)}, {i.Offering}, {i.Unit}";
+                var siteName = MetadataHelper.CleanPrefixes(i.Site);
+                var stationName = MetadataHelper.CleanPrefixes(i.Station);
                 if (stationName.EndsWith(siteName))
                 {
                     stationName = stationName.Substring(0, stationName.Length - siteName.Length - 2);
                 }
                 return $"{variable} for {stationName}";
-            }).Union(observations.Where(i => !i.StationName.StartsWith("ELW, ")).Select(i =>
+            }).Union(observations.Where(i => !i.Station.StartsWith("ELW, ")).Select(i =>
             {
-                var variable = $"{MetadataHelper.CleanPrefixes(i.PhenomenonName)}, {i.OfferingName}, {i.UnitName}";
-                var siteName = MetadataHelper.CleanPrefixes(i.SiteName);
-                var stationName = MetadataHelper.CleanPrefixes(i.StationName);
+                var variable = $"{MetadataHelper.CleanPrefixes(i.Phenomenon)}, {i.Offering}, {i.Unit}";
+                var siteName = MetadataHelper.CleanPrefixes(i.Site);
+                var stationName = MetadataHelper.CleanPrefixes(i.Station);
                 return $"{variable} for {siteName}, {stationName}";
             })).Distinct();
             result.Metadata.Title = string.Join("; ", titles.OrderBy(i => i));
-            var descriptions = observations.Where(i => i.StationName.StartsWith("ELW, ")).Select(i =>
+            var descriptions = observations.Where(i => i.Station.StartsWith("ELW, ")).Select(i =>
             {
-                var variable = $"{MetadataHelper.CleanPrefixes(i.PhenomenonName)}, {i.OfferingName}, {i.UnitName}";
-                var siteName = MetadataHelper.CleanPrefixes(i.SiteName);
-                var stationName = MetadataHelper.CleanPrefixes(i.StationName);
+                var variable = $"{MetadataHelper.CleanPrefixes(i.Phenomenon)}, {i.Offering}, {i.Unit}";
+                var siteName = MetadataHelper.CleanPrefixes(i.Site);
+                var stationName = MetadataHelper.CleanPrefixes(i.Station);
                 if (stationName.EndsWith(siteName))
                 {
                     stationName = stationName.Substring(0, stationName.Length - siteName.Length - 2);
                 }
                 return $"{variable} for {stationName}";
-            }).Union(observations.Where(i => !i.StationName.StartsWith("ELW, ")).Select(i =>
+            }).Union(observations.Where(i => !i.Station.StartsWith("ELW, ")).Select(i =>
             {
-                var variable = $"{MetadataHelper.CleanPrefixes(i.PhenomenonName)}, {i.OfferingName}, {i.UnitName}";
-                var siteName = MetadataHelper.CleanPrefixes(i.SiteName);
-                var stationName = MetadataHelper.CleanPrefixes(i.StationName);
+                var variable = $"{MetadataHelper.CleanPrefixes(i.Phenomenon)}, {i.Offering}, {i.Unit}";
+                var siteName = MetadataHelper.CleanPrefixes(i.Site);
+                var stationName = MetadataHelper.CleanPrefixes(i.Station);
                 return $"{variable} for {siteName}, {stationName}";
             })).Distinct();
             result.Metadata.Description = string.Join("; ", descriptions.OrderBy(i => i));
-            var datasetCodes = observations.Select(i => $"{i.StationCode}~{i.PhenomenonCode}~{i.OfferingCode}~{i.UnitCode}").Distinct();
-            SAEONLogs.Verbose("DatasetCodes: {DatasetCodes}", datasetCodes.ToList());
-            var datasetDOIs = DbContext.DigitalObjectIdentifiers.Where(i => datasetCodes.Contains(i.Code)).OrderBy(i => i.Name).ToList();
+            //var datasetCodes = observations.Select(i => $"{i.Station}~{i.Phenomenon}~{i.Offering}~{i.Unit}").Distinct();
+            //SAEONLogs.Verbose("DatasetCodes: {DatasetCodes}", datasetCodes.ToList());
+            var datasetDOIs = datasets.Select(i => i.DigitalObjectIdentifier).OrderBy(i => i.Code).ToList();
             if (!datasetDOIs.Any())
             {
-                SAEONLogs.Error("No dataset DOIs found! Dataset Codes: {Codes}", datasetCodes);
+                SAEONLogs.Error("No dataset DOIs found! Dataset Codes: {Codes}", datasets.Select(i => i.Code).ToList());
             }
             else
             {
@@ -376,13 +299,13 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             //result.Metadata.Subjects.AddRange(observations.Select(i => i.OrganisationName).Distinct().Select(i => new MetadataSubject { Name = MetadataHelper.CleanPrefixes(i) }));
             //result.Metadata.Subjects.AddRange(observations.Select(i => i.ProgrammeName).Distinct().Select(i => new MetadataSubject { Name = MetadataHelper.CleanPrefixes(i) }));
             //result.Metadata.Subjects.AddRange(observations.Select(i => i.ProjectName).Distinct().Select(i => new MetadataSubject { Name = MetadataHelper.CleanPrefixes(i) }));
-            result.Metadata.Subjects.AddRange(observations.Select(i => i.SiteName).Distinct().Select(i => new MetadataSubject { Name = MetadataHelper.CleanPrefixes(i) }));
-            result.Metadata.Subjects.AddRange(observations.Select(i => i.StationName).Distinct().Select(i => new MetadataSubject { Name = MetadataHelper.CleanPrefixes(i) }));
-            result.Metadata.Subjects.AddRange(observations.Select(i => i.PhenomenonName).Distinct().Select(i => new MetadataSubject { Name = i }));
-            result.Metadata.Subjects.AddRange(observations.Select(i => $"{i.PhenomenonName}, {i.OfferingName}, {i.UnitName}").Distinct().Select(i => new MetadataSubject { Name = i }));
+            result.Metadata.Subjects.AddRange(observations.Select(i => i.Site).Distinct().Select(i => new MetadataSubject { Name = MetadataHelper.CleanPrefixes(i) }));
+            result.Metadata.Subjects.AddRange(observations.Select(i => i.Station).Distinct().Select(i => new MetadataSubject { Name = MetadataHelper.CleanPrefixes(i) }));
+            result.Metadata.Subjects.AddRange(observations.Select(i => i.Phenomenon).Distinct().Select(i => new MetadataSubject { Name = i }));
+            result.Metadata.Subjects.AddRange(observations.Select(i => $"{i.Phenomenon}, {i.Offering}, {i.Unit}").Distinct().Select(i => new MetadataSubject { Name = i }));
             // Dates
-            result.Metadata.StartDate = observations.Min(i => i.ValueDate);
-            result.Metadata.EndDate = observations.Max(i => i.ValueDate);
+            result.Metadata.StartDate = observations.Min(i => i.Date);
+            result.Metadata.EndDate = observations.Max(i => i.Date);
             // Bounding box
             result.Metadata.LatitudeNorth = observations.Max(i => i.Latitude);
             result.Metadata.LatitudeSouth = observations.Min(i => i.Latitude);
@@ -391,33 +314,23 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             result.Metadata.ElevationMaximum = observations.Max(i => i.Elevation);
             result.Metadata.ElevationMinimum = observations.Min(i => i.Elevation);
             // Places - Might come later
-            SAEONLogs.Verbose("Metadata: {@Metadata}", result.Metadata);
+            //SAEONLogs.Verbose("Metadata: {@Metadata}", result.Metadata);
             SAEONLogs.Verbose("Metadata: Stage {Stage} Total {Total}", stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
+            stageStopwatch.Restart();
             //Chart series
             if (includeChart)
             {
-                ChartSeries series = null;
-                siteId = new Guid();
-                stationId = new Guid();
-                nRow = 0;
-                foreach (var obs in observations.OrderBy(i => i.SiteName).ThenBy(i => i.StationName).ThenBy(i => i.ValueDate))
+                foreach (var dataset in datasets)
                 {
-                    if (++nRow % 10000 == 0)
+                    var series = new ChartSeries
                     {
-                        SAEONLogs.Verbose("Chart.Row: {Row}", nRow);
-                    }
-                    if ((series is null) || (obs.SiteId != siteId) || (obs.StationId != stationId))
-                    {
-                        series = new ChartSeries
-                        {
-                            Name = GetCode(obs.StationCode, obs.PhenomenonCode, obs.OfferingCode, obs.UnitCode),
-                            Caption = GetName(obs.StationName, obs.PhenomenonName, obs.OfferingName, obs.UnitName)
-                        };
-                        result.ChartSeries.Add(series);
-                        siteId = obs.SiteId;
-                        stationId = obs.StationId;
-                    }
-                    series.Add(obs.ValueDate, obs.DataValue);
+                        Name = GetCode(dataset.StationCode, dataset.PhenomenonCode, dataset.OfferingCode, dataset.UnitCode),
+                        Caption = GetName(dataset.StationName, dataset.PhenomenonName, dataset.OfferingName, dataset.UnitName)
+                    };
+                    series.Data.AddRange(observations.Where(o => o.Station == dataset.StationName && o.Phenomenon == dataset.PhenomenonName && o.Offering == dataset.OfferingName && o.Unit == dataset.UnitName)
+                        .OrderBy(i => i.Date)
+                        .Select(i => new ChartData { Date = i.Date, Value = i.Value }));
+                    result.ChartSeries.Add(series);
                 }
                 //SAEONLogs.Verbose("ChartSeries: Count: {count} Stage {Stage} Total {Total} Series: {@Series}", result.ChartSeries.Count, stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr(), result.ChartSeries);
                 SAEONLogs.Verbose("ChartSeries: Count: {count} Stage {Stage} Total {Total}", result.ChartSeries.Count, stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
@@ -550,7 +463,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                             ZipCheckSum = "ABCD",
                             ZipUrl = $"{baseUrl}/DownloadZip",
                             AddedBy = User.UserId(),
-                            UpdatedBy = User.UserId()
+                            UpdatedBy = User.UserId(),
+                            IPAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString()
                         };
                         SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
                         DbContext.UserDownloads.Add(result);
@@ -566,19 +480,25 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         result.ZipUrl = $"{baseUrl}/DownloadZip/{result.Id}";
                         // Create files
                         SAEONLogs.Verbose("Creating files");
+                        var fileName = $"SAEON Observations Database Download {output.Date:yyyyMMdd HHmmss}";
                         switch (input.DownloadFormat)
                         {
                             case DownloadFormat.CSV:
-                                System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, $"SAEON Observations Database Download {output.Date:yyyyMMdd HHmmss}.csv"), output.DataMatrix.ToCSV());
+                                fileName += ".csv";
+                                System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, fileName), output.Data.ToCSV());
                                 break;
                             case DownloadFormat.Excel:
-                                System.IO.File.WriteAllBytes(Path.Combine(dirInfo.FullName, $"SAEON Observations Database Download {output.Date:yyyyMMdd HHmmss}.xlsx"), output.DataMatrix.ToExcel());
+                                fileName += ".xlsx";
+                                System.IO.File.WriteAllBytes(Path.Combine(dirInfo.FullName, fileName), output.Data.ToExcel());
                                 break;
                             case DownloadFormat.NetCDF:
-                                break;
+                                throw new NotSupportedException();
+                                //break;
                         }
                         // Create Zip
                         ZipFile.CreateFromDirectory(dirInfo.FullName, Path.Combine(folder, $"{result.Id}.zip"));
+                        result.FileSize = new FileInfo(Path.Combine(dirInfo.FullName, fileName)).Length;
+                        result.ZipSize = new FileInfo(Path.Combine(folder, $"{result.Id}.zip")).Length;
                         // Download info extras
                         System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input, Formatting.Indented));
                         //System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), metadata.ToJson());
@@ -590,7 +510,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         //System.IO.File.WriteAllText(Path.Combine(folder, $"{result.Id} Checksum.json"), jChecksum.ToString());
                         System.IO.File.WriteAllText(Path.Combine(dirInfo.FullName, $"{result.Id} Checksum.json"), jChecksum.ToString());
                         //dirInfo.Delete(true);
-                        result.IPAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
                         SAEONLogs.Verbose("UserDownload: {@UserDownload}", result);
                         await SaveChangesAsync();
                         await RequestLogger.LogAsync(DbContext, Request, result.Id.ToString());

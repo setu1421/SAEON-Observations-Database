@@ -80,6 +80,7 @@ namespace SAEON.Observations.WebAPI
                                 i.PhenomenonUnitId == inventoryDataset.PhenomenonUnitId);
                             if (dataset is null)
                             {
+                                await AddLineAsync($"Adding dataset {inventoryDataset.Code}, {inventoryDataset.Name}");
                                 dataset = new Dataset
                                 {
                                     Code = inventoryDataset.Code,
@@ -179,8 +180,8 @@ namespace SAEON.Observations.WebAPI
                         {
                             if (!inventoryDataset.Code.StartsWith("SACTN"))
                             {
-                                var dataset = await EnsureDataset(inventoryDataset);
                                 var doiDataset = await EnsureDatasetDOI(inventoryDataset);
+                                var dataset = await EnsureDataset(inventoryDataset);
                                 dataset.DigitalObjectIdentifierId = doiDataset.Id;
                                 doiDataset.DatasetId = dataset.Id;
                                 if (dbContext.Entry(doiDataset).State != EntityState.Unchanged)

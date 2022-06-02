@@ -12,7 +12,6 @@
             sr.Name(series.Caption)
                 .Type(SeriesType.Line)
                 .DataSource(series.Data)
-                //.DataSource(ds => ds.URL($"/DataWizard/GetChartData/{series.Name}"))
                 .XName("Date")
                 .YName("Value")
                 .Add();

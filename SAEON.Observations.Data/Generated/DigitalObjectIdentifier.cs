@@ -195,7 +195,7 @@ namespace SAEON.Observations.Data
 				TableSchema.TableColumn colvarAddedBy = new TableSchema.TableColumn(schema);
 				colvarAddedBy.ColumnName = "AddedBy";
 				colvarAddedBy.DataType = DbType.AnsiString;
-				colvarAddedBy.MaxLength = 128;
+				colvarAddedBy.MaxLength = 36;
 				colvarAddedBy.AutoIncrement = false;
 				colvarAddedBy.IsNullable = false;
 				colvarAddedBy.IsPrimaryKey = false;
@@ -222,7 +222,7 @@ namespace SAEON.Observations.Data
 				TableSchema.TableColumn colvarUpdatedBy = new TableSchema.TableColumn(schema);
 				colvarUpdatedBy.ColumnName = "UpdatedBy";
 				colvarUpdatedBy.DataType = DbType.AnsiString;
-				colvarUpdatedBy.MaxLength = 128;
+				colvarUpdatedBy.MaxLength = 36;
 				colvarUpdatedBy.AutoIncrement = false;
 				colvarUpdatedBy.IsNullable = false;
 				colvarUpdatedBy.IsPrimaryKey = false;
@@ -520,6 +520,20 @@ namespace SAEON.Observations.Data
 				colvarODPMetadataPublishErrors.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarODPMetadataPublishErrors);
 				
+				TableSchema.TableColumn colvarDatasetID = new TableSchema.TableColumn(schema);
+				colvarDatasetID.ColumnName = "DatasetID";
+				colvarDatasetID.DataType = DbType.Guid;
+				colvarDatasetID.MaxLength = 0;
+				colvarDatasetID.AutoIncrement = false;
+				colvarDatasetID.IsNullable = true;
+				colvarDatasetID.IsPrimaryKey = false;
+				colvarDatasetID.IsForeignKey = true;
+				colvarDatasetID.IsReadOnly = false;
+				colvarDatasetID.DefaultSetting = @"";
+				
+					colvarDatasetID.ForeignKeyTableName = "Datasets";
+				schema.Columns.Add(colvarDatasetID);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -769,6 +783,14 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<string>(Columns.ODPMetadataPublishErrors); }
 			set { SetColumnValue(Columns.ODPMetadataPublishErrors, value); }
 		}
+		  
+		[XmlAttribute("DatasetID")]
+		[Bindable(true)]
+		public Guid? DatasetID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.DatasetID); }
+			set { SetColumnValue(Columns.DatasetID, value); }
+		}
 		
 		#endregion
 		
@@ -783,6 +805,10 @@ namespace SAEON.Observations.Data
         }
         
 		
+		public SAEON.Observations.Data.DatasetCollection Datasets()
+		{
+			return new SAEON.Observations.Data.DatasetCollection().Where(Dataset.Columns.DigitalObjectIdentifierID, Id).Load();
+		}
 		public SAEON.Observations.Data.DigitalObjectIdentifierCollection ChildDigitalObjectIdentifiers()
 		{
 			return new SAEON.Observations.Data.DigitalObjectIdentifierCollection().Where(DigitalObjectIdentifier.Columns.ParentID, Id).Load();
@@ -792,6 +818,19 @@ namespace SAEON.Observations.Data
 			
 		
 		#region ForeignKey Properties
+		
+        private SAEON.Observations.Data.Dataset _Dataset = null;
+		/// <summary>
+		/// Returns a Dataset ActiveRecord object related to this DigitalObjectIdentifier
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.Dataset Dataset
+		{
+//			get { return SAEON.Observations.Data.Dataset.FetchByID(this.DatasetID); }  
+			get { return _Dataset ?? (_Dataset = SAEON.Observations.Data.Dataset.FetchByID(this.DatasetID)); }
+			set { SetColumnValue("DatasetID", value.Id); }
+		}
+		
 		
         private SAEON.Observations.Data.DigitalObjectIdentifier _ParentDigitalObjectIdentifier = null;
 		/// <summary>
@@ -820,7 +859,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,Guid? varAlternateID,int? varParentID,byte varDOIType,string varCode,string varMetadataJson,byte[] varMetadataJsonSha256,string varMetadataHtml,string varMetadataUrl,string varObjectStoreUrl,string varQueryUrl,Guid? varODPMetadataID,bool? varODPMetadataNeedsUpdate,bool? varODPMetadataIsValid,string varODPMetadataErrors,string varTitle,string varCitationHtml,string varDescription,string varDescriptionHtml,string varCitation,bool? varODPMetadataIsPublished,string varODPMetadataPublishErrors)
+		public static void Insert(string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,Guid? varAlternateID,int? varParentID,byte varDOIType,string varCode,string varMetadataJson,byte[] varMetadataJsonSha256,string varMetadataHtml,string varMetadataUrl,string varObjectStoreUrl,string varQueryUrl,Guid? varODPMetadataID,bool? varODPMetadataNeedsUpdate,bool? varODPMetadataIsValid,string varODPMetadataErrors,string varTitle,string varCitationHtml,string varDescription,string varDescriptionHtml,string varCitation,bool? varODPMetadataIsPublished,string varODPMetadataPublishErrors,Guid? varDatasetID)
 		{
 			DigitalObjectIdentifier item = new DigitalObjectIdentifier();
 			
@@ -882,6 +921,8 @@ namespace SAEON.Observations.Data
 			
 			item.ODPMetadataPublishErrors = varODPMetadataPublishErrors;
 			
+			item.DatasetID = varDatasetID;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -892,7 +933,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(int varId,string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,Guid? varAlternateID,int? varParentID,byte varDOIType,string varCode,string varMetadataJson,byte[] varMetadataJsonSha256,string varMetadataHtml,string varMetadataUrl,string varObjectStoreUrl,string varQueryUrl,Guid? varODPMetadataID,bool? varODPMetadataNeedsUpdate,bool? varODPMetadataIsValid,string varODPMetadataErrors,string varTitle,string varCitationHtml,string varDescription,string varDescriptionHtml,string varCitation,bool? varODPMetadataIsPublished,string varODPMetadataPublishErrors)
+		public static void Update(int varId,string varDoi,string varDOIUrl,string varName,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,Guid? varAlternateID,int? varParentID,byte varDOIType,string varCode,string varMetadataJson,byte[] varMetadataJsonSha256,string varMetadataHtml,string varMetadataUrl,string varObjectStoreUrl,string varQueryUrl,Guid? varODPMetadataID,bool? varODPMetadataNeedsUpdate,bool? varODPMetadataIsValid,string varODPMetadataErrors,string varTitle,string varCitationHtml,string varDescription,string varDescriptionHtml,string varCitation,bool? varODPMetadataIsPublished,string varODPMetadataPublishErrors,Guid? varDatasetID)
 		{
 			DigitalObjectIdentifier item = new DigitalObjectIdentifier();
 			
@@ -955,6 +996,8 @@ namespace SAEON.Observations.Data
 				item.ODPMetadataIsPublished = varODPMetadataIsPublished;
 			
 				item.ODPMetadataPublishErrors = varODPMetadataPublishErrors;
+			
+				item.DatasetID = varDatasetID;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -1179,6 +1222,13 @@ namespace SAEON.Observations.Data
         
         
         
+        public static TableSchema.TableColumn DatasetIDColumn
+        {
+            get { return Schema.Columns[30]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -1213,6 +1263,7 @@ namespace SAEON.Observations.Data
 			 public static string Citation = @"Citation";
 			 public static string ODPMetadataIsPublished = @"ODPMetadataIsPublished";
 			 public static string ODPMetadataPublishErrors = @"ODPMetadataPublishErrors";
+			 public static string DatasetID = @"DatasetID";
 						
 		}
 		#endregion

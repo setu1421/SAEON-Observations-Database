@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid SensorID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion,string TextValue,double? Elevation,double? Latitude,double? Longitude,DateTime? ValueDay,int? ValueYear,int? ValueDecade,Guid? VerifiedBy,DateTime? VerifiedAt,Guid? UnverifiedBy,DateTime? UnverifiedAt)
+	    public void Insert(Guid SensorID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion,string TextValue,double? Elevation,double? Latitude,double? Longitude,DateTime? ValueDay,Guid? VerifiedBy,DateTime? VerifiedAt,Guid? UnverifiedBy,DateTime? UnverifiedAt,int? ValueYear,int? ValueDecade)
 	    {
 		    Observation item = new Observation();
 		    
@@ -126,10 +126,6 @@ namespace SAEON.Observations.Data
             
             item.ValueDay = ValueDay;
             
-            item.ValueYear = ValueYear;
-            
-            item.ValueDecade = ValueDecade;
-            
             item.VerifiedBy = VerifiedBy;
             
             item.VerifiedAt = VerifiedAt;
@@ -137,6 +133,10 @@ namespace SAEON.Observations.Data
             item.UnverifiedBy = UnverifiedBy;
             
             item.UnverifiedAt = UnverifiedAt;
+            
+            item.ValueYear = ValueYear;
+            
+            item.ValueDecade = ValueDecade;
             
 	    
 		    item.Save(UserName);
@@ -146,7 +146,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid SensorID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,int Id,byte[] RowVersion,string TextValue,double? Elevation,double? Latitude,double? Longitude,DateTime? ValueDay,int? ValueYear,int? ValueDecade,Guid? VerifiedBy,DateTime? VerifiedAt,Guid? UnverifiedBy,DateTime? UnverifiedAt)
+	    public void Update(Guid SensorID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,int Id,byte[] RowVersion,string TextValue,double? Elevation,double? Latitude,double? Longitude,DateTime? ValueDay,Guid? VerifiedBy,DateTime? VerifiedAt,Guid? UnverifiedBy,DateTime? UnverifiedAt,int? ValueYear,int? ValueDecade)
 	    {
 		    Observation item = new Observation();
 	        item.MarkOld();
@@ -196,10 +196,6 @@ namespace SAEON.Observations.Data
 				
 			item.ValueDay = ValueDay;
 				
-			item.ValueYear = ValueYear;
-				
-			item.ValueDecade = ValueDecade;
-				
 			item.VerifiedBy = VerifiedBy;
 				
 			item.VerifiedAt = VerifiedAt;
@@ -207,6 +203,10 @@ namespace SAEON.Observations.Data
 			item.UnverifiedBy = UnverifiedBy;
 				
 			item.UnverifiedAt = UnverifiedAt;
+				
+			item.ValueYear = ValueYear;
+				
+			item.ValueDecade = ValueDecade;
 				
 	        item.Save(UserName);
 	    }

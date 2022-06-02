@@ -20,6 +20,8 @@
        [dbo].[DigitalObjectIdentifiers] (Table)
        [dbo].[Observation] (Table)
        [dbo].[UserDownloads] (Table)
+       [dbo].[vVariables] (View)
+       [dbo].[vLocations] (View)
      Create
        [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_DatasetID] (Index)
        [dbo].[Datasets] (Table)

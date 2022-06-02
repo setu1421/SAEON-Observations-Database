@@ -11,8 +11,4 @@ Select distinct
   (LongitudeWest + LongitudeEast) / 2 Longitude,
   (ElevationMaximum + ElevationMinimum) / 2 Elevation
 from
-  vInventoryDatasets
-where
-  (VerifiedCount > 0) and
-  (LatitudeNorth is not null) and (LatitudeSouth is not null) and
-  (LongitudeWest is not null) and (LongitudeEast is not null)
+  vDatasetsExpansion

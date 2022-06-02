@@ -8,7 +8,7 @@ Select
 from 
 	vInventoryDatasets
 where
-	(StationCode like 'ELW%') and
+    (OrganisationCode = 'SAEON') and
 	(VerifiedCount > 0)  and 
 	(LatitudeNorth is not null) and (LatitudeSouth is not null) and 
 	(LongitudeEast is not null) and (LongitudeWest is not null)
@@ -21,7 +21,7 @@ Select
 from
 	vImportBatchSummary
 where
-	(StationCode like 'ELW%') and
+    (OrganisationCode = 'SAEON') and
 	(VerifiedCount > 0)  and 
 	(LatitudeNorth is not null) and (LatitudeSouth is not null) and 
 	(LongitudeEast is not null) and (LongitudeWest is not null)

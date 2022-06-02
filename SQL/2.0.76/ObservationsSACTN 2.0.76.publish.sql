@@ -166,7 +166,9 @@ SET QUOTED_IDENTIFIER OFF;
 
 GO
 ALTER TABLE [dbo].[UserDownloads]
-    ADD [IPAddress] VARCHAR (45) NULL;
+    ADD [IPAddress] VARCHAR (45) NULL,
+        [FileSize]  BIGINT       NULL,
+        [ZipSize]   BIGINT       NULL;
 
 
 GO
@@ -496,7 +498,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing View [dbo].[vInventorySnapshots]...';
+PRINT N'Altering View [dbo].[vVariables]...';
 
 
 GO
@@ -506,9 +508,14 @@ SET QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vInventorySnapshots]';
-
-
+ALTER VIEW [dbo].[vVariables]
+AS 
+Select distinct
+  PhenomenonID, PhenomenonName, PhenomenonUrl,
+  PhenomenonOfferingID, OfferingID, OfferingName,
+  PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureUnit
+from
+  vInventoryDatasets
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
@@ -526,14 +533,14 @@ SET QUOTED_IDENTIFIER OFF;
 GO
 CREATE VIEW [dbo].[vDatasetsExpansion]
 AS
-Select
+Select Distinct
   Datasets.*,
   Organisation.ID OrganisationID, Organisation.Code OrganisationCode, Organisation.Name OrganisationName, Organisation.Description OrganisationDescription, Organisation.Url OrganisationUrl,
   Programme.ID ProgrammeID, Programme.Code ProgrammeCode, Programme.Name ProgrammeName, Programme.Description ProgrammeDescription, Programme.Url ProgrammeUrl,
   Project.ID ProjectID, Project.Code ProjectCode, Project.Name ProjectName, Project.Description ProjectDescription, Project.Url ProjectUrl,
   Site.ID SiteID, Site.Code SiteCode, Site.Name SiteName, Site.Description SiteDescription, Site.Url SiteUrl,
   Station.Code StationCode, Station.Name StationName, Station.Description StationDescription, Station.Url StationUrl,
-  Phenomenon.ID PhenomenonID, Phenomenon.Code PhenomenonCode, Phenomenon.Name PhenomenonName, Phenomenon.Description PhenomenonDescription,
+  Phenomenon.ID PhenomenonID, Phenomenon.Code PhenomenonCode, Phenomenon.Name PhenomenonName, Phenomenon.Description PhenomenonDescription, Phenomenon.Url PhenomenonUrl,
   Offering.ID OfferingID, Offering.Code OfferingCode, Offering.Name OfferingName, Offering.Description OfferingDescription,
   UnitOfMeasure.ID UnitOfMeasureID, UnitOfMeasure.Code UnitOfMeasureCode, UnitOfMeasure.Unit UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol
 from
@@ -562,6 +569,91 @@ from
     on (vStationOrganisation.StationID = Station.ID)
   left join Organisation
     on (vStationOrganisation.OrganisationID = Organisation.ID)
+where
+  (VerifiedCount > 0) and (LatitudeNorth is not null) and (LatitudeSouth is not null) and (LongitudeWest is not null) and (LongitudeEast is not null)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering View [dbo].[vInventorySnapshots]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vInventorySnapshots]
+as
+with VerifiedDatasets as
+(
+Select 
+	* 
+from 
+	vDatasetsExpansion
+where
+	(VerifiedCount > 0)  and 
+	(LatitudeNorth is not null) and (LatitudeSouth is not null) and 
+	(LongitudeEast is not null) and (LongitudeWest is not null)
+),
+VerifiedImportBatchSummaries as
+(
+Select
+	*
+from
+	vImportBatchSummary
+where
+	(VerifiedCount > 0)  and 
+	(LatitudeNorth is not null) and (LatitudeSouth is not null) and 
+	(LongitudeEast is not null) and (LongitudeWest is not null)
+)
+Select 
+	(Select Count(distinct OrganisationCode) from VerifiedDatasets) Organisations,
+	(Select Count(distinct ProgrammeCode) from VerifiedDatasets) Programmes,
+	(Select Count(distinct ProjectCode) from VerifiedDatasets) Projects,
+	(Select Count(distinct SiteCode) from VerifiedDatasets) Sites,
+	(Select Count(distinct StationCode) from VerifiedDatasets) Stations,
+	(Select Count(distinct InstrumentCode) from VerifiedImportBatchSummaries) Instruments,
+	(Select Count(distinct SensorCode) from VerifiedImportBatchSummaries) Sensors,
+	(Select Count(distinct PhenomenonCode) from VerifiedDatasets) Phenomena,
+	(Select Count(distinct OfferingCode) from VerifiedDatasets) Offerings,
+	(Select Count(distinct UnitOfMeasureCode) from VerifiedDatasets) UnitsOfMeasure,
+	(Select Count(*) from vVariables) Variables,
+	(Select Count(*) from VerifiedDatasets) Datasets,
+	(Select Sum(VerifiedCount) from VerifiedImportBatchSummaries) Observations,
+	(Select Count(*) from UserDownloads) Downloads
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering View [dbo].[vLocations]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vLocations]
+AS
+Select distinct
+  OrganisationID, OrganisationName, OrganisationUrl,
+  ProgrammeID, ProgrammeName, ProgrammeUrl,
+  ProjectID, ProjectName, ProjectUrl,
+  SiteID, SiteName, SiteUrl,
+  StationID, StationName, StationUrl,
+  --[Count],  VerifiedCount, UnverifiedCount, 
+  (LatitudeNorth + LatitudeSouth) / 2 Latitude,
+  (LongitudeWest + LongitudeEast) / 2 Longitude,
+  (ElevationMaximum + ElevationMinimum) / 2 Elevation
+from
+  vDatasetsExpansion
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 

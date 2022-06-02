@@ -1,23 +1,27 @@
-﻿CREATE VIEW [dbo].[vInventorySnapshots]
+use Observations;
+with 
+VerifiedDatasets
 as
-with VerifiedDatasets as
 (
 Select 
 	* 
 from 
-	vDatasetsExpansion
+	vInventoryDatasets
 where
+    (OrganisationCode = 'SMCRI') and
 	(VerifiedCount > 0)  and 
 	(LatitudeNorth is not null) and (LatitudeSouth is not null) and 
 	(LongitudeEast is not null) and (LongitudeWest is not null)
 ),
-VerifiedImportBatchSummaries as
+VerifiedImportBatchSummaries
+as
 (
 Select
 	*
 from
 	vImportBatchSummary
 where
+    (OrganisationCode = 'SMCRI') and
 	(VerifiedCount > 0)  and 
 	(LatitudeNorth is not null) and (LatitudeSouth is not null) and 
 	(LongitudeEast is not null) and (LongitudeWest is not null)
@@ -36,4 +40,5 @@ Select
 	(Select Count(*) from vVariables) Variables,
 	(Select Count(*) from VerifiedDatasets) Datasets,
 	(Select Sum(VerifiedCount) from VerifiedImportBatchSummaries) Observations,
-	(Select Count(*) from UserDownloads) Downloads
+	(Select Count(*) from UserDownloads) Downloads;
+

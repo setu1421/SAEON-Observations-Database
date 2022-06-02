@@ -445,6 +445,7 @@ namespace SAEON.Observations.Core
         public string PhenomenonCode { get; set; }
         public string PhenomenonName { get; set; }
         public string PhenomenonDescription { get; set; }
+        public string PhenomenonUrl { get; set; }
         //public Guid PhenomenonOfferingID { get; set; }
         public Guid OfferingId { get; set; }
         public string OfferingCode { get; set; }
@@ -1258,6 +1259,10 @@ namespace SAEON.Observations.Core
         public string ZipUrl { get; set; }
         [JsonIgnore, SwaggerIgnore]
         public string IPAddress { get; set; }
+        [JsonIgnore, SwaggerIgnore]
+        public long FileSize { get; set; }
+        [JsonIgnore, SwaggerIgnore]
+        public long ZipSize { get; set; }
         ///// <summary>
         ///// UserId of the UserDownload
         ///// </summary>

@@ -363,6 +363,63 @@ namespace SAEON.Observations.Core
         }
     }
 
+    public class ObservationDTO
+    {
+        public string Station { get; set; }
+        public string Variable => $"{Phenomenon.Replace(", ", "_")}, {Offering.Replace(", ", "_")}, {Unit.Replace(", ", "_")}";
+        public double? Elevation { get; set; }
+        public DateTime Date { get; set; }
+        public double? Value { get; set; }
+        public string Comment { get; set; }
+        public string Site { get; set; }
+        public string Phenomenon { get; set; }
+        public string Offering { get; set; }
+        public string Unit { get; set; }
+        public string Instrument { get; set; }
+        public string Sensor { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ObservationDTO dTO &&
+                   Station == dTO.Station &&
+                   Variable == dTO.Variable &&
+                   Elevation == dTO.Elevation &&
+                   Date == dTO.Date &&
+                   Value == dTO.Value &&
+                   Comment == dTO.Comment &&
+                   Site == dTO.Site &&
+                   Phenomenon == dTO.Phenomenon &&
+                   Offering == dTO.Offering &&
+                   Unit == dTO.Unit &&
+                   Instrument == dTO.Instrument &&
+                   Sensor == dTO.Sensor &&
+                   Latitude == dTO.Latitude &&
+                   Longitude == dTO.Longitude;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = new HashCode();
+            hash.Add(Station);
+            hash.Add(Variable);
+            hash.Add(Elevation);
+            hash.Add(Date);
+            hash.Add(Value);
+            hash.Add(Comment);
+            hash.Add(Site);
+            hash.Add(Phenomenon);
+            hash.Add(Offering);
+            hash.Add(Unit);
+            hash.Add(Instrument);
+            hash.Add(Sensor);
+            hash.Add(Latitude);
+            hash.Add(Longitude);
+            return hash.ToHashCode();
+        }
+    }
+
     public class DataWizardDataOutput
     {
         //public DataWizardDataOutput()
@@ -382,28 +439,12 @@ namespace SAEON.Observations.Core
         //}
 
         //public DataTable DataTable { get; private set; }
-        public DataMatrix DataMatrix { get; } = new DataMatrix();
+        public Guid Id { get; } = Guid.NewGuid();
+        public List<ObservationDTO> Data { get; set; } = new List<ObservationDTO>();
+        //public DataMatrix DataMatrix { get; } = new DataMatrix();
         public List<ChartSeries> ChartSeries { get; } = new List<ChartSeries>();
         public DateTime Date { get; } = DateTime.Now;
         public MetadataCore Metadata { get; private set; } = new MetadataCore();
-        //public string Title { get; set; }
-        //public string Description { get; set; }
-        /// <summary>
-        /// Semi-colon separated Name;Scheme;Uri
-        /// </summary>
-        //public List<string> Keywords { get; } = new List<string>();
-        /// <summary>
-        /// Lookup on GeoNames in format Name:Country:Lat:Lon
-        /// </summary>
-        //public List<string> Places { get; } = new List<string>();
-        //public double? LatitudeNorth { get; set; } // + N to -S
-        //public double? LatitudeSouth { get; set; } // + N to -S
-        //public double? LongitudeWest { get; set; } // -W to +E
-        //public double? LongitudeEast { get; set; } // -W to +E
-        //public double? ElevationMinimum { get; set; } // m
-        //public double? ElevationMaximum { get; set; } // m
-        //public DateTime? StartDate { get; set; }
-        //public DateTime? EndDate { get; set; }
     }
 
     public class DataWizardApproximation

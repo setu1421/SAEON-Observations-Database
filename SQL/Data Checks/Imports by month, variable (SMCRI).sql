@@ -8,7 +8,7 @@ from
   inner join ImportBatch
     on (vImportBatchSummary.ImportBatchID = ImportBatch.ID)
 where
-  (StationCode like 'ELW%')
+  (OrganisationCode = 'SMCRI')
 )
 Select
   Date Month, Phenomenon, Offering, Unit, Count(*) Imports, Sum([Count]) Observations

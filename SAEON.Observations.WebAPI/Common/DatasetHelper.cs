@@ -23,7 +23,9 @@ namespace SAEON.Observations.WebAPI
 {
     public static class DatasetHelper
     {
+        private static readonly string BatchSizeConfigKey = "DatasetsBatchSize";
         private static readonly string DatasetsFolderConfigKey = "DatasetsFolder";
+        private static readonly string UseDiskConfigKey = "DatasetsUseDisk";
 
         public static async Task<string> CreateDatasets(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext, IConfiguration config)
         {
@@ -53,7 +55,7 @@ namespace SAEON.Observations.WebAPI
                             .ThenBy(i => i.ProgrammeName)
                             .ThenBy(i => i.SiteName)
                             .ThenBy(i => i.StationName);
-                        if (int.TryParse(config["DatasetBatchSize"], out var take))
+                        if (int.TryParse(config[BatchSizeConfigKey], out var take))
                         {
                             if (take > 0)
                             {
@@ -73,17 +75,15 @@ namespace SAEON.Observations.WebAPI
                         stopwatch.Start();
                         await AddLineAsync($"{dataset.Code} {dataset.Name}");
                         var datasetsFolder = config[DatasetsFolderConfigKey];
-                        var observations = await LoadFromDatabase(dbContext, dataset.Id);
+                        var observations = await LoadFromDatabaseAsync(dbContext, dataset);
                         var csvConfig = new CsvConfiguration(CultureInfo.CreateSpecificCulture("en-za"))
                         {
                             NewLine = Environment.NewLine,
                             IgnoreReferences = true
                         };
-                        using (var writer = new StreamWriter(Path.Combine(datasetsFolder, dataset.FileName)))
-                        using (var csv = new CsvWriter(writer, csvConfig))
-                        {
-                            csv.WriteRecords(observations);
-                        }
+                        using var writer = new StreamWriter(Path.Combine(datasetsFolder, dataset.FileName));
+                        using var csv = new CsvWriter(writer, csvConfig);
+                        csv.WriteRecords(observations);
                         dataset.NeedsUpdate = false;
                         if (dbContext.Entry(dataset).State != EntityState.Unchanged)
                         {
@@ -102,20 +102,25 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
-        public static async Task<bool> IsOnDisk(ObservationsDbContext dbContext, IConfiguration config, Guid datasetId)
+        private static List<ObservationDTO> LoadFromDisk(Dataset dataset, IConfiguration config)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", datasetId } }))
+            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
             {
                 try
                 {
-                    var dataset = await dbContext.Datasets.FirstOrDefaultAsync(i => i.Id == datasetId);
-                    if (!dataset?.NeedsUpdate ?? false)
+                    Guard.IsNotNull(dataset, nameof(dataset));
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    var csvConfig = new CsvConfiguration(CultureInfo.CreateSpecificCulture("en-za"))
                     {
-                        var result = File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.FileName));
-                        SAEONLogs.Verbose("IsOnDisk: {FileName}, {Result}", dataset.FileName, result);
-                        return result;
-                    }
-                    return false;
+                        NewLine = Environment.NewLine,
+                        IgnoreReferences = true
+                    };
+                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.FileName));
+                    using var csv = new CsvReader(reader, csvConfig);
+                    var result = csv.GetRecords<ObservationDTO>().ToList();
+                    SAEONLogs.Verbose("Loaded in {Elapsed}", stopwatch.Elapsed.TimeStr());
+                    return result;
                 }
                 catch (Exception ex)
                 {
@@ -125,15 +130,43 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
-        public static async Task<List<ObservationDTO>> LoadFromDatabase(ObservationsDbContext dbContext, Guid datasetId)
+        private static async Task<List<ObservationDTO>> LoadFromDiskAsync(Dataset dataset, IConfiguration config)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", datasetId } }))
+            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
             {
                 try
                 {
-                    var dataset = await dbContext.Datasets.FirstOrDefaultAsync(i => i.Id == datasetId);
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    return await dbContext.VObservationsExpansion.AsNoTracking()
+                    var csvConfig = new CsvConfiguration(CultureInfo.CreateSpecificCulture("en-za"))
+                    {
+                        NewLine = Environment.NewLine,
+                        IgnoreReferences = true
+                    };
+                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.FileName));
+                    using var csv = new CsvReader(reader, csvConfig);
+                    var result = new List<ObservationDTO>();
+                    await foreach (var record in csv.GetRecordsAsync<ObservationDTO>())
+                    {
+                        result.Add(record);
+                    }
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        private static IQueryable<ObservationDTO> GetQuery(ObservationsDbContext dbContext, Dataset dataset)
+        {
+            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
+            {
+                try
+                {
+                    Guard.IsNotNull(dataset, nameof(dataset));
+                    return dbContext.VObservationsExpansion.AsNoTracking()
                         .Where(i =>
                             (i.StationId == dataset.StationId) && (i.PhenomenonOfferingId == dataset.PhenomenonOfferingId) && (i.PhenomenonUnitId == dataset.PhenomenonUnitId) &&
                             ((i.StatusId == null) || (i.StatusName == "Verified")))
@@ -150,9 +183,10 @@ namespace SAEON.Observations.WebAPI
                             Value = i.DataValue,
                             Instrument = i.InstrumentName,
                             Sensor = i.SensorName,
-                            Comment = i.Comment
-                        })
-                        .ToListAsync();
+                            Comment = i.Comment,
+                            Latitude = i.Latitude,
+                            Longitude = i.Longitude,
+                        });
                 }
                 catch (Exception ex)
                 {
@@ -162,29 +196,99 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
-        public static async Task<List<ObservationDTO>> LoadFromDisk(ObservationsDbContext dbContext, IConfiguration config, Guid datasetId)
+        private static List<ObservationDTO> LoadFromDatabase(ObservationsDbContext dbContext, Dataset dataset)
+        {
+            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
+            {
+                try
+                {
+                    Guard.IsNotNull(dataset, nameof(dataset));
+                    return GetQuery(dbContext, dataset).ToList();
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        private static async Task<List<ObservationDTO>> LoadFromDatabaseAsync(ObservationsDbContext dbContext, Dataset dataset)
+        {
+            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
+            {
+                try
+                {
+                    Guard.IsNotNull(dataset, nameof(dataset));
+                    return await GetQuery(dbContext, dataset).ToListAsync();
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        private static bool IsOnDisk(IConfiguration config, Dataset dataset)
+        {
+            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
+            {
+                try
+                {
+                    Guard.IsNotNull(dataset, nameof(dataset));
+                    SAEONLogs.Verbose("UseDisk: {UseDisk} NeedsUpdate: {NeedsUpdate} FileExists: {FileExists}", config[UseDiskConfigKey]?.IsTrue() ?? false, dataset.NeedsUpdate ?? false, File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.FileName)));
+                    var result = (config[UseDiskConfigKey]?.IsTrue() ?? false) && (!dataset.NeedsUpdate ?? false) && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.FileName));
+                    SAEONLogs.Verbose("IsOnDisk: {FileName}, {Result}", dataset.FileName, result);
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        public static async Task<List<ObservationDTO>> LoadAsync(ObservationsDbContext dbContext, IConfiguration config, Guid datasetId)
         {
             using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", datasetId } }))
             {
                 try
                 {
-                    if (!await IsOnDisk(dbContext, config, datasetId)) throw new InvalidOperationException($"Dataset {datasetId} is not IsOnDisk disk");
-                    var dataset = await dbContext.Datasets.FirstAsync(i => i.Id == datasetId);
-                    var csvConfig = new CsvConfiguration(CultureInfo.CreateSpecificCulture("en-za"))
+                    var dataset = await dbContext.Datasets.FirstOrDefaultAsync(i => i.Id == datasetId);
+                    Guard.IsNotNull(dataset, nameof(dataset));
+                    if (IsOnDisk(config, dataset))
                     {
-                        NewLine = Environment.NewLine,
-                        IgnoreReferences = true
-                    };
-                    using (var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.FileName)))
-                    using (var csv = new CsvReader(reader, csvConfig))
+                        return await LoadFromDiskAsync(dataset, config);
+                    }
+                    else
                     {
-                        var result = new List<ObservationDTO>();
-                        await foreach (var record in csv.GetRecordsAsync<ObservationDTO>())
-                        {
-                            result.Add(record);
-                        }
+                        return await LoadFromDatabaseAsync(dbContext, dataset);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
 
-                        return result;
+        public static List<ObservationDTO> Load(ObservationsDbContext dbContext, IConfiguration config, Guid datasetId)
+        {
+            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", datasetId } }))
+            {
+                try
+                {
+                    var dataset = dbContext.Datasets.FirstOrDefault(i => i.Id == datasetId);
+                    Guard.IsNotNull(dataset, nameof(dataset));
+                    if (IsOnDisk(config, dataset))
+                    {
+                        return LoadFromDisk(dataset, config);
+                    }
+                    else
+                    {
+                        return LoadFromDatabase(dbContext, dataset);
                     }
                 }
                 catch (Exception ex)

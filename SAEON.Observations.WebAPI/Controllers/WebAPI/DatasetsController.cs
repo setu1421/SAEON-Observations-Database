@@ -116,14 +116,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                         throw new ArgumentException($"{id} not found");
                     }
                     var result = new List<ObservationDTO>();
-                    if (await DatasetHelper.IsOnDisk(DbContext, Config, id))
-                    {
-                        result.AddRange(await DatasetHelper.LoadFromDisk(DbContext, Config, id));
-                    }
-                    else
-                    {
-                        result.AddRange(await DatasetHelper.LoadFromDatabase(DbContext, id));
-                    }
+                    result.AddRange(await DatasetHelper.LoadAsync(DbContext, Config, id));
                     try
                     {
                         await RequestLogger.LogAsync(DbContext, Request);
@@ -165,14 +158,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     Guard.IsNotNull(input, nameof(input));
 
                     var result = new List<ObservationDTO>();
-                    if (await DatasetHelper.IsOnDisk(DbContext, Config, id))
-                    {
-                        result.AddRange(await DatasetHelper.LoadFromDisk(DbContext, Config, id));
-                    }
-                    else
-                    {
-                        result.AddRange(await DatasetHelper.LoadFromDatabase(DbContext, id));
-                    }
+                    result.AddRange(await DatasetHelper.LoadAsync(DbContext, Config, id));
                     if (input.StartDate.HasValue)
                     {
                         result.RemoveAll(i => i.Date < input.StartDate);

@@ -1,3 +1,4 @@
+--use Observations;
 with RankedSnapshots
 as
 (

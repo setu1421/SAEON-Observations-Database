@@ -8,8 +8,8 @@ from
   vImportBatchSummary
   inner join ImportBatch
     on (vImportBatchSummary.ImportBatchID = ImportBatch.ID)
---where
---  (StationCode like 'ELW%')
+where
+  (OrganisationCode = 'SAEON') and
 )
 Select
   Date Month, Count(*) Imports, Sum([Count]) Observations

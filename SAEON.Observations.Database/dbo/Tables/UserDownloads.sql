@@ -30,6 +30,8 @@
  --   [StartDate] DATETIME NULL, 
  --   [EndDate] DATETIME NULL, 
     [IPAddress] VarChar(45) null,
+    [FileSize] BigInt null,
+    [ZipSize] BigInt null,
     [UserId] VarChar(128) not Null,
     [AddedAt] DateTime null Constraint [DF_UserDownloads_AddedAt] DEFAULT (getdate()),
     [AddedBy] VarChar(128) not Null,

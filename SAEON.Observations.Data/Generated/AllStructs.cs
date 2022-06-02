@@ -32,6 +32,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string DataSchema = @"DataSchema";
         
+		public static readonly string Dataset = @"Datasets";
+        
 		public static readonly string DataSource = @"DataSource";
         
 		public static readonly string DataSourceTransformation = @"DataSourceTransformation";
@@ -136,6 +138,11 @@ namespace SAEON.Observations.Data
 		public static TableSchema.Table DataSchema
 		{
             get { return DataService.GetSchema("DataSchema", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table Dataset
+		{
+            get { return DataService.GetSchema("Datasets", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table DataSource
@@ -317,6 +324,8 @@ namespace SAEON.Observations.Data
 		public static readonly string VDataQuery = @"vDataQuery";
         
 		public static readonly string VDataSchema = @"vDataSchema";
+        
+		public static readonly string VDatasetsExpansion = @"vDatasetsExpansion";
         
 		public static readonly string VDataSource = @"vDataSource";
         
