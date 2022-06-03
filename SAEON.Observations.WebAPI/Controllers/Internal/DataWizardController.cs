@@ -122,6 +122,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpGet("Approximation")]
+#if ResponseCaching
+        [ResponseCache(Duration = Defaults.InternalCacheDuration, VaryByQueryKeys = new[] { "input" })]
+#endif
         public DataWizardApproximation ApproximationGet([FromQuery] string input)
         {
             using (SAEONLogs.MethodCall<DataWizardApproximation>(GetType()))
@@ -143,6 +146,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpPost("Approximation")]
+#if ResponseCaching
+        [ResponseCache(Duration = Defaults.InternalCacheDuration, VaryByQueryKeys = new[] { "input" })]
+#endif
         public DataWizardApproximation ApproximationPost([FromBody] DataWizardDataInput input)
         {
             using (SAEONLogs.MethodCall<DataWizardApproximation>(GetType()))
@@ -342,6 +348,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         [HttpGet("GetData")]
         //[Authorize]
+#if ResponseCaching
+        [ResponseCache(Duration = Defaults.InternalCacheDuration, VaryByQueryKeys = new[] { "input" })]
+#endif
         public DataWizardDataOutput DataGet([FromQuery] string input)
         {
             using (SAEONLogs.MethodCall<DataWizardDataOutput>(GetType()))
@@ -364,6 +373,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         [HttpPost("GetData")]
         //[Authorize]
+#if ResponseCaching
+        [ResponseCache(Duration = Defaults.InternalCacheDuration, VaryByQueryKeys = new[] { "input" })]
+#endif
         public DataWizardDataOutput DataPost([FromBody] DataWizardDataInput input)
         {
             using (SAEONLogs.MethodCall<DataWizardDataOutput>(GetType()))
@@ -535,6 +547,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         [HttpGet("GetDownload/{input}")]
         [Authorize]
+#if ResponseCaching
+        [ResponseCache(Duration = Defaults.InternalCacheDuration, VaryByQueryKeys = new[] { "input" })]
+#endif
         public async Task<UserDownload> DownloadGetAsync(string input)
         {
             using (SAEONLogs.MethodCall<UserDownload>(GetType()))
@@ -559,6 +574,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         [HttpPost("GetDownload")]
         [Authorize]
+#if ResponseCaching
+        [ResponseCache(Duration = Defaults.InternalCacheDuration, VaryByQueryKeys = new[] { "input" })]
+#endif
         public async Task<UserDownload> DownloadPostAsync([FromBody] DataWizardDownloadInput input)
         {
             using (SAEONLogs.MethodCall<UserDownload>(GetType()))
@@ -582,6 +600,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpGet("DownloadZip/{id:guid}")]
+#if ResponseCaching
+        [ResponseCache(Duration = Defaults.InternalCacheDuration, VaryByQueryKeys = new[] { "id" })]
+#endif
         public ActionResult DownloadZip(Guid id)
         {
             using (SAEONLogs.MethodCall<UserDownload>(GetType(), new MethodCallParameters { { "Id", id } }))

@@ -141,7 +141,7 @@ namespace SAEON.Observations.Service
                         {
                             SAEONLogs.Information("Worker running at: {time}", currentTime);
                             var newDay = (currentTime.Date != lastRun.Date);
-                            var newHour = (currentTime.Hour != lastRun.Hour) || newDay || true;
+                            var newHour = (currentTime.Hour != lastRun.Hour) || newDay || config["RunHourlyContinuously"].IsTrue();
                             if (newDay)
                             {
                                 SAEONLogs.Information("New Day: {Date}", currentTime.Date);

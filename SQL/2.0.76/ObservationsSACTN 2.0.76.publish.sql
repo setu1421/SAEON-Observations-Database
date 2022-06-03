@@ -498,29 +498,6 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Altering View [dbo].[vVariables]...';
-
-
-GO
-SET ANSI_NULLS ON;
-
-SET QUOTED_IDENTIFIER OFF;
-
-
-GO
-ALTER VIEW [dbo].[vVariables]
-AS 
-Select distinct
-  PhenomenonID, PhenomenonName, PhenomenonUrl,
-  PhenomenonOfferingID, OfferingID, OfferingName,
-  PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureUnit
-from
-  vInventoryDatasets
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
 PRINT N'Creating View [dbo].[vDatasetsExpansion]...';
 
 
@@ -576,6 +553,58 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
+PRINT N'Altering View [dbo].[vLocations]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vLocations]
+AS
+Select distinct
+  OrganisationID, OrganisationName, OrganisationUrl,
+  ProgrammeID, ProgrammeName, ProgrammeUrl,
+  ProjectID, ProjectName, ProjectUrl,
+  SiteID, SiteName, SiteUrl,
+  StationID, StationName, StationUrl,
+  --[Count],  VerifiedCount, UnverifiedCount, 
+  (LatitudeNorth + LatitudeSouth) / 2 Latitude,
+  (LongitudeWest + LongitudeEast) / 2 Longitude,
+  (ElevationMaximum + ElevationMinimum) / 2 Elevation
+from
+  vDatasetsExpansion
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering View [dbo].[vVariables]...';
+
+
+GO
+SET ANSI_NULLS ON;
+
+SET QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vVariables]
+AS 
+Select distinct
+  PhenomenonID, PhenomenonName, PhenomenonUrl,
+  PhenomenonOfferingID, OfferingID, OfferingName,
+  PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureUnit
+from
+  vDatasetsExpansion
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
 PRINT N'Altering View [dbo].[vInventorySnapshots]...';
 
 
@@ -625,35 +654,6 @@ Select
 	(Select Count(*) from VerifiedDatasets) Datasets,
 	(Select Sum(VerifiedCount) from VerifiedImportBatchSummaries) Observations,
 	(Select Count(*) from UserDownloads) Downloads
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Altering View [dbo].[vLocations]...';
-
-
-GO
-SET ANSI_NULLS ON;
-
-SET QUOTED_IDENTIFIER OFF;
-
-
-GO
-ALTER VIEW [dbo].[vLocations]
-AS
-Select distinct
-  OrganisationID, OrganisationName, OrganisationUrl,
-  ProgrammeID, ProgrammeName, ProgrammeUrl,
-  ProjectID, ProjectName, ProjectUrl,
-  SiteID, SiteName, SiteUrl,
-  StationID, StationName, StationUrl,
-  --[Count],  VerifiedCount, UnverifiedCount, 
-  (LatitudeNorth + LatitudeSouth) / 2 Latitude,
-  (LongitudeWest + LongitudeEast) / 2 Longitude,
-  (ElevationMaximum + ElevationMinimum) / 2 Elevation
-from
-  vDatasetsExpansion
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 

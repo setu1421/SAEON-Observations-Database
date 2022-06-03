@@ -18,8 +18,9 @@
        [dbo].[DigitalObjectIdentifiers] (Table)
        [dbo].[Observation] (Table)
        [dbo].[UserDownloads] (Table)
-       [dbo].[vVariables] (View)
        [dbo].[vLocations] (View)
+       [dbo].[vVariables] (View)
+       [dbo].[vInventorySnapshots] (View)
      Create
        [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_DatasetID] (Index)
        [dbo].[Datasets] (Table)
@@ -52,7 +53,6 @@
        [dbo].[vObservation] (View)
        [dbo].[vObservationJSON] (View)
        [dbo].[vStationObservations] (View)
-       [dbo].[vInventorySnapshots] (View)
        [dbo].[spCreateImportBatchSummaries] (Procedure)
        [dbo].[spCreateInventorySnapshot] (Procedure)
 
