@@ -170,28 +170,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
-        //private class DataFeature
-        //{
-        //    public Guid StationId { get; set; }
-        //    public Guid PhenomenonOfferingId { get; set; }
-        //    public Guid PhenomenonUnitId { get; set; }
-        //    public string Name { get; set; }
-        //    public string Caption { get; set; }
-
-        //    public override bool Equals(object obj)
-        //    {
-        //        return obj is DataFeature feature &&
-        //               StationId.Equals(feature.StationId) &&
-        //               PhenomenonOfferingId.Equals(feature.PhenomenonOfferingId) &&
-        //               PhenomenonUnitId.Equals(feature.PhenomenonUnitId);
-        //    }
-
-        //    public override int GetHashCode()
-        //    {
-        //        return HashCode.Combine(StationId, PhenomenonOfferingId, PhenomenonUnitId);
-        //    }
-        //}
-
         private DataWizardDataOutput GetData(DataWizardDataInput input, bool includeChart)
         {
             string GetCode(string stationCode, string phenomenonCode, string offeringCode, string unitCode)
@@ -211,16 +189,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var result = new DataWizardDataOutput();
             var datasets = GetDatasets(ref input);
             SAEONLogs.Verbose("Datasets: Stage {Stage} Total {Total}", stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
-            stageStopwatch.Restart();
-            //var features = datasets.Select(i => new DataFeature
-            //{
-            //    StationId = i.StationId,
-            //    PhenomenonOfferingId = i.PhenomenonOfferingId,
-            //    PhenomenonUnitId = i.PhenomenonUnitId,
-            //    Name = GetCode(i.StationCode, i.PhenomenonCode, i.OfferingCode, i.UnitCode),
-            //    Caption = GetName(i.StationName, i.PhenomenonName, i.OfferingName, i.UnitName)
-            //}).Distinct().ToList();
-            //SAEONLogs.Verbose("Features: Stage {Stage} Total {Total}", stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
             stageStopwatch.Restart();
             var observations = new List<ObservationDTO>();
             foreach (var dataset in datasets)
@@ -330,18 +298,23 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 {
                     var series = new ChartSeries
                     {
+                        Station = dataset.StationName,
+                        Phenomenon = dataset.PhenomenonName,
+                        Offering = dataset.OfferingName,
+                        Unit = dataset.UnitName,
                         Name = GetCode(dataset.StationCode, dataset.PhenomenonCode, dataset.OfferingCode, dataset.UnitCode),
                         Caption = GetName(dataset.StationName, dataset.PhenomenonName, dataset.OfferingName, dataset.UnitName)
                     };
-                    series.Data.AddRange(observations.Where(o => o.Station == dataset.StationName && o.Phenomenon == dataset.PhenomenonName && o.Offering == dataset.OfferingName && o.Unit == dataset.UnitName)
-                        .OrderBy(i => i.Date)
-                        .Select(i => new ChartData { Date = i.Date, Value = i.Value }));
+                    //series.Data.AddRange(observations.Where(o => o.Station == dataset.StationName && o.Phenomenon == dataset.PhenomenonName && o.Offering == dataset.OfferingName && o.Unit == dataset.UnitName)
+                    //    .OrderBy(i => i.Date)
+                    //    .Select(i => new ChartData { Date = i.Date, Value = i.Value }));
                     result.ChartSeries.Add(series);
                 }
                 //SAEONLogs.Verbose("ChartSeries: Count: {count} Stage {Stage} Total {Total} Series: {@Series}", result.ChartSeries.Count, stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr(), result.ChartSeries);
                 SAEONLogs.Verbose("ChartSeries: Count: {count} Stage {Stage} Total {Total}", result.ChartSeries.Count, stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr());
                 stageStopwatch.Restart();
             }
+
             SAEONLogs.Verbose("GetData: {Total}", stopwatch.Elapsed.TimeStr());
             return result;
         }

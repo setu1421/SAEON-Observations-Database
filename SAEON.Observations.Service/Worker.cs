@@ -130,7 +130,6 @@ namespace SAEON.Observations.Service
             {
                 try
                 {
-                    // Start-up overrides
                     while (!cancellationToken.IsCancellationRequested)
                     {
                         var currentTime = DateTime.Now;

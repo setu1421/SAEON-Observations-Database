@@ -227,12 +227,12 @@ namespace SAEON.Observations.WebAPI
 
                     var supportedCultures = new[]
                     {
-                        new CultureInfo("en-GB")
+                        new CultureInfo("en-za")
                     };
 
                     app.UseRequestLocalization(new RequestLocalizationOptions
                     {
-                        DefaultRequestCulture = new RequestCulture("en-GB"),
+                        DefaultRequestCulture = new RequestCulture("en-za"),
                         // Formatting numbers, dates, etc.
                         SupportedCultures = supportedCultures,
                         // UI strings that we have localized.

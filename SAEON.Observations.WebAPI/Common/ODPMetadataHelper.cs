@@ -10,6 +10,7 @@ using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Mime;
@@ -107,12 +108,14 @@ namespace SAEON.Observations.WebAPI
                 }
             }
 
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             var sb = new StringBuilder();
             using (var client = await GetClient(config))
             {
                 await AddLineAsync("Creating ODP Metadata");
                 await GenerateODPMetadata(client);
-                await AddLineAsync("Done");
+                await AddLineAsync($"Done in {stopwatch.Elapsed.TimeStr()}");
                 return sb.ToString();
             }
 

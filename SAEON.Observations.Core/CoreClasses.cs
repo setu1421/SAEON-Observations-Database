@@ -2,16 +2,10 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 #endif
-using SAEON.Core;
-using SAEON.OpenXML;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Text;
 #if NET5_0_OR_GREATER
 using System.Text.Json.Serialization;
 #endif
@@ -68,7 +62,7 @@ namespace SAEON.Observations.Core
     #endregion
 
     #region DataWizard
-
+    /*
     public enum MaxtixDataType { mdtString, mdtInt, mdtDouble, mdtDate, mdtBoolean };
 
     public class DataMatrixColumn
@@ -270,46 +264,21 @@ namespace SAEON.Observations.Core
             return sb.ToString();
         }
     }
-
-    public class ChartData
-    {
-        public DateTime Date { get; set; }
-        public double? Value { get; set; }
-    }
-
-    public class ChartSeries
-    {
-        public string Name { get; set; }
-        public string Caption { get; set; }
-        public List<ChartData> Data { get; } = new List<ChartData>();
-
-        public void Add(DateTime date, double? value)
-        {
-            Data.Add(new ChartData { Date = date, Value = value });
-        }
-    }
+    */
 
     public class LocationFilter
     {
-        //public Guid OrganisationId { get; set; }
-        //public Guid ProgrammeId { get; set; }
-        //public Guid ProjectId { get; set; }
-        //public Guid SiteId { get; set; }
         public Guid StationId { get; set; }
 
         public override bool Equals(object obj)
         {
             return obj is LocationFilter filter &&
-                   //OrganisationId.Equals(filter.OrganisationId) &&
-                   //ProgrammeId.Equals(filter.ProgrammeId) &&
-                   //ProjectId.Equals(filter.ProjectId) &&
-                   //SiteId.Equals(filter.SiteId) &&
                    StationId.Equals(filter.StationId);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(/*OrganisationId, ProgrammeId, ProjectId, SiteId,*/ StationId);
+            return HashCode.Combine(StationId);
         }
     }
 
@@ -362,6 +331,24 @@ namespace SAEON.Observations.Core
             }
         }
     }
+
+    public class ChartData
+    {
+        public DateTime Date { get; set; }
+        public double? Value { get; set; }
+    }
+
+    public class ChartSeries
+    {
+        public string Station { get; set; }
+        public string Phenomenon { get; set; }
+        public string Offering { get; set; }
+        public string Unit { get; set; }
+        public string Name { get; set; }
+        public string Caption { get; set; }
+        public List<ChartData> Data { get; } = new List<ChartData>();
+    }
+
 
     public class ObservationDTO
     {
@@ -422,29 +409,11 @@ namespace SAEON.Observations.Core
 
     public class DataWizardDataOutput
     {
-        //public DataWizardDataOutput()
-        //{
-        //    DataTable = new DataTable("DataDownload");
-        //    DataTable.Columns.Add("Site", typeof(string));
-        //    DataTable.Columns.Add("Station", typeof(string));
-        //    DataTable.Columns.Add("Elevation", typeof(double));
-        //    DataTable.Columns.Add("Phenomenon", typeof(string));
-        //    DataTable.Columns.Add("Offering", typeof(string));
-        //    DataTable.Columns.Add("Unit", typeof(string));
-        //    DataTable.Columns.Add("Variable", typeof(string));
-        //    DataTable.Columns.Add("Date", typeof(DateTime));
-        //    DataTable.Columns.Add("Value", typeof(double));
-        //    DataTable.Columns.Add("Instrument", typeof(string));
-        //    DataTable.Columns.Add("Sensor", typeof(string));
-        //}
-
-        //public DataTable DataTable { get; private set; }
         public Guid Id { get; } = Guid.NewGuid();
         public List<ObservationDTO> Data { get; set; } = new List<ObservationDTO>();
-        //public DataMatrix DataMatrix { get; } = new DataMatrix();
-        public List<ChartSeries> ChartSeries { get; } = new List<ChartSeries>();
         public DateTime Date { get; } = DateTime.Now;
         public MetadataCore Metadata { get; private set; } = new MetadataCore();
+        public List<ChartSeries> ChartSeries { get; } = new List<ChartSeries>();
     }
 
     public class DataWizardApproximation

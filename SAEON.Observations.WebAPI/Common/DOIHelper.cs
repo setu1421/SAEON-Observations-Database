@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SAEON.AspNet.Auth;
+using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,10 +31,12 @@ namespace SAEON.Observations.WebAPI
             {
                 try
                 {
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
                     var sb = new StringBuilder();
                     await AddLineAsync("Creating DOIs");
                     await GenerateDOIs();
-                    await AddLineAsync("Done");
+                    await AddLineAsync($"Done in {stopwatch.Elapsed.TimeStr()}");
                     return sb.ToString();
 
                     async Task AddLineAsync(string line)

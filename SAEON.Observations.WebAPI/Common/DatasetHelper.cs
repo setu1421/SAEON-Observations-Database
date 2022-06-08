@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -33,10 +34,12 @@ namespace SAEON.Observations.WebAPI
             {
                 try
                 {
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
                     var sb = new StringBuilder();
                     await AddLineAsync("Generating datasets");
                     await GenerateDatasets();
-                    await AddLineAsync("Done");
+                    await AddLineAsync($"Done in {stopwatch.Elapsed.TimeStr()}");
                     return sb.ToString();
 
                     async Task AddLineAsync(string line)
@@ -48,24 +51,33 @@ namespace SAEON.Observations.WebAPI
 
                     async Task GenerateDatasets()
                     {
-                        var query = dbContext.VDatasetsExpansion.AsNoTracking()
-                            .Where(i => (i.NeedsUpdate ?? false))
+                        foreach (var dataset in dbContext.Datasets.Where(i => !i.NeedsUpdate ?? false))
+                        {
+                            if (!File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.FileName)))
+                            {
+                                dataset.NeedsUpdate = true;
+                            }
+                        }
+                        await dbContext.SaveChangesAsync();
+                        var datasetIds = await dbContext.VDatasetsExpansion.AsNoTracking()
+                            .Where(i => i.NeedsUpdate ?? false)
                             .OrderBy(i => i.OrganisationName)
                             .ThenBy(i => i.ProgrammeName)
                             .ThenBy(i => i.ProgrammeName)
                             .ThenBy(i => i.SiteName)
-                            .ThenBy(i => i.StationName);
+                            .ThenBy(i => i.StationName)
+                            .Select(i => i.Id)
+                            .ToListAsync();
                         if (int.TryParse(config[BatchSizeConfigKey], out var take))
                         {
                             if (take > 0)
                             {
-                                query = (IOrderedQueryable<VDatasetExpansion>)query.Take(take);
+                                datasetIds = datasetIds.Take(take).ToList();
                             }
                         }
-                        foreach (var datasetExpansion in await query.ToListAsync())
+                        foreach (var datasetId in datasetIds)
                         {
-                            var dataset = await dbContext.Datasets.FirstAsync(i => i.Id == datasetExpansion.Id);
-                            await EnsureDataset(dataset);
+                            await EnsureDataset(await dbContext.Datasets.FirstAsync(i => i.Id == datasetId));
                         }
                     }
 
@@ -76,13 +88,8 @@ namespace SAEON.Observations.WebAPI
                         await AddLineAsync($"{dataset.Code} {dataset.Name}");
                         var datasetsFolder = config[DatasetsFolderConfigKey];
                         var observations = await LoadFromDatabaseAsync(dbContext, dataset);
-                        var csvConfig = new CsvConfiguration(CultureInfo.CreateSpecificCulture("en-za"))
-                        {
-                            NewLine = Environment.NewLine,
-                            IgnoreReferences = true
-                        };
                         using var writer = new StreamWriter(Path.Combine(datasetsFolder, dataset.FileName));
-                        using var csv = new CsvWriter(writer, csvConfig);
+                        using var csv = GetCsvWriter(writer);
                         csv.WriteRecords(observations);
                         dataset.NeedsUpdate = false;
                         if (dbContext.Entry(dataset).State != EntityState.Unchanged)
@@ -102,6 +109,22 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
+        private static CsvWriter GetCsvWriter(TextWriter writer)
+        {
+            var result = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture) { IgnoreReferences = true });
+            var options = new TypeConverterOptions { Formats = new[] { "o" } };
+            result.Context.TypeConverterOptionsCache.AddOptions<DateTime>(options);
+            result.Context.TypeConverterOptionsCache.AddOptions<DateTime?>(options);
+            return result;
+        }
+
+        private static CsvReader GetCsvReader(TextReader reader)
+        {
+            var result = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture) { IgnoreReferences = true });
+
+            return result;
+        }
+
         private static List<ObservationDTO> LoadFromDisk(Dataset dataset, IConfiguration config)
         {
             using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
@@ -111,13 +134,8 @@ namespace SAEON.Observations.WebAPI
                     Guard.IsNotNull(dataset, nameof(dataset));
                     var stopwatch = new Stopwatch();
                     stopwatch.Start();
-                    var csvConfig = new CsvConfiguration(CultureInfo.CreateSpecificCulture("en-za"))
-                    {
-                        NewLine = Environment.NewLine,
-                        IgnoreReferences = true
-                    };
                     using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.FileName));
-                    using var csv = new CsvReader(reader, csvConfig);
+                    using var csv = GetCsvReader(reader);
                     var result = csv.GetRecords<ObservationDTO>().ToList();
                     SAEONLogs.Verbose("Loaded in {Elapsed}", stopwatch.Elapsed.TimeStr());
                     return result;
@@ -137,13 +155,8 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    var csvConfig = new CsvConfiguration(CultureInfo.CreateSpecificCulture("en-za"))
-                    {
-                        NewLine = Environment.NewLine,
-                        IgnoreReferences = true
-                    };
                     using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.FileName));
-                    using var csv = new CsvReader(reader, csvConfig);
+                    using var csv = GetCsvReader(reader);
                     var result = new List<ObservationDTO>();
                     await foreach (var record in csv.GetRecordsAsync<ObservationDTO>())
                     {
