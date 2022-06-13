@@ -354,7 +354,6 @@ namespace SAEON.Observations.Core
     {
         public string Station { get; set; }
         public string Variable => $"{Phenomenon.Replace(", ", "_")}, {Offering.Replace(", ", "_")}, {Unit.Replace(", ", "_")}";
-        public double? Elevation { get; set; }
         public DateTime Date { get; set; }
         public double? Value { get; set; }
         public string Comment { get; set; }
@@ -366,13 +365,13 @@ namespace SAEON.Observations.Core
         public string Sensor { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
+        public double? Elevation { get; set; }
 
         public override bool Equals(object obj)
         {
             return obj is ObservationDTO dTO &&
                    Station == dTO.Station &&
                    Variable == dTO.Variable &&
-                   Elevation == dTO.Elevation &&
                    Date == dTO.Date &&
                    Value == dTO.Value &&
                    Comment == dTO.Comment &&
@@ -383,7 +382,8 @@ namespace SAEON.Observations.Core
                    Instrument == dTO.Instrument &&
                    Sensor == dTO.Sensor &&
                    Latitude == dTO.Latitude &&
-                   Longitude == dTO.Longitude;
+                   Longitude == dTO.Longitude &&
+                    Elevation == dTO.Elevation;
         }
 
         public override int GetHashCode()
@@ -391,7 +391,6 @@ namespace SAEON.Observations.Core
             var hash = new HashCode();
             hash.Add(Station);
             hash.Add(Variable);
-            hash.Add(Elevation);
             hash.Add(Date);
             hash.Add(Value);
             hash.Add(Comment);
@@ -403,6 +402,7 @@ namespace SAEON.Observations.Core
             hash.Add(Sensor);
             hash.Add(Latitude);
             hash.Add(Longitude);
+            hash.Add(Elevation);
             return hash.ToHashCode();
         }
     }

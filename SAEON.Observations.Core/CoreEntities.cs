@@ -295,94 +295,124 @@ namespace SAEON.Observations.Core
         [StringLength(5000)]
         public string Description { get; set; }
         /// <summary>
-        /// StationId of the dataset
+        /// StationId of the Dataset
         /// </summary>
         public Guid StationId { get; set; }
         /// <summary>
-        /// PhenomenonOfferingId of the dataset
+        /// PhenomenonOfferingId of the Dataset
         /// </summary>
         public Guid PhenomenonOfferingId { get; set; }
         /// <summary>
-        /// PhenomenonUOMId of the dataset
+        /// PhenomenonUOMId of the Dataset
         /// </summary>
         [Column("PhenomenonUOMId")]
         public Guid PhenomenonUnitId { get; set; }
         /// <summary>
-        /// DigitalObjectIdentifierId of the dataset
+        /// DigitalObjectIdentifierId of the Dataset
         /// </summary>
+        [JsonIgnore, SwaggerIgnore]
         public int? DigitalObjectIdentifierId { get; set; }
         /// <summary>
-        /// Count of observations in the dataset
+        /// Count of observations in the Dataset
         /// </summary>
         public int? Count { get; set; }
         /// <summary>
-        /// Count of observations with values in the dataset
+        /// Count of observations with values in the Dataset
         /// </summary>
         public int? ValueCount { get; set; }
         /// <summary>
-        /// Count of observations of null in the dataset
+        /// Count of observations of null in the Dataset
         /// </summary>
         public int? NullCount { get; set; }
         /// <summary>
-        /// Count of verified observations in the dataset
+        /// Count of verified observations in the Dataset
         /// </summary>
         public int? VerifiedCount { get; set; }
         /// <summary>
-        /// Count of unverified observations in the dataset
+        /// Count of unverified observations in the Dataset
         /// </summary>
         public int? UnverifiedCount { get; set; }
         /// <summary>
-        /// StartDate of the dataset
+        /// StartDate of the Dataset
         /// </summary>
         public DateTime? StartDate { get; set; }
         /// <summary>
-        /// EndDate of the dataset
+        /// EndDate of the Dataset
         /// </summary>
         public DateTime? EndDate { get; set; }
         /// <summary>
-        /// LatitudeNorth of the dataset
+        /// LatitudeNorth of the Dataset
         /// </summary>
         public double? LatitudeNorth { get; set; }
         /// <summary>
-        /// LatitudeSouth of the dataset
+        /// LatitudeSouth of the Dataset
         /// </summary>
         public double? LatitudeSouth { get; set; }
         /// <summary>
-        /// LongitudeWest of the dataset
+        /// LongitudeWest of the Dataset
         /// </summary>
         public double? LongitudeWest { get; set; }
         /// <summary>
-        /// LongitudeEast of the dataset
+        /// LongitudeEast of the Dataset
         /// </summary>
         public double? LongitudeEast { get; set; }
         /// <summary>
-        /// ElevationMinimum of the dataset
+        /// ElevationMinimum of the Dataset
         /// </summary>
         public double? ElevationMinimum { get; set; }
         /// <summary>
-        /// ElevationMaximum of the dataset
+        /// ElevationMaximum of the Dataset
         /// </summary>
         public double? ElevationMaximum { get; set; }
         /// <summary>
-        /// If CSV for dataset needs to be rebuilt
+        /// If CSV for Dataset needs to be rebuilt
         /// </summary>
+        [JsonIgnore, SwaggerIgnore]
         public bool? NeedsUpdate { get; set; } // CSV needs to be rebuild
         /// <summary> 
-        /// UserId of user who added the DigitalObjectIdentifier   
+        /// UserId of user who added the Dataset   
         /// </summary>
         [StringLength(36), ScaffoldColumn(false)]
-        public string AddedBy { get; set; }
-        /// <summary>
-        /// UserId of user who last updated the DigitalObjectIdentifier 
-        /// </summary>
-        [StringLength(36), ScaffoldColumn(false)]
-        public string UpdatedBy { get; set; }
         [JsonIgnore, SwaggerIgnore]
-        /// <summary>
-        /// HashCode of the dataset
+        public string AddedBy { get; set; }
+        /// Time the Dataset was added
         /// </summary>
+        [ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore]
+        public DateTime? AddedAt { get; set; }
+        /// <summary>
+        /// UserId of user who last updated the Dataset 
+        /// </summary>
+        [StringLength(36), ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore]
+        public string UpdatedBy { get; set; }
+        /// <summary>
+        /// Time the Dataset was updated
+        /// </summary>
+        [ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore]
+        public DateTime? UpdatedAt { get; set; }
+        /// <summary>
+        /// HashCode of the Dataset
+        /// </summary>
+        [JsonIgnore, SwaggerIgnore]
         public int HashCode { get; set; }
-        public string FileName => $"{Code.Replace(Path.GetInvalidFileNameChars(), '_')}.csv";
+        private string FileName => Code.Replace(Path.GetInvalidFileNameChars(), '_');
+        /// <summary>
+        /// FileName of the Dataset as CSV
+        /// </summary>
+        [JsonIgnore, SwaggerIgnore]
+        public string ExcelFileName => $"{FileName}.xlsx";
+        /// <summary>
+        /// FileName of the Dataset as CSV
+        /// </summary>
+        [JsonIgnore, SwaggerIgnore]
+        public string NetCdfFileName => $"{FileName}.nc";
+        /// <summary>
+        /// FileName of the Dataset as CSV
+        /// </summary>
+        [JsonIgnore, SwaggerIgnore]
+        public string CsvFileName => $"{FileName}.csv";
 
         public int CreateHashCode()
         {
@@ -576,14 +606,28 @@ namespace SAEON.Observations.Core
         /// UserId of user who added the DigitalObjectIdentifier   
         /// </summary>
         [StringLength(36), ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore]
         public string AddedBy { get; set; }
         /// <summary>
         /// UserId of user who last updated the DigitalObjectIdentifier 
         /// </summary>
+        /// Time the DigitalObjectIdentifier was added
+        /// </summary>
+        [ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore]
+        public DateTime? AddedAt { get; set; }
         [StringLength(36), ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore]
         public string UpdatedBy { get; set; }
-        [Timestamp, ConcurrencyCheck, ScaffoldColumn(false)]
+        /// <summary>
+        /// Time the DigitalObjectIdentifier was updated
+        /// </summary>
+        [ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore]
+        public DateTime? UpdatedAt { get; set; }
+        [JsonIgnore, SwaggerIgnore, Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false)]
         //[HiddenInput]
+        [IgnoreDataMember]
         public byte[] RowVersion { get; set; }
 
         // Navigation
@@ -1266,28 +1310,34 @@ namespace SAEON.Observations.Core
         ///// <summary>
         ///// UserId of the UserDownload
         ///// </summary>
-        //[ScaffoldColumn(false)]
+        [ScaffoldColumn(false)]
         //[HiddenInput]
-        public new string UserId { get; set; }
+        [Column("UserId")]
+        public string User_Id { get; set; }
+        //public new string UserId { get; set; } // new confuses System.Text.Json
         /// <summary>
         /// UserId of user who added the UserDownload
         /// </summary>
         [Required, StringLength(128), ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore]
         public string AddedBy { get; set; }
         /// <summary>
         /// Time the UserDownload was added
         /// </summary>
         [ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore]
         public DateTime? AddedAt { get; set; }
         ///// <summary>
         ///// UserId of user who last updated the UserDownload
         ///// </summary>
         [Required, StringLength(128), ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore]
         public string UpdatedBy { get; set; }
         /// <summary>
         /// Time the UserDownload was updated
         /// </summary>
         [ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore]
         public DateTime? UpdatedAt { get; set; }
 
         // Navigation
@@ -1320,26 +1370,33 @@ namespace SAEON.Observations.Core
         /// </summary>
         [ScaffoldColumn(false)]
         //[HiddenInput]
-        public new string UserId { get; set; }
+        [JsonIgnore, SwaggerIgnore]
+        [Column("UserId")]
+        public string User_Id { get; set; }
+        //public new string UserId { get; set; } // new confuses System.Text.Json
         /// <summary>
         /// UserId of user who added the UserQuery
         /// </summary>
         [StringLength(128), ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore]
         public string AddedBy { get; set; }
         /// <summary>
         /// Time the UserQuery was added
         /// </summary>
         [ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore]
         public DateTime? AddedAt { get; set; }
         /// <summary>
         /// UserId of user who last updated the UserQuery
         /// </summary>
         [StringLength(128), ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore]
         public string UpdatedBy { get; set; }
         /// <summary>
         /// Time the UserQuery was updated
         /// </summary>
         [ScaffoldColumn(false)]
+        [JsonIgnore, SwaggerIgnore]
         public DateTime? UpdatedAt { get; set; }
     }
 

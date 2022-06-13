@@ -432,7 +432,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         var baseUrl = $"{Config["QuerySiteUrl"].AddEndForwardSlash()}Query/Data";
                         var result = new UserDownload
                         {
-                            UserId = User.UserId(),
+                            User_Id = User.UserId(),
                             Date = output.Date,
                             Name = doiCode,
                             Title = metadata.Title,

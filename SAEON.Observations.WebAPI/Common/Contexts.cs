@@ -93,6 +93,8 @@ namespace SAEON.Observations.WebAPI
             modelBuilder.Entity<VObservationExpansion>().ToView("vObservationExpansion");
             modelBuilder.Entity<DigitalObjectIdentifier>().Property("DOIType").HasConversion<byte>();
             //modelBuilder.Entity<DigitalObjectIdentifier>().HasOne(i => i.Parent).WithMany(i => i.Children).HasForeignKey(i => i.ParentId);
+            modelBuilder.Entity<UserDownload>().Ignore(i => i.UserId);
+            modelBuilder.Entity<UserQuery>().Ignore(i => i.UserId);
             // One to One
             modelBuilder.Entity<Dataset>().HasOne(i => i.DigitalObjectIdentifier).WithOne(i => i.Dataset).HasForeignKey<DigitalObjectIdentifier>(i => i.DatasetId);
             // Many to Many

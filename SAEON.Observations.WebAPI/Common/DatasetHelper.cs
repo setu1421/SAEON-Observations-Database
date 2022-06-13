@@ -53,7 +53,7 @@ namespace SAEON.Observations.WebAPI
                     {
                         foreach (var dataset in dbContext.Datasets.Where(i => !i.NeedsUpdate ?? false))
                         {
-                            if (!File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.FileName)))
+                            if (!File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName)))
                             {
                                 dataset.NeedsUpdate = true;
                             }
@@ -88,7 +88,7 @@ namespace SAEON.Observations.WebAPI
                         await AddLineAsync($"{dataset.Code} {dataset.Name}");
                         var datasetsFolder = config[DatasetsFolderConfigKey];
                         var observations = await LoadFromDatabaseAsync(dbContext, dataset);
-                        using var writer = new StreamWriter(Path.Combine(datasetsFolder, dataset.FileName));
+                        using var writer = new StreamWriter(Path.Combine(datasetsFolder, dataset.CsvFileName));
                         using var csv = GetCsvWriter(writer);
                         csv.WriteRecords(observations);
                         dataset.NeedsUpdate = false;
@@ -121,7 +121,7 @@ namespace SAEON.Observations.WebAPI
         private static CsvReader GetCsvReader(TextReader reader)
         {
             var result = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture) { IgnoreReferences = true });
-
+            result.Context.TypeConverterOptionsCache.GetOptions<string>().NullValues.Add("");
             return result;
         }
 
@@ -134,7 +134,7 @@ namespace SAEON.Observations.WebAPI
                     Guard.IsNotNull(dataset, nameof(dataset));
                     var stopwatch = new Stopwatch();
                     stopwatch.Start();
-                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.FileName));
+                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName));
                     using var csv = GetCsvReader(reader);
                     var result = csv.GetRecords<ObservationDTO>().ToList();
                     SAEONLogs.Verbose("Loaded in {Elapsed}", stopwatch.Elapsed.TimeStr());
@@ -155,7 +155,7 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.FileName));
+                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName));
                     using var csv = GetCsvReader(reader);
                     var result = new List<ObservationDTO>();
                     await foreach (var record in csv.GetRecordsAsync<ObservationDTO>())
@@ -250,9 +250,9 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    SAEONLogs.Verbose("UseDisk: {UseDisk} NeedsUpdate: {NeedsUpdate} FileExists: {FileExists}", config[UseDiskConfigKey]?.IsTrue() ?? false, dataset.NeedsUpdate ?? false, File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.FileName)));
-                    var result = (config[UseDiskConfigKey]?.IsTrue() ?? false) && (!dataset.NeedsUpdate ?? false) && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.FileName));
-                    SAEONLogs.Verbose("IsOnDisk: {FileName}, {Result}", dataset.FileName, result);
+                    SAEONLogs.Verbose("UseDisk: {UseDisk} NeedsUpdate: {NeedsUpdate} FileExists: {FileExists}", config[UseDiskConfigKey]?.IsTrue() ?? false, dataset.NeedsUpdate ?? false, File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName)));
+                    var result = (config[UseDiskConfigKey]?.IsTrue() ?? false) && (!dataset.NeedsUpdate ?? false) && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName));
+                    SAEONLogs.Verbose("IsOnDisk: {FileName}, {Result}", dataset.CsvFileName, result);
                     return result;
                 }
                 catch (Exception ex)

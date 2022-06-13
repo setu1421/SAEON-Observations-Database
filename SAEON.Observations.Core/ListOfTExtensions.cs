@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
 using SAEON.Logs;
 using SAEON.OpenXML;
 using System;
@@ -11,15 +12,18 @@ namespace SAEON.Observations.Core
 {
     public static class ListOfTExtensions
     {
-        public static string ToCSV<T>(this List<T> list, string delimiter = ", ", string culture = "en-za")
+        public static string ToCSV<T>(this List<T> list)
         {
             using (SAEONLogs.MethodCall(typeof(ListOfTExtensions)))
             {
                 try
                 {
-                    var config = new CsvConfiguration(CultureInfo.CreateSpecificCulture(culture)) { NewLine = Environment.NewLine, Delimiter = delimiter };
+                    var config = new CsvConfiguration(CultureInfo.InvariantCulture) { IgnoreReferences = true };
                     using var writer = new StringWriter();
                     using var csv = new CsvWriter(writer, config);
+                    var typeConverterOptions = new TypeConverterOptions { Formats = new[] { "o" } };
+                    csv.Context.TypeConverterOptionsCache.AddOptions<DateTime>(typeConverterOptions);
+                    csv.Context.TypeConverterOptionsCache.AddOptions<DateTime?>(typeConverterOptions);
                     csv.WriteRecords(list);
                     writer.Flush();
                     return writer.ToString();

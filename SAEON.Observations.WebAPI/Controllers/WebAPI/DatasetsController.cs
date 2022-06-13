@@ -7,6 +7,7 @@ using SAEON.Logs;
 using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
@@ -117,6 +118,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     }
                     var result = new List<ObservationDTO>();
                     result.AddRange(await DatasetHelper.LoadAsync(DbContext, Config, id));
+                    SAEONLogs.Information("Obs: {@Observation}", result.FirstOrDefault());
                     try
                     {
                         await RequestLogger.LogAsync(DbContext, Request);

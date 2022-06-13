@@ -18,7 +18,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 throw new ArgumentNullException("Logged in UserId");
             }
             var list = base.GetWheres();
-            list.Add(i => i.UserId == userId);
+            list.Add(i => i.User_Id == userId);
             return list;
         }
 
@@ -36,7 +36,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 throw new NullReferenceException("Not logged in");
             }
-            return (isPost || (item.UserId == userId));
+            return (isPost || (item.User_Id == userId));
         }
 
         protected override bool IsEntityPatchOk(UserQueryPatch item)
@@ -60,7 +60,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 throw new NullReferenceException("Not logged in");
             }
-            item.UserId = userId;
+            item.User_Id = userId;
             var now = DateTime.Now;
             if (isPost)
             {
