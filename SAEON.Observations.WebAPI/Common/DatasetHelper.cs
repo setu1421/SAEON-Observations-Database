@@ -191,7 +191,6 @@ namespace SAEON.Observations.WebAPI
                             Phenomenon = i.PhenomenonName,
                             Offering = i.OfferingName,
                             Unit = i.UnitName,
-                            Elevation = i.Elevation,
                             Date = i.ValueDate,
                             Value = i.DataValue,
                             Instrument = i.InstrumentName,
@@ -199,6 +198,7 @@ namespace SAEON.Observations.WebAPI
                             Comment = i.Comment,
                             Latitude = i.Latitude,
                             Longitude = i.Longitude,
+                            Elevation = i.Elevation,
                         });
                 }
                 catch (Exception ex)
@@ -251,7 +251,7 @@ namespace SAEON.Observations.WebAPI
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
                     SAEONLogs.Verbose("UseDisk: {UseDisk} NeedsUpdate: {NeedsUpdate} FileExists: {FileExists}", config[UseDiskConfigKey]?.IsTrue() ?? false, dataset.NeedsUpdate ?? false, File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName)));
-                    var result = (config[UseDiskConfigKey]?.IsTrue() ?? false) && (!dataset.NeedsUpdate ?? false) && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName));
+                    var result = (config[UseDiskConfigKey]?.IsTrue() ?? false) /*&& (!dataset.NeedsUpdate ?? false)*/ && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName));
                     SAEONLogs.Verbose("IsOnDisk: {FileName}, {Result}", dataset.CsvFileName, result);
                     return result;
                 }
