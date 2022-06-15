@@ -9,7 +9,7 @@ from
   inner join ImportBatch
     on (vImportBatchSummary.ImportBatchID = ImportBatch.ID)
 where
-  (OrganisationCode = 'SAEON') and
+  (OrganisationCode = 'SAEON') 
 )
 Select
   Date Month, Count(*) Imports, Sum([Count]) Observations
