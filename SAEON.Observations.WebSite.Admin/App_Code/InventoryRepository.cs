@@ -23,7 +23,7 @@ public class InventoryRepository : BaseRepository
         GetPagedQuery(ref q, e, paramPrefix);
         VInventorySensorCollection col = q.ExecuteAsCollection<VInventorySensorCollection>();
 
-        
+
         return col.ToList<object>();
 
     }

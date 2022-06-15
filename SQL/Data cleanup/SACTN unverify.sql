@@ -8,9 +8,7 @@
 --	   (Observation.PhenomenonOfferingID = vImportBatchSummary.PhenomenonOfferingID) and
 --	   (Observation.PhenomenonUOMID = vImportBatchSummary.PhenomenonUOMID)
 --where 
---  (StationCode like 'SACTN%') and
---  (StationCode not like '% SAEON') and
---  (StatusID is null)
+--  (StationCode like 'SACTN%') 
 
 Declare @StatusID UniqueIdentifier = (Select ID from Status where Code = 'QA-97')
 Declare @StatusReasonID UniqueIdentifier = (Select ID from StatusReason where Code = 'QAR-38')
@@ -28,5 +26,4 @@ from
 	   (Observation.PhenomenonUOMID = vImportBatchSummary.PhenomenonUOMID)
 where
   (StationCode like 'SACTN%') and
-  (StationCode not like '% SAEON') and
   (StatusID is null)

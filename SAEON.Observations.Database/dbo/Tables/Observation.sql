@@ -23,6 +23,10 @@
     [ValueDay]             as (CONVERT([date],[ValueDate])),
     [ValueYear]             as (Year([ValueDate])),
     [ValueDecade]           as (Year([ValueDate])/10*10),
+    [VerifiedBy] UNIQUEIDENTIFIER NULL, 
+    [VerifiedAt] DATETIME NULL, 
+    [UnverifiedBy] UNIQUEIDENTIFIER NULL, 
+    [UnverifiedAt] DATETIME NULL, 
     CONSTRAINT [FK_Observation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_Observation_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]),
     CONSTRAINT [FK_Observation_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]),
@@ -39,7 +43,12 @@ CREATE INDEX [IX_Observation_ImportBatchID] ON [dbo].[Observation]([ImportBatchI
 GO
 CREATE INDEX [IX_Observation_SensorID] ON [dbo].[Observation] ([SensorID])
   --INCLUDE ([ValueDate],[DataValue],[PhenomenonOfferingID],[PhenomenonUOMID],[ImportBatchID],[StatusID],[StatusReasonID],[Elevation],[Latitude],[Longitude],[ValueDay])
+  INCLUDE ([ValueDate],[PhenomenonOfferingID],[PhenomenonUOMID],[ImportBatchID],[StatusID],[StatusReasonID],[Elevation],[Latitude],[Longitude],[ValueDay])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDate]
+ON [dbo].[Observation] ([SensorID],[ValueDate])
+INCLUDE ([PhenomenonOfferingID],[PhenomenonUOMID],[ImportBatchID],[StatusID],[StatusReasonID],[Elevation],[Latitude],[Longitude],[ValueDay])
 GO
 CREATE INDEX [IX_Observation_PhenomenonOfferingID] ON [dbo].[Observation] ([PhenomenonOfferingID])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];

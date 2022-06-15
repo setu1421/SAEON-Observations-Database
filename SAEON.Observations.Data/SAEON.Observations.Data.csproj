@@ -72,6 +72,8 @@
     <Compile Include="Generated\DataLogController.cs" />
     <Compile Include="Generated\DataSchema.cs" />
     <Compile Include="Generated\DataSchemaController.cs" />
+    <Compile Include="Generated\Dataset.cs" />
+    <Compile Include="Generated\DatasetController.cs" />
     <Compile Include="Generated\DataSource.cs" />
     <Compile Include="Generated\DataSourceController.cs" />
     <Compile Include="Generated\DataSourceTransformation.cs" />
@@ -149,7 +151,6 @@
     <Compile Include="Generated\VImportBatchSummary.cs" />
     <Compile Include="Generated\VInstrumentOrganisation.cs" />
     <Compile Include="Generated\VInstrumentSensor.cs" />
-    <Compile Include="Generated\VInventoryDataset.cs" />
     <Compile Include="Generated\VInventorySensor.cs" />
     <Compile Include="Generated\VModuleRoleModule.cs" />
     <Compile Include="Generated\VObservation.cs" />

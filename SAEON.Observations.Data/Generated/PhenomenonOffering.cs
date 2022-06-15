@@ -306,6 +306,10 @@ namespace SAEON.Observations.Data
 		{
 			return new SAEON.Observations.Data.DataLogCollection().Where(DataLog.Columns.PhenomenonOfferingID, Id).Load();
 		}
+		public SAEON.Observations.Data.DatasetCollection Datasets()
+		{
+			return new SAEON.Observations.Data.DatasetCollection().Where(Dataset.Columns.PhenomenonOfferingID, Id).Load();
+		}
 		public SAEON.Observations.Data.DataSourceTransformationCollection DataSourceTransformationRecords()
 		{
 			return new SAEON.Observations.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.NewPhenomenonOfferingID, Id).Load();

@@ -14,6 +14,8 @@ using System.Linq.Expressions;
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     [EnableCors(ObsDBAuthenticationDefaults.CorsAllowAllPolicy)]
+    [EnableQuery]
+    //[EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
     public abstract class ODataController<TEntity> : BaseODataController<TEntity> where TEntity : BaseEntity
     {
         protected override void UpdateRequest()
@@ -31,9 +33,8 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>TEntity</returns>
         [HttpGet]
         [ODataRoute("({id})")]
-        [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
 #if ResponseCaching
-        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "id" })]
 #endif
 
         public virtual SingleResult<TEntity> GetById(Guid id)
@@ -54,10 +55,9 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         }
 
         [HttpGet]
-        [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
         //[ODataRoute("({id})/TRelated")] required on calling class
 #if ResponseCaching
-        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "id" })]
 #endif
         protected TRelated GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
         {
@@ -79,10 +79,9 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
 
 
         [HttpGet]
-        [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
         //[ODataRoute("({id})/TRelated")] required on calling class
 #if ResponseCaching
-        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "id" })]
 #endif
         protected IQueryable<TRelated> GetManyWithGuidId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : GuidIdEntity
         {
@@ -92,7 +91,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
                 {
                     UpdateRequest();
                     SAEONLogs.Verbose("uri: {uri}", Request.GetUri());
-                    return GetQuery(i => i.Id == id).SelectMany(select).Take(ODataDefaults.MaxAll);
+                    return GetQuery(i => i.Id == id).SelectMany(select)/*.Take(ODataDefaults.MaxAll)*/;
                 }
                 catch (Exception ex)
                 {
@@ -103,10 +102,9 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         }
 
         [HttpGet]
-        [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
         //[ODataRoute("({id})/TRelated")] required on calling class
 #if ResponseCaching
-        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "id" })]
 #endif
         protected IQueryable<TRelated> GetManyWithIntId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : IntIdEntity
         {
@@ -116,7 +114,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
                 {
                     UpdateRequest();
                     SAEONLogs.Verbose("uri: {uri}", Request.GetUri());
-                    return GetQuery(i => i.Id == id).SelectMany(select).Take(ODataDefaults.MaxAll);
+                    return GetQuery(i => i.Id == id).SelectMany(select)/*.Take(ODataDefaults.MaxAll)*/;
                 }
                 catch (Exception ex)
                 {
@@ -127,10 +125,9 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         }
 
         [HttpGet]
-        [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
         //[ODataRoute("({id})/TRelated")] required on calling class
 #if ResponseCaching
-        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "id" })]
 #endif
         protected IQueryable<TRelated> GetManyWithLongId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : LongIdEntity
         {
@@ -140,7 +137,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
                 {
                     UpdateRequest();
                     SAEONLogs.Verbose("uri: {uri}", Request.GetUri());
-                    return GetQuery(i => i.Id == id).SelectMany(select).Take(ODataDefaults.MaxAll);
+                    return GetQuery(i => i.Id == id).SelectMany(select)/*.Take(ODataDefaults.MaxAll)*/;
                 }
                 catch (Exception ex)
                 {

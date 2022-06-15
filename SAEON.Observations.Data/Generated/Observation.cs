@@ -422,6 +422,58 @@ namespace SAEON.Observations.Data
 				colvarValueDay.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarValueDay);
 				
+				TableSchema.TableColumn colvarVerifiedBy = new TableSchema.TableColumn(schema);
+				colvarVerifiedBy.ColumnName = "VerifiedBy";
+				colvarVerifiedBy.DataType = DbType.Guid;
+				colvarVerifiedBy.MaxLength = 0;
+				colvarVerifiedBy.AutoIncrement = false;
+				colvarVerifiedBy.IsNullable = true;
+				colvarVerifiedBy.IsPrimaryKey = false;
+				colvarVerifiedBy.IsForeignKey = false;
+				colvarVerifiedBy.IsReadOnly = false;
+				colvarVerifiedBy.DefaultSetting = @"";
+				colvarVerifiedBy.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarVerifiedBy);
+				
+				TableSchema.TableColumn colvarVerifiedAt = new TableSchema.TableColumn(schema);
+				colvarVerifiedAt.ColumnName = "VerifiedAt";
+				colvarVerifiedAt.DataType = DbType.DateTime;
+				colvarVerifiedAt.MaxLength = 0;
+				colvarVerifiedAt.AutoIncrement = false;
+				colvarVerifiedAt.IsNullable = true;
+				colvarVerifiedAt.IsPrimaryKey = false;
+				colvarVerifiedAt.IsForeignKey = false;
+				colvarVerifiedAt.IsReadOnly = false;
+				colvarVerifiedAt.DefaultSetting = @"";
+				colvarVerifiedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarVerifiedAt);
+				
+				TableSchema.TableColumn colvarUnverifiedBy = new TableSchema.TableColumn(schema);
+				colvarUnverifiedBy.ColumnName = "UnverifiedBy";
+				colvarUnverifiedBy.DataType = DbType.Guid;
+				colvarUnverifiedBy.MaxLength = 0;
+				colvarUnverifiedBy.AutoIncrement = false;
+				colvarUnverifiedBy.IsNullable = true;
+				colvarUnverifiedBy.IsPrimaryKey = false;
+				colvarUnverifiedBy.IsForeignKey = false;
+				colvarUnverifiedBy.IsReadOnly = false;
+				colvarUnverifiedBy.DefaultSetting = @"";
+				colvarUnverifiedBy.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUnverifiedBy);
+				
+				TableSchema.TableColumn colvarUnverifiedAt = new TableSchema.TableColumn(schema);
+				colvarUnverifiedAt.ColumnName = "UnverifiedAt";
+				colvarUnverifiedAt.DataType = DbType.DateTime;
+				colvarUnverifiedAt.MaxLength = 0;
+				colvarUnverifiedAt.AutoIncrement = false;
+				colvarUnverifiedAt.IsNullable = true;
+				colvarUnverifiedAt.IsPrimaryKey = false;
+				colvarUnverifiedAt.IsForeignKey = false;
+				colvarUnverifiedAt.IsReadOnly = false;
+				colvarUnverifiedAt.DefaultSetting = @"";
+				colvarUnverifiedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUnverifiedAt);
+				
 				TableSchema.TableColumn colvarValueYear = new TableSchema.TableColumn(schema);
 				colvarValueYear.ColumnName = "ValueYear";
 				colvarValueYear.DataType = DbType.Int32;
@@ -634,6 +686,38 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.ValueDay, value); }
 		}
 		  
+		[XmlAttribute("VerifiedBy")]
+		[Bindable(true)]
+		public Guid? VerifiedBy 
+		{
+			get { return GetColumnValue<Guid?>(Columns.VerifiedBy); }
+			set { SetColumnValue(Columns.VerifiedBy, value); }
+		}
+		  
+		[XmlAttribute("VerifiedAt")]
+		[Bindable(true)]
+		public DateTime? VerifiedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.VerifiedAt); }
+			set { SetColumnValue(Columns.VerifiedAt, value); }
+		}
+		  
+		[XmlAttribute("UnverifiedBy")]
+		[Bindable(true)]
+		public Guid? UnverifiedBy 
+		{
+			get { return GetColumnValue<Guid?>(Columns.UnverifiedBy); }
+			set { SetColumnValue(Columns.UnverifiedBy, value); }
+		}
+		  
+		[XmlAttribute("UnverifiedAt")]
+		[Bindable(true)]
+		public DateTime? UnverifiedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.UnverifiedAt); }
+			set { SetColumnValue(Columns.UnverifiedAt, value); }
+		}
+		  
 		[XmlAttribute("ValueYear")]
 		[Bindable(true)]
 		public int? ValueYear 
@@ -762,7 +846,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid? varCorrelationID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,string varTextValue,double? varElevation,double? varLatitude,double? varLongitude,DateTime? varValueDay,int? varValueYear,int? varValueDecade)
+		public static void Insert(Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid? varCorrelationID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,string varTextValue,double? varElevation,double? varLatitude,double? varLongitude,DateTime? varValueDay,Guid? varVerifiedBy,DateTime? varVerifiedAt,Guid? varUnverifiedBy,DateTime? varUnverifiedAt,int? varValueYear,int? varValueDecade)
 		{
 			Observation item = new Observation();
 			
@@ -808,6 +892,14 @@ namespace SAEON.Observations.Data
 			
 			item.ValueDay = varValueDay;
 			
+			item.VerifiedBy = varVerifiedBy;
+			
+			item.VerifiedAt = varVerifiedAt;
+			
+			item.UnverifiedBy = varUnverifiedBy;
+			
+			item.UnverifiedAt = varUnverifiedAt;
+			
 			item.ValueYear = varValueYear;
 			
 			item.ValueDecade = varValueDecade;
@@ -822,7 +914,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid? varCorrelationID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt,int varId,byte[] varRowVersion,string varTextValue,double? varElevation,double? varLatitude,double? varLongitude,DateTime? varValueDay,int? varValueYear,int? varValueDecade)
+		public static void Update(Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid? varCorrelationID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt,int varId,byte[] varRowVersion,string varTextValue,double? varElevation,double? varLatitude,double? varLongitude,DateTime? varValueDay,Guid? varVerifiedBy,DateTime? varVerifiedAt,Guid? varUnverifiedBy,DateTime? varUnverifiedAt,int? varValueYear,int? varValueDecade)
 		{
 			Observation item = new Observation();
 			
@@ -869,6 +961,14 @@ namespace SAEON.Observations.Data
 				item.Longitude = varLongitude;
 			
 				item.ValueDay = varValueDay;
+			
+				item.VerifiedBy = varVerifiedBy;
+			
+				item.VerifiedAt = varVerifiedAt;
+			
+				item.UnverifiedBy = varUnverifiedBy;
+			
+				item.UnverifiedAt = varUnverifiedAt;
 			
 				item.ValueYear = varValueYear;
 			
@@ -1041,16 +1141,44 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn ValueYearColumn
+        public static TableSchema.TableColumn VerifiedByColumn
         {
             get { return Schema.Columns[22]; }
         }
         
         
         
-        public static TableSchema.TableColumn ValueDecadeColumn
+        public static TableSchema.TableColumn VerifiedAtColumn
         {
             get { return Schema.Columns[23]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UnverifiedByColumn
+        {
+            get { return Schema.Columns[24]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UnverifiedAtColumn
+        {
+            get { return Schema.Columns[25]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ValueYearColumn
+        {
+            get { return Schema.Columns[26]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ValueDecadeColumn
+        {
+            get { return Schema.Columns[27]; }
         }
         
         
@@ -1081,6 +1209,10 @@ namespace SAEON.Observations.Data
 			 public static string Latitude = @"Latitude";
 			 public static string Longitude = @"Longitude";
 			 public static string ValueDay = @"ValueDay";
+			 public static string VerifiedBy = @"VerifiedBy";
+			 public static string VerifiedAt = @"VerifiedAt";
+			 public static string UnverifiedBy = @"UnverifiedBy";
+			 public static string UnverifiedAt = @"UnverifiedAt";
 			 public static string ValueYear = @"ValueYear";
 			 public static string ValueDecade = @"ValueDecade";
 						

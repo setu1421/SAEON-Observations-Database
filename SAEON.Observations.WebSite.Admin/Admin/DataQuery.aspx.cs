@@ -6,8 +6,8 @@ using SAEON.Observations.Data;
 using SubSonic;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.UI.WebControls;
 
@@ -29,389 +29,159 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         }
     }
 
-    //private PhenomenonOfferingCollection GetPhenomenonOfferings(Guid sensorId)
-    //{
-    //    QueryCommand cmd = new QueryCommand("Select Distinct * from PhenomenonOffering inner join ImportBatchSummary on (ImportBatchSummary.PhenomenonOfferingID = PhenomenonOffering.ID) where (SensorID = @SensorID)", PhenomenonOffering.Schema.Provider.Name);
-    //    cmd.AddParameter("@SensorID", sensorId, DbType.Guid);
-    //    PhenomenonOfferingCollection result = new PhenomenonOfferingCollection();
-    //    result.LoadAndCloseReader(DataService.GetReader(cmd));
-    //    return result;
-    //}
-
-    protected void NodeLoad(object sender, NodeLoadEventArgs e)
-    {
-        if (!ConfigurationManager.AppSettings["AsyncTree"].IsTrue()) return;
-
-        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "NodeID", e.NodeID } }))
-            try
-            {
-                if (e.NodeID.StartsWith("Organisations"))
-                {
-                    var col = new Select()
-                                .From(Organisation.Schema)
-                                .InnerJoin(VInventoryDataset.Schema.TableName, VInventoryDataset.Columns.OrganisationID, Organisation.Schema.TableName, Organisation.Columns.Id)
-                                .Distinct()
-                                .OrderAsc(Organisation.Columns.Name)
-                                .ExecuteAsCollection<OrganisationCollection>();
-                    SAEONLogs.Verbose("Organisations: {count}", col.Count());
-                    foreach (var item in col)
-                    {
-                        SAEONLogs.Verbose("Organisation: {name}", item.Name);
-                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Organisation_" + item.Id.ToString(), item.Name, Icon.ResultsetNext);
-                        e.Nodes.Add(node);
-                        AsyncTreeNode root = new AsyncTreeNode("Sites_" + item.Id.ToString() + "|" + node.NodeID, "Sites")
-                        {
-                            Icon = (Icon)new ModuleX("A5C81FF7-69D6-4344-8548-E3EF7F08C4E7").Icon
-                        };
-                        node.Nodes.Add(root);
-                    }
-                }
-                else if (e.NodeID.StartsWith("Sites_"))
-                {
-                    var organisation = new Organisation(e.NodeID.Split('|')[0].Split('_')[1]);
-                    var col = new Select()
-                                .From(SAEON.Observations.Data.Site.Schema)
-                                .InnerJoin(VInventoryDataset.Schema.TableName, VInventoryDataset.Columns.SiteID, SAEON.Observations.Data.Site.Schema.TableName, SAEON.Observations.Data.Site.Columns.Id)
-                                .Where(VInventoryDataset.Columns.OrganisationID)
-                                .IsEqualTo(organisation.Id)
-                                .Distinct()
-                                .OrderAsc(SAEON.Observations.Data.Site.Columns.Name)
-                                .ExecuteAsCollection<SiteCollection>();
-                    SAEONLogs.Verbose("Sites: {count}", col.Count());
-                    foreach (var item in col)
-                    {
-                        SAEONLogs.Verbose("Site: {name}", item.Name);
-                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Site_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
-                        {
-                            Checked = ThreeStateBool.False
-                        };
-                        e.Nodes.Add(node);
-                        AsyncTreeNode root = new AsyncTreeNode("Stations_" + item.Id.ToString() + "|" + node.NodeID, "Stations")
-                        {
-                            Icon = (Icon)new ModuleX("0585e63d-0f9f-4dda-98ec-7de9397dc614").Icon
-                        };
-                        node.Nodes.Add(root);
-                    }
-                }
-                else if (e.NodeID.StartsWith("Stations_"))
-                {
-                    var site = new SAEON.Observations.Data.Site(e.NodeID.Split('|')[0].Split('_')[1]);
-                    var col = new Select()
-                                .From(Station.Schema)
-                                .InnerJoin(VInventoryDataset.Schema.TableName, VInventoryDataset.Columns.StationID, Station.Schema.TableName, Station.Columns.Id)
-                                .Where(VInventoryDataset.Columns.SiteID)
-                                .IsEqualTo(site.Id)
-                                .Distinct()
-                                .OrderAsc(Station.Columns.Name)
-                                .ExecuteAsCollection<StationCollection>();
-                    SAEONLogs.Verbose("Stations: {count}", col.Count());
-                    foreach (var item in col)
-                    {
-                        SAEONLogs.Verbose("Station: {name}", item.Name);
-                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Station_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
-                        {
-                            Checked = ThreeStateBool.False
-                        };
-                        e.Nodes.Add(node);
-                        var q = new Select()
-                            .From(ImportBatchSummary.Schema)
-                            .Where(ImportBatchSummary.StationIDColumn)
-                            .IsEqualTo(item.Id)
-                            .GetRecordCount();
-                        if (q == 0)
-                            node.Leaf = true;
-                        else
-                        {
-                            AsyncTreeNode root = new AsyncTreeNode("Instruments_" + item.Id.ToString() + "|" + node.NodeID, "Instruments")
-                            {
-                                Icon = (Icon)new ModuleX("2610866B-8CBF-44E1-9A38-6511B31A8350").Icon
-                            };
-                            node.Nodes.Add(root);
-                        }
-                    }
-
-                }
-                else if (e.NodeID.StartsWith("Instruments_"))
-                {
-                    var station = new Station(e.NodeID.Split('|')[0].Split('_')[1]);
-                    var col = new Select()
-                        .From(Instrument.Schema)
-                        .InnerJoin(ImportBatchSummary.InstrumentIDColumn, Instrument.IdColumn)
-                        .Where(ImportBatchSummary.StationIDColumn)
-                        .IsEqualTo(station.Id)
-                        .Distinct()
-                        .OrderAsc(Instrument.Columns.Name)
-                        .ExecuteAsCollection<InstrumentCollection>();
-                    SAEONLogs.Verbose("Instruments: {count}", col.Count());
-                    foreach (var item in col)
-                    {
-                        SAEONLogs.Verbose("Instrument: {name}", item.Name);
-                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Instrument_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
-                        {
-                            Checked = ThreeStateBool.False
-                        };
-                        e.Nodes.Add(node);
-                        var q = new Select()
-                            .From(ImportBatchSummary.Schema)
-                            .Where(ImportBatchSummary.InstrumentIDColumn)
-                            .IsEqualTo(item.Id)
-                            .GetRecordCount();
-                        if (q == 0)
-                            node.Leaf = true;
-                        else
-                        {
-                            AsyncTreeNode root = new AsyncTreeNode("Sensors_" + item.Id.ToString() + "|" + node.NodeID, "Sensors")
-                            {
-                                Icon = (Icon)new ModuleX("9992ba10-cb0c-4a22-841c-1d695e8293d5").Icon
-                            };
-                            node.Nodes.Add(root);
-                        }
-                    }
-
-                }
-                else if (e.NodeID.StartsWith("Sensors_"))
-                {
-                    var instrument = new Instrument(e.NodeID.Split('|')[0].Split('_')[1]);
-                    var col = new Select()
-                        .From(Sensor.Schema)
-                        .InnerJoin(ImportBatchSummary.SensorIDColumn, Sensor.IdColumn)
-                        .Where(ImportBatchSummary.InstrumentIDColumn)
-                        .IsEqualTo(instrument.Id)
-                        .Distinct()
-                        .OrderAsc(Sensor.Columns.Name)
-                        .ExecuteAsCollection<SensorCollection>();
-                    SAEONLogs.Verbose("Sensors: {count}", col.Count());
-                    foreach (var item in col)
-                    {
-                        SAEONLogs.Verbose("Sensor: {name}", item.Name);
-                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Sensor_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
-                        {
-                            Icon = Icon.ResultsetNext,
-                            Checked = ThreeStateBool.False
-                        };
-                        e.Nodes.Add(node);
-                        var colPhenomenaOfferings = new Select(VImportBatchSummary.Columns.PhenomenonOfferingID, VImportBatchSummary.Columns.PhenomenonName, VImportBatchSummary.Columns.OfferingName)
-                            .From(VImportBatchSummary.Schema)
-                            .Where(VImportBatchSummary.Columns.SensorID)
-                            .IsEqualTo(item.Id)
-                            .OrderAsc(VImportBatchSummary.Columns.PhenomenonName)
-                            .OrderAsc(VImportBatchSummary.Columns.OfferingName)
-                            .Distinct()
-                            .ExecuteAsCollection<VImportBatchSummaryCollection>();
-                        if (colPhenomenaOfferings.Count == 0)
-                            node.Leaf = true;
-                        else
-                        {
-                            Ext.Net.TreeNode phenomenonNode = null;
-                            foreach (var phenomenonOffering in colPhenomenaOfferings)
-                            {
-                                if (phenomenonNode?.Text != phenomenonOffering.PhenomenonName)
-                                {
-                                    phenomenonNode = new Ext.Net.TreeNode("Phenomenon_" + phenomenonOffering.PhenomenonOfferingID.ToString() + "|" + node.NodeID, phenomenonOffering.PhenomenonName, Icon.ResultsetNext);
-                                    node.Nodes.Add(phenomenonNode);
-                                }
-                                var offeringNode = new Ext.Net.TreeNode("Offering_" + phenomenonOffering.PhenomenonOfferingID.ToString() + "|" + phenomenonNode.NodeID, phenomenonOffering.OfferingName, Icon.ResultsetNext)
-                                {
-                                    Leaf = true,
-                                    Checked = ThreeStateBool.False
-                                };
-                                phenomenonNode.Nodes.Add(offeringNode);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                SAEONLogs.Exception(ex, "Unable to load node {nodeID}", e.NodeID);
-                throw;
-            }
-    }
-
-    void BuildAsyncTree()
-    {
-        AsyncTreeNode root = new AsyncTreeNode("Organisations", "Organisations")
-        {
-            Icon = (Icon)new ModuleX("e4c08bfa-a8f0-4112-b45c-dd1788ade5a0").Icon
-        };
-        FilterTree.Root.Add(root);
-    }
-
-    void BuildFullTree()
-    {
-        Ext.Net.TreeNode rootOrganisations = new Ext.Net.TreeNode("Organisations", "Organisations", (Icon)new ModuleX("e4c08bfa-a8f0-4112-b45c-dd1788ade5a0").Icon);
-        FilterTree.Root.Add(rootOrganisations);
-        var colOrganisations = new Select()
-            .From(Organisation.Schema)
-            .InnerJoin(VInventoryDataset.Schema.TableName, VInventoryDataset.Columns.OrganisationID, Organisation.Schema.TableName, Organisation.Columns.Id)
-            .Distinct()
-            .OrderAsc(Organisation.Columns.Name)
-            .ExecuteAsCollection<OrganisationCollection>();
-        SAEONLogs.Verbose("Organisations: {count}", colOrganisations.Count());
-        foreach (var organisation in colOrganisations)
-        {
-            SAEONLogs.Verbose("Organisation: {name}", organisation.Name);
-            Ext.Net.TreeNode nodeOrganisation = new Ext.Net.TreeNode("Organisation_" + organisation.Id.ToString(), organisation.Name, Icon.ResultsetNext);
-            rootOrganisations.Nodes.Add(nodeOrganisation);
-            Ext.Net.TreeNode rootSites = new Ext.Net.TreeNode("Sites_" + organisation.Id.ToString() + "|" + nodeOrganisation.NodeID, "Sites",
-                (Icon)new ModuleX("A5C81FF7-69D6-4344-8548-E3EF7F08C4E7").Icon);
-            nodeOrganisation.Nodes.Add(rootSites);
-            var colSites = new Select()
-                .From(SAEON.Observations.Data.Site.Schema)
-                .InnerJoin(VInventoryDataset.Schema.TableName, VInventoryDataset.Columns.SiteID, SAEON.Observations.Data.Site.Schema.TableName, SAEON.Observations.Data.Site.Columns.Id)
-                .Where(VInventoryDataset.Columns.OrganisationID)
-                .IsEqualTo(organisation.Id)
-                .Distinct()
-                .OrderAsc(SAEON.Observations.Data.Site.Columns.Name)
-                .ExecuteAsCollection<SiteCollection>();
-            SAEONLogs.Verbose("Sites: {count}", colSites.Count());
-            foreach (var site in colSites)
-            {
-                SAEONLogs.Verbose("Site: {name}", site.Name);
-                Ext.Net.TreeNode nodeSite = new Ext.Net.TreeNode("Site_" + site.Id.ToString() + "|" + nodeOrganisation.NodeID, site.Name, Icon.ResultsetNext)
-                {
-                    Checked = ThreeStateBool.False
-                };
-                rootSites.Nodes.Add(nodeSite);
-                Ext.Net.TreeNode rootStations = new Ext.Net.TreeNode("Stations_" + site.Id.ToString() + "|" + nodeSite.NodeID, "Stations",
-                    (Icon)new ModuleX("0585e63d-0f9f-4dda-98ec-7de9397dc614").Icon);
-                nodeSite.Nodes.Add(rootStations);
-                var colStations = new Select()
-                    .From(Station.Schema)
-                    .InnerJoin(VInventoryDataset.Schema.TableName, VInventoryDataset.Columns.StationID, Station.Schema.TableName, Station.Columns.Id)
-                    .Where(VInventoryDataset.Columns.SiteID)
-                    .IsEqualTo(site.Id)
-                    .Distinct()
-                    .OrderAsc(Station.Columns.Name)
-                    .ExecuteAsCollection<StationCollection>();
-                SAEONLogs.Verbose("Stations: {count}", colStations.Count());
-                foreach (var station in colStations)
-                {
-                    SAEONLogs.Verbose("Station: {name}", station.Name);
-                    Ext.Net.TreeNode nodeStation = new Ext.Net.TreeNode("Station_" + station.Id.ToString() + "|" + nodeSite.NodeID, station.Name,
-                        Icon.ResultsetNext)
-                    {
-                        Checked = ThreeStateBool.False
-                    };
-                    rootStations.Nodes.Add(nodeStation);
-                    var qStation = new Select()
-                        .From(ImportBatchSummary.Schema)
-                        .Where(ImportBatchSummary.StationIDColumn)
-                        .IsEqualTo(station.Id)
-                        .GetRecordCount();
-                    if (qStation == 0)
-                        nodeStation.Leaf = true;
-                    else
-                    {
-                        Ext.Net.TreeNode rootInstruments = new Ext.Net.TreeNode("Instruments_" + station.Id.ToString() + "|" + nodeStation.NodeID, "Instruments",
-                            (Icon)new ModuleX("2610866B-8CBF-44E1-9A38-6511B31A8350").Icon);
-                        nodeStation.Nodes.Add(rootInstruments);
-                        var colInstruments = new Select()
-                            .From(Instrument.Schema)
-                            .InnerJoin(ImportBatchSummary.InstrumentIDColumn, Instrument.IdColumn)
-                            .Where(ImportBatchSummary.StationIDColumn)
-                            .IsEqualTo(station.Id)
-                            .Distinct()
-                            .OrderAsc(Instrument.Columns.Name)
-                            .ExecuteAsCollection<InstrumentCollection>();
-                        SAEONLogs.Verbose("Instruments: {count}", colInstruments.Count());
-                        foreach (var instrument in colInstruments)
-                        {
-                            SAEONLogs.Verbose("Instrument: {name}", instrument.Name);
-                            Ext.Net.TreeNode nodeInstrument = new Ext.Net.TreeNode("Instrument_" + instrument.Id.ToString() + "|" + nodeStation.NodeID, instrument.Name,
-                                Icon.ResultsetNext)
-                            {
-                                Checked = ThreeStateBool.False
-                            };
-                            rootInstruments.Nodes.Add(nodeInstrument);
-                            var qInstrument = new Select()
-                                .From(ImportBatchSummary.Schema)
-                                .Where(ImportBatchSummary.InstrumentIDColumn)
-                                .IsEqualTo(instrument.Id)
-                                .GetRecordCount();
-                            if (qInstrument == 0)
-                                nodeInstrument.Leaf = true;
-                            else
-                            {
-                                Ext.Net.TreeNode rootSensors = new Ext.Net.TreeNode("Sensors_" + instrument.Id.ToString() + "|" + nodeInstrument.NodeID, "Sensors",
-                                    (Icon)new ModuleX("9992ba10-cb0c-4a22-841c-1d695e8293d5").Icon);
-                                nodeInstrument.Nodes.Add(rootSensors);
-                                var colSensors = new Select()
-                                    .From(Sensor.Schema)
-                                    .InnerJoin(ImportBatchSummary.SensorIDColumn, Sensor.IdColumn)
-                                    .Where(ImportBatchSummary.InstrumentIDColumn)
-                                    .IsEqualTo(instrument.Id)
-                                    .Distinct()
-                                    .OrderAsc(Sensor.Columns.Name)
-                                    .ExecuteAsCollection<SensorCollection>();
-                                SAEONLogs.Verbose("Sensors: {count}", colSensors.Count());
-                                foreach (var sensor in colSensors)
-                                {
-                                    SAEONLogs.Verbose("Sensor: {name}", sensor.Name);
-                                    Ext.Net.TreeNode nodeSensor = new Ext.Net.TreeNode("Sensor_" + sensor.Id.ToString() + "|" + nodeInstrument.NodeID, sensor.Name, Icon.ResultsetNext)
-                                    {
-                                        Checked = ThreeStateBool.False
-                                    };
-                                    nodeInstrument.Nodes.Add(nodeSensor);
-                                    var colPhenomenaOfferings = new Select(VImportBatchSummary.Columns.PhenomenonOfferingID, VImportBatchSummary.Columns.PhenomenonName, VImportBatchSummary.Columns.OfferingName)
-                                        .From(VImportBatchSummary.Schema)
-                                        .Where(VImportBatchSummary.Columns.SensorID)
-                                        .IsEqualTo(sensor.Id)
-                                        .OrderAsc(VImportBatchSummary.Columns.PhenomenonName)
-                                        .OrderAsc(VImportBatchSummary.Columns.OfferingName)
-                                        .Distinct()
-                                        .ExecuteAsCollection<VImportBatchSummaryCollection>();
-                                    if (colPhenomenaOfferings.Count == 0)
-                                        nodeSensor.Leaf = true;
-                                    else
-                                    {
-                                        Ext.Net.TreeNode phenomenonNode = null;
-                                        foreach (var phenomenonOffering in colPhenomenaOfferings)
-                                        {
-                                            if (phenomenonNode?.Text != phenomenonOffering.PhenomenonName)
-                                            {
-                                                phenomenonNode = new Ext.Net.TreeNode("Phenomenon_" + phenomenonOffering.PhenomenonOfferingID.ToString() + "|" + nodeSensor.NodeID, phenomenonOffering.PhenomenonName, Icon.ResultsetNext);
-                                                nodeSensor.Nodes.Add(phenomenonNode);
-                                            }
-                                            var offeringNode = new Ext.Net.TreeNode("Offering_" + phenomenonOffering.PhenomenonOfferingID.ToString() + "|" + phenomenonNode.NodeID, phenomenonOffering.OfferingName, Icon.ResultsetNext)
-                                            {
-                                                Leaf = true,
-                                                Checked = ThreeStateBool.False
-                                            };
-                                            phenomenonNode.Nodes.Add(offeringNode);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     /// <summary>
     /// 
     /// </summary>
     void BuildTree()
     {
         using (SAEONLogs.MethodCall(GetType()))
+        {
             try
             {
-                if (ConfigurationManager.AppSettings["AsyncTree"].IsTrue())
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                Ext.Net.TreeNode rootOrganisations = new Ext.Net.TreeNode("Organisations", "Organisations", (Icon)new ModuleX("e4c08bfa-a8f0-4112-b45c-dd1788ade5a0").Icon);
+                FilterTree.Root.Add(rootOrganisations);
+                string organisationName = null;
+                string siteName = null;
+                string stationName = null;
+                string instrumentName = null;
+                string sensorName = null;
+                string phenomenonName = null;
+                string offeringName = null;
+                var vInventorySensors =
+                    new Select()
+                    .From(VInventorySensor.Schema)
+                    .Where("Count").IsGreaterThan(0)
+                    .OrderAsc(VInventorySensor.Columns.OrganisationName)
+                    .OrderAsc(VInventorySensor.Columns.SiteName)
+                    .OrderAsc(VInventorySensor.Columns.StationName)
+                    .OrderAsc(VInventorySensor.Columns.InstrumentName)
+                    .OrderAsc(VInventorySensor.Columns.SensorName)
+                    .OrderAsc(VInventorySensor.Columns.PhenomenonName)
+                    .OrderAsc(VInventorySensor.Columns.OfferingName)
+                    .Distinct()
+                    .ExecuteAsCollection<VInventorySensorCollection>();
+                Ext.Net.TreeNode nodeOrganisation = null;
+                Ext.Net.TreeNode rootSites = null;
+                Ext.Net.TreeNode nodeSite = null;
+                Ext.Net.TreeNode rootStations = null;
+                Ext.Net.TreeNode nodeStation = null;
+                Ext.Net.TreeNode rootInstruments = null;
+                Ext.Net.TreeNode nodeInstrument = null;
+                Ext.Net.TreeNode rootSensors = null;
+                Ext.Net.TreeNode nodeSensor = null;
+                Ext.Net.TreeNode phenomenonNode = null;
+                Ext.Net.TreeNode offeringNode = null;
+                foreach (var dataset in vInventorySensors)
                 {
-                    BuildAsyncTree();
+                    if (organisationName != dataset.OrganisationName)
+                    {
+                        organisationName = dataset.OrganisationName;
+                        siteName = null;
+                        stationName = null;
+                        instrumentName = null;
+                        sensorName = null;
+                        phenomenonName = null;
+                        offeringName = null;
+                        //SAEONLogs.Verbose("Organisation: {name}", organisationName);
+                        nodeOrganisation = new Ext.Net.TreeNode("Organisation_" + dataset.OrganisationID.ToString(), dataset.OrganisationName, Icon.ResultsetNext);
+                        rootOrganisations.Nodes.Add(nodeOrganisation);
+                        rootSites = new Ext.Net.TreeNode("Sites_" + dataset.OrganisationID.ToString() + "|" + nodeOrganisation.NodeID, "Sites",
+                            (Icon)new ModuleX("A5C81FF7-69D6-4344-8548-E3EF7F08C4E7").Icon);
+                        nodeOrganisation.Nodes.Add(rootSites);
+                    }
+                    if (siteName != dataset.SiteName)
+                    {
+                        siteName = dataset.SiteName;
+                        stationName = null;
+                        instrumentName = null;
+                        sensorName = null;
+                        phenomenonName = null;
+                        offeringName = null;
+                        //SAEONLogs.Verbose("Site: {name}", siteName);
+                        nodeSite = new Ext.Net.TreeNode("Site_" + dataset.SiteID.ToString() + "|" + nodeOrganisation.NodeID, dataset.SiteName, Icon.ResultsetNext)
+                        {
+                            Checked = ThreeStateBool.False
+                        };
+                        rootSites.Nodes.Add(nodeSite);
+                        rootStations = new Ext.Net.TreeNode("Stations_" + dataset.SiteID.ToString() + "|" + nodeSite.NodeID, "Stations",
+                            (Icon)new ModuleX("0585e63d-0f9f-4dda-98ec-7de9397dc614").Icon);
+                        nodeSite.Nodes.Add(rootStations);
+                    }
+                    if (stationName != dataset.StationName)
+                    {
+                        stationName = dataset.StationName;
+                        instrumentName = null;
+                        sensorName = null;
+                        phenomenonName = null;
+                        offeringName = null;
+                        //SAEONLogs.Verbose("Station: {name}", stationName);
+                        nodeStation = new Ext.Net.TreeNode("Station_" + dataset.StationID.ToString() + "|" + nodeSite.NodeID, dataset.StationName, Icon.ResultsetNext)
+                        {
+                            Checked = ThreeStateBool.False
+                        };
+                        rootStations.Nodes.Add(nodeStation);
+                        rootInstruments = new Ext.Net.TreeNode("Instruments_" + dataset.StationID.ToString() + "|" + nodeStation.NodeID, "Instruments",
+                            (Icon)new ModuleX("2610866B-8CBF-44E1-9A38-6511B31A8350").Icon);
+                        nodeStation.Nodes.Add(rootInstruments);
+                    }
+                    if (instrumentName != dataset.InstrumentName)
+                    {
+                        instrumentName = dataset.InstrumentName;
+                        sensorName = null;
+                        phenomenonName = null;
+                        offeringName = null;
+                        //SAEONLogs.Verbose("Instrument: {name}", instrumentName);
+                        nodeInstrument = new Ext.Net.TreeNode("Instrument_" + dataset.InstrumentID.ToString() + "|" + nodeStation.NodeID, dataset.InstrumentName, Icon.ResultsetNext)
+                        {
+                            Checked = ThreeStateBool.False
+                        };
+                        rootInstruments.Nodes.Add(nodeInstrument);
+                        rootSensors = new Ext.Net.TreeNode("Sensors_" + dataset.InstrumentID.ToString() + "|" + nodeInstrument.NodeID, "Sensors",
+                            (Icon)new ModuleX("9992ba10-cb0c-4a22-841c-1d695e8293d5").Icon);
+                        nodeInstrument.Nodes.Add(rootSensors);
+                    }
+                    if (sensorName != dataset.SensorName)
+                    {
+                        sensorName = dataset.SensorName;
+                        phenomenonName = null;
+                        offeringName = null;
+                        //SAEONLogs.Verbose("Sensor: {name}", sensorName);
+                        nodeSensor = new Ext.Net.TreeNode("Sensor_" + dataset.SensorID.ToString() + "|" + nodeInstrument.NodeID, dataset.SensorName, Icon.ResultsetNext)
+                        {
+                            Checked = ThreeStateBool.False
+                        };
+                        nodeInstrument.Nodes.Add(nodeSensor);
+                    }
+                    if (phenomenonName != dataset.PhenomenonName)
+                    {
+                        phenomenonName = dataset.PhenomenonName;
+                        offeringName = null;
+                        //SAEONLogs.Verbose("Phenomenon: {name}", phenomenonName);
+                        phenomenonNode = new Ext.Net.TreeNode("Phenomenon_" + dataset.PhenomenonOfferingID.ToString() + "|" + nodeSensor.NodeID, dataset.PhenomenonName, Icon.ResultsetNext);
+                        nodeSensor.Nodes.Add(phenomenonNode);
+                    }
+                    if (offeringName != dataset.OfferingName)
+                    {
+                        offeringName = dataset.OfferingName;
+                        //SAEONLogs.Verbose("Offering: {name}", offeringName);
+                        offeringNode = new Ext.Net.TreeNode("Offering_" + dataset.PhenomenonOfferingID.ToString() + "|" + phenomenonNode.NodeID, dataset.OfferingName, Icon.ResultsetNext)
+                        {
+                            Leaf = true,
+                            Checked = ThreeStateBool.False
+                        };
+                        phenomenonNode.Nodes.Add(offeringNode);
+                    }
                 }
-                else
-                {
-                    BuildFullTree();
-                }
+                SAEONLogs.Information("BuildTree done in {Elapsed}", stopwatch.Elapsed.TimeStr());
             }
             catch (Exception ex)
             {
                 SAEONLogs.Exception(ex, "Unable to load tree");
                 throw;
             }
+        }
     }
 
     protected class QueryDataClass
@@ -451,6 +221,8 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         {
             try
             {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
                 log = "Query -> ";
                 DateTime fromDate = FromFilter.SelectedDate;
                 DateTime toDate = ToFilter.SelectedDate;
@@ -472,7 +244,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         QueryDataClassList.Add(new QueryDataClass() { NodeID = item.NodeID, ID = new Guid(items[0].Item2), Type = items[0].Item1 });
                     }
 
-                    SAEONLogs.Verbose("Items: {@QueryDataClassList}", QueryDataClassList);
+                    //SAEONLogs.Verbose("Items: {@QueryDataClassList}", QueryDataClassList);
 
                     #region buildQ
                     foreach (QueryDataClass item in QueryDataClassList)
@@ -480,7 +252,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
                         int count = 0;
                         List<Tuple<string, string>> items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
-                        SAEONLogs.Verbose("Items: {@items}", items);
+                        //SAEONLogs.Verbose("Items: {@items}", items);
                         PhenomenonOffering phenomenonOffering = null;
                         Phenomenon phenomenon = null;
                         Sensor sensor = null;
@@ -575,6 +347,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                     #endregion buildQ
                 }
                 SAEONLogs.Verbose("SQL: {sql}", q.BuildSqlStatement());
+                SAEONLogs.Information("BuildQuery done in {Elapsed}", stopwatch.Elapsed.TimeStr());
                 return q;
             }
             catch (Exception ex)
@@ -599,7 +372,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 {
                     var log = string.Empty;
                     var q = BuildQuery(out log);
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
                     ObservationsGrid.GetStore().DataSource = DataQueryRepository.GetPagedFilteredList(e, e.Parameters[GridFilters1.ParamPrefix], ref q);
+                    SAEONLogs.Information("Loaded: {Elapsed}", stopwatch.Elapsed.TimeStr());
                 }
             }
             catch (Exception ex)

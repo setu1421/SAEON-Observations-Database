@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SAEON.Observations.QuerySite.Models
 {
+
     public class DataWizardModel : BaseModel, IValidatableObject
     {
         public List<LocationTreeNode> LocationNodes { get; } = new List<LocationTreeNode>();

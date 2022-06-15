@@ -23,6 +23,84 @@ public class BaseRepository
         //
     }
 
+    private static void GetQuery(ref SqlQuery q, StoreRefreshDataEventArgs e, string filters)
+    {
+        if (!string.IsNullOrEmpty(filters))
+        {
+            FilterConditions fc = new FilterConditions(filters);
+
+            foreach (FilterCondition condition in fc.Conditions)
+            {
+                switch (condition.FilterType)
+                {
+                    case FilterType.Date:
+                        switch (condition.Comparison.ToString())
+                        {
+                            case "Eq":
+                                q.And(condition.Name).IsEqualTo(condition.Value);
+
+                                break;
+                            case "Gt":
+                                q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
+
+                                break;
+                            case "Lt":
+                                q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
+
+                                break;
+                            default:
+                                break;
+                        }
+
+                        break;
+
+                    case FilterType.Numeric:
+                        switch (condition.Comparison.ToString())
+                        {
+                            case "Eq":
+                                q.And(condition.Name).IsEqualTo(condition.Value);
+
+                                break;
+                            case "Gt":
+                                q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
+
+                                break;
+                            case "Lt":
+                                q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
+
+                                break;
+                            default:
+                                break;
+                        }
+
+                        break;
+
+                    case FilterType.String:
+                        q.And(condition.Name).Like("%" + condition.Value + "%");
+
+
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+            }
+
+        }
+
+        if (!string.IsNullOrEmpty(e.Sort))
+        {
+            if (e.Dir == Ext.Net.SortDirection.DESC)
+            {
+                q.OrderDesc(e.Sort);
+            }
+            else
+            {
+                q.OrderAsc(e.Sort);
+            }
+        }
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -34,82 +112,7 @@ public class BaseRepository
     {
         using (SAEONLogs.MethodCall(typeof(BaseRepository)))
         {
-
-            if (!string.IsNullOrEmpty(filters))
-            {
-                FilterConditions fc = new FilterConditions(filters);
-
-                foreach (FilterCondition condition in fc.Conditions)
-                {
-                    switch (condition.FilterType)
-                    {
-                        case FilterType.Date:
-                            switch (condition.Comparison.ToString())
-                            {
-                                case "Eq":
-                                    q.And(condition.Name).IsEqualTo(condition.Value);
-
-                                    break;
-                                case "Gt":
-                                    q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
-
-                                    break;
-                                case "Lt":
-                                    q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
-
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                            break;
-
-                        case FilterType.Numeric:
-                            switch (condition.Comparison.ToString())
-                            {
-                                case "Eq":
-                                    q.And(condition.Name).IsEqualTo(condition.Value);
-
-                                    break;
-                                case "Gt":
-                                    q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
-
-                                    break;
-                                case "Lt":
-                                    q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
-
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                            break;
-
-                        case FilterType.String:
-                            q.And(condition.Name).Like("%" + condition.Value + "%");
-
-
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-
-                }
-
-            }
-
-            if (!string.IsNullOrEmpty(e.Sort))
-            {
-                if (e.Dir == Ext.Net.SortDirection.DESC)
-                {
-                    q.OrderDesc(e.Sort);
-                }
-                else
-                {
-                    q.OrderAsc(e.Sort);
-                }
-            }
-
+            GetQuery(ref q, e, filters);
             int total = q.GetRecordCount();
             int currentPage = (e.Start / e.Limit) + 1;
             SAEONLogs.Verbose("e.Limit: {Limit} e.Start: {Start} e.Total: {Total} CurrentPage: {CurrentPage} Total: {Total}", e.Limit, e.Start, e.Total, currentPage, total);
@@ -118,6 +121,15 @@ public class BaseRepository
                 q.Paged(currentPage, e.Total);
             else
                 q.Paged(currentPage, e.Limit);
+            SAEONLogs.Verbose("Sql: {sql}", q.BuildSqlStatement());
+        }
+    }
+
+    public static void GetUnpagedQuery(ref SqlQuery q, StoreRefreshDataEventArgs e, string filters)
+    {
+        using (SAEONLogs.MethodCall(typeof(BaseRepository)))
+        {
+            GetQuery(ref q, e, filters);
             SAEONLogs.Verbose("Sql: {sql}", q.BuildSqlStatement());
         }
     }

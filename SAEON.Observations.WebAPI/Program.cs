@@ -40,7 +40,7 @@ namespace SAEON.Observations.WebAPI
                     webBuilder.UseStartup<Startup>();
                     webBuilder.ConfigureKestrel(options =>
                     {
-                        options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(15);
+                        options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(30);
                     });
                 });
     }

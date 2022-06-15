@@ -80,9 +80,9 @@
                                         </Items>
                                     </ext:Toolbar>
                                 </TopBar>
-                                <Loader>
+<%--                                <Loader>
                                     <ext:PageTreeLoader OnNodeLoad="NodeLoad" Timeout="900000"/>
-                                </Loader>
+                                </Loader>--%>
                                 <Listeners>
                                     <Click Handler="#{FilterTreeBottomBar}.setStatus({text: 'Node Selected: <b>' + node.text + '</b>', clear: true});" />
                                     <ExpandNode Delay="30" Handler="#{FilterTreeBottomBar}.setStatus({text: 'Node Expanded: <b>' + node.text + '</b>', clear: true});" />

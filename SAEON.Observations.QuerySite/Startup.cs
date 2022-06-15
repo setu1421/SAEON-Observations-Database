@@ -32,7 +32,7 @@ namespace SAEON.Observations.QuerySite
                 try
                 {
                     SAEONLogs.Verbose("AuthenticationServer: {AuthenticationServer}", ConfigurationManager.AppSettings["AuthenticationServerUrl"]);
-                    SyncfusionLicenseProvider.RegisterLicense("NTY3NDQzQDMxMzkyZTM0MmUzMGhYMVVvayt3T0NLYkgweGxTYzBDWFBWV3VxVVFMRmU3OU1uWWQyVnNPS1E9;NTY3NDQ0QDMxMzkyZTM0MmUzMGlqWlVCWUZaVndKSHJDaWtGMVZzbWZvNjRITWJxQUNSdkEvd2dHMUVsQUU9");
+                    SyncfusionLicenseProvider.RegisterLicense("Mgo+DSMBPh8sVXJ0S0d+XE9AcVRDX3xKf0x/TGpQb19xflBPallYVBYiSV9jS3xTckRnWXdbdXFWQmJZVw==;Mgo+DSMBMAY9C3t2VVhhQlFaclhJXGFWfVJpTGpQdk5xdV9DaVZUTWY/P1ZhSXxRdkFiXX9WdXFQRWhaUUY=");
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.AntiForgeryClaim;
                     //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -46,8 +46,8 @@ namespace SAEON.Observations.QuerySite
                         ClientId = ConfigurationManager.AppSettings["QuerySiteClientId"],
                         ClientSecret = ConfigurationManager.AppSettings["QuerySiteClientSecret"],
                         Scope = $"openid {ConfigurationManager.AppSettings["WebAPIClientId"]}",
-                        RedirectUri = ConfigurationManager.AppSettings["QuerySiteUrl"].AddTrailingForwardSlash() + "signin-oidc",
-                        PostLogoutRedirectUri = ConfigurationManager.AppSettings["QuerySiteUrl"].AddTrailingForwardSlash(),
+                        RedirectUri = ConfigurationManager.AppSettings["QuerySiteUrl"].AddEndForwardSlash() + "signin-oidc",
+                        PostLogoutRedirectUri = ConfigurationManager.AppSettings["QuerySiteUrl"].AddEndForwardSlash(),
                         ResponseType = "code",
                         SignInAsAuthenticationType = "Cookies",
                         SaveTokens = true,
@@ -163,6 +163,7 @@ namespace SAEON.Observations.QuerySite
                                     var loginReferer = context.Request.Headers["Referer"];
                                     context.Response.Headers["LoginReferer"] = loginReferer;
                                     //SAEONLogs.Information("LoginReferer: {LoginReferer}", loginReferer);
+                                    SAEONLogs.Verbose("State: {State}", context.ProtocolMessage.State);
                                     var stateQueryString = context.ProtocolMessage.State.Split('=');
                                     var protectedState = stateQueryString[1];
                                     var state = context.Options.StateDataFormat.Unprotect(protectedState);

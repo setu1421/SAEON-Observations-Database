@@ -170,7 +170,7 @@ namespace SAEON.Observations.Data
 				
 				TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
 				colvarStartDate.ColumnName = "StartDate";
-				colvarStartDate.DataType = DbType.Date;
+				colvarStartDate.DataType = DbType.DateTime;
 				colvarStartDate.MaxLength = 0;
 				colvarStartDate.AutoIncrement = false;
 				colvarStartDate.IsNullable = true;
@@ -183,7 +183,7 @@ namespace SAEON.Observations.Data
 				
 				TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
 				colvarEndDate.ColumnName = "EndDate";
-				colvarEndDate.DataType = DbType.Date;
+				colvarEndDate.DataType = DbType.DateTime;
 				colvarEndDate.MaxLength = 0;
 				colvarEndDate.AutoIncrement = false;
 				colvarEndDate.IsNullable = true;

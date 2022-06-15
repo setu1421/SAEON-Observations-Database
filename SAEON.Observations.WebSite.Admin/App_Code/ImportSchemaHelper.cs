@@ -842,14 +842,14 @@ public class ImportSchemaHelper : IDisposable
                             var dateOk = false;
                             if (def.Sensors.Count > 0)
                             {
-                                SAEONLogs.Verbose("Row#: {row} Sensors: {sensors}", rowNum, def.Sensors.Select(s => s.Name).ToList());
+                                //SAEONLogs.Verbose("Row#: {row} Sensors: {sensors}", rowNum, def.Sensors.Select(s => s.Name).ToList());
                             }
                             foreach (var sensor in def.Sensors)
                             {
                                 // Sensor x Instrument_Sensor x Instrument x Station_Instrument x Station x Site
                                 var index = def.Sensors.IndexOf(sensor);
                                 var dates = def.SensorDates.ElementAt(index);
-                                SAEONLogs.Verbose("Date: {recDate} Dates: {DatesCount} {Dates}", rec.DateValue, dates.Count, string.Join("; ", dates.Select(d => $"Start: {d.StartDate} End: {d.EndDate}")));
+                                //SAEONLogs.Verbose("Date: {recDate} Dates: {DatesCount} {Dates}", rec.DateValue, dates.Count, string.Join("; ", dates.Select(d => $"Start: {d.StartDate} End: {d.EndDate}")));
                                 if (!dates.Any())
                                 {
                                     dateOk = true;
@@ -859,7 +859,8 @@ public class ImportSchemaHelper : IDisposable
                                     {
                                         if (date.StartDate.HasValue && date.EndDate.HasValue)
                                         {
-                                            if ((rec.DateValue.Date >= date.StartDate.Value.Date) && (rec.DateValue.Date <= date.EndDate.Value.Date))
+                                            //if ((rec.DateValue.Date >= date.StartDate.Value.Date) && (rec.DateValue.Date <= date.EndDate.Value.Date))
+                                            if ((rec.DateValue >= date.StartDate.Value) && (rec.DateValue <= date.EndDate.Value))
                                             {
                                                 dateOk = true;
                                                 break;
@@ -867,7 +868,8 @@ public class ImportSchemaHelper : IDisposable
                                         }
                                         else if (date.StartDate.HasValue)
                                         {
-                                            if (rec.DateValue.Date >= date.StartDate.Value.Date)
+                                            //if (rec.DateValue.Date >= date.StartDate.Value.Date)
+                                            if (rec.DateValue >= date.StartDate.Value)
                                             {
                                                 dateOk = true;
                                                 break;
@@ -875,7 +877,8 @@ public class ImportSchemaHelper : IDisposable
                                         }
                                         else if (date.EndDate.HasValue)
                                         {
-                                            if (rec.DateValue.Date <= date.EndDate.Value.Date)
+                                            //if (rec.DateValue.Date <= date.EndDate.Value.Date)
+                                            if (rec.DateValue <= date.EndDate.Value)
                                             {
                                                 dateOk = true;
                                                 break;
@@ -884,7 +887,7 @@ public class ImportSchemaHelper : IDisposable
                                     }
                                 if (!dateOk)
                                 {
-                                    SAEONLogs.Error("Row#: {row} Date out of bounds, ignoring! Sensor: {sensor} Date: {recDate} Dates: {Dates} Rec: {@rec}", rowNum, sensor.Name, rec.DateValue, string.Join("; ", dates.Select(d => $"{d.StartDate} {d.EndDate}")), rec);
+                                    SAEONLogs.Error("Row#: {row} Date out of bounds, ignoring! Sensor: {sensor} Date: {recDate} Dates: {Dates} Rec: {@rec}", rowNum, sensor.Name, rec.DateValue, string.Join("; ", dates.OrderBy(d => d.StartDate).Select(d => $"{d.StartDate} {d.EndDate}")), rec);
                                     continue;
                                 }
                                 rec.SensorID = sensor.Id;
@@ -1039,6 +1042,7 @@ public class ImportSchemaHelper : IDisposable
                         //                        SAEONLogs.Information("IsDuplicateOfNull {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
                         //                        stageStart = stopwatch.Elapsed;
                         //#endif
+                        //SAEONLogs.Verbose("Rec: {@rec}", rec);
                         SchemaValues.Add(rec);
                     }
                 }

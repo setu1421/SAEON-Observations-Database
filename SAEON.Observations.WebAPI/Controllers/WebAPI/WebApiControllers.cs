@@ -33,7 +33,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>TEntity</returns>
         [HttpGet("{id:guid}")]
 #if ResponseCaching
-        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "id" })]
 #endif
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public virtual async Task<ActionResult<TEntity>> GetByIdAsync(Guid id)
@@ -66,9 +66,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select TRelated</param>
         /// <returns>TaskOf(IHttpActionResult)</returns>
-//[HttpGet("{id:guid}/TRelated")] Required in calling classes
+        //[HttpGet("{id:guid}/TRelated")] Required in calling classes
 #if ResponseCaching
-        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "id" })]
 #endif
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         protected async Task<ActionResult<TRelated>> GetSingleAsync<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
@@ -100,9 +100,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select TRelated</param>
         /// <returns>TaskOf(IHttpActionResult)</returns>
-//[HttpGet("{id:guid}/TRelated")] Required in calling classes
+        //[HttpGet("{id:guid}/TRelated")] Required in calling classes
 #if ResponseCaching
-        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "id" })]
 #endif
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         protected TRelated GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
@@ -137,7 +137,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         //[HttpGet]
         //[Route("{id:guid}/TRelated")] Required in derived classes
 #if ResponseCaching
-        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "id" })]
 #endif
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         protected IQueryable<TRelated> GetManyWithGuidId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : GuidIdEntity
@@ -147,6 +147,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 try
                 {
                     UpdateRequest();
+                    if (!GetQuery(i => (i.Id == id)).Any())
+                    {
+                        SAEONLogs.Error("{id} not found", id);
+                        throw new ArgumentException($"{id} not found");
+                    }
                     return GetQuery(i => i.Id == id).SelectMany(select);
                 }
                 catch (Exception ex)
@@ -166,7 +171,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>IQueryableOf(TRelated)</returns>
 //[HttpGet("{id:guid}/TRelated")] Required in calling classes
 #if ResponseCaching
-        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "id" })]
 #endif
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         protected IQueryable<TRelated> GetManyWithIntId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : IntIdEntity
@@ -176,6 +181,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 try
                 {
                     UpdateRequest();
+                    if (!GetQuery(i => (i.Id == id)).Any())
+                    {
+                        SAEONLogs.Error("{id} not found", id);
+                        throw new ArgumentException($"{id} not found");
+                    }
                     return GetQuery(i => i.Id == id).SelectMany(select);
                 }
                 catch (Exception ex)
@@ -195,7 +205,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>IQueryableOf(TRelated)</returns>
 //[HttpGet("{id:guid}/TRelated")] Required in calling classes
 #if ResponseCaching
-        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "id" })]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "id" })]
 #endif
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         protected IQueryable<TRelated> GetManyWithLongId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : LongIdEntity
@@ -205,6 +215,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 try
                 {
                     UpdateRequest();
+                    if (!GetQuery(i => (i.Id == id)).Any())
+                    {
+                        SAEONLogs.Error("{id} not found", id);
+                        throw new ArgumentException($"{id} not found");
+                    }
                     return GetQuery(i => i.Id == id).SelectMany(select);
                 }
                 catch (Exception ex)
@@ -233,7 +248,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>TEntity</returns>
         [HttpGet("ByCode/{code:required}")]
 #if ResponseCaching
-        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "code" })]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "code" })]
 #endif
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public virtual async Task<ActionResult<TEntity>> GetByCodeAsync(string code)
@@ -276,7 +291,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>TEntity</returns>
         [HttpGet("ByName/{name:required}")]
 #if ResponseCaching
-        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "name" })]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "name" })]
 #endif
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public virtual async Task<ActionResult<TEntity>> GetByNameAsync(string name)
@@ -320,7 +335,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>TEntity</returns>
         [HttpGet("ByCode/{code:required}")]
 #if ResponseCaching
-        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "code" })]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "code" })]
 #endif
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public virtual async Task<ActionResult<TEntity>> GetByCodeAsync(string code)
@@ -353,7 +368,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>TEntity</returns>
         [HttpGet("ByName/{name:required}")]
 #if ResponseCaching
-        [ResponseCache(Duration = Defaults.CacheDuration, VaryByQueryKeys = new[] { "name" })]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration, VaryByQueryKeys = new[] { "name" })]
 #endif
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public virtual async Task<ActionResult<TEntity>> GetByNameAsync(string name)

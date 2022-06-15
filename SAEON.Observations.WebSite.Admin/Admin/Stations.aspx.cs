@@ -535,11 +535,11 @@ public partial class Admin_Stations : System.Web.UI.Page
                 else
                     stationInstrument.Elevation = nfInstrumentElevation.Number;
                 if (!dfInstrumentStartDate.IsEmpty && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
-                    stationInstrument.StartDate = dfInstrumentStartDate.SelectedDate;
+                    stationInstrument.StartDate = DateTime.Parse(dfInstrumentStartDate.RawText);
                 else
                     stationInstrument.StartDate = null;
                 if (!dfInstrumentEndDate.IsEmpty && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
-                    stationInstrument.EndDate = dfInstrumentEndDate.SelectedDate;
+                    stationInstrument.EndDate = DateTime.Parse(dfInstrumentEndDate.RawText);
                 else
                     stationInstrument.EndDate = null;
                 stationInstrument.UserId = AuthHelper.GetLoggedInUserId;

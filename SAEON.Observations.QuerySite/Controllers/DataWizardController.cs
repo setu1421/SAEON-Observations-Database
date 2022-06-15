@@ -17,7 +17,6 @@ using System.Web.UI;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
-
     [RoutePrefix("Query/Data")]
     [OutputCache(Duration = 0, Location = OutputCacheLocation.None, NoStore = true)]
     public class DataWizardController : BaseController<DataWizardModel>
@@ -523,6 +522,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion Approximation
 
         #region Data
+
         [HttpGet]
         public async Task<EmptyResult> GetData()
         {
@@ -539,6 +539,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.ElevationMinimum = model.ElevationMinimum;
                     input.ElevationMaximum = model.ElevationMaximum;
                     model.DataOutput = await PostEntityAsync<DataWizardDataInput, DataWizardDataOutput>("Internal/DataWizard/GetData", input);
+                    LoadCharData(model.DataOutput);
                     model.HaveSearched = true;
                     SessionModel = model;
                     return new EmptyResult();
@@ -547,6 +548,16 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     SAEONLogs.Exception(ex);
                     throw;
+                }
+            }
+
+            void LoadCharData(DataWizardDataOutput output)
+            {
+                foreach (var series in output.ChartSeries)
+                {
+                    series.Data.AddRange(output.Data.Where(o => o.Station == series.Station && o.Phenomenon == series.Phenomenon && o.Offering == series.Offering && o.Unit == series.Unit)
+                        .OrderBy(i => i.Date)
+                        .Select(i => new ChartData { Date = i.Date, Value = i.Value }));
                 }
             }
         }

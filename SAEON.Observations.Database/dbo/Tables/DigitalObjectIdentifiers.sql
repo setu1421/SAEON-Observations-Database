@@ -6,6 +6,7 @@
     [DOIType] tinyint not null,
 	[DOI] as '10.15493/obsdb.'+Stuff(Convert(VarChar(20),Convert(VarBinary(4),ID),2),5,0,'.'),
 	[DOIUrl] as 'https://doi.org/10.15493/obsdb.'+Stuff(Convert(VarChar(20),Convert(VarBinary(4),ID),2),5,0,'.'),
+    [DatasetID] UniqueIdentifier null,
 	[Code] VARCHAR(200) not null,
 	[Name] VARCHAR(500) not null,
     [Title] VARCHAR(5000) not null,
@@ -26,17 +27,20 @@
     [ODPMetadataIsPublished] Bit null,
     [ODPMetadataPublishErrors] VarChar(Max) null,
     [AddedAt] DateTime null Constraint [DF_DigitalObjectIdentifiers_AddedAt] DEFAULT (getdate()),
-    [AddedBy] VarChar(128) not Null,
+    [AddedBy] VarChar(36) not Null,
     [UpdatedAt] DateTime null Constraint [DF_DigitalObjectIdentifiers_UpdatedAt] DEFAULT (getdate()), 
-    [UpdatedBy] VarChar(128) not Null,
+    [UpdatedBy] VARCHAR(36) not Null,
     [RowVersion] RowVersion not null,
 	Constraint PK_DigitalObjectIdentifiers Primary Key Clustered (ID),
     Constraint UX_DigitalObjectIdentifiers_DOIType_Code UNIQUE (DOIType, Code),
     Constraint UX_DigitalObjectIdentifiers_DOIType_Name UNIQUE (DOIType, Name),
-    Constraint FK_DigitalObjectIdentifiers_ParentID Foreign Key (ParentID) References DigitalObjectIdentifiers(ID)
+    Constraint FK_DigitalObjectIdentifiers_ParentID Foreign Key (ParentID) References DigitalObjectIdentifiers(ID),
+    Constraint FK_DigitalObjectIdentifiers_DatasetID Foreign Key (DatasetID) References Datasets(ID)
 );
 GO
 CREATE INDEX [IX_DigitalObjectIdentifiers_ParentID] ON [dbo].[DigitalObjectIdentifiers] ([ParentID])
+GO
+CREATE INDEX [IX_DigitalObjectIdentifiers_DatasetID] ON [dbo].[DigitalObjectIdentifiers] ([DatasetID])
 GO
 CREATE INDEX [IX_DigitalObjectIdentifiers_DOIType] ON [dbo].[DigitalObjectIdentifiers] ([DOIType])
 GO

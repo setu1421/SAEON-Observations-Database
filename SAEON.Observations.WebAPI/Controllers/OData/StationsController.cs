@@ -35,16 +35,9 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         }
 
         [ODataRoute("({id})/Datasets")]
-        public IQueryable<Dataset> GetDatasets(Guid id)
+        public IQueryable<VDatasetExpansion> GetDatasets(Guid id)
         {
-            return GetManyWithLongId(id, s => s.Datasets);
+            return GetManyWithGuidId(id, s => s.DatasetsExpansion);
         }
-
-        //[ODataRoute("({id})/Observations/{phenomenonId}/{offeringId}/{unitId}")]
-        //public List<Observation> GetObservations(Guid id, Guid phenomenonId, Guid offeringId, Guid unitId)
-        //{
-        //    return GetManyWithIntId<Observation>(id, s => s.Observations).Where(i => (i.PhenomenonId == phenomenonId) && (i.OfferingId == offeringId) && (i.UnitId == unitId)).ToList();
-        //}
-
     }
 }

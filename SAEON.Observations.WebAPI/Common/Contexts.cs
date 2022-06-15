@@ -27,6 +27,7 @@ namespace SAEON.Observations.WebAPI
         public DbSet<DataSchema> DataSchemas { get; set; }
         public DbSet<DataSource> DataSources { get; set; }
         public DbSet<DataSourceType> DataSourceTypes { get; set; }
+        public DbSet<Dataset> Datasets { get; set; }
         public DbSet<DigitalObjectIdentifier> DigitalObjectIdentifiers { get; set; }
         public DbSet<ImportBatch> ImportBatches { get; set; }
         public DbSet<ImportBatchSummary> ImportBatchSummaries { get; set; }
@@ -42,8 +43,7 @@ namespace SAEON.Observations.WebAPI
         public DbSet<Sensor> Sensors { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Station> Stations { get; set; }
-        public DbSet<Dataset> Datasets { get; set; }
-        public DbSet<Observation> Observations { get; set; }
+        //public DbSet<Observation> Observations { get; set; } @@@
         public DbSet<Unit> Units { get; set; }
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }
@@ -52,9 +52,10 @@ namespace SAEON.Observations.WebAPI
         public DbSet<VLocation> VLocations { get; set; }
         public DbSet<VVariable> VVariables { get; set; }
         public DbSet<VImportBatchSummary> VImportBatchSummaries { get; set; }
-        public DbSet<InventoryDataset> InventoryDatasets { get; set; }
-        public DbSet<InventorySensor> InventorySensors { get; set; }
-        public DbSet<VObservationExpansion> VObservationExpansions { get; set; }
+        public DbSet<VInventoryDataset> VInventoryDatasets { get; set; }
+        public DbSet<VInventorySensor> VInventorySensors { get; set; }
+        public DbSet<VObservationExpansion> VObservationsExpansion { get; set; }
+        public DbSet<VDatasetExpansion> VDatasetsExpansion { get; set; }
 
         // SensorThings
         public DbSet<SensorThingsDatastream> SensorThingsDatastreams { get; set; }
@@ -85,12 +86,17 @@ namespace SAEON.Observations.WebAPI
         {
             if (modelBuilder is null) throw new ArgumentNullException(nameof(modelBuilder));
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Dataset>().ToView("vStationDatasets");
-            modelBuilder.Entity<InventoryDataset>().ToView("vInventoryDatasets");
-            modelBuilder.Entity<InventorySensor>().ToView("vInventorySensors");
+            //modelBuilder.Entity<Dataset>().ToView("vStationDatasets");
+            modelBuilder.Entity<VDatasetExpansion>().ToView("vDatasetsExpansion");
+            modelBuilder.Entity<VInventoryDataset>().ToView("vInventoryDatasets");
+            modelBuilder.Entity<VInventorySensor>().ToView("vInventorySensors");
             modelBuilder.Entity<VObservationExpansion>().ToView("vObservationExpansion");
             modelBuilder.Entity<DigitalObjectIdentifier>().Property("DOIType").HasConversion<byte>();
-            modelBuilder.Entity<DigitalObjectIdentifier>().HasOne(i => i.Parent).WithMany(i => i.Children).HasForeignKey(i => i.ParentId);
+            //modelBuilder.Entity<DigitalObjectIdentifier>().HasOne(i => i.Parent).WithMany(i => i.Children).HasForeignKey(i => i.ParentId);
+            modelBuilder.Entity<UserDownload>().Ignore(i => i.UserId);
+            modelBuilder.Entity<UserQuery>().Ignore(i => i.UserId);
+            // One to One
+            modelBuilder.Entity<Dataset>().HasOne(i => i.DigitalObjectIdentifier).WithOne(i => i.Dataset).HasForeignKey<DigitalObjectIdentifier>(i => i.DatasetId);
             // Many to Many
             modelBuilder.Entity<Organisation>()
                 .HasMany(i => i.Instruments)

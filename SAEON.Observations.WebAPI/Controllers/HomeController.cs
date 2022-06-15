@@ -70,6 +70,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Duration = Defaults.ApiCacheDuration)]
         public JsonResult GetMapPoints()
         {
             using (SAEONLogs.MethodCall(GetType()))

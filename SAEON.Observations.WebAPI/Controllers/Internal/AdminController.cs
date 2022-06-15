@@ -2,14 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
 using SAEON.AspNet.Auth;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.WebAPI.Hubs;
 using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,7 +33,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await DOIHelper.CreateDOIsV2(DbContext, AdminHub, HttpContext/*, AnalyticsHelper.IsTest(Request)*/));
+                    return Content(await DOIHelper.CreateDOIs(DbContext, AdminHub, HttpContext/*, AnalyticsHelper.IsTest(Request)*/));
                 }
                 catch (Exception ex)
                 {
@@ -53,7 +51,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await MetadataHelper.CreateMetadataV2(DbContext, AdminHub/*, AnalyticsHelper.IsTest(Request)*/));
+                    return Content(await MetadataHelper.CreateMetadata(DbContext, AdminHub, HttpContext/*, AnalyticsHelper.IsTest(Request)*/));
                 }
                 catch (Exception ex)
                 {
@@ -71,7 +69,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    return Content(await ODPMetadataHelper.CreateMetadata(DbContext, AdminHub, Config));
+                    return Content(await ODPMetadataHelper.CreateODPMetadata(DbContext, AdminHub, HttpContext, Config));
                 }
                 catch (Exception ex)
                 {
@@ -82,24 +80,14 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpPost("[action]")]
-        [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
-        public async Task<IActionResult> UpdateODP()
+        [Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
+        public async Task<IActionResult> CreateDatasets()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
-                    var sb = new StringBuilder();
-                    SAEONLogs.Information("CreateDOIs");
-                    sb.AppendLine("CreateDOIs");
-                    sb.AppendLine(await DOIHelper.CreateDOIsV2(DbContext, AdminHub, HttpContext/*, AnalyticsHelper.IsTest(Request)*/));
-                    SAEONLogs.Information("CreateMetadata");
-                    sb.AppendLine("CreateMetadata");
-                    sb.AppendLine(await MetadataHelper.CreateMetadataV2(DbContext, AdminHub/*, AnalyticsHelper.IsTest(Request)*/));
-                    SAEONLogs.Information("CreateODPMetadata");
-                    sb.AppendLine("CreateODPMetadata");
-                    sb.AppendLine(await ODPMetadataHelper.CreateMetadata(DbContext, AdminHub, Config));
-                    return Content(sb.ToString());
+                    return Content(await DatasetHelper.CreateDatasets(DbContext, AdminHub, HttpContext, Config));
                 }
                 catch (Exception ex)
                 {
@@ -110,44 +98,78 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpPost("[action]")]
-        [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
-        public async Task<IActionResult> CreateSnapshots()
-        {
-            using (SAEONLogs.MethodCall(GetType()))
-            {
-                try
-                {
-                    var sb = new StringBuilder();
-                    SAEONLogs.Information("CreateInventorySnapshot");
-                    sb.AppendLine("CreateInventorySnapshot");
-                    var inventorySnapshot = (await DbContext.InventorySnapshots.FromSqlRaw("spCreateInventorySnapshot").ToListAsync()).FirstOrDefault();
-                    SAEONLogs.Information("InventorySnapshot: {InventorySnapshot}", inventorySnapshot);
-                    SAEONLogs.Information("Done");
-                    sb.AppendLine("Done");
-                    return Content(sb.ToString());
-                }
-                catch (Exception ex)
-                {
-                    SAEONLogs.Exception(ex);
-                    throw;
-                }
-            }
-        }
-
-        [HttpPost("[action]")]
-        [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+        [Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
         public async Task<IActionResult> CreateImportBatchSummaries()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
+                    return Content(await ImportBatchSummaryHelper.CreateImportBatchSummaries(DbContext, AdminHub));
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpPost("[action]")]
+        [Authorize(Policy = ODPAuthenticationDefaults.AdminTokenPolicy)]
+        public async Task<IActionResult> CreateSnapshots()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    return Content(await SnapshotHelper.CreateSnapshots(DbContext, AdminHub));
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpPost("[action]")]
+        [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+        public async Task<IActionResult> DailyUpdate()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
                     var sb = new StringBuilder();
-                    SAEONLogs.Information("CreateImportBatchSummaries");
-                    sb.AppendLine("CreateImportBatchSummaries");
-                    _ = (await DbContext.ImportBatchSummaries.FromSqlRaw("spCreateImportBatchSummaries").ToListAsync());
-                    SAEONLogs.Information("Done");
-                    sb.AppendLine("Done");
+                    sb.AppendLine(await ImportBatchSummaryHelper.CreateImportBatchSummaries(DbContext, AdminHub));
+                    sb.AppendLine(await DOIHelper.CreateDOIs(DbContext, AdminHub, HttpContext));
+                    sb.AppendLine(await MetadataHelper.CreateMetadata(DbContext, AdminHub, HttpContext));
+                    sb.AppendLine(await DatasetHelper.CreateDatasets(DbContext, AdminHub, HttpContext, Config));
+                    sb.AppendLine(await ODPMetadataHelper.CreateODPMetadata(DbContext, AdminHub, HttpContext, Config));
+                    sb.AppendLine(await SnapshotHelper.CreateSnapshots(DbContext, AdminHub));
+                    return Content(sb.ToString());
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpPost("[action]")]
+        [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
+        public async Task<IActionResult> HourlyUpdate()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    var sb = new StringBuilder();
+                    sb.AppendLine(await DOIHelper.CreateDOIs(DbContext, AdminHub, HttpContext));
+                    sb.AppendLine(await MetadataHelper.CreateMetadata(DbContext, AdminHub, HttpContext));
+                    sb.AppendLine(await DatasetHelper.CreateDatasets(DbContext, AdminHub, HttpContext, Config));
                     return Content(sb.ToString());
                 }
                 catch (Exception ex)

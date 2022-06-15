@@ -13,6 +13,24 @@ namespace SAEON.Observations.Core
             }
         }
 
+        public static string Replace(this string value, char[] oldChars, char newChar)
+        {
+            foreach (var oldChar in oldChars)
+            {
+                value = value.Replace(oldChar, newChar);
+            }
+            return value;
+        }
+
+        public static string Replace(this string value, string[] oldStrings, string newString)
+        {
+            foreach (var oldString in oldStrings)
+            {
+                value = value.Replace(oldString, newString);
+            }
+            return value;
+        }
+
         //public static string HtmlB(this string value)
         //{
         //    return $"<b>{value}</b>";

@@ -5,7 +5,7 @@ with VerifiedDatasets as
 Select 
 	* 
 from 
-	vInventoryDatasets
+	vDatasetsExpansion
 where
 	(VerifiedCount > 0)  and 
 	(LatitudeNorth is not null) and (LatitudeSouth is not null) and 

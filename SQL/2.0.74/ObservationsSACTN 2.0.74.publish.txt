@@ -1,0 +1,74 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Alter
+       [dbo].[Observation] (Table)
+       [dbo].[Station_Instrument] (Table)
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vDataLog] (View)
+       [dbo].[spCreateInventorySnapshot] (Procedure)
+     Create
+       [dbo].[Observation].[IX_Observation_ImportBatchID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID] (Index)
+       [dbo].[Observation].[IX_Observation_StatusID] (Index)
+       [dbo].[RequestLogs] (Table)
+       [dbo].[RequestLogs].[IX_RequestLogs_Time] (Index)
+       [dbo].[RequestLogs].[IX_RequestLogs_Method] (Index)
+       [dbo].[RequestLogs].[IX_RequestLogs_Path] (Index)
+       [dbo].[vInventorySnapshots] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[Station_Instrument].[IX_Station_Instrument_EndDate] (Index)
+       [dbo].[Station_Instrument].[IX_Station_Instrument_StartDateEndDate] (Index)
+       [dbo].[Station_Instrument].[IX_Station_Instrument_StartDate] (Index)
+       [dbo].[UX_Station_Instrument] (Unique Constraint)
+     Create
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[UX_Station_Instrument] (Unique Constraint)
+       [dbo].[Station_Instrument].[IX_Station_Instrument_EndDate] (Index)
+       [dbo].[Station_Instrument].[IX_Station_Instrument_StartDateEndDate] (Index)
+       [dbo].[Station_Instrument].[IX_Station_Instrument_StartDate] (Index)
+     Refresh
+       [dbo].[vSensorThingsAPIObservations] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationJSON] (View)
+       [dbo].[vStationObservations] (View)
+       [dbo].[vInstrumentOrganisation] (View)
+       [dbo].[vSensor] (View)
+       [dbo].[vSensorDates] (View)
+       [dbo].[vSensorLocation] (View)
+       [dbo].[vSensorThingsAPIInstrumentDates] (View)
+       [dbo].[vSensorThingsAPIStationDates] (View)
+       [dbo].[vSiteOrganisation] (View)
+       [dbo].[vStationInstrument] (View)
+       [dbo].[vStationOrganisation] (View)
+       [dbo].[vImportBatchSummary] (View)
+       [dbo].[vInventoryDatasets] (View)
+       [dbo].[vInventorySensors] (View)
+       [dbo].[vStationDatasets] (View)
+       [dbo].[vLocations] (View)
+       [dbo].[vVariables] (View)
+       [dbo].[vSensorThingsAPIDatastreams] (View)
+       [dbo].[vSensorThingsAPIObservedProperties] (View)
+       [dbo].[vSensorThingsAPISensors] (View)
+       [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIThings] (View)
+       [dbo].[vSensorThingsAPIFeaturesOfInterest] (View)
+       [dbo].[vSensorThingsAPIHistoricalLocations] (View)
+       [dbo].[spCreateImportBatchSummaries] (Procedure)
+
+If this deployment is executed, changes to [dbo].[Station_Instrument] might introduce run-time errors in [dbo].[vDataQuery].
+If this deployment is executed, changes to [dbo].[vObservationExpansion] might introduce run-time errors in [dbo].[vSensorObservations].
+

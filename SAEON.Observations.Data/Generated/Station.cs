@@ -469,6 +469,10 @@ namespace SAEON.Observations.Data
         }
         
 		
+		public SAEON.Observations.Data.DatasetCollection Datasets()
+		{
+			return new SAEON.Observations.Data.DatasetCollection().Where(Dataset.Columns.StationID, Id).Load();
+		}
 		public SAEON.Observations.Data.ImportBatchSummaryCollection ImportBatchSummaryRecords()
 		{
 			return new SAEON.Observations.Data.ImportBatchSummaryCollection().Where(ImportBatchSummary.Columns.StationID, Id).Load();

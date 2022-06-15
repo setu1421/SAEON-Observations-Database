@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Solution File, Format Version 18.00
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1EFF8888-CAFA-4642-ABC4-4B9A65E3683A}"
+	ProjectSection(SolutionItems) = preProject
+		..\Data Cleanup\Delete redundant Snapshots.sql = ..\Data Cleanup\Delete redundant Snapshots.sql
+		Observations 2.0.76.publish.sql = Observations 2.0.76.publish.sql
+		Observations 2.0.76.publish.txt = Observations 2.0.76.publish.txt
+		ObservationsElwandle 2.0.76.publish.sql = ObservationsElwandle 2.0.76.publish.sql
+		ObservationsElwandle 2.0.76.publish.txt = ObservationsElwandle 2.0.76.publish.txt
+		ObservationsFynbos 2.0.76.publish.sql = ObservationsFynbos 2.0.76.publish.sql
+		ObservationsFynbos 2.0.76.publish.txt = ObservationsFynbos 2.0.76.publish.txt
+		ObservationsSACTN 2.0.76.publish.sql = ObservationsSACTN 2.0.76.publish.sql
+		ObservationsSACTN 2.0.76.publish.txt = ObservationsSACTN 2.0.76.publish.txt
+		..\Data Cleanup\SACTN unverify.sql = ..\Data Cleanup\SACTN unverify.sql
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2D6870C2-3B87-40CD-ADC0-D2F5C6937652}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {15CA26F6-F481-412B-B3AB-B866421E4331}
+	EndGlobalSection
+EndGlobal

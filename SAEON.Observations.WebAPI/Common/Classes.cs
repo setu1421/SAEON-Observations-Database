@@ -27,7 +27,16 @@ namespace SAEON.Observations.WebAPI
         /// End date for the observations
         /// </summary>
         public DateTime? EndDate { get; set; }
+        /// <summary>
+        /// Minimum Elevation of the observations
+        /// </summary>
+        public double? ElevationMinimum { get; set; }
+        /// <summary>
+        /// Maximum Elevation of the observations
+        /// </summary>
+        public double? ElevationMaximum { get; set; }
     }
+
 
     #region SpacialCoverage
     /*

@@ -23,7 +23,7 @@ namespace SAEON.Observations.WebAPI
     [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
     [ApiController]
 #if ResponseCaching
-    [ResponseCache(Duration = Defaults.CacheDuration)]
+    [ResponseCache(Duration = Defaults.ApiCacheDuration)]
     //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 #endif
     [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
@@ -56,6 +56,7 @@ namespace SAEON.Observations.WebAPI
                 return dbContext;
             }
         }
+
         public BaseApiController() : base()
         {
         }
@@ -220,17 +221,35 @@ namespace SAEON.Observations.WebAPI
     [Authorize(Policy = TenantAuthenticationDefaults.TenantPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
 #if ResponseCaching
-    [ResponseCache(Duration = Defaults.CacheDuration)]
+    [ResponseCache(Duration = Defaults.ApiCacheDuration)]
     //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 #endif
     [Authorize(Policy = ODPAuthenticationDefaults.AccessTokenPolicy)]
     public abstract class BaseODataController<TEntity> : ODataController where TEntity : BaseEntity
     {
         public static string BaseUrl { get; set; }
+        private IConfiguration config;
+        protected IConfiguration Config => config ??= HttpContext.RequestServices.GetRequiredService<IConfiguration>();
         protected int CommandTimeout { get; set; } = 30;
+        protected string CommandTimeoutKey { get; set; } = "CommandTimeoutInMins";
 
-        private ObservationsDbContext _dbContext;
-        protected ObservationsDbContext DbContext => _dbContext ??= HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
+        private ObservationsDbContext dbContext;
+        protected ObservationsDbContext DbContext
+        {
+            get
+            {
+                if (dbContext is null)
+                {
+                    dbContext = HttpContext.RequestServices.GetRequiredService<ObservationsDbContext>();
+                    if (int.TryParse(Config[CommandTimeoutKey] ?? "30", out int commandTimeout))
+                    {
+                        CommandTimeout = commandTimeout;
+                    }
+                    dbContext.Database.SetCommandTimeout(CommandTimeout * 60);
+                }
+                return dbContext;
+            }
+        }
 
         protected virtual List<Expression<Func<TEntity, bool>>> GetWheres()
         {
@@ -288,7 +307,7 @@ namespace SAEON.Observations.WebAPI
         protected abstract void UpdateRequest();
 
         [HttpGet]
-        [EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
+        //[EnableQuery(PageSize = ODataDefaults.PageSize, MaxTop = ODataDefaults.MaxTop)]
         public virtual ActionResult<IQueryable<TEntity>> Get()
         {
             using (SAEONLogs.MethodCall<TEntity>(GetType()))
@@ -297,7 +316,7 @@ namespace SAEON.Observations.WebAPI
                 {
                     UpdateRequest();
                     SAEONLogs.Verbose("uri: {uri}", Request.GetUri());
-                    return Ok(GetQuery().Take(ODataDefaults.MaxAll));
+                    return Ok(GetQuery()/*.Take(ODataDefaults.MaxAll)*/);
                 }
                 catch (Exception ex)
                 {

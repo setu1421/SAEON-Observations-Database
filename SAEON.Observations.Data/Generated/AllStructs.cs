@@ -32,6 +32,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string DataSchema = @"DataSchema";
         
+		public static readonly string Dataset = @"Datasets";
+        
 		public static readonly string DataSource = @"DataSource";
         
 		public static readonly string DataSourceTransformation = @"DataSourceTransformation";
@@ -136,6 +138,11 @@ namespace SAEON.Observations.Data
 		public static TableSchema.Table DataSchema
 		{
             get { return DataService.GetSchema("DataSchema", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table Dataset
+		{
+            get { return DataService.GetSchema("Datasets", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table DataSource
@@ -318,6 +325,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VDataSchema = @"vDataSchema";
         
+		public static readonly string VDatasetsExpansion = @"vDatasetsExpansion";
+        
 		public static readonly string VDataSource = @"vDataSource";
         
 		public static readonly string VDataSourceTransformation = @"vDataSourceTransformation";
@@ -329,8 +338,6 @@ namespace SAEON.Observations.Data
 		public static readonly string VInstrumentOrganisation = @"vInstrumentOrganisation";
         
 		public static readonly string VInstrumentSensor = @"vInstrumentSensor";
-        
-		public static readonly string VInventoryDataset = @"vInventoryDatasets";
         
 		public static readonly string VInventorySensor = @"vInventorySensors";
         
@@ -363,6 +370,8 @@ namespace SAEON.Observations.Data
 		public static readonly string VSensor = @"vSensor";
         
 		public static readonly string VSensorDate = @"vSensorDates";
+        
+		public static readonly string VSensorExpansion = @"vSensorExpansion";
         
 		public static readonly string VSensorLocation = @"vSensorLocation";
         

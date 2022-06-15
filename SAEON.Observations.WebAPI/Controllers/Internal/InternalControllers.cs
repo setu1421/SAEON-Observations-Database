@@ -18,7 +18,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     [EnableCors(ObsDBAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+#if ResponseCaching
+    [ResponseCache(Duration = Defaults.InternalCacheDuration)]
+    //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+#endif
     public abstract class InternalApiController : BaseApiController
     {
     }
@@ -27,7 +30,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     [EnableCors(ObsDBAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+#if ResponseCaching
+    [ResponseCache(Duration = Defaults.InternalCacheDuration)]
+    //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+#endif
     public abstract class InternalListController<TEntity> : BaseListController<TEntity> where TEntity : class
     {
     }
@@ -36,7 +42,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     [EnableCors(ObsDBAuthenticationDefaults.CorsAllowQuerySitePolicy)]
     //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+#if ResponseCaching
+    [ResponseCache(Duration = Defaults.InternalCacheDuration)]
+    //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+#endif
     public abstract class InternalReadController<TEntity> : BaseIdedReadController<TEntity> where TEntity : IdedEntity
     {
         protected override void UpdateRequest()
