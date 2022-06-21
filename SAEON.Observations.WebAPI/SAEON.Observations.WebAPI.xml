@@ -15,21 +15,6 @@
             Input for an observations query
             </summary>
         </member>
-        <member name="P:SAEON.Observations.WebAPI.ObservationInput.PhenomenonId">
-            <summary>
-            PhenomenonId for the observations
-            </summary>
-        </member>
-        <member name="P:SAEON.Observations.WebAPI.ObservationInput.OfferingId">
-            <summary>
-            OfferingId for the observations
-            </summary>
-        </member>
-        <member name="P:SAEON.Observations.WebAPI.ObservationInput.UnitId">
-            <summary>
-            UnitId for the observations
-            </summary>
-        </member>
         <member name="P:SAEON.Observations.WebAPI.ObservationInput.StartDate">
             <summary>
             Start date for the observations

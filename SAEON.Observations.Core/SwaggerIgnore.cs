@@ -5,6 +5,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Linq;
 #endif
 using System;
+using Microsoft.Toolkit.Diagnostics;
 
 namespace SAEON.Observations.Core
 {
@@ -16,8 +17,8 @@ namespace SAEON.Observations.Core
     {
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)
         {
-            if (schema is null) throw new ArgumentNullException(nameof(schema));
-            if (context is null) throw new ArgumentNullException(nameof(context));
+            Guard.IsNotNull(schema, nameof(schema));
+            Guard.IsNotNull(context, nameof(context));
             //SAEONLogs.Verbose("Schema: {Schema}", schema.Title);
             if (schema?.Properties.Count == 0) return;
             var excludedProperties = context.Type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SwaggerIgnoreAttribute)));

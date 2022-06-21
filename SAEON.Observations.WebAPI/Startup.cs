@@ -108,7 +108,19 @@ namespace SAEON.Observations.WebAPI
                             License = new OpenApiLicense { Name = "Creative Commons Attribution-ShareAlike 4.0 International License", Url = new Uri("https://creativecommons.org/licenses/by-sa/4.0/") }
                         });
                         options.IncludeXmlComments("SAEON.Observations.WebAPI.xml");
+
                         options.SchemaFilter<SwaggerIgnoreFilter>();
+                        //options.SchemaFilter<SwaggerNameFilter>();
+                        options.CustomSchemaIds((type) =>
+                        {
+                            var result = type.Name;
+                            var nameAttribute = (SwaggerNameAttribute)Attribute.GetCustomAttribute(type, typeof(SwaggerNameAttribute));
+                            if (nameAttribute is not null)
+                            {
+                                return nameAttribute.Name;
+                            }
+                            return result;
+                        });
 
                         options.AddSecurityDefinition("AccessToken", new OpenApiSecurityScheme
                         {
@@ -167,7 +179,6 @@ namespace SAEON.Observations.WebAPI
                     throw;
                 }
             }
-
 
             //void SetODataFormatters(IServiceCollection services)
             //{
