@@ -417,6 +417,42 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarRowVersion);
                 
+                TableSchema.TableColumn colvarCSVFileName = new TableSchema.TableColumn(schema);
+                colvarCSVFileName.ColumnName = "CSVFileName";
+                colvarCSVFileName.DataType = DbType.AnsiString;
+                colvarCSVFileName.MaxLength = 500;
+                colvarCSVFileName.AutoIncrement = false;
+                colvarCSVFileName.IsNullable = true;
+                colvarCSVFileName.IsPrimaryKey = false;
+                colvarCSVFileName.IsForeignKey = false;
+                colvarCSVFileName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarCSVFileName);
+                
+                TableSchema.TableColumn colvarExcelFileName = new TableSchema.TableColumn(schema);
+                colvarExcelFileName.ColumnName = "ExcelFileName";
+                colvarExcelFileName.DataType = DbType.AnsiString;
+                colvarExcelFileName.MaxLength = 500;
+                colvarExcelFileName.AutoIncrement = false;
+                colvarExcelFileName.IsNullable = true;
+                colvarExcelFileName.IsPrimaryKey = false;
+                colvarExcelFileName.IsForeignKey = false;
+                colvarExcelFileName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarExcelFileName);
+                
+                TableSchema.TableColumn colvarNetCDFFileName = new TableSchema.TableColumn(schema);
+                colvarNetCDFFileName.ColumnName = "NetCDFFileName";
+                colvarNetCDFFileName.DataType = DbType.AnsiString;
+                colvarNetCDFFileName.MaxLength = 500;
+                colvarNetCDFFileName.AutoIncrement = false;
+                colvarNetCDFFileName.IsNullable = true;
+                colvarNetCDFFileName.IsPrimaryKey = false;
+                colvarNetCDFFileName.IsForeignKey = false;
+                colvarNetCDFFileName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarNetCDFFileName);
+                
                 TableSchema.TableColumn colvarOrganisationID = new TableSchema.TableColumn(schema);
                 colvarOrganisationID.ColumnName = "OrganisationID";
                 colvarOrganisationID.DataType = DbType.Guid;
@@ -1331,6 +1367,48 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("CSVFileName")]
+        [Bindable(true)]
+        public string CSVFileName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("CSVFileName");
+		    }
+            set 
+		    {
+			    SetColumnValue("CSVFileName", value);
+            }
+        }
+	      
+        [XmlAttribute("ExcelFileName")]
+        [Bindable(true)]
+        public string ExcelFileName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("ExcelFileName");
+		    }
+            set 
+		    {
+			    SetColumnValue("ExcelFileName", value);
+            }
+        }
+	      
+        [XmlAttribute("NetCDFFileName")]
+        [Bindable(true)]
+        public string NetCDFFileName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("NetCDFFileName");
+		    }
+            set 
+		    {
+			    SetColumnValue("NetCDFFileName", value);
+            }
+        }
+	      
         [XmlAttribute("OrganisationID")]
         [Bindable(true)]
         public Guid? OrganisationID 
@@ -1915,6 +1993,12 @@ namespace SAEON.Observations.Data{
             public static string UserId = @"UserId";
             
             public static string RowVersion = @"RowVersion";
+            
+            public static string CSVFileName = @"CSVFileName";
+            
+            public static string ExcelFileName = @"ExcelFileName";
+            
+            public static string NetCDFFileName = @"NetCDFFileName";
             
             public static string OrganisationID = @"OrganisationID";
             
