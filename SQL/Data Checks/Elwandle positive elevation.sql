@@ -1,4 +1,5 @@
--- Stations
+use Observations
+-- Station
 Select Code StationCode, Name StationName, Elevation from Station where (Code like 'ELW_%') and (Elevation > 0)
 -- Station_Instrument
 Select
@@ -11,6 +12,8 @@ from
     on (Station_Instrument.InstrumentID = Instrument.ID)
 where 
   (Station.Code like 'ELW_%') and (Station_Instrument.Elevation > 0)
+-- Instrument
+Select Code InstrumentCode, Name InstrumentName, Elevation from Instrument where (Code like 'ELW_%') and (Elevation > 0)
 -- Instrument_Sensor
 Select
   Instrument.Code InstrumentCode, Instrument.Name InstrumentName, Sensor.Code SensorCode, Sensor.Name SensorName, Instrument_Sensor.Elevation
@@ -23,7 +26,7 @@ from
 where 
   (Instrument.Code like 'ELW_%') and (Instrument_Sensor.Elevation > 0)
 -- Sensor
-Select Code InstrumentCode, Name InstrumentName, Elevation from Instrument where (Code like 'ELW_%') and (Elevation > 0)
+Select Code SensorCode, Name SensorName, Elevation from Sensor where (Code like 'ELW_%') and (Elevation > 0)
 -- Observations
 Select
   StationCode, StationName, Observation.Elevation

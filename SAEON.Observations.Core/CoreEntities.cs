@@ -278,6 +278,8 @@ namespace SAEON.Observations.Core
         public List<DataSchema> DataSchemas { get; set; }
     }
 
+    public enum DatasetFileTypes { CSV, Excel, NetCDF }
+
     public abstract class DatasetBase : CodedNamedEntity
     {
         [StringLength(200)]
@@ -397,22 +399,26 @@ namespace SAEON.Observations.Core
         /// </summary>
         [JsonIgnore, SwaggerIgnore]
         public int HashCode { get; set; }
-        private string FileName => Code.Replace(Path.GetInvalidFileNameChars(), '_');
+        public string FileName => $"{DateTime.Now:yyyyMMddHHmm} {Code.Replace(Path.GetInvalidFileNameChars(), '_')}";
+        public string OldFileName => $"{Code.Replace(Path.GetInvalidFileNameChars(), '_')}"; // @@@ Remove after new style have been populated
         /// <summary>
-        /// FileName of the Dataset as CSV
+        /// FileName of the Dataset as Excel file
         /// </summary>
         [JsonIgnore, SwaggerIgnore]
-        public string ExcelFileName => $"{FileName}.xlsx";
+        [StringLength(500)]
+        public string ExcelFileName { get; set; }
         /// <summary>
-        /// FileName of the Dataset as CSV
+        /// FileName of the Dataset as CSV NextCDF file
         /// </summary>
         [JsonIgnore, SwaggerIgnore]
-        public string NetCdfFileName => $"{FileName}.nc";
+        [StringLength(500)]
+        public string NetCDFFileName { get; set; }
         /// <summary>
-        /// FileName of the Dataset as CSV
+        /// FileName of the Dataset as CSV file
         /// </summary>
         [JsonIgnore, SwaggerIgnore]
-        public string CsvFileName => $"{FileName}.csv";
+        [StringLength(500)]
+        public string CSVFileName { get; set; }
 
         public int CreateHashCode()
         {

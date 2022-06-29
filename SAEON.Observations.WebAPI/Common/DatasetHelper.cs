@@ -11,6 +11,7 @@ using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Hubs;
+using SAEON.OpenXML;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -53,7 +54,9 @@ namespace SAEON.Observations.WebAPI
                     {
                         foreach (var dataset in dbContext.Datasets.Where(i => !i.NeedsUpdate ?? false))
                         {
-                            if (!File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName)))
+                            if ((string.IsNullOrEmpty(dataset.CSVFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName))) ||
+                                (string.IsNullOrEmpty(dataset.ExcelFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.ExcelFileName))) /*||
+                                (string.IsNullOrEmpty(dataset.NetCDFFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.NetCDFFileName)))*/)
                             {
                                 dataset.NeedsUpdate = true;
                             }
@@ -86,11 +89,16 @@ namespace SAEON.Observations.WebAPI
                         var stopwatch = new Stopwatch();
                         stopwatch.Start();
                         await AddLineAsync($"{dataset.Code} {dataset.Name}");
-                        var datasetsFolder = config[DatasetsFolderConfigKey];
+                        var folder = $"{DateTime.Now:yyyy-MM}";
+                        Directory.CreateDirectory(Path.Combine(config[DatasetsFolderConfigKey], folder));
+                        var fileName = Path.Combine(folder, $"{DateTime.Now:yyyy-MM} {dataset.FileName}");
+                        dataset.CSVFileName = $"{fileName}.CSV";
+                        dataset.ExcelFileName = $"{fileName}.xlsx";
+                        dataset.NetCDFFileName = $"{fileName}.nc";
                         var observations = await LoadFromDatabaseAsync(dbContext, dataset);
-                        using var writer = new StreamWriter(Path.Combine(datasetsFolder, dataset.CsvFileName));
-                        using var csv = GetCsvWriter(writer);
-                        csv.WriteRecords(observations);
+                        EnsureCSV();
+                        EnsureExcel();
+                        EnsureNetCDF();
                         dataset.NeedsUpdate = false;
                         if (dbContext.Entry(dataset).State != EntityState.Unchanged)
                         {
@@ -99,6 +107,29 @@ namespace SAEON.Observations.WebAPI
                         }
                         await dbContext.SaveChangesAsync();
                         await AddLineAsync($"{dataset.Code} done in {stopwatch.Elapsed.TimeStr()}");
+
+                        void EnsureCSV()
+                        {
+                            SAEONLogs.Verbose("Creating {FileName}", dataset.CSVFileName);
+                            using var writer = new StreamWriter(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName));
+                            using var csv = GetCsvWriter(writer);
+                            csv.WriteRecords(observations);
+                            writer.Flush();
+                        }
+
+                        void EnsureExcel()
+                        {
+                            SAEONLogs.Verbose("Creating {FileName}", dataset.ExcelFileName);
+                            using (var doc = ExcelSaxHelper.CreateSpreadsheet(Path.Combine(config[DatasetsFolderConfigKey], dataset.ExcelFileName), observations))
+                            {
+                                doc.Save();
+                            }
+                        }
+
+                        void EnsureNetCDF()
+                        {
+                            SAEONLogs.Verbose("Creating {FileName}", dataset.NetCDFFileName);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -134,7 +165,13 @@ namespace SAEON.Observations.WebAPI
                     Guard.IsNotNull(dataset, nameof(dataset));
                     var stopwatch = new Stopwatch();
                     stopwatch.Start();
-                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName));
+                    var fileName = dataset.CSVFileName; // @@@ Remove once new style are populated
+                    if (string.IsNullOrEmpty(fileName))
+                    {
+                        fileName = $"{dataset.OldFileName}.CSV";
+                    }
+                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], fileName));
+                    //using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName));
                     using var csv = GetCsvReader(reader);
                     var result = csv.GetRecords<ObservationDTO>().ToList();
                     SAEONLogs.Verbose("Loaded in {Elapsed}", stopwatch.Elapsed.TimeStr());
@@ -155,7 +192,13 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName));
+                    var fileName = dataset.CSVFileName; // @@@ Remove once new style are populated
+                    if (string.IsNullOrEmpty(fileName))
+                    {
+                        fileName = $"{dataset.OldFileName}.CSV";
+                    }
+                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], fileName));
+                    //using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName));
                     using var csv = GetCsvReader(reader);
                     var result = new List<ObservationDTO>();
                     await foreach (var record in csv.GetRecordsAsync<ObservationDTO>())
@@ -243,16 +286,35 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
-        private static bool IsOnDisk(IConfiguration config, Dataset dataset)
+        private static bool IsOnDisk(IConfiguration config, Dataset dataset, DatasetFileTypes fileType)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
+            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id }, { "fileType", fileType } }))
             {
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    SAEONLogs.Verbose("UseDisk: {UseDisk} NeedsUpdate: {NeedsUpdate} FileExists: {FileExists}", config[UseDiskConfigKey]?.IsTrue() ?? false, dataset.NeedsUpdate ?? false, File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName)));
-                    var result = (config[UseDiskConfigKey]?.IsTrue() ?? false) /*&& (!dataset.NeedsUpdate ?? false)*/ && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName));
-                    SAEONLogs.Verbose("IsOnDisk: {FileName}, {Result}", dataset.CsvFileName, result);
+                    string fileName = null;
+                    string oldFileName = null;
+                    switch (fileType)
+                    {
+                        case DatasetFileTypes.CSV:
+                            fileName = dataset.CSVFileName;
+                            oldFileName = $"{dataset.OldFileName}.CSV";
+                            break;
+                        case DatasetFileTypes.Excel:
+                            fileName = dataset.ExcelFileName;
+                            break;
+                        case DatasetFileTypes.NetCDF:
+                            fileName = dataset.NetCDFFileName;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(fileType));
+                    }
+                    var useDisk = config[UseDiskConfigKey]?.IsTrue() ?? false;
+                    var fileExists = (!string.IsNullOrEmpty(fileName) && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], fileName))) ||
+                                     (!string.IsNullOrEmpty(oldFileName) && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], oldFileName)));
+                    var result = useDisk && fileExists;
+                    SAEONLogs.Verbose("UseDisk: {UseDisk} FileName: {FileName} OldFileName: {OldFileName} FileExists: {FileExists} IsOnDisk: {IsOnDisk}", useDisk, fileName, oldFileName, fileExists, result);
                     return result;
                 }
                 catch (Exception ex)
@@ -262,15 +324,15 @@ namespace SAEON.Observations.WebAPI
                 }
             }
         }
-        public static async Task<List<ObservationDTO>> LoadAsync(ObservationsDbContext dbContext, IConfiguration config, Guid datasetId)
+        public static async Task<List<ObservationDTO>> LoadAsync(ObservationsDbContext dbContext, IConfiguration config, Guid datasetId, DatasetFileTypes fileType)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", datasetId } }))
+            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", datasetId }, { "fileType", fileType } }))
             {
                 try
                 {
                     var dataset = await dbContext.Datasets.FirstOrDefaultAsync(i => i.Id == datasetId);
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    if (IsOnDisk(config, dataset))
+                    if (IsOnDisk(config, dataset, fileType))
                     {
                         return await LoadFromDiskAsync(dataset, config);
                     }
@@ -287,15 +349,15 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
-        public static List<ObservationDTO> Load(ObservationsDbContext dbContext, IConfiguration config, Guid datasetId)
+        public static List<ObservationDTO> Load(ObservationsDbContext dbContext, IConfiguration config, Guid datasetId, DatasetFileTypes fileType)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", datasetId } }))
+            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", datasetId }, { "fileType", fileType } }))
             {
                 try
                 {
                     var dataset = dbContext.Datasets.FirstOrDefault(i => i.Id == datasetId);
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    if (IsOnDisk(config, dataset))
+                    if (IsOnDisk(config, dataset, fileType))
                     {
                         return LoadFromDisk(dataset, config);
                     }

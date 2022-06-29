@@ -193,7 +193,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var observations = new List<ObservationDTO>();
             foreach (var dataset in datasets)
             {
-                var datasetObservations = DatasetHelper.Load(DbContext, Config, dataset.Id)
+                var datasetObservations = DatasetHelper.Load(DbContext, Config, dataset.Id, DatasetFileTypes.CSV)
                     .Where(i =>
                         ((i.Date >= input.StartDate) && (i.Date <= input.EndDate)) &&
                         (!i.Elevation.HasValue || (i.Elevation >= input.ElevationMinimum)) &&

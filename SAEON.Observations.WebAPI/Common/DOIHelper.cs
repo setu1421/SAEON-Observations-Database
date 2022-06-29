@@ -129,6 +129,7 @@ namespace SAEON.Observations.WebAPI
                             var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code == inventoryDataset.Code);
                             if (doi is null)
                             {
+                                // @@ Remove once all SACTN recycled
                                 // Recycle SACTN hourly
                                 doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_H~DEGC"));
                                 UpdateDOI();

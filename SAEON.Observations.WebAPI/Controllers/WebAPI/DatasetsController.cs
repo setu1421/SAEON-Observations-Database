@@ -7,7 +7,6 @@ using SAEON.Logs;
 using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
@@ -117,8 +116,21 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                         throw new ArgumentException($"{id} not found");
                     }
                     var result = new List<ObservationDTO>();
-                    result.AddRange(await DatasetHelper.LoadAsync(DbContext, Config, id));
-                    SAEONLogs.Information("Obs: {@Observation}", result.FirstOrDefault());
+                    var fileType = DatasetFileTypes.CSV;
+                    //if (Request.Headers.TryGetValue("Accept", out var acceptHeaders))
+                    //{
+                    //    var value = acceptHeaders.FirstOrDefault().ToLowerInvariant();
+                    //    if (value == AspNetConstants.ContentTypeExcel.ToLowerInvariant())
+                    //    {
+                    //        fileType = DatasetFileTypes.NetCDF;
+                    //    }
+                    //    else if (value == AspNetConstants.ContentTypeNetCDF.ToLowerInvariant())
+                    //    {
+                    //        fileType = DatasetFileTypes.NetCDF;
+                    //    }
+                    //}
+                    result.AddRange(await DatasetHelper.LoadAsync(DbContext, Config, id, fileType));
+                    //SAEONLogs.Information("Obs: {@Observation}", result.FirstOrDefault());
                     try
                     {
                         await RequestLogger.LogAsync(DbContext, Request);
@@ -160,7 +172,20 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     Guard.IsNotNull(input, nameof(input));
 
                     var result = new List<ObservationDTO>();
-                    result.AddRange(await DatasetHelper.LoadAsync(DbContext, Config, id));
+                    var fileType = DatasetFileTypes.CSV;
+                    //if (Request.Headers.TryGetValue("Accept", out var acceptHeaders))
+                    //{
+                    //    var value = acceptHeaders.FirstOrDefault().ToLowerInvariant();
+                    //    if (value == AspNetConstants.ContentTypeExcel.ToLowerInvariant())
+                    //    {
+                    //        fileType = DatasetFileTypes.NetCDF;
+                    //    }
+                    //    else if (value == AspNetConstants.ContentTypeNetCDF.ToLowerInvariant())
+                    //    {
+                    //        fileType = DatasetFileTypes.NetCDF;
+                    //    }
+                    //}
+                    result.AddRange(await DatasetHelper.LoadAsync(DbContext, Config, id, fileType));
                     if (input.StartDate.HasValue)
                     {
                         result.RemoveAll(i => i.Date < input.StartDate);
