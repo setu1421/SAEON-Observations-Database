@@ -164,6 +164,10 @@ namespace SAEON.Observations.Core
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public double? Elevation { get; set; }
+        [SwaggerIgnore, JsonIgnore]
+        public string Status { get; set; }
+        [SwaggerIgnore, JsonIgnore]
+        public string Reason { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -181,7 +185,7 @@ namespace SAEON.Observations.Core
                    Sensor == dTO.Sensor &&
                    Latitude == dTO.Latitude &&
                    Longitude == dTO.Longitude &&
-                    Elevation == dTO.Elevation;
+                   Elevation == dTO.Elevation;
         }
 
         public override int GetHashCode()

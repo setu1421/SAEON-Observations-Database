@@ -1,13 +1,11 @@
-﻿using CsvHelper;
-using CsvHelper.Configuration;
-using CsvHelper.TypeConversion;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Toolkit.Diagnostics;
 using SAEON.AspNet.Auth;
 using SAEON.Core;
+using SAEON.CSV;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Hubs;
@@ -15,7 +13,6 @@ using SAEON.OpenXML;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -91,8 +88,8 @@ namespace SAEON.Observations.WebAPI
                         await AddLineAsync($"{dataset.Code} {dataset.Name}");
                         var folder = $"{DateTime.Now:yyyy-MM}";
                         Directory.CreateDirectory(Path.Combine(config[DatasetsFolderConfigKey], folder));
-                        var fileName = Path.Combine(folder, $"{DateTime.Now:yyyy-MM} {dataset.FileName}");
-                        dataset.CSVFileName = $"{fileName}.CSV";
+                        var fileName = Path.Combine(folder, dataset.FileName);
+                        dataset.CSVFileName = $"{fileName}.csv";
                         dataset.ExcelFileName = $"{fileName}.xlsx";
                         dataset.NetCDFFileName = $"{fileName}.nc";
                         var observations = await LoadFromDatabaseAsync(dbContext, dataset);
@@ -112,7 +109,7 @@ namespace SAEON.Observations.WebAPI
                         {
                             SAEONLogs.Verbose("Creating {FileName}", dataset.CSVFileName);
                             using var writer = new StreamWriter(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName));
-                            using var csv = GetCsvWriter(writer);
+                            using var csv = CsvWriterHelper.GetCsvWriter(writer);
                             csv.WriteRecords(observations);
                             writer.Flush();
                         }
@@ -120,7 +117,7 @@ namespace SAEON.Observations.WebAPI
                         void EnsureExcel()
                         {
                             SAEONLogs.Verbose("Creating {FileName}", dataset.ExcelFileName);
-                            using (var doc = ExcelSaxHelper.CreateSpreadsheet(Path.Combine(config[DatasetsFolderConfigKey], dataset.ExcelFileName), observations))
+                            using (var doc = ExcelSaxHelper.CreateSpreadsheet(Path.Combine(config[DatasetsFolderConfigKey], dataset.ExcelFileName), observations, true))
                             {
                                 doc.Save();
                             }
@@ -140,22 +137,6 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
-        private static CsvWriter GetCsvWriter(TextWriter writer)
-        {
-            var result = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture) { IgnoreReferences = true });
-            var options = new TypeConverterOptions { Formats = new[] { "o" } };
-            result.Context.TypeConverterOptionsCache.AddOptions<DateTime>(options);
-            result.Context.TypeConverterOptionsCache.AddOptions<DateTime?>(options);
-            return result;
-        }
-
-        private static CsvReader GetCsvReader(TextReader reader)
-        {
-            var result = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture) { IgnoreReferences = true });
-            result.Context.TypeConverterOptionsCache.GetOptions<string>().NullValues.Add("");
-            return result;
-        }
-
         private static List<ObservationDTO> LoadFromDisk(Dataset dataset, IConfiguration config)
         {
             using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
@@ -168,11 +149,11 @@ namespace SAEON.Observations.WebAPI
                     var fileName = dataset.CSVFileName; // @@@ Remove once new style are populated
                     if (string.IsNullOrEmpty(fileName))
                     {
-                        fileName = $"{dataset.OldFileName}.CSV";
+                        fileName = $"{dataset.OldFileName}.csv";
                     }
                     using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], fileName));
                     //using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName));
-                    using var csv = GetCsvReader(reader);
+                    using var csv = CsvReaderHelper.GetCsvReader(reader);
                     var result = csv.GetRecords<ObservationDTO>().ToList();
                     SAEONLogs.Verbose("Loaded in {Elapsed}", stopwatch.Elapsed.TimeStr());
                     return result;
@@ -195,11 +176,11 @@ namespace SAEON.Observations.WebAPI
                     var fileName = dataset.CSVFileName; // @@@ Remove once new style are populated
                     if (string.IsNullOrEmpty(fileName))
                     {
-                        fileName = $"{dataset.OldFileName}.CSV";
+                        fileName = $"{dataset.OldFileName}.csv";
                     }
                     using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], fileName));
                     //using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName));
-                    using var csv = GetCsvReader(reader);
+                    using var csv = CsvReaderHelper.GetCsvReader(reader);
                     var result = new List<ObservationDTO>();
                     await foreach (var record in csv.GetRecordsAsync<ObservationDTO>())
                     {
@@ -242,6 +223,8 @@ namespace SAEON.Observations.WebAPI
                             Latitude = i.Latitude,
                             Longitude = i.Longitude,
                             Elevation = i.Elevation,
+                            Status = i.StatusName,
+                            Reason = i.StatusReasonName,
                         });
                 }
                 catch (Exception ex)
@@ -299,7 +282,7 @@ namespace SAEON.Observations.WebAPI
                     {
                         case DatasetFileTypes.CSV:
                             fileName = dataset.CSVFileName;
-                            oldFileName = $"{dataset.OldFileName}.CSV";
+                            oldFileName = $"{dataset.OldFileName}.csv";
                             break;
                         case DatasetFileTypes.Excel:
                             fileName = dataset.ExcelFileName;

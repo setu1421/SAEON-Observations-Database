@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OData.Edm;
 using Microsoft.OpenApi.Models;
 using SAEON.AspNet.Auth;
+using SAEON.AspNet.Common;
 using SAEON.AspNetCore.Formatters;
 using SAEON.Core;
 using SAEON.Logs;
@@ -62,7 +63,7 @@ namespace SAEON.Observations.WebAPI
                     services.AddResponseCompression(options =>
                     {
                         options.EnableForHttps = true;
-                        options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "text/csv" });
+                        options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { AspNetConstants.ContentTypeCSV, AspNetConstants.ContentTypeExcel, AspNetConstants.ContentTypeNetCDF });
                     });
 #if ResponseCaching
                     services.AddResponseCaching();
@@ -167,7 +168,7 @@ namespace SAEON.Observations.WebAPI
                     });
                     services.AddControllersWithViews();
                     services.AddOData();
-                    services.AddMvcCore().AddCSVFormatters(new CSVFormatterOptions { Culture = CultureInfo.CreateSpecificCulture("en-za") });
+                    services.AddMvcCore().AddCSVFormatters();
                     //SetODataFormatters(services);
                     services.AddApplicationInsightsTelemetry();
                     //IFileProvider physicalProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
