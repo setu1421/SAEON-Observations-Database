@@ -507,11 +507,13 @@ export function DownloadClose() {
 }
 export function Download() {
     downloading = true;
+    const format = $("#selectFormat").val();
     $("#dialogDownload").ejDialog("close");
     ShowWaiting();
-    $.get("/DataWizard/GetDownload")
+    $.get("/Query/Data/GetDownload/" + format)
         .done(function (data) {
         downloading = false;
+        //alert(data.viewDownloadUrl + " " + data.downloadUrl);
         //EnableButtons();
         HideWaiting();
         window.open(data.downloadUrl, '_blank');
