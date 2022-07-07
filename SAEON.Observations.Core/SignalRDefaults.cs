@@ -2,12 +2,13 @@
 {
     public static class SignalRDefaults
     {
-        public const string CreateDOIsStatusUpdate = "CreateDOIsStatusUpdate";
-        public const string CreateMetadataStatusUpdate = "CreateMetadataStatusUpdate";
-        public const string CreateODPMetadataStatusUpdate = "CreateODPMetadataStatusUpdate";
-        public const string CreateDatasetsStatusUpdate = "CreateDatasetsStatusUpdate";
-        public const string CreateSnapshotsStatusUpdate = "CreateSnapshotsStatusUpdate";
-        public const string CreateImportBatchSummariesStatusUpdate = "CreateImportBatchSummariesStatusUpdate";
-        public const string ImportSetupStatusUpdate = "ImportSetupStatusUpdate";
+        public const string CreateDOIsStatus = "CreateDOIsStatus";
+        public const string CreateMetadataStatus = "CreateMetadataStatus";
+        public const string CreateODPMetadataStatus = "CreateODPMetadataStatus";
+        public const string UpdateDatasetsStatus = "UpdateDatasetStatus";
+        public const string CreateDatasetFilesStatus = "CreateDatasetFilesStatus";
+        public const string CreateSnapshotsStatus = "CreateSnapshotsStatus";
+        public const string CreateImportBatchSummariesStatus = "CreateImportBatchSummariesStatus";
+        public const string ImportSetupStatus = "ImportSetupStatus";
     }
 }

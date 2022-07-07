@@ -27,6 +27,7 @@
     [ExcelFileName] VarChar(500) null,
     [NetCDFFileName] VarChar(500) null,
     [NeedsUpdate] bit null,
+    [IsValid] as Cast((case when (VerifiedCount > 0) and (LatitudeNorth is not null) and (LatitudeSouth is not null) and (LongitudeWest is not null) and (LongitudeEast is not null) then 1 else 0 end) as bit),
     [AddedAt] DateTime null Constraint [DF_Dataset_AddedAt] DEFAULT (getdate()),
     [AddedBy] VarChar(36) not Null,
     [UpdatedAt] DateTime null Constraint [DF_Datasets_UpdatedAt] DEFAULT (getdate()), 

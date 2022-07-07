@@ -16,7 +16,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     [Route("Internal/[controller]")]
     [EnableCors(ObsDBAuthenticationDefaults.CorsAllowQuerySitePolicy)]
-    //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
+    [Authorize(Policy = ObsDBAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
 #if ResponseCaching
     [ResponseCache(Duration = Defaults.InternalCacheDuration)]
@@ -28,7 +28,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
     [Route("Internal/[controller]")]
     [EnableCors(ObsDBAuthenticationDefaults.CorsAllowQuerySitePolicy)]
-    //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
+    [Authorize(Policy = ObsDBAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
 #if ResponseCaching
     [ResponseCache(Duration = Defaults.InternalCacheDuration)]
@@ -40,7 +40,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
     [Route("Internal/[controller]")]
     [EnableCors(ObsDBAuthenticationDefaults.CorsAllowQuerySitePolicy)]
-    //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
+    [Authorize(Policy = ObsDBAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
 #if ResponseCaching
     [ResponseCache(Duration = Defaults.InternalCacheDuration)]
@@ -56,7 +56,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
     [Route("Internal/[controller]")]
     [EnableCors(ObsDBAuthenticationDefaults.CorsAllowQuerySitePolicy)]
-    //[Authorize(Policy = ODPAuthenticationDefaults.AllowedClientsPolicy)]
+    [Authorize(Policy = ObsDBAuthenticationDefaults.AllowedClientsPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     [Authorize(Policy = ODPAuthenticationDefaults.IdTokenPolicy)]

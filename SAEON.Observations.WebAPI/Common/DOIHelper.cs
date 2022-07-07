@@ -43,7 +43,7 @@ namespace SAEON.Observations.WebAPI
                     {
                         sb.AppendLine(line);
                         SAEONLogs.Information(line);
-                        await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateDOIsStatusUpdate, line);
+                        await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateDOIsStatus, line);
                     }
 
                     async Task GenerateDOIs()
@@ -175,7 +175,7 @@ namespace SAEON.Observations.WebAPI
                         var orgCodes = new string[] { "SAEON", "SMCRI", "EFTEON" };
                         foreach (var inventoryDataset in await dbContext.VInventoryDatasets.Where(
                             i => orgCodes.Contains(i.OrganisationCode) &&
-                            i.LatitudeNorth.HasValue && i.LongitudeEast.HasValue && i.VerifiedCount > 0)
+                            i.LatitudeNorth.HasValue && i.LatitudeSouth.HasValue && i.LongitudeEast.HasValue && i.LongitudeWest.HasValue && i.VerifiedCount > 0)
                             .OrderBy(i => i.OrganisationName)
                             .ThenBy(i => i.ProgrammeName)
                             .ThenBy(i => i.ProgrammeName)

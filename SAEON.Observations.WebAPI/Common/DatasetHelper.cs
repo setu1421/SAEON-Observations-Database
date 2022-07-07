@@ -23,10 +23,102 @@ namespace SAEON.Observations.WebAPI
     public static class DatasetHelper
     {
         private static readonly string BatchSizeConfigKey = "DatasetsBatchSize";
-        private static readonly string DatasetsFolderConfigKey = "DatasetsFolder";
+        public static readonly string DatasetsFolderConfigKey = "DatasetsFolder";
         private static readonly string UseDiskConfigKey = "DatasetsUseDisk";
 
-        public static async Task<string> CreateDatasets(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext, IConfiguration config)
+        public static async Task<string> UpdateDatasets(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext)
+        {
+            using (SAEONLogs.MethodCall(typeof(DOIHelper)))
+            {
+                try
+                {
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    var sb = new StringBuilder();
+                    await AddLineAsync("Updating datasets");
+                    await GenerateDatasets();
+                    await AddLineAsync($"Done in {stopwatch.Elapsed.TimeStr()}");
+                    return sb.ToString();
+
+                    async Task AddLineAsync(string line)
+                    {
+                        sb.AppendLine(line);
+                        SAEONLogs.Information(line);
+                        await adminHub.Clients.All.SendAsync(SignalRDefaults.UpdateDatasetsStatus, line);
+                    }
+
+                    async Task GenerateDatasets()
+                    {
+                        foreach (var inventoryDataset in await dbContext.VInventoryDatasets
+                            .OrderBy(i => i.OrganisationName)
+                            .ThenBy(i => i.ProgrammeName)
+                            .ThenBy(i => i.ProgrammeName)
+                            .ThenBy(i => i.SiteName)
+                            .ThenBy(i => i.StationName)
+                            .ToListAsync())
+                        {
+                            var dataset = await EnsureDataset(inventoryDataset);
+                            dataset.Count = inventoryDataset.Count;
+                            dataset.ValueCount = inventoryDataset.ValueCount;
+                            dataset.NullCount = inventoryDataset.NullCount;
+                            dataset.VerifiedCount = inventoryDataset.VerifiedCount;
+                            dataset.UnverifiedCount = inventoryDataset.UnverifiedCount;
+                            dataset.StartDate = inventoryDataset.StartDate;
+                            dataset.EndDate = inventoryDataset.EndDate;
+                            dataset.LatitudeNorth = inventoryDataset.LatitudeNorth;
+                            dataset.LatitudeSouth = inventoryDataset.LatitudeSouth;
+                            dataset.LongitudeWest = inventoryDataset.LongitudeWest;
+                            dataset.LongitudeEast = inventoryDataset.LongitudeEast;
+                            dataset.ElevationMinimum = inventoryDataset.ElevationMinimum;
+                            dataset.ElevationMaximum = inventoryDataset.ElevationMaximum;
+                            var oldHashCode = dataset.HashCode;
+                            var newHashCode = dataset.CreateHashCode();
+                            SAEONLogs.Verbose("OldHashCode: {OldHashCode} NewHashCode: {NewHashCode}", oldHashCode, newHashCode);
+                            if (oldHashCode != newHashCode)
+                            {
+                                dataset.HashCode = newHashCode;
+                                dataset.NeedsUpdate = true;
+                            }
+                        }
+                        await dbContext.SaveChangesAsync();
+                    }
+
+                    async Task<Dataset> EnsureDataset(VInventoryDataset inventoryDataset)
+                    {
+                        var dataset = await dbContext.Datasets.FirstOrDefaultAsync(i =>
+                            i.StationId == inventoryDataset.StationId &&
+                            i.PhenomenonOfferingId == inventoryDataset.PhenomenonOfferingId &&
+                            i.PhenomenonUnitId == inventoryDataset.PhenomenonUnitId);
+                        if (dataset is null)
+                        {
+                            await AddLineAsync($"Adding dataset {inventoryDataset.Code}, {inventoryDataset.Name}");
+                            dataset = new Dataset
+                            {
+                                Code = inventoryDataset.Code,
+                                Name = inventoryDataset.Name,
+                                StationId = inventoryDataset.StationId,
+                                PhenomenonOfferingId = inventoryDataset.PhenomenonOfferingId,
+                                PhenomenonUnitId = inventoryDataset.PhenomenonUnitId,
+                                NeedsUpdate = true,
+                                AddedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString(),
+                                UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString(),
+                                UserId = new Guid(httpContext?.User?.UserId() ?? Guid.Empty.ToString()),
+                            };
+                            dbContext.Datasets.Add(dataset);
+                        }
+                        return dataset;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public static async Task<string> CreateDatasetsFiles(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext, IConfiguration config)
         {
             using (SAEONLogs.MethodCall(typeof(DOIHelper)))
             {
@@ -44,7 +136,7 @@ namespace SAEON.Observations.WebAPI
                     {
                         sb.AppendLine(line);
                         SAEONLogs.Information(line);
-                        await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateDatasetsStatusUpdate, line);
+                        await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateDatasetFilesStatus, line);
                     }
 
                     async Task GenerateDatasets()
@@ -52,8 +144,8 @@ namespace SAEON.Observations.WebAPI
                         foreach (var dataset in dbContext.Datasets.Where(i => !i.NeedsUpdate ?? false))
                         {
                             if ((string.IsNullOrEmpty(dataset.CSVFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName))) ||
-                                (string.IsNullOrEmpty(dataset.ExcelFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.ExcelFileName))) /*||
-                                (string.IsNullOrEmpty(dataset.NetCDFFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.NetCDFFileName)))*/)
+                                (dataset.IsValid && (string.IsNullOrEmpty(dataset.ExcelFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.ExcelFileName)))) /*||
+                                (dataset.IsValid && (string.IsNullOrEmpty(dataset.NetCDFFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.NetCDFFileName))))*/)
                             {
                                 dataset.NeedsUpdate = true;
                             }
@@ -77,11 +169,11 @@ namespace SAEON.Observations.WebAPI
                         }
                         foreach (var datasetId in datasetIds)
                         {
-                            await EnsureDataset(await dbContext.Datasets.FirstAsync(i => i.Id == datasetId));
+                            await EnsureDatasetFiles(await dbContext.Datasets.FirstAsync(i => i.Id == datasetId));
                         }
                     }
 
-                    async Task EnsureDataset(Dataset dataset)
+                    async Task EnsureDatasetFiles(Dataset dataset)
                     {
                         var stopwatch = new Stopwatch();
                         stopwatch.Start();
@@ -94,8 +186,11 @@ namespace SAEON.Observations.WebAPI
                         dataset.NetCDFFileName = $"{fileName}.nc";
                         var observations = await LoadFromDatabaseAsync(dbContext, dataset);
                         EnsureCSV();
-                        EnsureExcel();
-                        EnsureNetCDF();
+                        if (dataset.IsValid)
+                        {
+                            EnsureExcel();
+                            EnsureNetCDF();
+                        }
                         dataset.NeedsUpdate = false;
                         if (dbContext.Entry(dataset).State != EntityState.Unchanged)
                         {
@@ -269,30 +364,16 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
-        private static bool IsOnDisk(IConfiguration config, Dataset dataset, DatasetFileTypes fileType)
+        private static bool IsOnDisk(IConfiguration config, Dataset dataset)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id }, { "fileType", fileType } }))
+            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
             {
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    string fileName = null;
-                    string oldFileName = null;
-                    switch (fileType)
-                    {
-                        case DatasetFileTypes.CSV:
-                            fileName = dataset.CSVFileName;
-                            oldFileName = $"{dataset.OldFileName}.csv";
-                            break;
-                        case DatasetFileTypes.Excel:
-                            fileName = dataset.ExcelFileName;
-                            break;
-                        case DatasetFileTypes.NetCDF:
-                            fileName = dataset.NetCDFFileName;
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException(nameof(fileType));
-                    }
+                    //@@ Remove once new-style are populated
+                    string fileName = dataset.CSVFileName;
+                    string oldFileName = $"{dataset.OldFileName}.csv";
                     var useDisk = config[UseDiskConfigKey]?.IsTrue() ?? false;
                     var fileExists = (!string.IsNullOrEmpty(fileName) && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], fileName))) ||
                                      (!string.IsNullOrEmpty(oldFileName) && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], oldFileName)));
@@ -307,15 +388,16 @@ namespace SAEON.Observations.WebAPI
                 }
             }
         }
-        public static async Task<List<ObservationDTO>> LoadAsync(ObservationsDbContext dbContext, IConfiguration config, Guid datasetId, DatasetFileTypes fileType)
+
+        public static async Task<List<ObservationDTO>> LoadAsync(ObservationsDbContext dbContext, IConfiguration config, Guid datasetId)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", datasetId }, { "fileType", fileType } }))
+            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", datasetId } }))
             {
                 try
                 {
                     var dataset = await dbContext.Datasets.FirstOrDefaultAsync(i => i.Id == datasetId);
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    if (IsOnDisk(config, dataset, fileType))
+                    if (IsOnDisk(config, dataset))
                     {
                         return await LoadFromDiskAsync(dataset, config);
                     }
@@ -332,15 +414,15 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
-        public static List<ObservationDTO> Load(ObservationsDbContext dbContext, IConfiguration config, Guid datasetId, DatasetFileTypes fileType)
+        public static List<ObservationDTO> Load(ObservationsDbContext dbContext, IConfiguration config, Guid datasetId)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", datasetId }, { "fileType", fileType } }))
+            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", datasetId } }))
             {
                 try
                 {
                     var dataset = dbContext.Datasets.FirstOrDefault(i => i.Id == datasetId);
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    if (IsOnDisk(config, dataset, fileType))
+                    if (IsOnDisk(config, dataset))
                     {
                         return LoadFromDisk(dataset, config);
                     }

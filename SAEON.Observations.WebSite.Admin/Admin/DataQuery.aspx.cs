@@ -189,6 +189,8 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         public string NodeID { get; set; }
         public Guid ID { get; set; }
         public string Type { get; set; }
+        public string Name { get; set; }
+        public List<(string Type, string Id)> Items { get; set; } = new List<(string Type, string Id)>();
     }
 
     protected void ObservationsGridStore_Submit(object sender, StoreSubmitDataEventArgs e)
@@ -210,9 +212,9 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         });
     }
 
-    private string GetItem(List<Tuple<string, string>> items, string itemType)
+    private string GetItem(List<(string Type, string Id)> items, string itemType)
     {
-        return items.Where(i => i.Item1 == itemType).Select(i => i.Item2).FirstOrDefault();
+        return items.Where(i => i.Type == itemType).Select(i => i.Id).FirstOrDefault();
     }
 
     private SqlQuery BuildQuery(out string log, string[] columns = null)
@@ -228,46 +230,44 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 DateTime toDate = ToFilter.SelectedDate;
 
                 SqlQuery q = null;
+                // @@ Remove Top
                 if ((columns == null) || (columns.Length == 0))
-                    q = new Select().From(VObservationExpansion.Schema);
+                    q = new Select().Top("100").From(VObservationExpansion.Schema);
                 else
-                    q = new Select(columns).From(VObservationExpansion.Schema);
+                    q = new Select(columns).Top("100").From(VObservationExpansion.Schema);
 
                 if (FilterTree.CheckedNodes != null)
                 {
-                    List<SubmittedNode> nodes = FilterTree.CheckedNodes;
-                    List<QueryDataClass> QueryDataClassList = new List<QueryDataClass>();
+                    var nodes = new List<QueryDataClass>();
 
-                    foreach (var item in nodes)
+                    foreach (var node in FilterTree.CheckedNodes)
                     {
-                        var items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
-                        QueryDataClassList.Add(new QueryDataClass() { NodeID = item.NodeID, ID = new Guid(items[0].Item2), Type = items[0].Item1 });
+                        var items = node.NodeID.Split('|').Select(i => { (string Type, string Id) d = (i.Split('_')[0], i.Split('_')[1]); return d; }).ToList();
+                        nodes.Add(new QueryDataClass() { NodeID = node.NodeID, ID = new Guid(items[0].Id), Type = items[0].Type, Name = node.Text, Items = items });
                     }
 
                     //SAEONLogs.Verbose("Items: {@QueryDataClassList}", QueryDataClassList);
 
                     #region buildQ
-                    foreach (QueryDataClass item in QueryDataClassList)
+                    foreach (var node in nodes)
                     {
 
                         int count = 0;
-                        List<Tuple<string, string>> items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
-                        //SAEONLogs.Verbose("Items: {@items}", items);
                         PhenomenonOffering phenomenonOffering = null;
                         Phenomenon phenomenon = null;
                         Sensor sensor = null;
                         Instrument instrument = null;
                         Station station = null;
                         SAEON.Observations.Data.Site site = null;
-                        switch (item.Type)
+                        switch (node.Type)
                         {
                             case "Offering":
                                 count++;
-                                phenomenonOffering = new PhenomenonOffering(item.ID);
-                                sensor = new Sensor(new Guid(GetItem(items, "Sensor")));
-                                instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
-                                station = new Station(new Guid(GetItem(items, "Station")));
-                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
+                                phenomenonOffering = new PhenomenonOffering(node.ID);
+                                sensor = new Sensor(new Guid(GetItem(node.Items, "Sensor")));
+                                instrument = new Instrument(new Guid(GetItem(node.Items, "Instrument")));
+                                station = new Station(new Guid(GetItem(node.Items, "Station")));
+                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(node.Items, "Site")));
                                 q.OrExpression(VObservationExpansion.Columns.PhenomenonOfferingID).IsEqualTo(phenomenonOffering.Id)
                                     .And(VObservationExpansion.Columns.SensorID).IsEqualTo(sensor.Id)
                                     .And(VObservationExpansion.Columns.InstrumentID).IsEqualTo(instrument.Id)
@@ -277,11 +277,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 break;
                             case "Phenomenon":
                                 count++;
-                                phenomenon = new PhenomenonOffering(item.ID).Phenomenon;
-                                sensor = new Sensor(new Guid(GetItem(items, "Sensor")));
-                                instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
-                                station = new Station(new Guid(GetItem(items, "Station")));
-                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
+                                phenomenon = new PhenomenonOffering(node.ID).Phenomenon;
+                                sensor = new Sensor(new Guid(GetItem(node.Items, "Sensor")));
+                                instrument = new Instrument(new Guid(GetItem(node.Items, "Instrument")));
+                                station = new Station(new Guid(GetItem(node.Items, "Station")));
+                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(node.Items, "Site")));
                                 q.OrExpression(VObservationExpansion.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
                                     .And(VObservationExpansion.Columns.SensorID).IsEqualTo(sensor.Id)
                                     .And(VObservationExpansion.Columns.InstrumentID).IsEqualTo(instrument.Id)
@@ -291,10 +291,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 break;
                             case "Sensor":
                                 count++;
-                                sensor = new Sensor(item.ID);
-                                instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
-                                station = new Station(new Guid(GetItem(items, "Station")));
-                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
+                                sensor = new Sensor(node.ID);
+                                instrument = new Instrument(new Guid(GetItem(node.Items, "Instrument")));
+                                station = new Station(new Guid(GetItem(node.Items, "Station")));
+                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(node.Items, "Site")));
                                 q.OrExpression(VObservationExpansion.Columns.SensorID).IsEqualTo(sensor.Id)
                                     .And(VObservationExpansion.Columns.InstrumentID).IsEqualTo(instrument.Id)
                                     .And(VObservationExpansion.Columns.StationID).IsEqualTo(station.Id)
@@ -303,9 +303,9 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 break;
                             case "Instrument":
                                 count++;
-                                instrument = new Instrument(item.ID);
-                                station = new Station(new Guid(GetItem(items, "Station")));
-                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
+                                instrument = new Instrument(node.ID);
+                                station = new Station(new Guid(GetItem(node.Items, "Station")));
+                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(node.Items, "Site")));
                                 q.OrExpression(VObservationExpansion.Columns.InstrumentID).IsEqualTo(instrument.Id)
                                     .And(VObservationExpansion.Columns.StationID).IsEqualTo(station.Id)
                                     .And(VObservationExpansion.Columns.SiteID).IsEqualTo(site.Id);
@@ -313,15 +313,15 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 break;
                             case "Station":
                                 count++;
-                                station = new Station(item.ID);
-                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
+                                station = new Station(node.ID);
+                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(node.Items, "Site")));
                                 q.OrExpression(VObservationExpansion.Columns.StationID).IsEqualTo(station.Id)
                                     .And(VObservationExpansion.Columns.SiteID).IsEqualTo(site.Id);
                                 log += $"Site: {site.Name} Station: {station.Name}";
                                 break;
                             case "Site":
                                 count++;
-                                site = new SAEON.Observations.Data.Site(item.ID);
+                                site = new SAEON.Observations.Data.Site(node.ID);
                                 q.OrExpression(VObservationExpansion.Columns.SiteID).IsEqualTo(site.Id);
                                 log += $"Site: {site.Name}";
                                 break;
@@ -358,6 +358,146 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         }
     }
 
+    private class ObservationDTO
+    {
+        public string Station { get; set; }
+        public string Variable => $"{Phenomenon.Replace(", ", "_")}, {Offering.Replace(", ", "_")}, {Unit.Replace(", ", "_")}";
+        public DateTime Date { get; set; }
+        public double? Value { get; set; }
+        public string Comment { get; set; }
+        public string Site { get; set; }
+        public string Phenomenon { get; set; }
+        public string Offering { get; set; }
+        public string Unit { get; set; }
+        public string Instrument { get; set; }
+        public string Sensor { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+        public double? Elevation { get; set; }
+        public string Status { get; set; }
+        public string Reason { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ObservationDTO dTO &&
+                   Station == dTO.Station &&
+                   Variable == dTO.Variable &&
+                   Date == dTO.Date &&
+                   Value == dTO.Value &&
+                   Comment == dTO.Comment &&
+                   Site == dTO.Site &&
+                   Phenomenon == dTO.Phenomenon &&
+                   Offering == dTO.Offering &&
+                   Unit == dTO.Unit &&
+                   Instrument == dTO.Instrument &&
+                   Sensor == dTO.Sensor &&
+                   Latitude == dTO.Latitude &&
+                   Longitude == dTO.Longitude &&
+                   Elevation == dTO.Elevation;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = new HashCode();
+            hash.Add(Station);
+            hash.Add(Variable);
+            hash.Add(Date);
+            hash.Add(Value);
+            hash.Add(Comment);
+            hash.Add(Site);
+            hash.Add(Phenomenon);
+            hash.Add(Offering);
+            hash.Add(Unit);
+            hash.Add(Instrument);
+            hash.Add(Sensor);
+            hash.Add(Latitude);
+            hash.Add(Longitude);
+            hash.Add(Elevation);
+            return hash.ToHashCode();
+        }
+    }
+
+    private List<ObservationDTO> LoadData()
+    {
+        using (SAEONLogs.MethodCall(GetType()))
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                var result = new List<ObservationDTO>();
+                if (FilterTree.CheckedNodes != null)
+                {
+                    var nodes = new List<QueryDataClass>();
+                    foreach (var node in FilterTree.CheckedNodes)
+                    {
+                        var items = node.NodeID.Split('|').Select(i => { (string Type, string Id) d = (i.Split('_')[0], i.Split('_')[1]); return d; }).ToList();
+                        nodes.Add(new QueryDataClass() { NodeID = node.NodeID, ID = new Guid(items[0].Id), Type = items[0].Type, Name = node.Text, Items = items });
+                    }
+                    SAEONLogs.Verbose("Items: {@Items}", nodes);
+                    var allDatasets = new VDatasetsExpansionCollection().Load();
+                    var selectedDatasets = new List<VDatasetsExpansion>();
+                    foreach (var node in nodes)
+                    {
+                        PhenomenonOffering phenomenonOffering = null;
+                        Phenomenon phenomenon = null;
+                        Station station = null;
+                        SAEON.Observations.Data.Site site = null;
+                        switch (node.Type)
+                        {
+                            case "Offering":
+                                phenomenonOffering = new PhenomenonOffering(node.ID);
+                                station = new Station(new Guid(GetItem(node.Items, "Station")));
+                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(node.Items, "Site")));
+                                selectedDatasets.AddRange(allDatasets.Where(i => i.PhenomenonOfferingID == phenomenonOffering.Id && i.StationID == station.Id && i.SiteID == site.Id));
+                                break;
+                            case "Phenomenon":
+                                phenomenon = new PhenomenonOffering(node.ID).Phenomenon;
+                                station = new Station(new Guid(GetItem(node.Items, "Station")));
+                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(node.Items, "Site")));
+                                selectedDatasets.AddRange(allDatasets.Where(i => i.PhenomenonID == phenomenon.Id && i.StationID == station.Id && i.SiteID == site.Id));
+                                break;
+                            case "Sensor":
+                                station = new Station(new Guid(GetItem(node.Items, "Station")));
+                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(node.Items, "Site")));
+                                selectedDatasets.AddRange(allDatasets.Where(i => i.StationID == station.Id && i.SiteID == site.Id));
+                                break;
+                            case "Instrument":
+                                station = new Station(new Guid(GetItem(node.Items, "Station")));
+                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(node.Items, "Site")));
+                                selectedDatasets.AddRange(allDatasets.Where(i => i.StationID == station.Id && i.SiteID == site.Id));
+                                break;
+                            case "Station":
+                                station = new Station(node.ID);
+                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(node.Items, "Site")));
+                                selectedDatasets.AddRange(allDatasets.Where(i => i.StationID == station.Id && i.SiteID == site.Id));
+                                break;
+                            case "Site":
+                                site = new SAEON.Observations.Data.Site(node.ID);
+                                selectedDatasets.AddRange(allDatasets.Where(i => i.StationID == station.Id && i.SiteID == site.Id));
+                                break;
+                        }
+                    }
+                    selectedDatasets = selectedDatasets.Distinct().ToList();
+                    SAEONLogs.Verbose("All: {All} Selected: {Selected}", allDatasets.Count, selectedDatasets.Count);
+                    SAEONLogs.Verbose("Datasets: {@Datasets}", selectedDatasets);
+                    foreach (var dataset in selectedDatasets)
+                    {
+
+                    }
+                }
+
+                SAEONLogs.Information("Loaded: {Elapsed}", stopwatch.Elapsed.TimeStr());
+                return result;
+            }
+            catch (Exception ex)
+            {
+                SAEONLogs.Exception(ex);
+                throw;
+            }
+        }
+    }
+
     protected void ObservationsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         using (SAEONLogs.MethodCall(GetType()))
@@ -370,6 +510,8 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 }
                 else
                 {
+                    LoadData();
+                    return;
                     var log = string.Empty;
                     var q = BuildQuery(out log);
                     var stopwatch = new Stopwatch();

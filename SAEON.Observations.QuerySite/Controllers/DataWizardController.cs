@@ -800,15 +800,18 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var model = SessionModel;
                     //SAEONLogs.Verbose("Model: {@model}", model);
-                    var input = new DataWizardDataInput();
+                    var input = new DataWizardDownloadInput();
                     input.Locations.AddRange(model.Locations);
                     input.Variables.AddRange(model.Variables);
                     input.StartDate = model.StartDate;
                     input.EndDate = model.EndDate;
                     input.ElevationMinimum = model.ElevationMinimum;
                     input.ElevationMaximum = model.ElevationMaximum;
-                    input.DownloadFormat = format;
-                    var userDownload = await PostEntityAsync<DataWizardDataInput, UserDownload>("Internal/DataWizard/GetDownload", input);
+                    if (Enum.TryParse(format, out DownloadFormat downloadFormat))
+                    {
+                        input.DownloadFormat = downloadFormat;
+                    }
+                    var userDownload = await PostEntityAsync<DataWizardDownloadInput, UserDownload>("Internal/DataWizard/GetDownload", input);
                     SAEONLogs.Verbose("UserDownload: {@userDownload}", userDownload);
                     //RedirectToAction(nameof(ViewDownload), new { id = userDownload.Id });
                     model.IsDataset = false;

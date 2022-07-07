@@ -115,7 +115,7 @@ namespace SAEON.Observations.Core
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
         public double ElevationMinimum { get; set; } = -100; // m
         public double ElevationMaximum { get; set; } = 3000; // m
-        public string DownloadFormat { get; set; } = "CSV";
+        //public string DownloadFormat { get; set; } = "CSV";
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

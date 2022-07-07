@@ -10,7 +10,7 @@
 		<ApplicationIcon>SAEON.ico</ApplicationIcon>
 		<LangVersion>9.0</LangVersion>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>1.0.34</Version>
+		<Version>1.0.35</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

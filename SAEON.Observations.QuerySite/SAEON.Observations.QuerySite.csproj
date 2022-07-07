@@ -992,7 +992,8 @@
     <Content Include="Views\Home\Disclaimer.cshtml" />
     <Content Include="Views\Home\ConditionsOfUse.cshtml" />
     <Content Include="Views\Home\Privacy.cshtml" />
-    <Content Include="Views\Admin\CreateDatasets.cshtml" />
+    <Content Include="Views\Admin\UpdateDatasets.cshtml" />
+    <Content Include="Views\Admin\CreateDatasetFiles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

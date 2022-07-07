@@ -49,7 +49,7 @@ namespace SAEON.Observations.WebAPI
                     {
                         sb.AppendLine(line);
                         SAEONLogs.Information(line);
-                        await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateMetadataStatusUpdate, line);
+                        await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateMetadataStatus, line);
                     }
 
                     async Task GenerateMetadata()

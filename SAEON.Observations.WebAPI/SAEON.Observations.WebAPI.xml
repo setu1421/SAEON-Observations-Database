@@ -112,6 +112,13 @@
             <param name="input">Input of the range of observations</param>
             <returns>ListOf(Observation)</returns>
         </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.DatasetsController.GetObservationsCSV(System.Guid)">
+            <summary>
+            Observations of the Dataset as CSV file
+            </summary>
+            <param name="id">Id of the Dataset</param>
+            <returns>ListOf(DataStream)</returns>
+        </member>
         <member name="M:SAEON.Observations.WebAPI.Controllers.WebAPI.InstrumentsController.GetAll">
             <summary>
             All Instruments

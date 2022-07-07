@@ -36,5 +36,5 @@ from
     on (vStationOrganisation.StationID = Station.ID)
   left join Organisation
     on (vStationOrganisation.OrganisationID = Organisation.ID)
-where
-  (VerifiedCount > 0) and (LatitudeNorth is not null) and (LatitudeSouth is not null) and (LongitudeWest is not null) and (LongitudeEast is not null)
+--where
+--  (VerifiedCount > 0) and (LatitudeNorth is not null) and (LatitudeSouth is not null) and (LongitudeWest is not null) and (LongitudeEast is not null)

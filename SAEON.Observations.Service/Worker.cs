@@ -33,12 +33,12 @@ namespace SAEON.Observations.Service
                         .WithUrl(config["WebAPIUrl"].AddEndForwardSlash() + "AdminHub")
                         .WithAutomaticReconnect()
                         .Build();
-                    adminHubConnection.On<string>(SignalRDefaults.CreateDOIsStatusUpdate, CreateDOIsStatusUpdate);
-                    adminHubConnection.On<string>(SignalRDefaults.CreateMetadataStatusUpdate, CreateMetadataStatusUpdate);
-                    adminHubConnection.On<string>(SignalRDefaults.CreateODPMetadataStatusUpdate, CreateODPMetadataStatusUpdate);
-                    adminHubConnection.On<string>(SignalRDefaults.CreateDatasetsStatusUpdate, CreateDatasetsStatusUpdate);
-                    adminHubConnection.On<string>(SignalRDefaults.CreateImportBatchSummariesStatusUpdate, CreateImportBatchSummariesStatusUpdate);
-                    adminHubConnection.On<string>(SignalRDefaults.CreateSnapshotsStatusUpdate, CreateSnapshotsStatusUpdate);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateDOIsStatus, CreateDOIsStatusUpdate);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateMetadataStatus, CreateMetadataStatusUpdate);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateODPMetadataStatus, CreateODPMetadataStatusUpdate);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateDatasetFilesStatus, CreateDatasetsStatusUpdate);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateImportBatchSummariesStatus, CreateImportBatchSummariesStatusUpdate);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateSnapshotsStatus, CreateSnapshotsStatusUpdate);
                 }
                 catch (Exception ex)
                 {

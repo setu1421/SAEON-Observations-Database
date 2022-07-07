@@ -525,7 +525,7 @@ namespace SAEON.Observations.WebAPI
                     {
                         sb.AppendLine(line);
                         SAEONLogs.Information(line);
-                        await adminHub.Clients.All.SendAsync(SignalRDefaults.ImportSetupStatusUpdate, line);
+                        await adminHub.Clients.All.SendAsync(SignalRDefaults.ImportSetupStatus, line);
                     }
 
                     DateTime? GetDate(object[,] array, int row, int col)
