@@ -419,9 +419,8 @@ namespace SAEON.Observations.Core
         [JsonIgnore, SwaggerIgnore]
         [StringLength(500)]
         public string CSVFileName { get; set; }
-
-        [JsonIgnore, SwaggerIgnore/*, DatabaseGenerated(DatabaseGeneratedOption.Computed)*/]
-        public bool IsValid => ((VerifiedCount ?? 0) > 0) && LatitudeNorth.HasValue && LatitudeSouth.HasValue && LongitudeEast.HasValue && LongitudeWest.HasValue;
+        [JsonIgnore, SwaggerIgnore, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public bool IsValid { get; set; }
 
         public int CreateHashCode()
         {

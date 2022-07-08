@@ -1,5 +1,5 @@
-﻿using SAEON.Logs;
-using SAEON.Observations.Core;
+﻿using SAEON.CSV;
+using SAEON.Logs;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -59,7 +59,7 @@ public static class Utilities
 
     public static List<string> DumpCSV(this DataTable dataTable, string name = "")
     {
-        return dataTable.ToCSV(",").Split(new string[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+        return dataTable.ToList().ToCSV().Split(new string[] { Environment.NewLine }, StringSplitOptions.None).ToList();
     }
 
     public static TransactionScope NewTransactionScope()

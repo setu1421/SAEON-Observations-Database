@@ -1,7 +1,8 @@
 ﻿CREATE VIEW [dbo].[vInventoryDatasets]
 AS 
 Select
-  Row_Number() over (order by StationCode, PhenomenonCode, OfferingCode, UnitOfMeasureCode) ID, s.*
+  Row_Number() over (order by StationCode, PhenomenonCode, OfferingCode, UnitOfMeasureCode) ID, s.*,
+  Cast((case when (OrganisationCode in ('SAEON','SMCRI','EFTEON')) and (ProgrammeCode <> 'SACTN') and (VerifiedCount > 0) and (LatitudeNorth is not null) and (LatitudeSouth is not null) and (LongitudeWest is not null) and (LongitudeEast is not null) then 1 else 0 end) as bit) IsVaid
 from
 (
 Select

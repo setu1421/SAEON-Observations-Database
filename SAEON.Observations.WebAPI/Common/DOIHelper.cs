@@ -171,11 +171,8 @@ namespace SAEON.Observations.WebAPI
                             }
                         }
 
-                        // We only create Dynamic DOIs for SAEON, SMCRI and EFTEON, and exclude SACTN
-                        var orgCodes = new string[] { "SAEON", "SMCRI", "EFTEON" };
-                        foreach (var inventoryDataset in await dbContext.VInventoryDatasets.Where(
-                            i => orgCodes.Contains(i.OrganisationCode) &&
-                            i.LatitudeNorth.HasValue && i.LatitudeSouth.HasValue && i.LongitudeEast.HasValue && i.LongitudeWest.HasValue && i.VerifiedCount > 0)
+                        foreach (var inventoryDataset in await dbContext.VInventoryDatasets
+                            .Where(i => i.IsValid)
                             .OrderBy(i => i.OrganisationName)
                             .ThenBy(i => i.ProgrammeName)
                             .ThenBy(i => i.ProgrammeName)
@@ -183,23 +180,20 @@ namespace SAEON.Observations.WebAPI
                             .ThenBy(i => i.StationName)
                             .ToListAsync())
                         {
-                            if (!inventoryDataset.Code.StartsWith("SACTN"))
+                            var doiDataset = await EnsureDatasetDOI(inventoryDataset);
+                            var dataset = await EnsureDataset(inventoryDataset);
+                            dataset.DigitalObjectIdentifierId = doiDataset.Id;
+                            doiDataset.DatasetId = dataset.Id;
+                            if (dbContext.Entry(doiDataset).State != EntityState.Unchanged)
                             {
-                                var doiDataset = await EnsureDatasetDOI(inventoryDataset);
-                                var dataset = await EnsureDataset(inventoryDataset);
-                                dataset.DigitalObjectIdentifierId = doiDataset.Id;
-                                doiDataset.DatasetId = dataset.Id;
-                                if (dbContext.Entry(doiDataset).State != EntityState.Unchanged)
-                                {
-                                    doiDataset.UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString();
-                                }
-                                if (dbContext.Entry(dataset).State != EntityState.Unchanged)
-                                {
-                                    dataset.UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString();
-                                    dataset.UserId = new Guid(httpContext?.User?.UserId() ?? Guid.Empty.ToString());
-                                }
-                                await dbContext.SaveChangesAsync();
+                                doiDataset.UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString();
                             }
+                            if (dbContext.Entry(dataset).State != EntityState.Unchanged)
+                            {
+                                dataset.UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString();
+                                dataset.UserId = new Guid(httpContext?.User?.UserId() ?? Guid.Empty.ToString());
+                            }
+                            await dbContext.SaveChangesAsync();
                         }
                     }
                 }
