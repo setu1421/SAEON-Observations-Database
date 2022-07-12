@@ -9,7 +9,8 @@ Select Distinct
   Station.Code StationCode, Station.Name StationName, Station.Description StationDescription, Station.Url StationUrl,
   Phenomenon.ID PhenomenonID, Phenomenon.Code PhenomenonCode, Phenomenon.Name PhenomenonName, Phenomenon.Description PhenomenonDescription, Phenomenon.Url PhenomenonUrl,
   Offering.ID OfferingID, Offering.Code OfferingCode, Offering.Name OfferingName, Offering.Description OfferingDescription,
-  UnitOfMeasure.ID UnitOfMeasureID, UnitOfMeasure.Code UnitOfMeasureCode, UnitOfMeasure.Unit UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol
+  UnitOfMeasure.ID UnitOfMeasureID, UnitOfMeasure.Code UnitOfMeasureCode, UnitOfMeasure.Unit UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
+  Cast((case when (Organisation.Code in ('SAEON','SMCRI','EFTEON')) and (Programme.Code <> 'SACTN') and (VerifiedCount > 0) and (LatitudeNorth is not null) and (LatitudeSouth is not null) and (LongitudeWest is not null) and (LongitudeEast is not null) then 1 else 0 end) as bit) IsValid
 from
   Datasets
   inner join Station
@@ -36,5 +37,3 @@ from
     on (vStationOrganisation.StationID = Station.ID)
   left join Organisation
     on (vStationOrganisation.OrganisationID = Organisation.ID)
-where
-  (VerifiedCount > 0) and (LatitudeNorth is not null) and (LatitudeSouth is not null) and (LongitudeWest is not null) and (LongitudeEast is not null)

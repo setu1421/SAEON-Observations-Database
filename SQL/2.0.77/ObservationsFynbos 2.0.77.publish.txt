@@ -1,0 +1,41 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       [dbo].[Observation].[IX_Observations_SensorID_ValueDate] (Index)
+     Alter
+       [dbo].[Datasets] (Table)
+       [dbo].[Observation] (Table)
+     Create
+       [dbo].[Observation].[IX_Observation_SensorID_ValueDate] (Index)
+
+** Supporting actions
+     Drop
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Create
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Refresh
+       [dbo].[vDatasetsExpansion] (View)
+       [dbo].[vLocations] (View)
+       [dbo].[vVariables] (View)
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vSensorThingsAPIObservations] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationJSON] (View)
+       [dbo].[vStationObservations] (View)
+       [dbo].[vInventorySnapshots] (View)
+       [dbo].[spCreateInventorySnapshot] (Procedure)
+       [dbo].[spCreateImportBatchSummaries] (Procedure)
+
+If this deployment is executed, changes to [dbo].[vObservationExpansion] might introduce run-time errors in [dbo].[vSensorObservations].
+

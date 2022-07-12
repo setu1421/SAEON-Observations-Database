@@ -1,0 +1,52 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       [dbo].[Observation].[IX_Observation_ImportBatchID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_ValueDate] (Index)
+     Alter
+       [dbo].[Observation] (Table)
+       [dbo].[vDatasetsExpansion] (View)
+       [dbo].[vLocations] (View)
+       [dbo].[vVariables] (View)
+       [dbo].[vInventoryDatasets] (View)
+       [dbo].[vInventorySensors] (View)
+       [dbo].[vInventorySnapshots] (View)
+     Create
+       [dbo].[Observation].[IX_Observation_ImportBatchID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID] (Index)
+
+** Supporting actions
+     Drop
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Create
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+     Refresh
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vSensorThingsAPIObservations] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationJSON] (View)
+       [dbo].[vStationObservations] (View)
+       [dbo].[vSensorThingsAPIDatastreams] (View)
+       [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIObservedProperties] (View)
+       [dbo].[vSensorThingsAPISensors] (View)
+       [dbo].[vSensorThingsAPIThings] (View)
+       [dbo].[vSensorThingsAPIFeaturesOfInterest] (View)
+       [dbo].[vSensorThingsAPIHistoricalLocations] (View)
+       [dbo].[spCreateImportBatchSummaries] (Procedure)
+       [dbo].[spCreateInventorySnapshot] (Procedure)
+
+If this deployment is executed, changes to [dbo].[vObservationExpansion] might introduce run-time errors in [dbo].[vSensorObservations].
+

@@ -123,7 +123,7 @@ namespace SAEON.Observations.WebAPI
             {
                 sb.AppendLine(line);
                 SAEONLogs.Information(line);
-                await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateODPMetadataStatusUpdate, line);
+                await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateODPMetadataStatus, line);
             }
         }
 

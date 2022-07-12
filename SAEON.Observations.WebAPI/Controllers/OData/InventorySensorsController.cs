@@ -10,7 +10,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         protected override List<Expression<Func<VInventorySensor, bool>>> GetWheres()
         {
             var result = base.GetWheres();
-            result.Add(i => i.VerifiedCount > 0 && i.LatitudeNorth.HasValue && i.LatitudeSouth.HasValue && i.LongitudeEast.HasValue && i.LongitudeWest.HasValue);
+            result.Add(i => i.IsValid ?? false);
             return result;
         }
     }

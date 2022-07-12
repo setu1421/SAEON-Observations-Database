@@ -1,24 +1,14 @@
-﻿using System;
+﻿using SAEON.Observations.Core;
+using System;
 
 namespace SAEON.Observations.WebAPI
 {
     /// <summary>
     /// Input for an observations query
     /// </summary>
+    [SwaggerName("ObservationsInput")]
     public class ObservationInput
     {
-        /// <summary>
-        /// PhenomenonId for the observations
-        /// </summary>
-        public Guid PhenomenonId { get; set; }
-        /// <summary>
-        /// OfferingId for the observations
-        /// </summary>
-        public Guid OfferingId { get; set; }
-        /// <summary>
-        /// UnitId for the observations
-        /// </summary>
-        public Guid UnitId { get; set; }
         /// <summary>
         /// Start date for the observations
         /// </summary>

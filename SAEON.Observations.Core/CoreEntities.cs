@@ -278,6 +278,8 @@ namespace SAEON.Observations.Core
         public List<DataSchema> DataSchemas { get; set; }
     }
 
+    public enum DatasetFileTypes { CSV, Excel, NetCDF }
+
     public abstract class DatasetBase : CodedNamedEntity
     {
         [StringLength(200)]
@@ -397,22 +399,26 @@ namespace SAEON.Observations.Core
         /// </summary>
         [JsonIgnore, SwaggerIgnore]
         public int HashCode { get; set; }
-        private string FileName => Code.Replace(Path.GetInvalidFileNameChars(), '_');
+        public string FileName => $"{DateTime.Now:yyyyMMddHHmm} {Code.Replace(Path.GetInvalidFileNameChars(), '_')}";
+        public string OldFileName => $"{Code.Replace(Path.GetInvalidFileNameChars(), '_')}"; // @@@ Remove after new style have been populated
         /// <summary>
-        /// FileName of the Dataset as CSV
+        /// FileName of the Dataset as Excel file
         /// </summary>
         [JsonIgnore, SwaggerIgnore]
-        public string ExcelFileName => $"{FileName}.xlsx";
+        [StringLength(500)]
+        public string ExcelFileName { get; set; }
         /// <summary>
-        /// FileName of the Dataset as CSV
+        /// FileName of the Dataset as CSV NextCDF file
         /// </summary>
         [JsonIgnore, SwaggerIgnore]
-        public string NetCdfFileName => $"{FileName}.nc";
+        [StringLength(500)]
+        public string NetCDFFileName { get; set; }
         /// <summary>
-        /// FileName of the Dataset as CSV
+        /// FileName of the Dataset as CSV file
         /// </summary>
         [JsonIgnore, SwaggerIgnore]
-        public string CsvFileName => $"{FileName}.csv";
+        [StringLength(500)]
+        public string CSVFileName { get; set; }
 
         public int CreateHashCode()
         {
@@ -445,6 +451,7 @@ namespace SAEON.Observations.Core
     /// </summary>
     public class Dataset : DatasetBase { }
 
+    [SwaggerName("Dataset")]
     public class VDatasetExpansion : DatasetBase
     {
         public Guid OrganisationId { get; set; }
@@ -493,6 +500,8 @@ namespace SAEON.Observations.Core
         public string UnitSymbol { get; set; }
 
         public string Variable => $"{PhenomenonName.Replace(", ", "_")}, {OfferingName.Replace(", ", "_")}, {UnitName.Replace(", ", "_")}";
+        [JsonIgnore, SwaggerIgnore, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public bool? IsValid { get; set; }
 
         // Navigation
         [JsonIgnore, SwaggerIgnore]
@@ -1138,63 +1147,6 @@ namespace SAEON.Observations.Core
             Links.Add("Observations");
         }
     }
-
-    /*
-    [Table("vStationObservations")]
-    public class Observation : IntIdEntity
-    {
-        //public Guid ImportBatchId { get; set; } 
-        public Guid StationId { get; set; }
-        public Guid InstrumentId { get; set; }
-        public string InstrumentCode { get; set; }
-        public string InstrumentName { get; set; }
-        public string InstrumentDescription { get; set; }
-        public Guid SensorId { get; set; }
-        public string SensorCode { get; set; }
-        public string SensorName { get; set; }
-        public string SensorDescription { get; set; }
-        public DateTime ValueDate { get; set; }
-        //public double? RawValue { get; set; }
-        public double? DataValue { get; set; }
-        public string TextValue { get; set; }
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
-        public double? Elevation { get; set; }
-        public Guid PhenomenonId { get; set; }
-        public string PhenomenonCode { get; set; }
-        public string PhenomenonName { get; set; }
-        public string PhenomenonDescription { get; set; }
-        //public Guid PhenomenonOfferingId { get; set; }
-        public Guid OfferingId { get; set; }
-        public string OfferingCode { get; set; }
-        public string OfferingName { get; set; }
-        public string OfferingDescription { get; set; }
-        //[Column("PhenomenonUOMID")]
-        //public Guid PhenomenonUnitId { get; set; }
-        [Column("UnitOfMeasureID")]
-        public Guid UnitId { get; set; }
-        [Column("UnitOfMeasureCode")]
-        public string UnitCode { get; set; }
-        [Column("UnitOfMeasureUnit")]
-        public string UnitName { get; set; }
-        [Column("UnitOfMeasureSymbol")]
-        public string UnitSymbol { get; set; }
-        public string Comment { get; set; }
-        public Guid? CorrelationId { get; set; }
-        //public Guid? StatusId { get; set; }
-        public string StatusCode { get; set; }
-        public string StatusName { get; set; }
-        public string StatusDescription { get; set; }
-        //public Guid? StatusReasonId { get; set; }
-        public string StatusReasonCode { get; set; }
-        public string StatusReasonName { get; set; }
-        public string StatusReasonDescription { get; set; }
-
-        // Navigation
-        [JsonIgnore, SwaggerIgnore]
-        public Station Station { get; set; }
-    }
-    */
 
     /// <summary>
     /// Unit Entity

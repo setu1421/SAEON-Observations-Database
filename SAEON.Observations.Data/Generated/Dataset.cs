@@ -523,6 +523,45 @@ namespace SAEON.Observations.Data
 				colvarRowVersion.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarRowVersion);
 				
+				TableSchema.TableColumn colvarCSVFileName = new TableSchema.TableColumn(schema);
+				colvarCSVFileName.ColumnName = "CSVFileName";
+				colvarCSVFileName.DataType = DbType.AnsiString;
+				colvarCSVFileName.MaxLength = 500;
+				colvarCSVFileName.AutoIncrement = false;
+				colvarCSVFileName.IsNullable = true;
+				colvarCSVFileName.IsPrimaryKey = false;
+				colvarCSVFileName.IsForeignKey = false;
+				colvarCSVFileName.IsReadOnly = false;
+				colvarCSVFileName.DefaultSetting = @"";
+				colvarCSVFileName.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarCSVFileName);
+				
+				TableSchema.TableColumn colvarExcelFileName = new TableSchema.TableColumn(schema);
+				colvarExcelFileName.ColumnName = "ExcelFileName";
+				colvarExcelFileName.DataType = DbType.AnsiString;
+				colvarExcelFileName.MaxLength = 500;
+				colvarExcelFileName.AutoIncrement = false;
+				colvarExcelFileName.IsNullable = true;
+				colvarExcelFileName.IsPrimaryKey = false;
+				colvarExcelFileName.IsForeignKey = false;
+				colvarExcelFileName.IsReadOnly = false;
+				colvarExcelFileName.DefaultSetting = @"";
+				colvarExcelFileName.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarExcelFileName);
+				
+				TableSchema.TableColumn colvarNetCDFFileName = new TableSchema.TableColumn(schema);
+				colvarNetCDFFileName.ColumnName = "NetCDFFileName";
+				colvarNetCDFFileName.DataType = DbType.AnsiString;
+				colvarNetCDFFileName.MaxLength = 500;
+				colvarNetCDFFileName.AutoIncrement = false;
+				colvarNetCDFFileName.IsNullable = true;
+				colvarNetCDFFileName.IsPrimaryKey = false;
+				colvarNetCDFFileName.IsForeignKey = false;
+				colvarNetCDFFileName.IsReadOnly = false;
+				colvarNetCDFFileName.DefaultSetting = @"";
+				colvarNetCDFFileName.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarNetCDFFileName);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -772,6 +811,30 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<byte[]>(Columns.RowVersion); }
 			set { SetColumnValue(Columns.RowVersion, value); }
 		}
+		  
+		[XmlAttribute("CSVFileName")]
+		[Bindable(true)]
+		public string CSVFileName 
+		{
+			get { return GetColumnValue<string>(Columns.CSVFileName); }
+			set { SetColumnValue(Columns.CSVFileName, value); }
+		}
+		  
+		[XmlAttribute("ExcelFileName")]
+		[Bindable(true)]
+		public string ExcelFileName 
+		{
+			get { return GetColumnValue<string>(Columns.ExcelFileName); }
+			set { SetColumnValue(Columns.ExcelFileName, value); }
+		}
+		  
+		[XmlAttribute("NetCDFFileName")]
+		[Bindable(true)]
+		public string NetCDFFileName 
+		{
+			get { return GetColumnValue<string>(Columns.NetCDFFileName); }
+			set { SetColumnValue(Columns.NetCDFFileName, value); }
+		}
 		
 		#endregion
 		
@@ -862,7 +925,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varTitle,Guid varStationID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int? varDigitalObjectIdentifierID,int? varCount,int? varValueCount,int? varNullCount,int? varVerifiedCount,int? varUnverifiedCount,DateTime? varStartDate,DateTime? varEndDate,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,int varHashCode,bool? varNeedsUpdate,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,Guid varUserId,byte[] varRowVersion)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varTitle,Guid varStationID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int? varDigitalObjectIdentifierID,int? varCount,int? varValueCount,int? varNullCount,int? varVerifiedCount,int? varUnverifiedCount,DateTime? varStartDate,DateTime? varEndDate,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,int varHashCode,bool? varNeedsUpdate,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,Guid varUserId,byte[] varRowVersion,string varCSVFileName,string varExcelFileName,string varNetCDFFileName)
 		{
 			Dataset item = new Dataset();
 			
@@ -926,6 +989,12 @@ namespace SAEON.Observations.Data
 			
 			item.RowVersion = varRowVersion;
 			
+			item.CSVFileName = varCSVFileName;
+			
+			item.ExcelFileName = varExcelFileName;
+			
+			item.NetCDFFileName = varNetCDFFileName;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -936,7 +1005,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varTitle,Guid varStationID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int? varDigitalObjectIdentifierID,int? varCount,int? varValueCount,int? varNullCount,int? varVerifiedCount,int? varUnverifiedCount,DateTime? varStartDate,DateTime? varEndDate,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,int varHashCode,bool? varNeedsUpdate,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,Guid varUserId,byte[] varRowVersion)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varTitle,Guid varStationID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int? varDigitalObjectIdentifierID,int? varCount,int? varValueCount,int? varNullCount,int? varVerifiedCount,int? varUnverifiedCount,DateTime? varStartDate,DateTime? varEndDate,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,int varHashCode,bool? varNeedsUpdate,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,Guid varUserId,byte[] varRowVersion,string varCSVFileName,string varExcelFileName,string varNetCDFFileName)
 		{
 			Dataset item = new Dataset();
 			
@@ -999,6 +1068,12 @@ namespace SAEON.Observations.Data
 				item.UserId = varUserId;
 			
 				item.RowVersion = varRowVersion;
+			
+				item.CSVFileName = varCSVFileName;
+			
+				item.ExcelFileName = varExcelFileName;
+			
+				item.NetCDFFileName = varNetCDFFileName;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -1223,6 +1298,27 @@ namespace SAEON.Observations.Data
         
         
         
+        public static TableSchema.TableColumn CSVFileNameColumn
+        {
+            get { return Schema.Columns[30]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ExcelFileNameColumn
+        {
+            get { return Schema.Columns[31]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn NetCDFFileNameColumn
+        {
+            get { return Schema.Columns[32]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -1257,6 +1353,9 @@ namespace SAEON.Observations.Data
 			 public static string UpdatedBy = @"UpdatedBy";
 			 public static string UserId = @"UserId";
 			 public static string RowVersion = @"RowVersion";
+			 public static string CSVFileName = @"CSVFileName";
+			 public static string ExcelFileName = @"ExcelFileName";
+			 public static string NetCDFFileName = @"NetCDFFileName";
 						
 		}
 		#endregion

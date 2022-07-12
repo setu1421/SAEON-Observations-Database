@@ -3,17 +3,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Toolkit.Diagnostics;
 using SAEON.AspNet.Auth;
+using SAEON.AspNet.Common;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     public class DatasetsController : CodedNamedApiController<VDatasetExpansion>
     {
+        protected override List<Expression<Func<VDatasetExpansion, bool>>> GetWheres()
+        {
+            var result = base.GetWheres();
+            result.Add(i => i.IsValid ?? false);
+            return result;
+        }
+
         /// <summary>
         /// All Datasets
         /// </summary>
@@ -118,7 +128,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     }
                     var result = new List<ObservationDTO>();
                     result.AddRange(await DatasetHelper.LoadAsync(DbContext, Config, id));
-                    SAEONLogs.Information("Obs: {@Observation}", result.FirstOrDefault());
+                    //SAEONLogs.Information("Obs: {@Observation}", result.FirstOrDefault());
                     try
                     {
                         await RequestLogger.LogAsync(DbContext, Request);
@@ -186,6 +196,37 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                         SAEONLogs.Exception(ex);
                     }
                     return result;
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Observations of the Dataset as CSV file
+        /// </summary>
+        /// <param name="id">Id of the Dataset</param>
+        /// <returns>ListOf(DataStream)</returns>
+        [HttpGet("{id:guid}/ObservationsCSV")]
+        [Authorize(Policy = ODPAuthenticationDefaults.IdTokenPolicy)]
+        public FileResult GetObservationsCSV(Guid id)
+        {
+            using (SAEONLogs.MethodCall<VDatasetExpansion, ObservationDTO>(GetType()))
+            {
+                try
+                {
+                    UpdateRequest();
+                    var dataset = GetQuery(i => (i.Id == id)).FirstOrDefault();
+                    if (dataset is null)
+                    {
+                        SAEONLogs.Error("{id} not found", id);
+                        throw new ArgumentException($"{id} not found");
+                    }
+                    Guard.IsNotNullOrWhiteSpace(dataset.CSVFileName, nameof(dataset.CSVFileName));
+                    return File(Path.Combine(Config[DatasetHelper.DatasetsFolderConfigKey], dataset.CSVFileName), AspNetConstants.ContentTypeCSV, Path.GetFileName(dataset.CSVFileName));
                 }
                 catch (Exception ex)
                 {

@@ -1,20 +1,18 @@
-﻿using CsvHelper;
-using CsvHelper.Configuration;
-using CsvHelper.TypeConversion;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Toolkit.Diagnostics;
 using SAEON.AspNet.Auth;
 using SAEON.Core;
+using SAEON.CSV;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Hubs;
+using SAEON.OpenXML;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -25,10 +23,102 @@ namespace SAEON.Observations.WebAPI
     public static class DatasetHelper
     {
         private static readonly string BatchSizeConfigKey = "DatasetsBatchSize";
-        private static readonly string DatasetsFolderConfigKey = "DatasetsFolder";
+        public static readonly string DatasetsFolderConfigKey = "DatasetsFolder";
         private static readonly string UseDiskConfigKey = "DatasetsUseDisk";
 
-        public static async Task<string> CreateDatasets(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext, IConfiguration config)
+        public static async Task<string> UpdateDatasets(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext)
+        {
+            using (SAEONLogs.MethodCall(typeof(DOIHelper)))
+            {
+                try
+                {
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    var sb = new StringBuilder();
+                    await AddLineAsync("Updating datasets");
+                    await GenerateDatasets();
+                    await AddLineAsync($"Done in {stopwatch.Elapsed.TimeStr()}");
+                    return sb.ToString();
+
+                    async Task AddLineAsync(string line)
+                    {
+                        sb.AppendLine(line);
+                        SAEONLogs.Information(line);
+                        await adminHub.Clients.All.SendAsync(SignalRDefaults.UpdateDatasetsStatus, line);
+                    }
+
+                    async Task GenerateDatasets()
+                    {
+                        foreach (var inventoryDataset in await dbContext.VInventoryDatasets
+                            .OrderBy(i => i.OrganisationName)
+                            .ThenBy(i => i.ProgrammeName)
+                            .ThenBy(i => i.ProgrammeName)
+                            .ThenBy(i => i.SiteName)
+                            .ThenBy(i => i.StationName)
+                            .ToListAsync())
+                        {
+                            var dataset = await EnsureDataset(inventoryDataset);
+                            dataset.Count = inventoryDataset.Count;
+                            dataset.ValueCount = inventoryDataset.ValueCount;
+                            dataset.NullCount = inventoryDataset.NullCount;
+                            dataset.VerifiedCount = inventoryDataset.VerifiedCount;
+                            dataset.UnverifiedCount = inventoryDataset.UnverifiedCount;
+                            dataset.StartDate = inventoryDataset.StartDate;
+                            dataset.EndDate = inventoryDataset.EndDate;
+                            dataset.LatitudeNorth = inventoryDataset.LatitudeNorth;
+                            dataset.LatitudeSouth = inventoryDataset.LatitudeSouth;
+                            dataset.LongitudeWest = inventoryDataset.LongitudeWest;
+                            dataset.LongitudeEast = inventoryDataset.LongitudeEast;
+                            dataset.ElevationMinimum = inventoryDataset.ElevationMinimum;
+                            dataset.ElevationMaximum = inventoryDataset.ElevationMaximum;
+                            var oldHashCode = dataset.HashCode;
+                            var newHashCode = dataset.CreateHashCode();
+                            SAEONLogs.Verbose("OldHashCode: {OldHashCode} NewHashCode: {NewHashCode}", oldHashCode, newHashCode);
+                            if (oldHashCode != newHashCode)
+                            {
+                                dataset.HashCode = newHashCode;
+                                dataset.NeedsUpdate = true;
+                            }
+                        }
+                        await dbContext.SaveChangesAsync();
+                    }
+
+                    async Task<Dataset> EnsureDataset(VInventoryDataset inventoryDataset)
+                    {
+                        var dataset = await dbContext.Datasets.FirstOrDefaultAsync(i =>
+                            i.StationId == inventoryDataset.StationId &&
+                            i.PhenomenonOfferingId == inventoryDataset.PhenomenonOfferingId &&
+                            i.PhenomenonUnitId == inventoryDataset.PhenomenonUnitId);
+                        if (dataset is null)
+                        {
+                            await AddLineAsync($"Adding dataset {inventoryDataset.Code}, {inventoryDataset.Name}");
+                            dataset = new Dataset
+                            {
+                                Code = inventoryDataset.Code,
+                                Name = inventoryDataset.Name,
+                                StationId = inventoryDataset.StationId,
+                                PhenomenonOfferingId = inventoryDataset.PhenomenonOfferingId,
+                                PhenomenonUnitId = inventoryDataset.PhenomenonUnitId,
+                                NeedsUpdate = true,
+                                AddedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString(),
+                                UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString(),
+                                UserId = new Guid(httpContext?.User?.UserId() ?? Guid.Empty.ToString()),
+                            };
+                            dbContext.Datasets.Add(dataset);
+                        }
+                        return dataset;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public static async Task<string> CreateDatasetsFiles(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext, IConfiguration config)
         {
             using (SAEONLogs.MethodCall(typeof(DOIHelper)))
             {
@@ -46,15 +136,18 @@ namespace SAEON.Observations.WebAPI
                     {
                         sb.AppendLine(line);
                         SAEONLogs.Information(line);
-                        await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateDatasetsStatusUpdate, line);
+                        await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateDatasetFilesStatus, line);
                     }
 
                     async Task GenerateDatasets()
                     {
-                        foreach (var dataset in dbContext.Datasets.Where(i => !i.NeedsUpdate ?? false))
+                        foreach (var vDataset in dbContext.VDatasetsExpansion.AsNoTracking().Where(i => !i.NeedsUpdate ?? false))
                         {
-                            if (!File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName)))
+                            if ((string.IsNullOrEmpty(vDataset.CSVFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], vDataset.CSVFileName))) ||
+                                ((vDataset.IsValid ?? false) && (string.IsNullOrEmpty(vDataset.ExcelFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], vDataset.ExcelFileName)))) /*||
+                                ((vDataset.IsValid ?? false) && (string.IsNullOrEmpty(vDataset.NetCDFFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], vDataset.NetCDFFileName))))*/)
                             {
+                                var dataset = dbContext.Datasets.First(i => i.Id == vDataset.Id);
                                 dataset.NeedsUpdate = true;
                             }
                         }
@@ -77,20 +170,29 @@ namespace SAEON.Observations.WebAPI
                         }
                         foreach (var datasetId in datasetIds)
                         {
-                            await EnsureDataset(await dbContext.Datasets.FirstAsync(i => i.Id == datasetId));
+                            await EnsureDatasetFiles(await dbContext.Datasets.FirstAsync(i => i.Id == datasetId));
                         }
                     }
 
-                    async Task EnsureDataset(Dataset dataset)
+                    async Task EnsureDatasetFiles(Dataset dataset)
                     {
                         var stopwatch = new Stopwatch();
                         stopwatch.Start();
                         await AddLineAsync($"{dataset.Code} {dataset.Name}");
-                        var datasetsFolder = config[DatasetsFolderConfigKey];
+                        var folder = $"{DateTime.Now:yyyy-MM}";
+                        Directory.CreateDirectory(Path.Combine(config[DatasetsFolderConfigKey], folder));
+                        var fileName = Path.Combine(folder, dataset.FileName);
+                        dataset.CSVFileName = $"{fileName}.csv";
+                        dataset.ExcelFileName = $"{fileName}.xlsx";
+                        dataset.NetCDFFileName = $"{fileName}.nc";
                         var observations = await LoadFromDatabaseAsync(dbContext, dataset);
-                        using var writer = new StreamWriter(Path.Combine(datasetsFolder, dataset.CsvFileName));
-                        using var csv = GetCsvWriter(writer);
-                        csv.WriteRecords(observations);
+                        EnsureCSV();
+                        var vDataset = dbContext.VDatasetsExpansion.First(i => i.Id == i.Id);
+                        if (vDataset.IsValid ?? false)
+                        {
+                            EnsureExcel();
+                            EnsureNetCDF();
+                        }
                         dataset.NeedsUpdate = false;
                         if (dbContext.Entry(dataset).State != EntityState.Unchanged)
                         {
@@ -99,6 +201,29 @@ namespace SAEON.Observations.WebAPI
                         }
                         await dbContext.SaveChangesAsync();
                         await AddLineAsync($"{dataset.Code} done in {stopwatch.Elapsed.TimeStr()}");
+
+                        void EnsureCSV()
+                        {
+                            SAEONLogs.Verbose("Creating {FileName}", dataset.CSVFileName);
+                            using var writer = new StreamWriter(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName));
+                            using var csv = CsvWriterHelper.GetCsvWriter(writer);
+                            csv.WriteRecords(observations);
+                            writer.Flush();
+                        }
+
+                        void EnsureExcel()
+                        {
+                            SAEONLogs.Verbose("Creating {FileName}", dataset.ExcelFileName);
+                            using (var doc = ExcelSaxHelper.CreateSpreadsheet(Path.Combine(config[DatasetsFolderConfigKey], dataset.ExcelFileName), observations, true))
+                            {
+                                doc.Save();
+                            }
+                        }
+
+                        void EnsureNetCDF()
+                        {
+                            //SAEONLogs.Verbose("Creating {FileName}", dataset.NetCDFFileName);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -107,22 +232,6 @@ namespace SAEON.Observations.WebAPI
                     throw;
                 }
             }
-        }
-
-        private static CsvWriter GetCsvWriter(TextWriter writer)
-        {
-            var result = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture) { IgnoreReferences = true });
-            var options = new TypeConverterOptions { Formats = new[] { "o" } };
-            result.Context.TypeConverterOptionsCache.AddOptions<DateTime>(options);
-            result.Context.TypeConverterOptionsCache.AddOptions<DateTime?>(options);
-            return result;
-        }
-
-        private static CsvReader GetCsvReader(TextReader reader)
-        {
-            var result = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture) { IgnoreReferences = true });
-            result.Context.TypeConverterOptionsCache.GetOptions<string>().NullValues.Add("");
-            return result;
         }
 
         private static List<ObservationDTO> LoadFromDisk(Dataset dataset, IConfiguration config)
@@ -134,8 +243,14 @@ namespace SAEON.Observations.WebAPI
                     Guard.IsNotNull(dataset, nameof(dataset));
                     var stopwatch = new Stopwatch();
                     stopwatch.Start();
-                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName));
-                    using var csv = GetCsvReader(reader);
+                    var fileName = dataset.CSVFileName; // @@@ Remove once new style are populated
+                    if (string.IsNullOrEmpty(fileName))
+                    {
+                        fileName = $"{dataset.OldFileName}.csv";
+                    }
+                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], fileName));
+                    //using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName));
+                    using var csv = CsvReaderHelper.GetCsvReader(reader);
                     var result = csv.GetRecords<ObservationDTO>().ToList();
                     SAEONLogs.Verbose("Loaded in {Elapsed}", stopwatch.Elapsed.TimeStr());
                     return result;
@@ -155,8 +270,14 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName));
-                    using var csv = GetCsvReader(reader);
+                    var fileName = dataset.CSVFileName; // @@@ Remove once new style are populated
+                    if (string.IsNullOrEmpty(fileName))
+                    {
+                        fileName = $"{dataset.OldFileName}.csv";
+                    }
+                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], fileName));
+                    //using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName));
+                    using var csv = CsvReaderHelper.GetCsvReader(reader);
                     var result = new List<ObservationDTO>();
                     await foreach (var record in csv.GetRecordsAsync<ObservationDTO>())
                     {
@@ -199,6 +320,8 @@ namespace SAEON.Observations.WebAPI
                             Latitude = i.Latitude,
                             Longitude = i.Longitude,
                             Elevation = i.Elevation,
+                            Status = i.StatusName,
+                            Reason = i.StatusReasonName,
                         });
                 }
                 catch (Exception ex)
@@ -250,9 +373,14 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    SAEONLogs.Verbose("UseDisk: {UseDisk} NeedsUpdate: {NeedsUpdate} FileExists: {FileExists}", config[UseDiskConfigKey]?.IsTrue() ?? false, dataset.NeedsUpdate ?? false, File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName)));
-                    var result = (config[UseDiskConfigKey]?.IsTrue() ?? false) /*&& (!dataset.NeedsUpdate ?? false)*/ && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CsvFileName));
-                    SAEONLogs.Verbose("IsOnDisk: {FileName}, {Result}", dataset.CsvFileName, result);
+                    //@@ Remove once new-style are populated
+                    string fileName = dataset.CSVFileName;
+                    string oldFileName = $"{dataset.OldFileName}.csv";
+                    var useDisk = config[UseDiskConfigKey]?.IsTrue() ?? false;
+                    var fileExists = (!string.IsNullOrEmpty(fileName) && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], fileName))) ||
+                                     (!string.IsNullOrEmpty(oldFileName) && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], oldFileName)));
+                    var result = useDisk && fileExists;
+                    SAEONLogs.Verbose("UseDisk: {UseDisk} FileName: {FileName} OldFileName: {OldFileName} FileExists: {FileExists} IsOnDisk: {IsOnDisk}", useDisk, fileName, oldFileName, fileExists, result);
                     return result;
                 }
                 catch (Exception ex)
@@ -262,6 +390,7 @@ namespace SAEON.Observations.WebAPI
                 }
             }
         }
+
         public static async Task<List<ObservationDTO>> LoadAsync(ObservationsDbContext dbContext, IConfiguration config, Guid datasetId)
         {
             using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", datasetId } }))

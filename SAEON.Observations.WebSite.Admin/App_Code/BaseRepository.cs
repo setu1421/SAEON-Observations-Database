@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using SAEON.Core;
 using SAEON.Logs;
-using SAEON.Observations.Core;
 using SubSonic;
 using System;
 using System.Collections.Generic;
@@ -169,7 +168,7 @@ public class BaseRepository
                 }
                 doSAEONLogs?.Invoke(dt);
                 response.Clear();
-                byte[] bytes;
+                byte[] bytes = null;
                 switch (exportType)
                 {
                     case "csv": //ExportTypes.Csv:
@@ -177,18 +176,18 @@ public class BaseRepository
                         var UTF16 = ConfigurationManager.AppSettings["UTF16CSVs"].IsTrue();
                         response.Charset = UTF16 ? "UTF-16" : "UTF-8";
                         response.AddHeader("Content-Disposition", $"attachment; filename={fileName}.csv");
+                        //bytes = Encoding.UTF8.GetBytes(dt.ToList().ToCSV());
                         bytes = dt.ToCSV(UTF16);
-                        response.AddHeader("Content-Length", bytes.Length.ToString());
-                        response.BinaryWrite(bytes);
                         break;
                     case "exc": //ExportTypes.Excel
                         response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                         response.AddHeader("Content-Disposition", $"attachment; filename={fileName}.xlsx");
+                        //bytes = dt.ToList().ToExcel();
                         bytes = dt.ToExcel();
-                        response.AddHeader("Content-Length", bytes.Length.ToString());
-                        response.BinaryWrite(bytes);
                         break;
                 }
+                response.AddHeader("Content-Length", bytes.Length.ToString());
+                response.BinaryWrite(bytes);
                 response.Flush();
                 response.End();
             }

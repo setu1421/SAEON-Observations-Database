@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,string Title,Guid StationID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int? DigitalObjectIdentifierID,int? Count,int? ValueCount,int? NullCount,int? VerifiedCount,int? UnverifiedCount,DateTime? StartDate,DateTime? EndDate,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,int HashCode,bool? NeedsUpdate,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,Guid UserId,byte[] RowVersion)
+	    public void Insert(Guid Id,string Code,string Name,string Description,string Title,Guid StationID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int? DigitalObjectIdentifierID,int? Count,int? ValueCount,int? NullCount,int? VerifiedCount,int? UnverifiedCount,DateTime? StartDate,DateTime? EndDate,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,int HashCode,bool? NeedsUpdate,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,Guid UserId,byte[] RowVersion,string CSVFileName,string ExcelFileName,string NetCDFFileName)
 	    {
 		    Dataset item = new Dataset();
 		    
@@ -144,6 +144,12 @@ namespace SAEON.Observations.Data
             
             item.RowVersion = RowVersion;
             
+            item.CSVFileName = CSVFileName;
+            
+            item.ExcelFileName = ExcelFileName;
+            
+            item.NetCDFFileName = NetCDFFileName;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -152,7 +158,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,string Title,Guid StationID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int? DigitalObjectIdentifierID,int? Count,int? ValueCount,int? NullCount,int? VerifiedCount,int? UnverifiedCount,DateTime? StartDate,DateTime? EndDate,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,int HashCode,bool? NeedsUpdate,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,Guid UserId,byte[] RowVersion)
+	    public void Update(Guid Id,string Code,string Name,string Description,string Title,Guid StationID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int? DigitalObjectIdentifierID,int? Count,int? ValueCount,int? NullCount,int? VerifiedCount,int? UnverifiedCount,DateTime? StartDate,DateTime? EndDate,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,int HashCode,bool? NeedsUpdate,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,Guid UserId,byte[] RowVersion,string CSVFileName,string ExcelFileName,string NetCDFFileName)
 	    {
 		    Dataset item = new Dataset();
 	        item.MarkOld();
@@ -217,6 +223,12 @@ namespace SAEON.Observations.Data
 			item.UserId = UserId;
 				
 			item.RowVersion = RowVersion;
+				
+			item.CSVFileName = CSVFileName;
+				
+			item.ExcelFileName = ExcelFileName;
+				
+			item.NetCDFFileName = NetCDFFileName;
 				
 	        item.Save(UserName);
 	    }

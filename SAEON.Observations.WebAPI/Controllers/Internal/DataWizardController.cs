@@ -9,8 +9,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SAEON.AspNet.Auth;
 using SAEON.Core;
+using SAEON.CSV;
 using SAEON.Logs;
 using SAEON.Observations.Core;
+using SAEON.OpenXML;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -474,7 +476,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                                 break;
                             case DownloadFormat.Excel:
                                 fileName += ".xlsx";
-                                System.IO.File.WriteAllBytes(Path.Combine(dirInfo.FullName, fileName), output.Data.ToExcel());
+                                System.IO.File.WriteAllBytes(Path.Combine(dirInfo.FullName, fileName), output.Data.ToExcel(true));
                                 break;
                             case DownloadFormat.NetCDF:
                                 throw new NotSupportedException();

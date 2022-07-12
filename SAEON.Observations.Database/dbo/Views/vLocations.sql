@@ -12,3 +12,5 @@ Select distinct
   (ElevationMaximum + ElevationMinimum) / 2 Elevation
 from
   vDatasetsExpansion
+where
+  (IsValid = 1)	

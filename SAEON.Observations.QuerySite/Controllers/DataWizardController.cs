@@ -60,6 +60,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         #region State
         [HttpGet]
+        //[Route(nameof(GetState))]
         public JsonResult GetState()
         {
             using (SAEONLogs.MethodCall(GetType()))
@@ -74,7 +75,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         LoadEnabled = model.IsAuthenticated && model.UserQueries.Any(),
                         SaveEnabled = model.IsAuthenticated && model.LocationNodesSelected.Any() && model.VariableNodesSelected.Any(),
                         SearchEnabled = model.LocationNodesSelected.Any() && model.VariableNodesSelected.Any() && (model.Approximation.RowCount > 0),
-                        DownloadEnabled = model.IsAuthenticated && model.LocationNodesSelected.Any() && model.VariableNodesSelected.Any() && (model.Approximation.RowCount > 0) && model.HaveSearched
+                        DownloadEnabled = model.IsAuthenticated && model.LocationNodesSelected.Any() && model.VariableNodesSelected.Any() && (model.Approximation.RowCount > 0) //&& model.HaveSearched
                     };
                     SAEONLogs.Verbose("State: {@State}", result);
                     return Json(result, JsonRequestBehavior.AllowGet);
@@ -90,6 +91,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         #region Locations
         [HttpGet]
+        //[Route(nameof(GetLocations))]
         public JsonResult GetLocations()
         {
             using (SAEONLogs.MethodCall(GetType()))
@@ -107,6 +109,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
+        //[Route(nameof(GetLocationsSelected))]
         public JsonResult GetLocationsSelected()
         {
             using (SAEONLogs.MethodCall(GetType()))
@@ -124,6 +127,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
+        //[Route(nameof(GetLocationsHtml))]
         public PartialViewResult GetLocationsHtml()
         {
             using (SAEONLogs.MethodCall(GetType()))
@@ -142,6 +146,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
+        //[Route(nameof(GetLocationsSelectedHtml))]
         public PartialViewResult GetLocationsSelectedHtml()
         {
             using (SAEONLogs.MethodCall(GetType()))
@@ -160,6 +165,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpPost]
+        //[Route(nameof(UpdateLocationsSelected))]
         public PartialViewResult UpdateLocationsSelected(List<string> locations)
         {
             using (SAEONLogs.MethodCall(GetType()))
@@ -444,6 +450,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         #region Map
 
         [HttpGet]
+        //[Route("GetMapPoints")]
         public JsonResult GetMapPoints()
         {
             using (SAEONLogs.MethodCall(GetType()))
@@ -783,23 +790,28 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
+        [Route("GetDownload/{format}")]
         [Authorize]
-        public async Task<JsonResult> GetDownload()
+        public async Task<JsonResult> GetDownload(string format)
         {
-            using (SAEONLogs.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Format", format } }))
             {
                 try
                 {
                     var model = SessionModel;
                     //SAEONLogs.Verbose("Model: {@model}", model);
-                    var input = new DataWizardDataInput();
+                    var input = new DataWizardDownloadInput();
                     input.Locations.AddRange(model.Locations);
                     input.Variables.AddRange(model.Variables);
                     input.StartDate = model.StartDate;
                     input.EndDate = model.EndDate;
                     input.ElevationMinimum = model.ElevationMinimum;
                     input.ElevationMaximum = model.ElevationMaximum;
-                    var userDownload = await PostEntityAsync<DataWizardDataInput, UserDownload>("Internal/DataWizard/GetDownload", input);
+                    if (Enum.TryParse(format, out DownloadFormat downloadFormat))
+                    {
+                        input.DownloadFormat = downloadFormat;
+                    }
+                    var userDownload = await PostEntityAsync<DataWizardDownloadInput, UserDownload>("Internal/DataWizard/GetDownload", input);
                     SAEONLogs.Verbose("UserDownload: {@userDownload}", userDownload);
                     //RedirectToAction(nameof(ViewDownload), new { id = userDownload.Id });
                     model.IsDataset = false;

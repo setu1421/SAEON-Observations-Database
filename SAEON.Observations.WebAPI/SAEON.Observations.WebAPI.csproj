@@ -58,15 +58,14 @@
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="[7.5.14,8.0)" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="[5.0.17,6.0.0)" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="[5.0.17,6.0.0)" />
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.7.3">
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.7.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.16.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="[5.0.2,6.0.0)" />
-    <PackageReference Include="SAEON.AspNetCore.Formatters" Version="1.0.16" />
+    <PackageReference Include="SAEON.AspNetCore.Formatters" Version="1.0.30" />
     <PackageReference Include="SAEON.Observations.Auth" Version="1.0.48" />
-    <PackageReference Include="SAEON.OpenXML" Version="1.0.119" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.3.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.3.1" />
   </ItemGroup>

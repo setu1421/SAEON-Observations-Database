@@ -170,6 +170,8 @@ namespace SAEON.Observations.Core
         public double? LongitudeEast { get; set; } // -W to +E
         public double? ElevationMinimum { get; set; } // Negative for below sea level
         public double? ElevationMaximum { get; set; } // Negative for below sea level
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public bool? IsValid { get; set; }
     }
 
     //[Table("vInventorySensors")]
@@ -228,6 +230,8 @@ namespace SAEON.Observations.Core
         public double? LongitudeEast { get; set; } // -W to +E
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public bool? IsValid { get; set; }
     }
 
     [Keyless]

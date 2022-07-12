@@ -43,7 +43,7 @@ namespace SAEON.Observations.WebAPI
                     {
                         sb.AppendLine(line);
                         SAEONLogs.Information(line);
-                        await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateDOIsStatusUpdate, line);
+                        await adminHub.Clients.All.SendAsync(SignalRDefaults.CreateDOIsStatus, line);
                     }
 
                     async Task GenerateDOIs()
@@ -129,6 +129,7 @@ namespace SAEON.Observations.WebAPI
                             var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code == inventoryDataset.Code);
                             if (doi is null)
                             {
+                                // @@ Remove once all SACTN recycled
                                 // Recycle SACTN hourly
                                 doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_H~DEGC"));
                                 UpdateDOI();
@@ -170,11 +171,8 @@ namespace SAEON.Observations.WebAPI
                             }
                         }
 
-                        // We only create Dynamic DOIs for SAEON, SMCRI and EFTEON, and exclude SACTN
-                        var orgCodes = new string[] { "SAEON", "SMCRI", "EFTEON" };
-                        foreach (var inventoryDataset in await dbContext.VInventoryDatasets.Where(
-                            i => orgCodes.Contains(i.OrganisationCode) &&
-                            i.LatitudeNorth.HasValue && i.LongitudeEast.HasValue && i.VerifiedCount > 0)
+                        foreach (var inventoryDataset in await dbContext.VInventoryDatasets
+                            .Where(i => i.IsValid ?? false)
                             .OrderBy(i => i.OrganisationName)
                             .ThenBy(i => i.ProgrammeName)
                             .ThenBy(i => i.ProgrammeName)
@@ -182,23 +180,20 @@ namespace SAEON.Observations.WebAPI
                             .ThenBy(i => i.StationName)
                             .ToListAsync())
                         {
-                            if (!inventoryDataset.Code.StartsWith("SACTN"))
+                            var doiDataset = await EnsureDatasetDOI(inventoryDataset);
+                            var dataset = await EnsureDataset(inventoryDataset);
+                            dataset.DigitalObjectIdentifierId = doiDataset.Id;
+                            doiDataset.DatasetId = dataset.Id;
+                            if (dbContext.Entry(doiDataset).State != EntityState.Unchanged)
                             {
-                                var doiDataset = await EnsureDatasetDOI(inventoryDataset);
-                                var dataset = await EnsureDataset(inventoryDataset);
-                                dataset.DigitalObjectIdentifierId = doiDataset.Id;
-                                doiDataset.DatasetId = dataset.Id;
-                                if (dbContext.Entry(doiDataset).State != EntityState.Unchanged)
-                                {
-                                    doiDataset.UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString();
-                                }
-                                if (dbContext.Entry(dataset).State != EntityState.Unchanged)
-                                {
-                                    dataset.UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString();
-                                    dataset.UserId = new Guid(httpContext?.User?.UserId() ?? Guid.Empty.ToString());
-                                }
-                                await dbContext.SaveChangesAsync();
+                                doiDataset.UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString();
                             }
+                            if (dbContext.Entry(dataset).State != EntityState.Unchanged)
+                            {
+                                dataset.UpdatedBy = httpContext?.User?.UserId() ?? Guid.Empty.ToString();
+                                dataset.UserId = new Guid(httpContext?.User?.UserId() ?? Guid.Empty.ToString());
+                            }
+                            await dbContext.SaveChangesAsync();
                         }
                     }
                 }

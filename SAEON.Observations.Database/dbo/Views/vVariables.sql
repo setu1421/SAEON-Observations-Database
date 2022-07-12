@@ -6,3 +6,5 @@ Select distinct
   PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureUnit
 from
   vDatasetsExpansion
+where
+  (IsValid = 1)	

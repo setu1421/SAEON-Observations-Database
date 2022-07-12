@@ -119,14 +119,13 @@ public class SchemaValue
 /// </summary>
 public class ImportSchemaHelper : IDisposable
 {
-    private bool disposed = false;
     private readonly FileHelperEngine engine;
     private readonly DataTable dtResults;
     private readonly DataSource dataSource;
     private readonly DataSchema dataSchema;
     //private readonly List<DataSourceTransformation> transformations;
     private List<SchemaDefinition> SchemaDefs { get; } = new List<SchemaDefinition>();
-    public BlockingCollection<SchemaValue> SchemaValues { get; } = new BlockingCollection<SchemaValue>();
+    public BlockingCollection<SchemaValue> SchemaValues { get; private set; } = new BlockingCollection<SchemaValue>();
     private readonly Sensor Sensor = null;
 
     /// <summary>
@@ -135,6 +134,7 @@ public class ImportSchemaHelper : IDisposable
     //ImportLogHelper LogHelper = null;
 
     private bool concatedatetime = false;
+    private bool disposedValue;
 
 #if UseCosmosDb
     private readonly ObservationsAzure Azure = new ObservationsAzure();
@@ -1405,28 +1405,6 @@ public class ImportSchemaHelper : IDisposable
     /// <summary>
     ///
     /// </summary>
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (disposed)
-        {
-            return;
-        }
-
-        if (disposing)
-        {
-        }
-        disposed = true;
-    }
-
-    /// <summary>
-    ///
-    /// </summary>
     /// <param name="ds"></param>
     /// <param name="reader"></param>
     /// <returns></returns>
@@ -1477,6 +1455,37 @@ public class ImportSchemaHelper : IDisposable
         }
 
         return Result;
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                // TODO: dispose managed state (managed objects)
+                SchemaValues.Dispose();
+                SchemaValues = null;
+            }
+
+            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+            // TODO: set large fields to null
+            disposedValue = true;
+        }
+    }
+
+    // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+    // ~ImportSchemaHelper()
+    // {
+    //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+    //     Dispose(disposing: false);
+    // }
+
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }
 

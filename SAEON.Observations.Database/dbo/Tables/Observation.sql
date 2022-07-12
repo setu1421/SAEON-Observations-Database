@@ -38,17 +38,17 @@
 );
 GO
 CREATE INDEX [IX_Observation_ImportBatchID] ON [dbo].[Observation]([ImportBatchID])
-  INCLUDE ([DataValue],[PhenomenonOfferingID],[PhenomenonUOMID],[SensorID],[StatusID],[StatusReasonID],[Elevation],[Latitude],[Longitude],[ValueDate],[ValueDay])
+  --INCLUDE ([DataValue],[PhenomenonOfferingID],[PhenomenonUOMID],[SensorID],[StatusID],[StatusReasonID],[Elevation],[Latitude],[Longitude],[ValueDate],[ValueDay])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO
 CREATE INDEX [IX_Observation_SensorID] ON [dbo].[Observation] ([SensorID])
   --INCLUDE ([ValueDate],[DataValue],[PhenomenonOfferingID],[PhenomenonUOMID],[ImportBatchID],[StatusID],[StatusReasonID],[Elevation],[Latitude],[Longitude],[ValueDay])
-  INCLUDE ([ValueDate],[PhenomenonOfferingID],[PhenomenonUOMID],[ImportBatchID],[StatusID],[StatusReasonID],[Elevation],[Latitude],[Longitude],[ValueDay])
+  --INCLUDE ([ValueDate],[PhenomenonOfferingID],[PhenomenonUOMID],[ImportBatchID],[StatusID],[StatusReasonID],[Elevation],[Latitude],[Longitude],[ValueDay])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 GO
-CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDate]
-ON [dbo].[Observation] ([SensorID],[ValueDate])
-INCLUDE ([PhenomenonOfferingID],[PhenomenonUOMID],[ImportBatchID],[StatusID],[StatusReasonID],[Elevation],[Latitude],[Longitude],[ValueDay])
+--CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDate]
+--ON [dbo].[Observation] ([SensorID],[ValueDate])
+--INCLUDE ([PhenomenonOfferingID],[PhenomenonUOMID],[ImportBatchID],[StatusID],[StatusReasonID],[Elevation],[Latitude],[Longitude],[ValueDay])
 GO
 CREATE INDEX [IX_Observation_PhenomenonOfferingID] ON [dbo].[Observation] ([PhenomenonOfferingID])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];

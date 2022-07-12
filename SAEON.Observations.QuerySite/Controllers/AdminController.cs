@@ -102,7 +102,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> APICreateDatasets()
+        public async Task<ActionResult> APIUpdateDatasets()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -111,7 +111,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     SAEONLogs.Information("Calling WebAPI");
                     using (var client = await GetWebAPIClientAsync())
                     {
-                        var response = await client.PostAsync("Internal/Admin/CreateDatasets", null);
+                        var response = await client.PostAsync("Internal/Admin/UpdateDatasets", null);
                         response.EnsureSuccessStatusCode();
                     }
                     return new HttpStatusCodeResult(HttpStatusCode.NoContent);
@@ -124,12 +124,38 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        public ActionResult CreateDatasets()
+        public ActionResult UpdateDatasets()
         {
             return View();
         }
 
+        [HttpPost]
+        public async Task<ActionResult> APICreateDatasetFiles()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    SAEONLogs.Information("Calling WebAPI");
+                    using (var client = await GetWebAPIClientAsync())
+                    {
+                        var response = await client.PostAsync("Internal/Admin/CreateDatasetFiles", null);
+                        response.EnsureSuccessStatusCode();
+                    }
+                    return new HttpStatusCodeResult(HttpStatusCode.NoContent);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
 
+        public ActionResult CreateDatasetFiles()
+        {
+            return View();
+        }
 
         [HttpPost]
         public async Task<ActionResult> APIImportSetup(HttpPostedFileBase formFile)
