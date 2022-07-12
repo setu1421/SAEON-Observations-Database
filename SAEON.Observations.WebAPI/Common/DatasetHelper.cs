@@ -141,12 +141,13 @@ namespace SAEON.Observations.WebAPI
 
                     async Task GenerateDatasets()
                     {
-                        foreach (var dataset in dbContext.Datasets.Where(i => !i.NeedsUpdate ?? false))
+                        foreach (var vDataset in dbContext.VDatasetsExpansion.AsNoTracking().Where(i => !i.NeedsUpdate ?? false))
                         {
-                            if ((string.IsNullOrEmpty(dataset.CSVFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName))) ||
-                                (dataset.IsValid && (string.IsNullOrEmpty(dataset.ExcelFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.ExcelFileName)))) /*||
-                                (dataset.IsValid && (string.IsNullOrEmpty(dataset.NetCDFFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.NetCDFFileName))))*/)
+                            if ((string.IsNullOrEmpty(vDataset.CSVFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], vDataset.CSVFileName))) ||
+                                ((vDataset.IsValid ?? false) && (string.IsNullOrEmpty(vDataset.ExcelFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], vDataset.ExcelFileName)))) /*||
+                                ((vDataset.IsValid ?? false) && (string.IsNullOrEmpty(vDataset.NetCDFFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], vDataset.NetCDFFileName))))*/)
                             {
+                                var dataset = dbContext.Datasets.First(i => i.Id == vDataset.Id);
                                 dataset.NeedsUpdate = true;
                             }
                         }
@@ -186,7 +187,8 @@ namespace SAEON.Observations.WebAPI
                         dataset.NetCDFFileName = $"{fileName}.nc";
                         var observations = await LoadFromDatabaseAsync(dbContext, dataset);
                         EnsureCSV();
-                        if (dataset.IsValid)
+                        var vDataset = dbContext.VDatasetsExpansion.First(i => i.Id == i.Id);
+                        if (vDataset.IsValid ?? false)
                         {
                             EnsureExcel();
                             EnsureNetCDF();
@@ -220,7 +222,7 @@ namespace SAEON.Observations.WebAPI
 
                         void EnsureNetCDF()
                         {
-                            SAEONLogs.Verbose("Creating {FileName}", dataset.NetCDFFileName);
+                            //SAEONLogs.Verbose("Creating {FileName}", dataset.NetCDFFileName);
                         }
                     }
                 }

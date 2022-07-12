@@ -419,8 +419,6 @@ namespace SAEON.Observations.Core
         [JsonIgnore, SwaggerIgnore]
         [StringLength(500)]
         public string CSVFileName { get; set; }
-        [JsonIgnore, SwaggerIgnore, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public bool IsValid { get; set; }
 
         public int CreateHashCode()
         {
@@ -502,6 +500,8 @@ namespace SAEON.Observations.Core
         public string UnitSymbol { get; set; }
 
         public string Variable => $"{PhenomenonName.Replace(", ", "_")}, {OfferingName.Replace(", ", "_")}, {UnitName.Replace(", ", "_")}";
+        [JsonIgnore, SwaggerIgnore, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public bool? IsValid { get; set; }
 
         // Navigation
         [JsonIgnore, SwaggerIgnore]

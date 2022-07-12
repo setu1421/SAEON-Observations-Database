@@ -172,7 +172,7 @@ namespace SAEON.Observations.WebAPI
                         }
 
                         foreach (var inventoryDataset in await dbContext.VInventoryDatasets
-                            .Where(i => i.IsValid)
+                            .Where(i => i.IsValid ?? false)
                             .OrderBy(i => i.OrganisationName)
                             .ThenBy(i => i.ProgrammeName)
                             .ThenBy(i => i.ProgrammeName)

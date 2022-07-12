@@ -19,6 +19,7 @@
        [dbo].[vLocations] (View)
        [dbo].[vVariables] (View)
        [dbo].[vInventoryDatasets] (View)
+       [dbo].[vInventorySensors] (View)
        [dbo].[vInventorySnapshots] (View)
      Create
        [dbo].[Observation].[IX_Observation_ImportBatchID] (Index)
@@ -37,6 +38,13 @@
        [dbo].[vObservation] (View)
        [dbo].[vObservationJSON] (View)
        [dbo].[vStationObservations] (View)
+       [dbo].[vSensorThingsAPIDatastreams] (View)
+       [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIObservedProperties] (View)
+       [dbo].[vSensorThingsAPISensors] (View)
+       [dbo].[vSensorThingsAPIThings] (View)
+       [dbo].[vSensorThingsAPIFeaturesOfInterest] (View)
+       [dbo].[vSensorThingsAPIHistoricalLocations] (View)
        [dbo].[spCreateImportBatchSummaries] (Procedure)
        [dbo].[spCreateInventorySnapshot] (Procedure)
 

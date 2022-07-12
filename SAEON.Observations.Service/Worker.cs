@@ -33,12 +33,13 @@ namespace SAEON.Observations.Service
                         .WithUrl(config["WebAPIUrl"].AddEndForwardSlash() + "AdminHub")
                         .WithAutomaticReconnect()
                         .Build();
-                    adminHubConnection.On<string>(SignalRDefaults.CreateDOIsStatus, CreateDOIsStatusUpdate);
-                    adminHubConnection.On<string>(SignalRDefaults.CreateMetadataStatus, CreateMetadataStatusUpdate);
-                    adminHubConnection.On<string>(SignalRDefaults.CreateODPMetadataStatus, CreateODPMetadataStatusUpdate);
-                    adminHubConnection.On<string>(SignalRDefaults.CreateDatasetFilesStatus, CreateDatasetsStatusUpdate);
-                    adminHubConnection.On<string>(SignalRDefaults.CreateImportBatchSummariesStatus, CreateImportBatchSummariesStatusUpdate);
-                    adminHubConnection.On<string>(SignalRDefaults.CreateSnapshotsStatus, CreateSnapshotsStatusUpdate);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateDOIsStatus, CreateDOIsStatus);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateMetadataStatus, CreateMetadataStatus);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateODPMetadataStatus, CreateODPMetadataStatus);
+                    adminHubConnection.On<string>(SignalRDefaults.UpdateDatasetsStatus, UpdateDatasetsStatus);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateDatasetFilesStatus, CreateDatasetFilesStatus);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateImportBatchSummariesStatus, CreateImportBatchSummariesStatus);
+                    adminHubConnection.On<string>(SignalRDefaults.CreateSnapshotsStatus, CreateSnapshotsStatus);
                 }
                 catch (Exception ex)
                 {
@@ -48,32 +49,37 @@ namespace SAEON.Observations.Service
             }
         }
 
-        private void CreateDOIsStatusUpdate(string status)
+        private void CreateDOIsStatus(string status)
         {
             SAEONLogs.Information("CreateDOIs: {Status}", status);
         }
 
-        private void CreateMetadataStatusUpdate(string status)
+        private void CreateMetadataStatus(string status)
         {
             SAEONLogs.Information("CreateMetadata: {Status}", status);
         }
 
-        private void CreateODPMetadataStatusUpdate(string status)
+        private void CreateODPMetadataStatus(string status)
         {
             SAEONLogs.Information("CreateODPMetadata: {Status}", status);
         }
 
-        private void CreateDatasetsStatusUpdate(string status)
+        private void CreateDatasetFilesStatus(string status)
         {
-            SAEONLogs.Information("CreateDatasets: {Status}", status);
+            SAEONLogs.Information("CreateDatasetFiles: {Status}", status);
         }
 
-        private void CreateImportBatchSummariesStatusUpdate(string status)
+        private void UpdateDatasetsStatus(string status)
+        {
+            SAEONLogs.Information("UpdateDatasets: {Status}", status);
+        }
+
+        private void CreateImportBatchSummariesStatus(string status)
         {
             SAEONLogs.Information("CreateImportBatchSummariesStatusUpdate: {Status}", status);
         }
 
-        private void CreateSnapshotsStatusUpdate(string status)
+        private void CreateSnapshotsStatus(string status)
         {
             SAEONLogs.Information("CreateSnapshotsStatusUpdate: {Status}", status);
         }

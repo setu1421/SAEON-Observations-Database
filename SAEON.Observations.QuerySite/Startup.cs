@@ -32,7 +32,7 @@ namespace SAEON.Observations.QuerySite
                 try
                 {
                     SAEONLogs.Verbose("AuthenticationServer: {AuthenticationServer}", ConfigurationManager.AppSettings["AuthenticationServerUrl"]);
-                    SyncfusionLicenseProvider.RegisterLicense("Mgo+DSMBPh8sVXJ0S0d+XE9AcVRDX3xKf0x/TGpQb19xflBPallYVBYiSV9jS3xTckRnWXdbdXFWQmJZVw==;Mgo+DSMBMAY9C3t2VVhhQlFaclhJXGFWfVJpTGpQdk5xdV9DaVZUTWY/P1ZhSXxRdkFiXX9WdXFQRWhaUUY=");
+                    SyncfusionLicenseProvider.RegisterLicense("Mgo+DSMBPh8sVXJ0S0R+XE9HcFRDX3xKf0x/TGpQb19xflBPallYVBYiSV9jS3xTcURiWXtfcXdWRWJYUg==;Mgo+DSMBMAY9C3t2VVhiQlFadVlJXGFWfVJpTGpQdk5xdV9DaVZUTWY/P1ZhSXxRdkJiWH9acXVWRWNfV0c=");
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.AntiForgeryClaim;
                     //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 

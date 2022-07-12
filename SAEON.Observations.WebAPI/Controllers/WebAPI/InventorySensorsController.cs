@@ -13,7 +13,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         protected override List<Expression<Func<VInventorySensor, bool>>> GetWheres()
         {
             var result = base.GetWheres();
-            result.Add(i => i.IsValid);
+            result.Add(i => i.IsValid ?? false);
             return result;
         }
 
