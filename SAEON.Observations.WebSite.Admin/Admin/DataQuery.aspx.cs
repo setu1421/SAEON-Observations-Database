@@ -510,8 +510,8 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 }
                 else
                 {
-                    LoadData();
-                    return;
+                    //LoadData();
+                    //return;
                     var log = string.Empty;
                     var q = BuildQuery(out log);
                     var stopwatch = new Stopwatch();

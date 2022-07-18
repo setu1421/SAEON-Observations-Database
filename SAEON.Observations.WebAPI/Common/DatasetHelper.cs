@@ -141,7 +141,13 @@ namespace SAEON.Observations.WebAPI
 
                     async Task GenerateDatasets()
                     {
-                        foreach (var vDataset in dbContext.VDatasetsExpansion.AsNoTracking().Where(i => !i.NeedsUpdate ?? false))
+                        foreach (var vDataset in dbContext.VDatasetsExpansion.AsNoTracking()
+                            .Where(i => !i.NeedsUpdate ?? false)
+                            .OrderBy(i => i.OrganisationName)
+                            .ThenBy(i => i.ProgrammeName)
+                            .ThenBy(i => i.ProgrammeName)
+                            .ThenBy(i => i.SiteName)
+                            .ThenBy(i => i.StationName))
                         {
                             if ((string.IsNullOrEmpty(vDataset.CSVFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], vDataset.CSVFileName))) ||
                                 ((vDataset.IsValid ?? false) && (string.IsNullOrEmpty(vDataset.ExcelFileName) || !File.Exists(Path.Combine(config[DatasetsFolderConfigKey], vDataset.ExcelFileName)))) /*||
@@ -185,9 +191,9 @@ namespace SAEON.Observations.WebAPI
                         dataset.CSVFileName = $"{fileName}.csv";
                         dataset.ExcelFileName = $"{fileName}.xlsx";
                         dataset.NetCDFFileName = $"{fileName}.nc";
-                        var observations = await LoadFromDatabaseAsync(dbContext, dataset);
+                        var observations = await LoadFromDatabaseAsync(dbContext, dataset, false);
                         EnsureCSV();
-                        var vDataset = dbContext.VDatasetsExpansion.First(i => i.Id == i.Id);
+                        var vDataset = dbContext.VDatasetsExpansion.First(i => i.Id == dataset.Id);
                         if (vDataset.IsValid ?? false)
                         {
                             EnsureExcel();
@@ -214,7 +220,7 @@ namespace SAEON.Observations.WebAPI
                         void EnsureExcel()
                         {
                             SAEONLogs.Verbose("Creating {FileName}", dataset.ExcelFileName);
-                            using (var doc = ExcelSaxHelper.CreateSpreadsheet(Path.Combine(config[DatasetsFolderConfigKey], dataset.ExcelFileName), observations, true))
+                            using (var doc = ExcelSaxHelper.CreateSpreadsheet(Path.Combine(config[DatasetsFolderConfigKey], dataset.ExcelFileName), observations.Where(i => (i.Status == null) || (i.Status == "Verified")).ToList(), true))
                             {
                                 doc.Save();
                             }
@@ -243,15 +249,9 @@ namespace SAEON.Observations.WebAPI
                     Guard.IsNotNull(dataset, nameof(dataset));
                     var stopwatch = new Stopwatch();
                     stopwatch.Start();
-                    var fileName = dataset.CSVFileName; // @@@ Remove once new style are populated
-                    if (string.IsNullOrEmpty(fileName))
-                    {
-                        fileName = $"{dataset.OldFileName}.csv";
-                    }
-                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], fileName));
-                    //using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName));
+                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName));
                     using var csv = CsvReaderHelper.GetCsvReader(reader);
-                    var result = csv.GetRecords<ObservationDTO>().ToList();
+                    var result = csv.GetRecords<ObservationDTO>().Where(i => (((i.Status == null) || (i.Status == "Verified")))).ToList();
                     SAEONLogs.Verbose("Loaded in {Elapsed}", stopwatch.Elapsed.TimeStr());
                     return result;
                 }
@@ -270,18 +270,14 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    var fileName = dataset.CSVFileName; // @@@ Remove once new style are populated
-                    if (string.IsNullOrEmpty(fileName))
-                    {
-                        fileName = $"{dataset.OldFileName}.csv";
-                    }
-                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], fileName));
-                    //using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName));
+                    using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName));
                     using var csv = CsvReaderHelper.GetCsvReader(reader);
                     var result = new List<ObservationDTO>();
                     await foreach (var record in csv.GetRecordsAsync<ObservationDTO>())
+
                     {
-                        result.Add(record);
+                        if ((record.Status == null) || (record.Status == "Verified"))
+                            result.Add(record);
                     }
                     return result;
                 }
@@ -293,36 +289,38 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
-        private static IQueryable<ObservationDTO> GetQuery(ObservationsDbContext dbContext, Dataset dataset)
+        private static IQueryable<ObservationDTO> GetQuery(ObservationsDbContext dbContext, Dataset dataset, bool onlyVerified)
         {
             using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
             {
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    return dbContext.VObservationsExpansion.AsNoTracking()
-                        .Where(i =>
-                            (i.StationId == dataset.StationId) && (i.PhenomenonOfferingId == dataset.PhenomenonOfferingId) && (i.PhenomenonUnitId == dataset.PhenomenonUnitId) &&
-                            ((i.StatusId == null) || (i.StatusName == "Verified")))
-                        .OrderBy(i => i.Elevation).ThenBy(i => i.ValueDate)
-                        .Select(i => new ObservationDTO
-                        {
-                            Site = i.SiteName,
-                            Station = i.StationName,
-                            Phenomenon = i.PhenomenonName,
-                            Offering = i.OfferingName,
-                            Unit = i.UnitName,
-                            Date = i.ValueDate,
-                            Value = i.DataValue,
-                            Instrument = i.InstrumentName,
-                            Sensor = i.SensorName,
-                            Comment = i.Comment,
-                            Latitude = i.Latitude,
-                            Longitude = i.Longitude,
-                            Elevation = i.Elevation,
-                            Status = i.StatusName,
-                            Reason = i.StatusReasonName,
-                        });
+                    var result = dbContext.VObservationsExpansion.AsNoTracking()
+                        .Where(i => (i.StationId == dataset.StationId) && (i.PhenomenonOfferingId == dataset.PhenomenonOfferingId) && (i.PhenomenonUnitId == dataset.PhenomenonUnitId));
+                    if (onlyVerified)
+                    {
+                        result = result.Where(i => (i.StatusId == null) || (i.StatusName == "Verified"));
+                    }
+                    result = result.OrderBy(i => i.Elevation).ThenBy(i => i.ValueDate);
+                    return result.Select(i => new ObservationDTO
+                    {
+                        Site = i.SiteName,
+                        Station = i.StationName,
+                        Phenomenon = i.PhenomenonName,
+                        Offering = i.OfferingName,
+                        Unit = i.UnitName,
+                        Date = i.ValueDate,
+                        Value = i.DataValue,
+                        Instrument = i.InstrumentName,
+                        Sensor = i.SensorName,
+                        Comment = i.Comment,
+                        Latitude = i.Latitude,
+                        Longitude = i.Longitude,
+                        Elevation = i.Elevation,
+                        Status = i.StatusName,
+                        Reason = i.StatusReasonName,
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -332,14 +330,14 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
-        private static List<ObservationDTO> LoadFromDatabase(ObservationsDbContext dbContext, Dataset dataset)
+        private static List<ObservationDTO> LoadFromDatabase(ObservationsDbContext dbContext, Dataset dataset, bool onlyVerified)
         {
             using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
             {
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    return GetQuery(dbContext, dataset).ToList();
+                    return GetQuery(dbContext, dataset, onlyVerified).ToList();
                 }
                 catch (Exception ex)
                 {
@@ -349,14 +347,14 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
-        private static async Task<List<ObservationDTO>> LoadFromDatabaseAsync(ObservationsDbContext dbContext, Dataset dataset)
+        private static async Task<List<ObservationDTO>> LoadFromDatabaseAsync(ObservationsDbContext dbContext, Dataset dataset, bool onlyVerified)
         {
             using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
             {
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    return await GetQuery(dbContext, dataset).ToListAsync();
+                    return await GetQuery(dbContext, dataset, onlyVerified).ToListAsync();
                 }
                 catch (Exception ex)
                 {
@@ -373,14 +371,11 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    //@@ Remove once new-style are populated
                     string fileName = dataset.CSVFileName;
-                    string oldFileName = $"{dataset.OldFileName}.csv";
                     var useDisk = config[UseDiskConfigKey]?.IsTrue() ?? false;
-                    var fileExists = (!string.IsNullOrEmpty(fileName) && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], fileName))) ||
-                                     (!string.IsNullOrEmpty(oldFileName) && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], oldFileName)));
+                    var fileExists = (!string.IsNullOrEmpty(fileName) && File.Exists(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName)));
                     var result = useDisk && fileExists;
-                    SAEONLogs.Verbose("UseDisk: {UseDisk} FileName: {FileName} OldFileName: {OldFileName} FileExists: {FileExists} IsOnDisk: {IsOnDisk}", useDisk, fileName, oldFileName, fileExists, result);
+                    SAEONLogs.Verbose("UseDisk: {UseDisk} FileName: {FileName} FileExists: {FileExists} IsOnDisk: {IsOnDisk}", useDisk, fileName, fileExists, result);
                     return result;
                 }
                 catch (Exception ex)
@@ -405,7 +400,7 @@ namespace SAEON.Observations.WebAPI
                     }
                     else
                     {
-                        return await LoadFromDatabaseAsync(dbContext, dataset);
+                        return await LoadFromDatabaseAsync(dbContext, dataset, true);
                     }
                 }
                 catch (Exception ex)
@@ -430,7 +425,7 @@ namespace SAEON.Observations.WebAPI
                     }
                     else
                     {
-                        return LoadFromDatabase(dbContext, dataset);
+                        return LoadFromDatabase(dbContext, dataset, true);
                     }
                 }
                 catch (Exception ex)
