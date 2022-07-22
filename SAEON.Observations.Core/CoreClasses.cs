@@ -151,6 +151,8 @@ namespace SAEON.Observations.Core
     [SwaggerName("Observation")]
     public class ObservationDTO
     {
+        [SwaggerIgnore, JsonIgnore]
+        public int Id { get; set; }
         public string Station { get; set; }
         public string Variable => $"{Phenomenon.Replace(", ", "_")}, {Offering.Replace(", ", "_")}, {Unit.Replace(", ", "_")}";
         public DateTime Date { get; set; }
@@ -160,6 +162,7 @@ namespace SAEON.Observations.Core
         public string Phenomenon { get; set; }
         public string Offering { get; set; }
         public string Unit { get; set; }
+        public string UnitSymbol { get; set; }
         public string Instrument { get; set; }
         public string Sensor { get; set; }
         public double? Latitude { get; set; }

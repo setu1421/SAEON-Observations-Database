@@ -28,7 +28,7 @@ namespace SAEON.Observations.WebAPI
 
         public static async Task<string> UpdateDatasets(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper)))
+            using (SAEONLogs.MethodCall(typeof(DatasetHelper)))
             {
                 try
                 {
@@ -120,7 +120,7 @@ namespace SAEON.Observations.WebAPI
 
         public static async Task<string> CreateDatasetsFiles(ObservationsDbContext dbContext, IHubContext<AdminHub> adminHub, HttpContext httpContext, IConfiguration config)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper)))
+            using (SAEONLogs.MethodCall(typeof(DatasetHelper)))
             {
                 try
                 {
@@ -242,7 +242,7 @@ namespace SAEON.Observations.WebAPI
 
         private static List<ObservationDTO> LoadFromDisk(Dataset dataset, IConfiguration config)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
+            using (SAEONLogs.MethodCall(typeof(DatasetHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
             {
                 try
                 {
@@ -252,7 +252,7 @@ namespace SAEON.Observations.WebAPI
                     using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName));
                     using var csv = CsvReaderHelper.GetCsvReader(reader);
                     var result = csv.GetRecords<ObservationDTO>().Where(i => (((i.Status == null) || (i.Status == "Verified")))).ToList();
-                    SAEONLogs.Verbose("Loaded in {Elapsed}", stopwatch.Elapsed.TimeStr());
+                    SAEONLogs.Verbose("Loaded from disk in {Elapsed}", stopwatch.Elapsed.TimeStr());
                     return result;
                 }
                 catch (Exception ex)
@@ -265,11 +265,13 @@ namespace SAEON.Observations.WebAPI
 
         private static async Task<List<ObservationDTO>> LoadFromDiskAsync(Dataset dataset, IConfiguration config)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
+            using (SAEONLogs.MethodCall(typeof(DatasetHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
             {
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
                     using var reader = new StreamReader(Path.Combine(config[DatasetsFolderConfigKey], dataset.CSVFileName));
                     using var csv = CsvReaderHelper.GetCsvReader(reader);
                     var result = new List<ObservationDTO>();
@@ -279,6 +281,7 @@ namespace SAEON.Observations.WebAPI
                         if ((record.Status == null) || (record.Status == "Verified"))
                             result.Add(record);
                     }
+                    SAEONLogs.Verbose("Loaded from disk in {Elapsed}", stopwatch.Elapsed.TimeStr());
                     return result;
                 }
                 catch (Exception ex)
@@ -291,7 +294,7 @@ namespace SAEON.Observations.WebAPI
 
         private static IQueryable<ObservationDTO> GetQuery(ObservationsDbContext dbContext, Dataset dataset, bool onlyVerified)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
+            using (SAEONLogs.MethodCall(typeof(DatasetHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
             {
                 try
                 {
@@ -305,11 +308,13 @@ namespace SAEON.Observations.WebAPI
                     result = result.OrderBy(i => i.Elevation).ThenBy(i => i.ValueDate);
                     return result.Select(i => new ObservationDTO
                     {
+                        Id = i.Id,
                         Site = i.SiteName,
                         Station = i.StationName,
                         Phenomenon = i.PhenomenonName,
                         Offering = i.OfferingName,
                         Unit = i.UnitName,
+                        UnitSymbol = i.UnitSymbol,
                         Date = i.ValueDate,
                         Value = i.DataValue,
                         Instrument = i.InstrumentName,
@@ -332,12 +337,16 @@ namespace SAEON.Observations.WebAPI
 
         private static List<ObservationDTO> LoadFromDatabase(ObservationsDbContext dbContext, Dataset dataset, bool onlyVerified)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
+            using (SAEONLogs.MethodCall(typeof(DatasetHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
             {
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    return GetQuery(dbContext, dataset, onlyVerified).ToList();
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    var result = GetQuery(dbContext, dataset, onlyVerified).ToList();
+                    SAEONLogs.Verbose("Loaded from database in {Elapsed}", stopwatch.Elapsed.TimeStr());
+                    return result;
                 }
                 catch (Exception ex)
                 {
@@ -349,12 +358,16 @@ namespace SAEON.Observations.WebAPI
 
         private static async Task<List<ObservationDTO>> LoadFromDatabaseAsync(ObservationsDbContext dbContext, Dataset dataset, bool onlyVerified)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
+            using (SAEONLogs.MethodCall(typeof(DatasetHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
             {
                 try
                 {
                     Guard.IsNotNull(dataset, nameof(dataset));
-                    return await GetQuery(dbContext, dataset, onlyVerified).ToListAsync();
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    var result = await GetQuery(dbContext, dataset, onlyVerified).ToListAsync();
+                    SAEONLogs.Verbose("Loaded from database in {Elapsed}", stopwatch.Elapsed.TimeStr());
+                    return result;
                 }
                 catch (Exception ex)
                 {
@@ -366,7 +379,7 @@ namespace SAEON.Observations.WebAPI
 
         private static bool IsOnDisk(IConfiguration config, Dataset dataset)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
+            using (SAEONLogs.MethodCall(typeof(DatasetHelper), new MethodCallParameters { { "datasetId", dataset?.Id } }))
             {
                 try
                 {
@@ -388,7 +401,7 @@ namespace SAEON.Observations.WebAPI
 
         public static async Task<List<ObservationDTO>> LoadAsync(ObservationsDbContext dbContext, IConfiguration config, Guid datasetId)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", datasetId } }))
+            using (SAEONLogs.MethodCall(typeof(DatasetHelper), new MethodCallParameters { { "datasetId", datasetId } }))
             {
                 try
                 {
@@ -413,7 +426,7 @@ namespace SAEON.Observations.WebAPI
 
         public static List<ObservationDTO> Load(ObservationsDbContext dbContext, IConfiguration config, Guid datasetId)
         {
-            using (SAEONLogs.MethodCall(typeof(DOIHelper), new MethodCallParameters { { "datasetId", datasetId } }))
+            using (SAEONLogs.MethodCall(typeof(DatasetHelper), new MethodCallParameters { { "datasetId", datasetId } }))
             {
                 try
                 {

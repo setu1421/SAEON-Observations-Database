@@ -399,6 +399,7 @@ namespace SAEON.Observations.Core
         /// </summary>
         [JsonIgnore, SwaggerIgnore]
         public int HashCode { get; set; }
+        [JsonIgnore, SwaggerIgnore]
         public string FileName => $"{DateTime.Now:yyyyMMddHHmm} {Code.Replace(Path.GetInvalidFileNameChars(), '_')}";
         /// <summary>
         /// FileName of the Dataset as Excel file

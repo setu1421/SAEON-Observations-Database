@@ -6,6 +6,7 @@ using SAEON.Observations.Data;
 using SubSonic;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -232,9 +233,9 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 SqlQuery q = null;
                 // @@ Remove Top
                 if ((columns == null) || (columns.Length == 0))
-                    q = new Select().Top("100").From(VObservationExpansion.Schema);
+                    q = new Select()/*.Top("100")*/.From(VObservationExpansion.Schema);
                 else
-                    q = new Select(columns).Top("100").From(VObservationExpansion.Schema);
+                    q = new Select(columns)/*.Top("100")*/.From(VObservationExpansion.Schema);
 
                 if (FilterTree.CheckedNodes != null)
                 {
@@ -358,64 +359,6 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         }
     }
 
-    private class ObservationDTO
-    {
-        public string Station { get; set; }
-        public string Variable => $"{Phenomenon.Replace(", ", "_")}, {Offering.Replace(", ", "_")}, {Unit.Replace(", ", "_")}";
-        public DateTime Date { get; set; }
-        public double? Value { get; set; }
-        public string Comment { get; set; }
-        public string Site { get; set; }
-        public string Phenomenon { get; set; }
-        public string Offering { get; set; }
-        public string Unit { get; set; }
-        public string Instrument { get; set; }
-        public string Sensor { get; set; }
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
-        public double? Elevation { get; set; }
-        public string Status { get; set; }
-        public string Reason { get; set; }
-
-        public override bool Equals(object obj)
-        {
-            return obj is ObservationDTO dTO &&
-                   Station == dTO.Station &&
-                   Variable == dTO.Variable &&
-                   Date == dTO.Date &&
-                   Value == dTO.Value &&
-                   Comment == dTO.Comment &&
-                   Site == dTO.Site &&
-                   Phenomenon == dTO.Phenomenon &&
-                   Offering == dTO.Offering &&
-                   Unit == dTO.Unit &&
-                   Instrument == dTO.Instrument &&
-                   Sensor == dTO.Sensor &&
-                   Latitude == dTO.Latitude &&
-                   Longitude == dTO.Longitude &&
-                   Elevation == dTO.Elevation;
-        }
-
-        public override int GetHashCode()
-        {
-            var hash = new HashCode();
-            hash.Add(Station);
-            hash.Add(Variable);
-            hash.Add(Date);
-            hash.Add(Value);
-            hash.Add(Comment);
-            hash.Add(Site);
-            hash.Add(Phenomenon);
-            hash.Add(Offering);
-            hash.Add(Unit);
-            hash.Add(Instrument);
-            hash.Add(Sensor);
-            hash.Add(Latitude);
-            hash.Add(Longitude);
-            hash.Add(Elevation);
-            return hash.ToHashCode();
-        }
-    }
 
     private List<ObservationDTO> LoadData()
     {
@@ -423,6 +366,8 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         {
             try
             {
+                //DatasetHelper.UpdateDatasetsFromDisk();
+                SAEONLogs.Information("DatasetsFolder: {DatasetsFolder}", ConfigurationManager.AppSettings["DatasetsFolder"]);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
                 var result = new List<ObservationDTO>();
@@ -483,10 +428,9 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                     SAEONLogs.Verbose("Datasets: {@Datasets}", selectedDatasets);
                     foreach (var dataset in selectedDatasets)
                     {
-
+                        result.AddRange(DatasetHelper.Load(dataset.Id));
                     }
                 }
-
                 SAEONLogs.Information("Loaded: {Elapsed}", stopwatch.Elapsed.TimeStr());
                 return result;
             }
@@ -510,8 +454,9 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 }
                 else
                 {
-                    //LoadData();
-                    //return;
+                    ObservationsGrid.GetStore().DataSource = LoadData().Take(10);
+                    ObservationsGrid.GetStore().DataBind();
+                    return;
                     var log = string.Empty;
                     var q = BuildQuery(out log);
                     var stopwatch = new Stopwatch();
