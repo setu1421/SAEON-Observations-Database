@@ -88,8 +88,8 @@ public static class DatasetHelper
                 {
                     using (var csv = CsvReaderHelper.GetCsvReader(reader))
                     {
-                        var result = csv.GetRecords<ObservationDTO>().Where(i => (((i.Status == null) || (i.Status == "Verified")))).ToList();
-                        SAEONLogs.Verbose("Loaded from disk in {Elapsed}", stopwatch.Elapsed.TimeStr());
+                        var result = csv.GetRecords<ObservationDTO>()/*.Where(i => (((i.Status == null) || (i.Status == "Verified"))))*/.ToList();
+                        SAEONLogs.Verbose("Loaded {Count} from disk in {Elapsed}", result.Count, stopwatch.Elapsed.TimeStr());
                         return result;
                     }
                 }
@@ -110,6 +110,8 @@ public static class DatasetHelper
             {
                 //Guard.IsNotNull(dataset, nameof(dataset));
                 if (dataset is null) throw new ArgumentNullException(nameof(dataset));
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
                 var observations = new VObservationExpansionCollection()
                     .Where(VObservationExpansion.Columns.StationID, dataset.StationID)
                     .Where(VObservationExpansion.Columns.PhenomenonOfferingID, dataset.PhenomenonOfferingID)
@@ -139,6 +141,7 @@ public static class DatasetHelper
                         Reason = observation.StatusReasonName,
                     });
                 }
+                SAEONLogs.Verbose("Loaded {Count} from database in {Elapsed}", result.Count, stopwatch.Elapsed.TimeStr());
                 return result.OrderBy(i => i.Elevation).ThenBy(i => i.Date).ToList();
             }
             catch (Exception ex)
@@ -245,7 +248,10 @@ public static class DatasetHelper
                     }
                     //else if (fi.Name.EndsWith(".nc"))
                     //{ }
-                    dataset.Save();
+                    if (dataset.NeedsUpdate ?? false)
+                    {
+                        dataset.Save();
+                    }
                 }
             }
         }

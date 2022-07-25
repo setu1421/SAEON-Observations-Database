@@ -1,5 +1,4 @@
 ﻿using Ext.Net;
-using Newtonsoft.Json;
 using SAEON.Core;
 using SAEON.CSV;
 using SAEON.Logs;
@@ -42,6 +41,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         {
             try
             {
+                //DatasetHelper.UpdateDatasetsFromDisk(); // Development only
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
                 Ext.Net.TreeNode rootOrganisations = new Ext.Net.TreeNode("Organisations", "Organisations", (Icon)new ModuleX("e4c08bfa-a8f0-4112-b45c-dd1788ade5a0").Icon);
@@ -259,6 +259,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         return items.Where(i => i.Type == itemType).Select(i => i.Id).FirstOrDefault();
     }
 
+    /*
     private SqlQuery BuildQuery(out string log, string[] columns = null)
     {
         using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Columns", columns } }))
@@ -398,11 +399,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             }
         }
     }
+    */
 
-
-    private List<ObservationDTO> LoadData(string sortCol, Ext.Net.SortDirection sortDir, int? skip = null, int? take = null)
+    private List<ObservationDTO> LoadData(string sortCol, Ext.Net.SortDirection sortDir)
     {
-        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Skip", skip }, { "Take", take } }))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "SortCol", sortCol }, { "SortDir", sortDir } }))
         {
             try
             {
@@ -477,7 +478,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 {
                                     case "Sensor":
                                         var sensor = new Sensor(new Guid(GetItem(node.Items, "Sensor")));
-                                        observations.RemoveAll(i => i.Instrument != sensor.Name);
+                                        observations.RemoveAll(i => i.Sensor != sensor.Name);
                                         break;
                                     case "Instrument":
                                         var instrument = new Instrument(new Guid(GetItem(node.Items, "Instrument")));
@@ -581,12 +582,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                             result = result.OrderBy(i => i.Date).ToList();
                         break;
                 }
-                SAEONLogs.Verbose("Skip: {Skip} Take: {Take}", skip, take);
-                if (skip.HasValue && take.HasValue)
-                {
-                    result = result.Skip(skip.Value).Take(take.Value).ToList();
-                }
-                SAEONLogs.Information("Loaded: {Elapsed}", stopwatch.Elapsed.TimeStr());
+                SAEONLogs.Information("Loaded {Count} in {Elapsed}", result.Count, stopwatch.Elapsed.TimeStr());
                 return result;
             }
             catch (Exception ex)
@@ -611,9 +607,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 {
                     var skip = e.Start / e.Limit * e.Limit;
                     var take = e.Limit;
-                    ObservationsGrid.GetStore().DataSource = LoadData(e.Sort, e.Dir, skip, take);
+                    SAEONLogs.Verbose("Skip: {Skip} Take: {Take}", skip, take);
+                    var observations = LoadData(e.Sort, e.Dir);
+                    e.Total = observations.Count;
+                    ObservationsGrid.GetStore().DataSource = observations.Skip(skip).Take(take).ToList();
                     ObservationsGrid.GetStore().DataBind();
-                    return;
                     //var log = string.Empty;
                     //var q = BuildQuery(out log);
                     //var stopwatch = new Stopwatch();
@@ -630,8 +628,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         }
     }
 
-
-
+    /*
     public SqlQuery BuildQ(string json, string visCols, string sortCol, string sortDir, out string log)
     {
         using (SAEONLogs.MethodCall(GetType()))
@@ -743,6 +740,5 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             }
         }
     }
-
-
+    */
 }
