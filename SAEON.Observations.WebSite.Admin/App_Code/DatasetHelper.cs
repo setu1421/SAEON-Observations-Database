@@ -1,4 +1,5 @@
-﻿using SAEON.Core;
+﻿using Newtonsoft.Json;
+using SAEON.Core;
 using SAEON.CSV;
 using SAEON.Logs;
 using SAEON.Observations.Data;
@@ -11,6 +12,7 @@ using System.Linq;
 
 public class ObservationDTO
 {
+    [JsonIgnore]
     public int Id { get; set; }
     public string Station { get; set; }
     public string Variable => $"{Phenomenon.Replace(", ", "_")}, {Offering.Replace(", ", "_")}, {Unit.Replace(", ", "_")}";

@@ -1,15 +1,18 @@
 ﻿using Ext.Net;
 using Newtonsoft.Json;
 using SAEON.Core;
+using SAEON.CSV;
 using SAEON.Logs;
 using SAEON.Observations.Data;
+using SAEON.OpenXML;
 using SubSonic;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Web.UI.WebControls;
 
 public partial class Admin_DataQuery : System.Web.UI.Page
@@ -196,6 +199,43 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
     protected void ObservationsGridStore_Submit(object sender, StoreSubmitDataEventArgs e)
     {
+        try
+        {
+            var sortSplits = SortInfo.Text.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+            SAEONLogs.Verbose("SortInfo: {SortInfo} Splits: {Splits}", SortInfo.Text, sortSplits);
+            var sortCol = sortSplits[0];
+            var sortDir = sortSplits[1].ToLowerInvariant() == "desc" ? Ext.Net.SortDirection.DESC : Ext.Net.SortDirection.DESC;
+            var observations = LoadData(sortCol, sortDir);
+            Response.Clear();
+            byte[] bytes = null;
+            switch (FormatType.Text)
+            {
+                case "csv": //ExportTypes.Csv:
+                    Response.ContentType = "text/csv";
+                    Response.AddHeader("Content-Disposition", "attachment; filename=Data Query.csv");
+                    bytes = Encoding.UTF8.GetBytes(observations.ToCSV());
+                    break;
+                case "exc": //ExportTypes.Excel
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    Response.AddHeader("Content-Disposition", "attachment; filename=Data Query.xlsx");
+                    bytes = observations.ToExcel(true);
+                    break;
+            }
+            Response.AddHeader("Content-Length", bytes.Length.ToString());
+            Response.BinaryWrite(bytes);
+            Response.Flush();
+            Response.End();
+        }
+        catch (ThreadAbortException)
+        {
+        }
+        catch (Exception ex)
+        {
+            SAEONLogs.Exception(ex);
+            throw;
+        }
+
+        /*
         string type = FormatType.Text;
         string json = GridData.Text;
         string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
@@ -211,6 +251,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             log += $" Result -> Rows: {count:N0} Start: {start:dd MMM yyyy} End: {end:dd MMM yyyy}";
             Auditing.Log(GetType(), new MethodCallParameters { { "Log", log } });
         });
+        */
     }
 
     private string GetItem(List<(string Type, string Id)> items, string itemType)
@@ -231,11 +272,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 DateTime toDate = ToFilter.SelectedDate;
 
                 SqlQuery q = null;
-                // @@ Remove Top
                 if ((columns == null) || (columns.Length == 0))
-                    q = new Select()/*.Top("100")*/.From(VObservationExpansion.Schema);
+                    q = new Select().From(VObservationExpansion.Schema);
                 else
-                    q = new Select(columns)/*.Top("100")*/.From(VObservationExpansion.Schema);
+                    q = new Select(columns).From(VObservationExpansion.Schema);
 
                 if (FilterTree.CheckedNodes != null)
                 {
@@ -360,14 +400,12 @@ public partial class Admin_DataQuery : System.Web.UI.Page
     }
 
 
-    private List<ObservationDTO> LoadData()
+    private List<ObservationDTO> LoadData(string sortCol, Ext.Net.SortDirection sortDir, int? skip = null, int? take = null)
     {
-        using (SAEONLogs.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Skip", skip }, { "Take", take } }))
         {
             try
             {
-                //DatasetHelper.UpdateDatasetsFromDisk();
-                SAEONLogs.Information("DatasetsFolder: {DatasetsFolder}", ConfigurationManager.AppSettings["DatasetsFolder"]);
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
                 var result = new List<ObservationDTO>();
@@ -419,17 +457,134 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 break;
                             case "Site":
                                 site = new SAEON.Observations.Data.Site(node.ID);
-                                selectedDatasets.AddRange(allDatasets.Where(i => i.StationID == station.Id && i.SiteID == site.Id));
+                                selectedDatasets.AddRange(allDatasets.Where(i => i.SiteID == site.Id));
                                 break;
                         }
                     }
                     selectedDatasets = selectedDatasets.Distinct().ToList();
                     SAEONLogs.Verbose("All: {All} Selected: {Selected}", allDatasets.Count, selectedDatasets.Count);
-                    SAEONLogs.Verbose("Datasets: {@Datasets}", selectedDatasets);
+                    //SAEONLogs.Verbose("Datasets: {@Datasets}", selectedDatasets);
                     foreach (var dataset in selectedDatasets)
                     {
-                        result.AddRange(DatasetHelper.Load(dataset.Id));
+                        var observations = DatasetHelper.Load(dataset.Id);
+                        // Filter by Instrument, Sensor
+                        foreach (var node in nodes)
+                        {
+                            var station = new Station(new Guid(GetItem(node.Items, "Station")));
+                            if (dataset.StationID == station.Id)
+                            {
+                                switch (node.Type)
+                                {
+                                    case "Sensor":
+                                        var sensor = new Sensor(new Guid(GetItem(node.Items, "Sensor")));
+                                        observations.RemoveAll(i => i.Instrument != sensor.Name);
+                                        break;
+                                    case "Instrument":
+                                        var instrument = new Instrument(new Guid(GetItem(node.Items, "Instrument")));
+                                        observations.RemoveAll(i => i.Instrument != instrument.Name);
+                                        break;
+                                }
+                            }
+                        }
+                        // Filter on dates
+                        if (FromFilter.HasValue())
+                        {
+                            observations.RemoveAll(i => i.Date < FromFilter.SelectedDate);
+                        }
+                        if (ToFilter.HasValue())
+                        {
+                            observations.RemoveAll(i => i.Date > ToFilter.SelectedDate.AddHours(23).AddMinutes(59).AddSeconds(59).Date);
+                        }
+                        result.AddRange(observations);
                     }
+                }
+                //var sortSplits = SortInfo.Text.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                //SAEONLogs.Verbose("SortInfo: {SortInfo} Splits: {Splits}", SortInfo.Text, sortSplits);
+                switch (sortCol)
+                {
+                    case "Site":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Site).ToList();
+                        else
+                            result = result.OrderBy(i => i.Site).ToList();
+                        break;
+                    case "Station":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Station).ToList();
+                        else
+                            result = result.OrderBy(i => i.Station).ToList();
+                        break;
+                    case "Instrument":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Instrument).ToList();
+                        else
+                            result = result.OrderBy(i => i.Instrument).ToList();
+                        break;
+                    case "Sensor":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Sensor).ToList();
+                        else
+                            result = result.OrderBy(i => i.Sensor).ToList();
+                        break;
+                    case "Phenomenon":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Phenomenon).ToList();
+                        else
+                            result = result.OrderBy(i => i.Phenomenon).ToList();
+                        break;
+                    case "Offering":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Offering).ToList();
+                        else
+                            result = result.OrderBy(i => i.Offering).ToList();
+                        break;
+                    case "Unit":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Unit).ToList();
+                        else
+                            result = result.OrderBy(i => i.Unit).ToList();
+                        break;
+                    case "Value":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Value).ToList();
+                        else
+                            result = result.OrderBy(i => i.Value).ToList();
+                        break;
+                    case "Status":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Status).ToList();
+                        else
+                            result = result.OrderBy(i => i.Status).ToList();
+                        break;
+                    case "Reason":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Reason).ToList();
+                        else
+                            result = result.OrderBy(i => i.Reason).ToList();
+                        break;
+                    case "Comment":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Comment).ToList();
+                        else
+                            result = result.OrderBy(i => i.Comment).ToList();
+                        break;
+                    case "Elevation":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Elevation).ToList();
+                        else
+                            result = result.OrderBy(i => i.Elevation).ToList();
+                        break;
+                    default:
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Date).ToList();
+                        else
+                            result = result.OrderBy(i => i.Date).ToList();
+                        break;
+                }
+                SAEONLogs.Verbose("Skip: {Skip} Take: {Take}", skip, take);
+                if (skip.HasValue && take.HasValue)
+                {
+                    result = result.Skip(skip.Value).Take(take.Value).ToList();
                 }
                 SAEONLogs.Information("Loaded: {Elapsed}", stopwatch.Elapsed.TimeStr());
                 return result;
@@ -454,15 +609,17 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 }
                 else
                 {
-                    ObservationsGrid.GetStore().DataSource = LoadData().Take(10);
+                    var skip = e.Start / e.Limit * e.Limit;
+                    var take = e.Limit;
+                    ObservationsGrid.GetStore().DataSource = LoadData(e.Sort, e.Dir, skip, take);
                     ObservationsGrid.GetStore().DataBind();
                     return;
-                    var log = string.Empty;
-                    var q = BuildQuery(out log);
-                    var stopwatch = new Stopwatch();
-                    stopwatch.Start();
-                    ObservationsGrid.GetStore().DataSource = DataQueryRepository.GetPagedFilteredList(e, e.Parameters[GridFilters1.ParamPrefix], ref q);
-                    SAEONLogs.Information("Loaded: {Elapsed}", stopwatch.Elapsed.TimeStr());
+                    //var log = string.Empty;
+                    //var q = BuildQuery(out log);
+                    //var stopwatch = new Stopwatch();
+                    //stopwatch.Start();
+                    //ObservationsGrid.GetStore().DataSource = DataQueryRepository.GetPagedFilteredList(e, e.Parameters[GridFilters1.ParamPrefix], ref q);
+                    //SAEONLogs.Information("Loaded: {Elapsed}", stopwatch.Elapsed.TimeStr());
                 }
             }
             catch (Exception ex)
