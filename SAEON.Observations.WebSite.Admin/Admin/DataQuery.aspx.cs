@@ -7,12 +7,21 @@ using SAEON.OpenXML;
 using SubSonic;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading;
-using System.Web.UI.WebControls;
+
+public static class LikeExtensions
+{
+    public static bool IsLike(this string source, string value)
+    {
+        if (source is null || value is null) return false;
+        return source.ToLowerInvariant().Contains(value.ToLowerInvariant());
+    }
+}
 
 public partial class Admin_DataQuery : System.Web.UI.Page
 {
@@ -41,7 +50,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         {
             try
             {
-                //DatasetHelper.UpdateDatasetsFromDisk(); // Development only
+                //if (Request.IsLocal)
+                //{
+                //    DatasetHelper.UpdateDatasetsFromDisk(); // Development only
+                //}
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
                 Ext.Net.TreeNode rootOrganisations = new Ext.Net.TreeNode("Organisations", "Organisations", (Icon)new ModuleX("e4c08bfa-a8f0-4112-b45c-dd1788ade5a0").Icon);
@@ -205,7 +217,8 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             SAEONLogs.Verbose("SortInfo: {SortInfo} Splits: {Splits}", SortInfo.Text, sortSplits);
             var sortCol = sortSplits[0];
             var sortDir = sortSplits[1].ToLowerInvariant() == "desc" ? Ext.Net.SortDirection.DESC : Ext.Net.SortDirection.DESC;
-            var observations = LoadData(sortCol, sortDir);
+            var filters = GridData.Text;
+            var observations = LoadData(sortCol, sortDir, filters);
             Response.Clear();
             byte[] bytes = null;
             switch (FormatType.Text)
@@ -401,7 +414,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
     }
     */
 
-    private List<ObservationDTO> LoadData(string sortCol, Ext.Net.SortDirection sortDir)
+    private List<ObservationDTO> LoadData(string sortCol, Ext.Net.SortDirection sortDir, string filters)
     {
         using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "SortCol", sortCol }, { "SortDir", sortDir } }))
         {
@@ -499,8 +512,81 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         result.AddRange(observations);
                     }
                 }
-                //var sortSplits = SortInfo.Text.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-                //SAEONLogs.Verbose("SortInfo: {SortInfo} Splits: {Splits}", SortInfo.Text, sortSplits);
+                // Filter
+                SAEONLogs.Verbose("Filters: {Filters}", filters);
+                if (!string.IsNullOrEmpty(filters))
+                {
+                    FilterConditions fc = new FilterConditions(filters);
+                    SAEONLogs.Verbose("FilterConditions: {@FiltersConditions}", fc);
+                    var predicate = new List<string>();
+                    var wheres = new List<Expression<Func<ObservationDTO, bool>>>();
+                    foreach (FilterCondition condition in fc.Conditions)
+                    {
+                        wheres.Add(GetWhere(condition));
+                        switch (condition.FilterType)
+                        {
+                            case FilterType.Date:
+                                switch (condition.Comparison.ToString())
+                                {
+                                    case "Eq":
+                                        //q.And(condition.Name).IsEqualTo(condition.Value);
+                                        predicate.Add($"{condition.Name} = {condition.Value}");
+                                        break;
+                                    case "Gt":
+                                        //q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
+                                        predicate.Add($"{condition.Name} >= {condition.Value}");
+                                        break;
+                                    case "Lt":
+                                        //q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
+                                        predicate.Add($"{condition.Name} <= {condition.Value}");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                            case FilterType.Numeric:
+                                switch (condition.Comparison.ToString())
+                                {
+                                    case "Eq":
+                                        //q.And(condition.Name).IsEqualTo(condition.Value);
+                                        predicate.Add($"{condition.Name} = {condition.Value}");
+                                        break;
+                                    case "Gt":
+                                        //q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
+                                        predicate.Add($"{condition.Name} >= {condition.Value}");
+                                        break;
+                                    case "Lt":
+                                        //q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
+                                        predicate.Add($"{condition.Name} <= {condition.Value}");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                            case FilterType.String:
+                                //q.And(condition.Name).Like("%" + condition.Value + "%");
+                                predicate.Add($"{condition.Name} like {condition.Value})");
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+
+                    }
+                    if (predicate.Any())
+                    {
+                        SAEONLogs.Verbose("Filters: {Filters}", string.Join(" and ", predicate));
+                    }
+                    if (wheres.Any())
+                    {
+                        var q = result.AsQueryable();
+                        foreach (var where in wheres)
+                        {
+                            q = q.Where(where);
+                        }
+                        result = q.ToList();
+                    }
+                }
+                // Sort
                 switch (sortCol)
                 {
                     case "Site":
@@ -590,6 +676,60 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 SAEONLogs.Exception(ex);
                 throw;
             }
+
+            Expression<Func<ObservationDTO, bool>> GetWhere(FilterCondition condition)
+            {
+                Expression<Func<ObservationDTO, bool>> result = null;
+                var param = Expression.Parameter(typeof(ObservationDTO), "p");
+                var prop = Expression.Property(param, condition.Name);
+                ConstantExpression val;
+                switch (condition.FilterType)
+                {
+                    case FilterType.Date:
+                        val = Expression.Constant(condition.ValueAsDate);
+                        break;
+                    case FilterType.Numeric:
+                        val = Expression.Constant(condition.ValueAsDouble, typeof(double?));
+                        break;
+                    case FilterType.String:
+                        val = Expression.Constant(condition.Value);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                switch (condition.FilterType)
+                {
+                    case FilterType.Date:
+                    case FilterType.Numeric:
+                        Expression exp;
+                        switch (condition.Comparison)
+                        {
+                            case Ext.Net.Comparison.Eq:
+                                exp = Expression.Equal(prop, val);
+                                break;
+                            case Ext.Net.Comparison.Lt:
+                                exp = Expression.LessThanOrEqual(prop, val);
+                                break;
+                            case Ext.Net.Comparison.Gt:
+                                exp = Expression.GreaterThanOrEqual(prop, val);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                        result = Expression.Lambda<Func<ObservationDTO, bool>>(exp, param);
+                        break;
+                    case FilterType.String:
+                        MethodInfo method = typeof(LikeExtensions).GetMethod(nameof(LikeExtensions.IsLike));
+                        //MethodInfo method = typeof(LikeExtensions).GetMethod(nameof(LikeExtensions.ToString), BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string) }, null);
+                        SAEONLogs.Verbose("Method: {@Method}", method);
+                        var containsMethodExp = Expression.Call(null, method, prop, val);
+                        result = Expression.Lambda<Func<ObservationDTO, bool>>(containsMethodExp, param);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                return result;
+            }
         }
     }
 
@@ -608,7 +748,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                     var skip = e.Start / e.Limit * e.Limit;
                     var take = e.Limit;
                     SAEONLogs.Verbose("Skip: {Skip} Take: {Take}", skip, take);
-                    var observations = LoadData(e.Sort, e.Dir);
+                    var observations = LoadData(e.Sort, e.Dir, e.Parameters[GridFilters1.ParamPrefix]);
                     e.Total = observations.Count;
                     ObservationsGrid.GetStore().DataSource = observations.Skip(skip).Take(take).ToList();
                     ObservationsGrid.GetStore().DataBind();

@@ -127,7 +127,7 @@ namespace SAEON.Observations.WebAPI
                     var stopwatch = new Stopwatch();
                     stopwatch.Start();
                     var sb = new StringBuilder();
-                    await AddLineAsync("Generating datasets");
+                    await AddLineAsync("Creating dataset files");
                     await GenerateDatasets();
                     await AddLineAsync($"Done in {stopwatch.Elapsed.TimeStr()}");
                     return sb.ToString();

@@ -208,6 +208,7 @@ public static class DatasetHelper
         {
             try
             {
+                SAEONLogs.Verbose("Updating datasets from disk");
                 WalkFolder(ConfigurationManager.AppSettings["DatasetsFolder"]);
             }
             catch (Exception ex)
@@ -230,13 +231,12 @@ public static class DatasetHelper
                 //SAEONLogs.Information(fi.FullName);
                 var subFolder = fi.Name.Substring(0, 6).Insert(4, "-");
                 var code = Path.GetFileNameWithoutExtension(fi.Name).Remove(0, "202207221012 ".Length);
-                SAEONLogs.Verbose("Dataset: {Dataset}", code);
                 var dataset = new Dataset(Dataset.Columns.Code, code);
                 if (dataset is null)
                 {
                     SAEONLogs.Error("Ignoring dataset {Code}, not found", code);
                 }
-                else
+                else if (!dataset.IsNew)
                 {
                     if (fi.Name.EndsWith(".csv"))
                     {
@@ -247,9 +247,12 @@ public static class DatasetHelper
                         dataset.ExcelFileName = $"{subFolder}\\{fi.Name}";
                     }
                     //else if (fi.Name.EndsWith(".nc"))
-                    //{ }
-                    if (dataset.NeedsUpdate ?? false)
+                    //{
+                    //    dataset.NetCDFFileName = $"{subFolder}\\{fi.Name}";
+                    //}
+                    if (dataset.IsDirty)
                     {
+                        SAEONLogs.Verbose("Dataset: {Dataset}", dataset.Code);
                         dataset.Save();
                     }
                 }
