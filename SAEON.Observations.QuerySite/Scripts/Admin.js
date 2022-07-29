@@ -20,7 +20,7 @@ function setupHub(hubUrl, messageId) {
         li.textContent = message;
         document.getElementById("ulStatus").appendChild(li);
         li.scrollIntoView();
-        if (message === "Done") {
+        if (message.startsWith("Done in ")) {
             enableStart();
         }
     });
