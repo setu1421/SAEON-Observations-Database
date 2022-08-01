@@ -7,6 +7,7 @@ using SAEON.OpenXML;
 using SubSonic;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
@@ -54,6 +55,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 //{
                 //    DatasetHelper.UpdateDatasetsFromDisk(); // Development only
                 //}
+                if (Request.IsLocal && ConfigurationManager.AppSettings["CleanDatasetsFiles"].IsTrue())
+                {
+                    DatasetHelper.CleanFilesOnDisk();
+                }
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
                 Ext.Net.TreeNode rootOrganisations = new Ext.Net.TreeNode("Organisations", "Organisations", (Icon)new ModuleX("e4c08bfa-a8f0-4112-b45c-dd1788ade5a0").Icon);

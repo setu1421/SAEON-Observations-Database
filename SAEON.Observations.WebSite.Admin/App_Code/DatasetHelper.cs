@@ -14,38 +14,38 @@ public class ObservationDTO
 {
     [JsonIgnore]
     public int Id { get; set; }
-    public string Station { get; set; }
-    public string Variable => $"{Phenomenon.Replace(", ", "_")}, {Offering.Replace(", ", "_")}, {Unit.Replace(", ", "_")}";
-    public DateTime Date { get; set; }
-    public double? Value { get; set; }
-    public string Comment { get; set; }
     public string Site { get; set; }
+    public string Station { get; set; }
+    public string Instrument { get; set; }
+    public string Sensor { get; set; }
     public string Phenomenon { get; set; }
     public string Offering { get; set; }
     public string Unit { get; set; }
     public string UnitSymbol { get; set; }
-    public string Instrument { get; set; }
-    public string Sensor { get; set; }
+    public string Variable => $"{Phenomenon.Replace(", ", "_")}, {Offering.Replace(", ", "_")}, {Unit.Replace(", ", "_")}";
+    public DateTime Date { get; set; }
+    public double? Value { get; set; }
+    public string Comment { get; set; }
+    public string Status { get; set; }
+    public string Reason { get; set; }
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
     public double? Elevation { get; set; }
-    public string Status { get; set; }
-    public string Reason { get; set; }
 
     public override bool Equals(object obj)
     {
         return obj is ObservationDTO dTO &&
+               Site == dTO.Site &&
                Station == dTO.Station &&
+               Instrument == dTO.Instrument &&
+               Sensor == dTO.Sensor &&
+               Phenomenon == dTO.Phenomenon &&
+               Offering == dTO.Offering &&
+               Unit == dTO.Unit &&
                Variable == dTO.Variable &&
                Date == dTO.Date &&
                Value == dTO.Value &&
                Comment == dTO.Comment &&
-               Site == dTO.Site &&
-               Phenomenon == dTO.Phenomenon &&
-               Offering == dTO.Offering &&
-               Unit == dTO.Unit &&
-               Instrument == dTO.Instrument &&
-               Sensor == dTO.Sensor &&
                Latitude == dTO.Latitude &&
                Longitude == dTO.Longitude &&
                Elevation == dTO.Elevation;
@@ -54,17 +54,17 @@ public class ObservationDTO
     public override int GetHashCode()
     {
         var hash = new HashCode();
+        hash.Add(Site);
         hash.Add(Station);
         hash.Add(Variable);
-        hash.Add(Date);
-        hash.Add(Value);
-        hash.Add(Comment);
-        hash.Add(Site);
+        hash.Add(Instrument);
+        hash.Add(Sensor);
         hash.Add(Phenomenon);
         hash.Add(Offering);
         hash.Add(Unit);
-        hash.Add(Instrument);
-        hash.Add(Sensor);
+        hash.Add(Date);
+        hash.Add(Value);
+        hash.Add(Comment);
         hash.Add(Latitude);
         hash.Add(Longitude);
         hash.Add(Elevation);
@@ -209,7 +209,10 @@ public static class DatasetHelper
             try
             {
                 SAEONLogs.Verbose("Updating datasets from disk");
-                WalkFolder(ConfigurationManager.AppSettings["DatasetsFolder"]);
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                var count = WalkFolder(ConfigurationManager.AppSettings["DatasetsFolder"]);
+                SAEONLogs.Information("Updated {Count} in {Elapsed}", count, stopwatch.Elapsed.TimeStr());
             }
             catch (Exception ex)
             {
@@ -218,13 +221,14 @@ public static class DatasetHelper
             }
         }
 
-        void WalkFolder(string folder)
+        int WalkFolder(string folder)
         {
             var di = new DirectoryInfo(folder);
+            var result = 0;
             foreach (var sdi in di.EnumerateDirectories())
             {
                 //SAEONLogs.Information(sdi.FullName);
-                WalkFolder(sdi.FullName);
+                result += WalkFolder(sdi.FullName);
             }
             foreach (var fi in di.EnumerateFiles())
             {
@@ -254,9 +258,79 @@ public static class DatasetHelper
                     {
                         SAEONLogs.Verbose("Dataset: {Dataset}", dataset.Code);
                         dataset.Save();
+                        result++;
                     }
                 }
             }
+            return result;
+        }
+    }
+
+    public static void CleanFilesOnDisk()
+    {
+        using (SAEONLogs.MethodCall(typeof(DatasetHelper)))
+        {
+            try
+            {
+                SAEONLogs.Verbose("Cleaning dataset files on disk");
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                var count = WalkFolder(ConfigurationManager.AppSettings["DatasetsFolder"]);
+                SAEONLogs.Information("Cleaned {Count} files in {Elapsed}", count, stopwatch.Elapsed.TimeStr());
+            }
+            catch (Exception ex)
+            {
+                SAEONLogs.Exception(ex);
+                throw;
+            }
+        }
+
+        int WalkFolder(string folder)
+        {
+            var result = 0;
+            var di = new DirectoryInfo(folder);
+            foreach (var sdi in di.EnumerateDirectories())
+            {
+                //SAEONLogs.Verbose(sdi.FullName);
+                result += WalkFolder(sdi.FullName);
+            }
+            foreach (var fi in di.EnumerateFiles())
+            {
+                //SAEONLogs.Verbose(fi.FullName);
+                var subFolder = fi.Name.Substring(0, 6).Insert(4, "-");
+                var code = Path.GetFileNameWithoutExtension(fi.Name).Remove(0, "202207221012 ".Length);
+                var dataset = new Dataset(Dataset.Columns.Code, code);
+                if (dataset is null)
+                {
+                    SAEONLogs.Error("Ignoring dataset {Code}, not found", code);
+                    SAEONLogs.Verbose("Deleted {FileName}", fi.Name);
+                    fi.Delete();
+                    result++;
+                }
+                else if (!dataset.IsNew)
+                {
+                    var fileName = $"{subFolder}\\{fi.Name}";
+                    if (fi.Name.EndsWith(".csv"))
+                    {
+                        if (dataset.CSVFileName != fileName)
+                        {
+                            SAEONLogs.Verbose("Deleted {FileName}", fi.Name);
+                            fi.Delete();
+                            result++;
+                        }
+                    }
+                    else if (fi.Name.EndsWith(".xlsx"))
+                    {
+                        if (dataset.ExcelFileName != fileName)
+                        {
+                            SAEONLogs.Verbose("Deleted {FileName}", fi.Name);
+                            fi.Delete();
+                            result++;
+                        }
+                    }
+                }
+            }
+            return result;
         }
     }
 }
