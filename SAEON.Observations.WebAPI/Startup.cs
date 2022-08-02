@@ -63,7 +63,7 @@ namespace SAEON.Observations.WebAPI
                     services.AddResponseCompression(options =>
                     {
                         options.EnableForHttps = true;
-                        options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { AspNetConstants.ContentTypeCSV, AspNetConstants.ContentTypeExcel, AspNetConstants.ContentTypeNetCDF });
+                        options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { AspNetConstants.ContentTypeCSV, AspNetConstants.ContentTypeExcel/*, AspNetConstants.ContentTypeNetCDF*/ });
                     });
 #if ResponseCaching
                     services.AddResponseCaching();
@@ -168,7 +168,7 @@ namespace SAEON.Observations.WebAPI
                     });
                     services.AddControllersWithViews();
                     services.AddOData();
-                    services.AddMvcCore().AddCSVFormatters();
+                    services.AddMvcCore().AddCSVFormatters().AddExcelFormatters(new ExcelFormatterOptions { DownloadFileName = "Observations Database Download.xlsx" });
                     //SetODataFormatters(services);
                     services.AddApplicationInsightsTelemetry();
                     //IFileProvider physicalProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory());

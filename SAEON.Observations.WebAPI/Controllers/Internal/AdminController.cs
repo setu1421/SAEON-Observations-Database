@@ -164,9 +164,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     sb.AppendLine(await DatasetHelper.UpdateDatasets(DbContext, AdminHub, HttpContext));
                     sb.AppendLine(await DOIHelper.CreateDOIs(DbContext, AdminHub, HttpContext));
                     sb.AppendLine(await MetadataHelper.CreateMetadata(DbContext, AdminHub, HttpContext));
-                    sb.AppendLine(await DatasetHelper.CreateDatasetsFiles(DbContext, AdminHub, HttpContext, Config));
                     sb.AppendLine(await ODPMetadataHelper.CreateODPMetadata(DbContext, AdminHub, HttpContext, Config));
                     sb.AppendLine(await SnapshotHelper.CreateSnapshots(DbContext, AdminHub));
+                    sb.AppendLine(await DatasetHelper.CreateDatasetsFiles(DbContext, AdminHub, HttpContext, Config)); // Must be last
                     return Content(sb.ToString());
                 }
                 catch (Exception ex)
@@ -189,7 +189,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     sb.AppendLine(await DatasetHelper.UpdateDatasets(DbContext, AdminHub, HttpContext));
                     sb.AppendLine(await DOIHelper.CreateDOIs(DbContext, AdminHub, HttpContext));
                     sb.AppendLine(await MetadataHelper.CreateMetadata(DbContext, AdminHub, HttpContext));
-                    sb.AppendLine(await DatasetHelper.CreateDatasetsFiles(DbContext, AdminHub, HttpContext, Config));
+                    sb.AppendLine(await DatasetHelper.CreateDatasetsFiles(DbContext, AdminHub, HttpContext, Config)); // Must be last
                     return Content(sb.ToString());
                 }
                 catch (Exception ex)

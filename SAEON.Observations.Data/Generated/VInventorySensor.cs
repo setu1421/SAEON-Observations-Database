@@ -777,6 +777,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarLongitudeEast);
                 
+                TableSchema.TableColumn colvarIsValid = new TableSchema.TableColumn(schema);
+                colvarIsValid.ColumnName = "IsValid";
+                colvarIsValid.DataType = DbType.Boolean;
+                colvarIsValid.MaxLength = 0;
+                colvarIsValid.AutoIncrement = false;
+                colvarIsValid.IsNullable = true;
+                colvarIsValid.IsPrimaryKey = false;
+                colvarIsValid.IsForeignKey = false;
+                colvarIsValid.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarIsValid);
+                
                 
                 BaseSchema = schema;
                 //add this schema to the provider
@@ -1666,6 +1678,20 @@ namespace SAEON.Observations.Data{
 			    SetColumnValue("LongitudeEast", value);
             }
         }
+	      
+        [XmlAttribute("IsValid")]
+        [Bindable(true)]
+        public bool? IsValid 
+	    {
+		    get
+		    {
+			    return GetColumnValue<bool?>("IsValid");
+		    }
+            set 
+		    {
+			    SetColumnValue("IsValid", value);
+            }
+        }
 	    
 	    #endregion
     
@@ -1793,6 +1819,8 @@ namespace SAEON.Observations.Data{
             public static string LongitudeWest = @"LongitudeWest";
             
             public static string LongitudeEast = @"LongitudeEast";
+            
+            public static string IsValid = @"IsValid";
             
 	    }
 	    #endregion

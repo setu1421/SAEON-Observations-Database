@@ -1,15 +1,28 @@
 ﻿using Ext.Net;
-using Newtonsoft.Json;
 using SAEON.Core;
+using SAEON.CSV;
 using SAEON.Logs;
 using SAEON.Observations.Data;
+using SAEON.OpenXML;
 using SubSonic;
 using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
-using System.Web.UI.WebControls;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Text;
+using System.Threading;
+
+public static class LikeExtensions
+{
+    public static bool IsLike(this string source, string value)
+    {
+        if (source is null || value is null) return false;
+        return source.ToLowerInvariant().Contains(value.ToLowerInvariant());
+    }
+}
 
 public partial class Admin_DataQuery : System.Web.UI.Page
 {
@@ -38,6 +51,14 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         {
             try
             {
+                //if (Request.IsLocal)
+                //{
+                //    DatasetHelper.UpdateDatasetsFromDisk(); // Development only
+                //}
+                if (Request.IsLocal && ConfigurationManager.AppSettings["CleanDatasetsFiles"].IsTrue())
+                {
+                    DatasetHelper.CleanFilesOnDisk();
+                }
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
                 Ext.Net.TreeNode rootOrganisations = new Ext.Net.TreeNode("Organisations", "Organisations", (Icon)new ModuleX("e4c08bfa-a8f0-4112-b45c-dd1788ade5a0").Icon);
@@ -195,6 +216,44 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
     protected void ObservationsGridStore_Submit(object sender, StoreSubmitDataEventArgs e)
     {
+        try
+        {
+            var sortSplits = SortInfo.Text.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+            SAEONLogs.Verbose("SortInfo: {SortInfo} Splits: {Splits}", SortInfo.Text, sortSplits);
+            var sortCol = sortSplits[0];
+            var sortDir = sortSplits[1].ToLowerInvariant() == "desc" ? Ext.Net.SortDirection.DESC : Ext.Net.SortDirection.DESC;
+            var filters = GridData.Text;
+            var observations = LoadData(sortCol, sortDir, filters);
+            Response.Clear();
+            byte[] bytes = null;
+            switch (FormatType.Text)
+            {
+                case "csv": //ExportTypes.Csv:
+                    Response.ContentType = "text/csv";
+                    Response.AddHeader("Content-Disposition", "attachment; filename=Data Query.csv");
+                    bytes = Encoding.UTF8.GetBytes(observations.ToCSV());
+                    break;
+                case "exc": //ExportTypes.Excel
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    Response.AddHeader("Content-Disposition", "attachment; filename=Data Query.xlsx");
+                    bytes = observations.ToExcel(true);
+                    break;
+            }
+            Response.AddHeader("Content-Length", bytes.Length.ToString());
+            Response.BinaryWrite(bytes);
+            Response.Flush();
+            Response.End();
+        }
+        catch (ThreadAbortException)
+        {
+        }
+        catch (Exception ex)
+        {
+            SAEONLogs.Exception(ex);
+            throw;
+        }
+
+        /*
         string type = FormatType.Text;
         string json = GridData.Text;
         string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
@@ -210,6 +269,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             log += $" Result -> Rows: {count:N0} Start: {start:dd MMM yyyy} End: {end:dd MMM yyyy}";
             Auditing.Log(GetType(), new MethodCallParameters { { "Log", log } });
         });
+        */
     }
 
     private string GetItem(List<(string Type, string Id)> items, string itemType)
@@ -217,6 +277,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         return items.Where(i => i.Type == itemType).Select(i => i.Id).FirstOrDefault();
     }
 
+    /*
     private SqlQuery BuildQuery(out string log, string[] columns = null)
     {
         using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Columns", columns } }))
@@ -230,11 +291,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 DateTime toDate = ToFilter.SelectedDate;
 
                 SqlQuery q = null;
-                // @@ Remove Top
                 if ((columns == null) || (columns.Length == 0))
-                    q = new Select().Top("100").From(VObservationExpansion.Schema);
+                    q = new Select().From(VObservationExpansion.Schema);
                 else
-                    q = new Select(columns).Top("100").From(VObservationExpansion.Schema);
+                    q = new Select(columns).From(VObservationExpansion.Schema);
 
                 if (FilterTree.CheckedNodes != null)
                 {
@@ -357,69 +417,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             }
         }
     }
+    */
 
-    private class ObservationDTO
+    private List<ObservationDTO> LoadData(string sortCol, Ext.Net.SortDirection sortDir, string filters)
     {
-        public string Station { get; set; }
-        public string Variable => $"{Phenomenon.Replace(", ", "_")}, {Offering.Replace(", ", "_")}, {Unit.Replace(", ", "_")}";
-        public DateTime Date { get; set; }
-        public double? Value { get; set; }
-        public string Comment { get; set; }
-        public string Site { get; set; }
-        public string Phenomenon { get; set; }
-        public string Offering { get; set; }
-        public string Unit { get; set; }
-        public string Instrument { get; set; }
-        public string Sensor { get; set; }
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
-        public double? Elevation { get; set; }
-        public string Status { get; set; }
-        public string Reason { get; set; }
-
-        public override bool Equals(object obj)
-        {
-            return obj is ObservationDTO dTO &&
-                   Station == dTO.Station &&
-                   Variable == dTO.Variable &&
-                   Date == dTO.Date &&
-                   Value == dTO.Value &&
-                   Comment == dTO.Comment &&
-                   Site == dTO.Site &&
-                   Phenomenon == dTO.Phenomenon &&
-                   Offering == dTO.Offering &&
-                   Unit == dTO.Unit &&
-                   Instrument == dTO.Instrument &&
-                   Sensor == dTO.Sensor &&
-                   Latitude == dTO.Latitude &&
-                   Longitude == dTO.Longitude &&
-                   Elevation == dTO.Elevation;
-        }
-
-        public override int GetHashCode()
-        {
-            var hash = new HashCode();
-            hash.Add(Station);
-            hash.Add(Variable);
-            hash.Add(Date);
-            hash.Add(Value);
-            hash.Add(Comment);
-            hash.Add(Site);
-            hash.Add(Phenomenon);
-            hash.Add(Offering);
-            hash.Add(Unit);
-            hash.Add(Instrument);
-            hash.Add(Sensor);
-            hash.Add(Latitude);
-            hash.Add(Longitude);
-            hash.Add(Elevation);
-            return hash.ToHashCode();
-        }
-    }
-
-    private List<ObservationDTO> LoadData()
-    {
-        using (SAEONLogs.MethodCall(GetType()))
+        using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "SortCol", sortCol }, { "SortDir", sortDir } }))
         {
             try
             {
@@ -474,26 +476,264 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 break;
                             case "Site":
                                 site = new SAEON.Observations.Data.Site(node.ID);
-                                selectedDatasets.AddRange(allDatasets.Where(i => i.StationID == station.Id && i.SiteID == site.Id));
+                                selectedDatasets.AddRange(allDatasets.Where(i => i.SiteID == site.Id));
                                 break;
                         }
                     }
                     selectedDatasets = selectedDatasets.Distinct().ToList();
                     SAEONLogs.Verbose("All: {All} Selected: {Selected}", allDatasets.Count, selectedDatasets.Count);
-                    SAEONLogs.Verbose("Datasets: {@Datasets}", selectedDatasets);
+                    //SAEONLogs.Verbose("Datasets: {@Datasets}", selectedDatasets);
                     foreach (var dataset in selectedDatasets)
                     {
-
+                        var observations = DatasetHelper.Load(dataset.Id);
+                        // Filter by Instrument, Sensor
+                        foreach (var node in nodes)
+                        {
+                            var station = new Station(new Guid(GetItem(node.Items, "Station")));
+                            if (dataset.StationID == station.Id)
+                            {
+                                switch (node.Type)
+                                {
+                                    case "Sensor":
+                                        var sensor = new Sensor(new Guid(GetItem(node.Items, "Sensor")));
+                                        observations.RemoveAll(i => i.Sensor != sensor.Name);
+                                        break;
+                                    case "Instrument":
+                                        var instrument = new Instrument(new Guid(GetItem(node.Items, "Instrument")));
+                                        observations.RemoveAll(i => i.Instrument != instrument.Name);
+                                        break;
+                                }
+                            }
+                        }
+                        // Filter on dates
+                        if (FromFilter.HasValue())
+                        {
+                            observations.RemoveAll(i => i.Date < FromFilter.SelectedDate);
+                        }
+                        if (ToFilter.HasValue())
+                        {
+                            observations.RemoveAll(i => i.Date > ToFilter.SelectedDate.AddHours(23).AddMinutes(59).AddSeconds(59).Date);
+                        }
+                        result.AddRange(observations);
                     }
                 }
+                // Filter
+                SAEONLogs.Verbose("Filters: {Filters}", filters);
+                if (!string.IsNullOrEmpty(filters))
+                {
+                    FilterConditions fc = new FilterConditions(filters);
+                    SAEONLogs.Verbose("FilterConditions: {@FiltersConditions}", fc);
+                    var predicate = new List<string>();
+                    var wheres = new List<Expression<Func<ObservationDTO, bool>>>();
+                    foreach (FilterCondition condition in fc.Conditions)
+                    {
+                        wheres.Add(GetWhere(condition));
+                        switch (condition.FilterType)
+                        {
+                            case FilterType.Date:
+                                switch (condition.Comparison.ToString())
+                                {
+                                    case "Eq":
+                                        //q.And(condition.Name).IsEqualTo(condition.Value);
+                                        predicate.Add($"{condition.Name} = {condition.Value}");
+                                        break;
+                                    case "Gt":
+                                        //q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
+                                        predicate.Add($"{condition.Name} >= {condition.Value}");
+                                        break;
+                                    case "Lt":
+                                        //q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
+                                        predicate.Add($"{condition.Name} <= {condition.Value}");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                            case FilterType.Numeric:
+                                switch (condition.Comparison.ToString())
+                                {
+                                    case "Eq":
+                                        //q.And(condition.Name).IsEqualTo(condition.Value);
+                                        predicate.Add($"{condition.Name} = {condition.Value}");
+                                        break;
+                                    case "Gt":
+                                        //q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
+                                        predicate.Add($"{condition.Name} >= {condition.Value}");
+                                        break;
+                                    case "Lt":
+                                        //q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
+                                        predicate.Add($"{condition.Name} <= {condition.Value}");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                            case FilterType.String:
+                                //q.And(condition.Name).Like("%" + condition.Value + "%");
+                                predicate.Add($"{condition.Name} like {condition.Value})");
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
 
-                SAEONLogs.Information("Loaded: {Elapsed}", stopwatch.Elapsed.TimeStr());
+                    }
+                    if (predicate.Any())
+                    {
+                        SAEONLogs.Verbose("Filters: {Filters}", string.Join(" and ", predicate));
+                    }
+                    if (wheres.Any())
+                    {
+                        var q = result.AsQueryable();
+                        foreach (var where in wheres)
+                        {
+                            q = q.Where(where);
+                        }
+                        result = q.ToList();
+                    }
+                }
+                // Sort
+                switch (sortCol)
+                {
+                    case "Site":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Site).ToList();
+                        else
+                            result = result.OrderBy(i => i.Site).ToList();
+                        break;
+                    case "Station":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Station).ToList();
+                        else
+                            result = result.OrderBy(i => i.Station).ToList();
+                        break;
+                    case "Instrument":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Instrument).ToList();
+                        else
+                            result = result.OrderBy(i => i.Instrument).ToList();
+                        break;
+                    case "Sensor":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Sensor).ToList();
+                        else
+                            result = result.OrderBy(i => i.Sensor).ToList();
+                        break;
+                    case "Phenomenon":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Phenomenon).ToList();
+                        else
+                            result = result.OrderBy(i => i.Phenomenon).ToList();
+                        break;
+                    case "Offering":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Offering).ToList();
+                        else
+                            result = result.OrderBy(i => i.Offering).ToList();
+                        break;
+                    case "Unit":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Unit).ToList();
+                        else
+                            result = result.OrderBy(i => i.Unit).ToList();
+                        break;
+                    case "Value":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Value).ToList();
+                        else
+                            result = result.OrderBy(i => i.Value).ToList();
+                        break;
+                    case "Status":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Status).ToList();
+                        else
+                            result = result.OrderBy(i => i.Status).ToList();
+                        break;
+                    case "Reason":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Reason).ToList();
+                        else
+                            result = result.OrderBy(i => i.Reason).ToList();
+                        break;
+                    case "Comment":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Comment).ToList();
+                        else
+                            result = result.OrderBy(i => i.Comment).ToList();
+                        break;
+                    case "Elevation":
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Elevation).ToList();
+                        else
+                            result = result.OrderBy(i => i.Elevation).ToList();
+                        break;
+                    default:
+                        if (sortDir == Ext.Net.SortDirection.DESC)
+                            result = result.OrderByDescending(i => i.Date).ToList();
+                        else
+                            result = result.OrderBy(i => i.Date).ToList();
+                        break;
+                }
+                SAEONLogs.Information("Loaded {Count} in {Elapsed}", result.Count, stopwatch.Elapsed.TimeStr());
                 return result;
             }
             catch (Exception ex)
             {
                 SAEONLogs.Exception(ex);
                 throw;
+            }
+
+            Expression<Func<ObservationDTO, bool>> GetWhere(FilterCondition condition)
+            {
+                Expression<Func<ObservationDTO, bool>> result = null;
+                var param = Expression.Parameter(typeof(ObservationDTO), "p");
+                var prop = Expression.Property(param, condition.Name);
+                ConstantExpression val;
+                switch (condition.FilterType)
+                {
+                    case FilterType.Date:
+                        val = Expression.Constant(condition.ValueAsDate);
+                        break;
+                    case FilterType.Numeric:
+                        val = Expression.Constant(condition.ValueAsDouble, typeof(double?));
+                        break;
+                    case FilterType.String:
+                        val = Expression.Constant(condition.Value);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                switch (condition.FilterType)
+                {
+                    case FilterType.Date:
+                    case FilterType.Numeric:
+                        Expression exp;
+                        switch (condition.Comparison)
+                        {
+                            case Ext.Net.Comparison.Eq:
+                                exp = Expression.Equal(prop, val);
+                                break;
+                            case Ext.Net.Comparison.Lt:
+                                exp = Expression.LessThanOrEqual(prop, val);
+                                break;
+                            case Ext.Net.Comparison.Gt:
+                                exp = Expression.GreaterThanOrEqual(prop, val);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                        result = Expression.Lambda<Func<ObservationDTO, bool>>(exp, param);
+                        break;
+                    case FilterType.String:
+                        MethodInfo method = typeof(LikeExtensions).GetMethod(nameof(LikeExtensions.IsLike));
+                        //MethodInfo method = typeof(LikeExtensions).GetMethod(nameof(LikeExtensions.ToString), BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string) }, null);
+                        SAEONLogs.Verbose("Method: {@Method}", method);
+                        var containsMethodExp = Expression.Call(null, method, prop, val);
+                        result = Expression.Lambda<Func<ObservationDTO, bool>>(containsMethodExp, param);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                return result;
             }
         }
     }
@@ -510,14 +750,19 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 }
                 else
                 {
-                    LoadData();
-                    return;
-                    var log = string.Empty;
-                    var q = BuildQuery(out log);
-                    var stopwatch = new Stopwatch();
-                    stopwatch.Start();
-                    ObservationsGrid.GetStore().DataSource = DataQueryRepository.GetPagedFilteredList(e, e.Parameters[GridFilters1.ParamPrefix], ref q);
-                    SAEONLogs.Information("Loaded: {Elapsed}", stopwatch.Elapsed.TimeStr());
+                    var skip = e.Start / e.Limit * e.Limit;
+                    var take = e.Limit;
+                    SAEONLogs.Verbose("Skip: {Skip} Take: {Take}", skip, take);
+                    var observations = LoadData(e.Sort, e.Dir, e.Parameters[GridFilters1.ParamPrefix]);
+                    e.Total = observations.Count;
+                    ObservationsGrid.GetStore().DataSource = observations.Skip(skip).Take(take).ToList();
+                    ObservationsGrid.GetStore().DataBind();
+                    //var log = string.Empty;
+                    //var q = BuildQuery(out log);
+                    //var stopwatch = new Stopwatch();
+                    //stopwatch.Start();
+                    //ObservationsGrid.GetStore().DataSource = DataQueryRepository.GetPagedFilteredList(e, e.Parameters[GridFilters1.ParamPrefix], ref q);
+                    //SAEONLogs.Information("Loaded: {Elapsed}", stopwatch.Elapsed.TimeStr());
                 }
             }
             catch (Exception ex)
@@ -528,8 +773,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         }
     }
 
-
-
+    /*
     public SqlQuery BuildQ(string json, string visCols, string sortCol, string sortDir, out string log)
     {
         using (SAEONLogs.MethodCall(GetType()))
@@ -641,6 +885,5 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             }
         }
     }
-
-
+    */
 }

@@ -64,10 +64,10 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.16.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="[5.0.2,6.0.0)" />
-    <PackageReference Include="SAEON.AspNetCore.Formatters" Version="1.0.30" />
-    <PackageReference Include="SAEON.Observations.Auth" Version="1.0.48" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.3.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.3.1" />
+    <PackageReference Include="SAEON.AspNetCore.Formatters" Version="1.0.42" />
+    <PackageReference Include="SAEON.Observations.Auth" Version="1.0.51" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,29 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-    <ApplicationIcon>SAEON.ico</ApplicationIcon>
-    <Authors>Tim Parker-Nance</Authors>
-    <Company>South African Environmental Observation Network (SAEON)</Company>
-    <Product>SAEON Observations Database</Product>
-    <Description>SAEON Observations - Azure</Description>
-    <Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.160</Version>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net472</TargetFramework>
+		<ApplicationIcon>SAEON.ico</ApplicationIcon>
+		<Authors>Tim Parker-Nance</Authors>
+		<Company>South African Environmental Observation Network (SAEON)</Company>
+		<Product>SAEON Observations Database</Product>
+		<Description>SAEON Observations - Azure</Description>
+		<Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Version>1.0.161</Version>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Content Remove="C:\Users\timpn\.nuget\packages\saeon.azure.cosmosdb\1.0.178\contentFiles\any\net472\ThirdPartyNotice.txt" />
-    <Content Remove="C:\Users\timpn\.nuget\packages\saeon.azure.cosmosdb\1.0.180\contentFiles\any\net472\ThirdPartyNotice.txt" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Remove="C:\Users\timpn\.nuget\packages\saeon.azure.cosmosdb\1.0.178\contentFiles\any\net472\ThirdPartyNotice.txt" />
+		<Content Remove="C:\Users\timpn\.nuget\packages\saeon.azure.cosmosdb\1.0.180\contentFiles\any\net472\ThirdPartyNotice.txt" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="SAEON.Azure.CosmosDB" Version="1.0.186" />
-    <PackageReference Include="SAEON.Azure.Storage" Version="1.0.76" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="SAEON.Azure.CosmosDB" Version="1.0.193" />
+		<PackageReference Include="SAEON.Azure.Storage" Version="1.0.87" />
+	</ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="echo rd /s /q &quot;$(DevDir)NuGet\$(ProjectName)&quot;&#xD;&#xA;rd /s /q &quot;$(DevDir)NuGet\$(ProjectName)&quot;&#xD;&#xA;echo nuget init &quot;$(ProjectDir)bin\Release&quot; &quot;$(DevDir)NuGet&quot;&#xD;&#xA;nuget init &quot;$(ProjectDir)bin\Release&quot; &quot;$(DevDir)NuGet&quot;" />
-  </Target>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="echo rd /s /q &quot;$(DevDir)NuGet\$(ProjectName)&quot;&#xD;&#xA;rd /s /q &quot;$(DevDir)NuGet\$(ProjectName)&quot;&#xD;&#xA;echo nuget init &quot;$(ProjectDir)bin\Release&quot; &quot;$(DevDir)NuGet&quot;&#xD;&#xA;nuget init &quot;$(ProjectDir)bin\Release&quot; &quot;$(DevDir)NuGet&quot;" />
+	</Target>
 
 </Project>

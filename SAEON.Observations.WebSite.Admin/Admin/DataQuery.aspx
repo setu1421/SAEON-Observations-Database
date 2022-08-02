@@ -1,5 +1,6 @@
 ﻿<%@ Page Title="Data Queries" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="DataQuery.aspx.cs" Inherits="Admin_DataQuery" %>
-<%@ MasterType virtualpath="~/Site.master" %>
+
+<%@ MasterType VirtualPath="~/Site.master" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <link href="../Styles/Site.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../JS/DataQuery.js"></script>
@@ -17,21 +18,21 @@
             if (FromFilter.getValue() == '' || ToFilter.getValue() == '') {
                 //Ext.Msg.alert('Invalid Date Range', 'Select a valid Date Range');
                 Ext.Msg.show(
-                {
-                    icon: Ext.MessageBox.WARNING,
-                    msg: 'Select a valid Date Range.',
-                    buttons: Ext.Msg.OK,
-                    title: 'Invalid Date Range'
-                });
+                    {
+                        icon: Ext.MessageBox.WARNING,
+                        msg: 'Select a valid Date Range.',
+                        buttons: Ext.Msg.OK,
+                        title: 'Invalid Date Range'
+                    });
             }
             else if (FilterTree.getCheckedNodes().length == 0) {
                 Ext.Msg.show(
-                {
-                    icon: Ext.MessageBox.WARNING,
-                    msg: 'Select at least one aspect in the treepane',
-                    buttons: Ext.Msg.OK,
-                    title: 'Invalid Filter Criteria'
-                });
+                    {
+                        icon: Ext.MessageBox.WARNING,
+                        msg: 'Select at least one aspect in the treepane',
+                        buttons: Ext.Msg.OK,
+                        title: 'Invalid Filter Criteria'
+                    });
             }
             else {
                 GridData.setValue(Ext.encode(GridFilters1.buildQuery(GridFilters1.getFilterData())));
@@ -47,9 +48,9 @@
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static"  />
-    <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static"  />
-    <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static"  />
+    <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
     <ext:Viewport ID="ViewPort1" runat="server">
         <Items>
@@ -80,7 +81,7 @@
                                         </Items>
                                     </ext:Toolbar>
                                 </TopBar>
-<%--                                <Loader>
+                                <%--                                <Loader>
                                     <ext:PageTreeLoader OnNodeLoad="NodeLoad" Timeout="900000"/>
                                 </Loader>--%>
                                 <Listeners>
@@ -102,11 +103,11 @@
                                 <Items>
                                     <ext:ToolbarTextItem Text="From Date:" />
                                     <ext:ToolbarSpacer Width="10" />
-                                    <ext:DateField ID="FromFilter" runat="server" Text="From" Vtype="daterange" ClientIDMode="Static" Format="dd MMM yyyy" >
+                                    <ext:DateField ID="FromFilter" runat="server" Text="From" Vtype="daterange" ClientIDMode="Static" Format="dd MMM yyyy">
                                         <CustomConfig>
                                             <ext:ConfigItem Name="endDateField" Value="#{ToFilter}" Mode="Value" />
                                         </CustomConfig>
-                                        </ext:DateField>
+                                    </ext:DateField>
                                     <ext:ToolbarSeparator Width="10" />
                                     <ext:ToolbarTextItem Text="To Date :" />
                                     <ext:ToolbarSpacer Width="10" />
@@ -139,7 +140,7 @@
                             <ext:GridPanel ID="ObservationsGrid" runat="server" Border="false" Layout="FitLayout"
                                 ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="ObservationsGridStore" runat="server" RemoteSort="true" RemotePaging="true" OnRefreshData="ObservationsGridStore_RefreshData"
+                                    <ext:Store ID="ObservationsGridStore" runat="server" RemotePaging="true" RemoteSort="true" OnRefreshData="ObservationsGridStore_RefreshData"
                                         OnSubmitData="ObservationsGridStore_Submit" AutoLoad="false">
                                         <Proxy>
                                             <ext:PageProxy />
@@ -148,24 +149,20 @@
                                             <ext:JsonReader IDProperty="Id">
                                                 <Fields>
                                                     <ext:RecordField Name="Id" Type="Auto" />
-                                                    <ext:RecordField Name="OrganisationName" Type="String" />
-                                                    <ext:RecordField Name="SiteName" Type="String" />
-                                                    <ext:RecordField Name="StationName" Type="String" />
-                                                    <ext:RecordField Name="InstrumentName" Type="String" />
-                                                    <ext:RecordField Name="SensorName" Type="String" />
-                                                    <ext:RecordField Name="PhenomenonName" Type="String" />
-                                                    <ext:RecordField Name="OfferingName" Type="String" />
-                                                    <ext:RecordField Name="Elevation" Type="Float" UseNull="true" />
-                                                    <ext:RecordField Name="DataValue" Type="Float" UseNull="true" />
-                                                    <ext:RecordField Name="RawValue" Type="Float" UseNull="true" />
-                                                    <ext:RecordField Name="UnitOfMeasureUnit" Type="String" />
-                                                    <ext:RecordField Name="UnitOfMeasureSymbol" Type="String" />
-                                                    <ext:RecordField Name="DataSchemaName" Type="String" />
-                                                    <ext:RecordField Name="ValueDate" Type="Date" SortType="AsDate" />
-                                                    <ext:RecordField Name="StatusName" Type="String" />
-                                                    <ext:RecordField Name="StatusReasonName" Type="String" />
-                                                    <ext:RecordField Name="UserName" Type="String" />
+                                                    <ext:RecordField Name="Site" Type="String" />
+                                                    <ext:RecordField Name="Station" Type="String" />
+                                                    <ext:RecordField Name="Instrument" Type="String" />
+                                                    <ext:RecordField Name="Sensor" Type="String" />
+                                                    <ext:RecordField Name="Phenomenon" Type="String" />
+                                                    <ext:RecordField Name="Offering" Type="String" />
+                                                    <ext:RecordField Name="Unit" Type="String" />
+                                                    <ext:RecordField Name="UnitSymbol" Type="String" />
+                                                    <ext:RecordField Name="Date" Type="Date" SortType="AsDate" />
+                                                    <ext:RecordField Name="Value" Type="Float" UseNull="true" />
+                                                    <ext:RecordField Name="Status" Type="String" />
+                                                    <ext:RecordField Name="Reason" Type="String" />
                                                     <ext:RecordField Name="Comment" Type="String" />
+                                                    <ext:RecordField Name="Elevation" Type="Float" UseNull="true" />
                                                 </Fields>
                                             </ext:JsonReader>
                                         </Reader>
@@ -175,30 +172,26 @@
                                             <ext:Parameter Name="sort" Value="" />
                                             <ext:Parameter Name="dir" Value="" />
                                         </BaseParams>
-                                        <SortInfo Field="ValueDate" Direction="DESC" />
+                                        <SortInfo Field="Date" Direction="DESC" />
                                         <DirectEventConfig IsUpload="true" />
                                     </ext:Store>
                                 </Store>
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
-                                        <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="100" Hideable="true" Hidden="true" />
-                                        <ext:Column Header="Site" DataIndex="SiteName" Width="100" Hideable="true"/>
-                                        <ext:Column Header="Station" DataIndex="StationName" Width="100" />
-                                        <ext:Column Header="Instrument" DataIndex="InstrumentName" Width="100" />
-                                        <ext:Column Header="Sensor" DataIndex="SensorName" Width="100" />
-                                        <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="100" />
-                                        <ext:Column Header="Offering" DataIndex="OfferingName" Width="100" />
-                                        <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="100" Hideable="true" Hidden="false" />
-                                        <ext:NumberColumn Header="Elevation" DataIndex="Elevation" Width="75" Format="0.00" Align="Right"/>
-                                        <ext:NumberColumn Header="Value" DataIndex="DataValue" Width="100" Format=",0.000000" Align="Right" />
-                                        <ext:NumberColumn Header="RawValue" DataIndex="RawValue" Width="100" Hideable="true" Hidden="true" Format=",0.000000" Align="Right" />
-                                        <ext:Column Header="Symbol" DataIndex="UnitOfMeasureSymbol" Width="50" />
-                                        <ext:Column Header="Schema Name" DataIndex="DataSchemaName" Width="100" Hideable="true" Hidden="true" />
-                                        <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy HH:mm" />
-                                        <ext:Column Header="Status" DataIndex="StatusName" Width="150" Hideable="true" />
-                                        <ext:Column Header="Reason" DataIndex="StatusReasonName" Width="150" Hideable="true" />
+                                        <ext:Column Header="Site" DataIndex="Site" Width="100" Hideable="true" />
+                                        <ext:Column Header="Station" DataIndex="Station" Width="100" />
+                                        <ext:Column Header="Instrument" DataIndex="Instrument" Width="100"  Hideable="true"/>
+                                        <ext:Column Header="Sensor" DataIndex="Sensor" Width="100"  Hideable="true"/>
+                                        <ext:Column Header="Phenomenon" DataIndex="Phenomenon" Width="100" />
+                                        <ext:Column Header="Offering" DataIndex="Offering" Width="100" />
+                                        <ext:Column Header="Unit of Measure" DataIndex="Unit" Width="100" Hideable="true" Hidden="false" />
+                                        <ext:Column Header="Symbol" DataIndex="UnitSymbol" Width="50" Hideable="true" Hidden="true" />
+                                        <ext:DateColumn Header="Date" DataIndex="Date" Width="125" Format="dd MMM yyyy HH:mm" />
+                                        <ext:NumberColumn Header="Value" DataIndex="Value" Width="100" Format=",0.000000" Align="Right" />
+                                        <ext:Column Header="Status" DataIndex="Status" Width="150" Hideable="true" />
+                                        <ext:Column Header="Reason" DataIndex="Reason" Width="150" Hideable="true" />
+                                        <ext:NumberColumn Header="Elevation" DataIndex="Elevation" Width="75" Format="0.00" Align="Right" Hideable="true"/>
                                         <ext:Column Header="Comment" DataIndex="Comment" Width="150" Hideable="true" />
-                                        <ext:Column Header="User" DataIndex="UserName" Width="100" Hideable="true" Hidden="true" />
                                     </Columns>
                                 </ColumnModel>
                                 <LoadMask ShowMask="true" />
@@ -206,22 +199,19 @@
                                     <ext:GridFilters runat="server" ID="GridFilters1" ClientIDMode="Static">
                                         <Filters>
                                             <ext:StringFilter DataIndex="Id" />
-                                            <ext:StringFilter DataIndex="SiteName" />
-                                            <ext:StringFilter DataIndex="StationName" />
-                                            <ext:StringFilter DataIndex="InstrumentName" />
-                                            <ext:StringFilter DataIndex="SensorName" />
-                                            <ext:StringFilter DataIndex="PhenomenonName" />
-                                            <ext:StringFilter DataIndex="OfferingName" />
+                                            <ext:StringFilter DataIndex="Site" />
+                                            <ext:StringFilter DataIndex="Station" />
+                                            <ext:StringFilter DataIndex="Phenomenon" />
+                                            <ext:StringFilter DataIndex="Offering" />
+                                            <ext:StringFilter DataIndex="Unit" />
+                                            <ext:StringFilter DataIndex="UnitSymbol" />
+                                            <ext:DateFilter DataIndex="Date" />
+                                            <ext:NumericFilter DataIndex="Value" />
+                                            <ext:StringFilter DataIndex="Instrument" />
+                                            <ext:StringFilter DataIndex="Sensor" />
+                                            <ext:StringFilter DataIndex="Status" />
+                                            <ext:StringFilter DataIndex="Reason" />
                                             <ext:NumericFilter DataIndex="Elevation" />
-                                            <ext:NumericFilter DataIndex="DataValue" />
-                                            <ext:NumericFilter DataIndex="RawValue" />
-                                            <ext:StringFilter DataIndex="UnitOfMeasureUnit" />
-                                            <ext:StringFilter DataIndex="UnitOfMeasureSymbol" />
-                                            <ext:StringFilter DataIndex="DataSchemaName" />
-                                            <ext:DateFilter DataIndex="ValueDate" />
-                                            <ext:StringFilter DataIndex="StatusName" />
-                                            <ext:StringFilter DataIndex="StatusReasonName" />
-                                            <ext:StringFilter DataIndex="UserName" />
                                         </Filters>
                                     </ext:GridFilters>
                                 </Plugins>

@@ -399,8 +399,8 @@ namespace SAEON.Observations.Core
         /// </summary>
         [JsonIgnore, SwaggerIgnore]
         public int HashCode { get; set; }
+        [JsonIgnore, SwaggerIgnore]
         public string FileName => $"{DateTime.Now:yyyyMMddHHmm} {Code.Replace(Path.GetInvalidFileNameChars(), '_')}";
-        public string OldFileName => $"{Code.Replace(Path.GetInvalidFileNameChars(), '_')}"; // @@@ Remove after new style have been populated
         /// <summary>
         /// FileName of the Dataset as Excel file
         /// </summary>
