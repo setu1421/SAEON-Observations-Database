@@ -131,24 +131,24 @@ namespace SAEON.Observations.WebAPI
                             {
                                 // @@ Remove once all SACTN recycled
                                 // Recycle SACTN hourly
-                                doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_H~DEGC"));
+                                doi = await dbContext.DigitalObjectIdentifiers.FirstOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_H~DEGC"));
                                 UpdateDOI();
                                 // Recycle SACTN daily
                                 if (doi is null)
                                 {
-                                    doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_D~DEGC"));
+                                    doi = await dbContext.DigitalObjectIdentifiers.FirstOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_D~DEGC"));
                                     UpdateDOI();
                                 }
                                 // Recycle SACTN monthly
                                 if (doi is null)
                                 {
-                                    doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_M~DEGC"));
+                                    doi = await dbContext.DigitalObjectIdentifiers.FirstOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_M~DEGC"));
                                     UpdateDOI();
                                 }
                                 // Recycle SACTN yearly
                                 if (doi is null)
                                 {
-                                    doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_Y~DEGC"));
+                                    doi = await dbContext.DigitalObjectIdentifiers.FirstOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_Y~DEGC"));
                                     UpdateDOI();
                                 }
                                 // None to recycle
