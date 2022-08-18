@@ -131,10 +131,6 @@ namespace SAEON.Observations.WebAPI
                             doiDataset.ODPMetadataNeedsUpdate = (!ShaEqual(oldSha256, doiDataset.MetadataJsonSha256)) || (!doiDataset.ODPMetadataIsValid ?? true);
                             if (doiDataset.ODPMetadataNeedsUpdate ?? false)
                             {
-                                await AddLineAsync($"{doiDataset.DOIType} {doiDataset.Code}, {doiDataset.Name}");
-                            }
-                            if (doiDataset.ODPMetadataNeedsUpdate ?? false)
-                            {
                                 doiDataset.ODPMetadataIsPublished = false;
                             }
                             doiDataset.MetadataHtml = metaDataset.ToHtml();
