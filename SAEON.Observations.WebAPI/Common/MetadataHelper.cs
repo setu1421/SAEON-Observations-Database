@@ -69,7 +69,7 @@ namespace SAEON.Observations.WebAPI
                         byte[] oldSha256;
                         foreach (var doiDataset in await dbContext.DigitalObjectIdentifiers.Include(i => i.Dataset).Where(i => i.DOIType == DOIType.Dataset).ToListAsync())
                         {
-                            if (doiDataset.Code.StartsWith("SACTN")) continue;
+                            //if (doiDataset.Code.StartsWith("SACTN")) continue;
                             SAEONLogs.Verbose($"{doiDataset.DOIType} {doiDataset.Code}, {doiDataset.Name}");
                             doiDataset.SetUrls();
                             var datasetExpansion = await dbContext.VDatasetsExpansion.FirstOrDefaultAsync(i => i.Id == doiDataset.DatasetId);
