@@ -174,16 +174,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         private DataWizardDataOutput GetData(DataWizardDataInput input, bool includeChart)
         {
-            string GetCode(string stationCode, string phenomenonCode, string offeringCode, string unitCode)
-            {
-                return $"{MetadataHelper.CleanPrefixes(stationCode).Replace("_", string.Empty)}_{phenomenonCode.Replace("_", string.Empty)}_{offeringCode.Replace("_", string.Empty)}_{unitCode.Replace("_", string.Empty)}".Replace(" ", string.Empty);
-            }
-
-            string GetName(string stationName, string phenomenonName, string offeringName, string unitName)
-            {
-                return $"{MetadataHelper.CleanPrefixes(stationName.Replace(", ", "_"))}, {phenomenonName.Replace(", ", "_")}, {offeringName.Replace(", ", "_")}, {unitName.Replace(", ", "_")}";
-            }
-
             var stopwatch = new Stopwatch();
             var stageStopwatch = new Stopwatch();
             stopwatch.Start();
@@ -296,20 +286,19 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             //Chart series
             if (includeChart)
             {
-                foreach (var dataset in datasets)
+                foreach (var group in observations.GroupBy(i => new { i.Station, i.Variable, i.Elevation }).OrderBy(i => i.Key.Station).ThenBy(i => i.Key.Variable).ThenByDescending(i => i.Key.Elevation))
                 {
+                    var dataset = datasets.First(i => i.StationName == group.Key.Station && i.Variable == group.Key.Variable);
                     var series = new ChartSeries
                     {
                         Station = dataset.StationName,
                         Phenomenon = dataset.PhenomenonName,
                         Offering = dataset.OfferingName,
                         Unit = dataset.UnitName,
-                        Name = GetCode(dataset.StationCode, dataset.PhenomenonCode, dataset.OfferingCode, dataset.UnitCode),
-                        Caption = GetName(dataset.StationName, dataset.PhenomenonName, dataset.OfferingName, dataset.UnitName)
+                        Variable = dataset.Variable,
+                        Elevation = group.Key.Elevation,
+                        Caption = GetCaption(dataset.StationName, dataset.PhenomenonName, dataset.OfferingName, dataset.UnitName, group.Key.Elevation)
                     };
-                    //series.Data.AddRange(observations.Where(o => o.Station == dataset.StationName && o.Phenomenon == dataset.PhenomenonName && o.Offering == dataset.OfferingName && o.Unit == dataset.UnitName)
-                    //    .OrderBy(i => i.Date)
-                    //    .Select(i => new ChartData { Date = i.Date, Value = i.Value }));
                     result.ChartSeries.Add(series);
                 }
                 //SAEONLogs.Verbose("ChartSeries: Count: {count} Stage {Stage} Total {Total} Series: {@Series}", result.ChartSeries.Count, stageStopwatch.Elapsed.TimeStr(), stopwatch.Elapsed.TimeStr(), result.ChartSeries);
@@ -319,6 +308,16 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
             SAEONLogs.Verbose("GetData: {Total}", stopwatch.Elapsed.TimeStr());
             return result;
+
+            string GetCaption(string stationName, string phenomenonName, string offeringName, string unitName, double? elevation)
+            {
+                var result = $"{MetadataHelper.CleanPrefixes(stationName.Replace(", ", "_"))}, {phenomenonName.Replace(", ", "_")}, {offeringName.Replace(", ", "_")}, {unitName.Replace(", ", "_")}";
+                if (elevation.HasValue)
+                {
+                    result += $", {elevation:N0}m";
+                }
+                return result;
+            }
         }
 
         [HttpGet("GetData")]

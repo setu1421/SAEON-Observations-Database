@@ -4,7 +4,7 @@
 @model DataWizardModel
 @(Html.EJ().Chart("chartResults")
     .PrimaryXAxis(px => px.ValueType(AxisValueType.Datetime).LabelFormat("dd MMM yyyy"))
-    .PrimaryYAxis(py => py.ValueType(AxisValueType.Double))
+    .PrimaryYAxis(py => py.ValueType(AxisValueType.Double).RangePadding(ChartRangePadding.Round))
     .Series( sr =>
     {
         foreach (var series in Model.DataOutput.ChartSeries)

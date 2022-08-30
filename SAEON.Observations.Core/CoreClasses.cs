@@ -139,14 +139,14 @@ namespace SAEON.Observations.Core
     public class ChartSeries
     {
         public string Station { get; set; }
+        public string Variable { get; set; }
+        public double? Elevation { get; set; }
         public string Phenomenon { get; set; }
         public string Offering { get; set; }
         public string Unit { get; set; }
-        public string Name { get; set; }
         public string Caption { get; set; }
         public List<ChartData> Data { get; } = new List<ChartData>();
     }
-
 
     [SwaggerName("Observation")]
     public class ObservationDTO
@@ -162,7 +162,8 @@ namespace SAEON.Observations.Core
         public string Unit { get; set; }
         public string UnitSymbol { get; set; }
         public string Variable => $"{Phenomenon.Replace(", ", "_")}, {Offering.Replace(", ", "_")}, {Unit.Replace(", ", "_")}";
-        public DateTime Date { get; set; }
+        public DateTimeOffset Date { get; set; }
+        public DateTimeOffset DateUTC => Date.ToUniversalTime();
         public double? Value { get; set; }
         public string Comment { get; set; }
         [SwaggerIgnore, JsonIgnore]

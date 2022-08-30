@@ -1,5 +1,4 @@
 ﻿@using SAEON.Core
-@*@using SAEON.Observations.Core*@
 @using SAEON.Observations.QuerySite.Models
 @model DataWizardModel
 @(Html.EJ().Grid<object>
@@ -10,13 +9,16 @@
     .PageSettings(p => p.PageSize(25))
     .AllowSorting()
     .AllowResizing()
+    //.AllowResizeToFit()
     .MinWidth(1024)
     .AllowFiltering()
     .FilterSettings(filter => { filter.FilterType(FilterType.Excel); })
     .Columns(col =>
     {
+        var ignores = new List<string> { "Id", "UnitSymbol", "Variable", "DateUTC", "Comment", "Status", "Reason", "Latitude", "Longitude"};
         foreach(var column in Model.DataOutput.Data.Columns())
         {
+            if (ignores.Contains(column)) continue;
             //if (column.Name.Contains("_"))
             if (column == "Value")
                 col.Field(column).TextAlign(TextAlign.Right).Format("{0:N6}").HeaderText(column).Add();

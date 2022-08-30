@@ -4,8 +4,8 @@ using SAEON.Logs;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Linq;
 #endif
+using CommunityToolkit.Diagnostics;
 using System;
-using Microsoft.Toolkit.Diagnostics;
 
 namespace SAEON.Observations.Core
 {
