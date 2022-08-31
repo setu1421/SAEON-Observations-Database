@@ -200,9 +200,11 @@ export function UpdateMap() {
                 mapBounds.extend(marker.getPosition() as google.maps.LatLng);
                 if (mapPoint.IsSelected) {
                     marker.setIcon('/Images/green-dot.png');
+                    marker.setZIndex(1);
                 }
                 else {
                     marker.setIcon('/Images/red-dot.png');
+                    marker.setZIndex(-1);
                 }
             }
         })

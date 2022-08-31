@@ -169,9 +169,11 @@ export function UpdateMap() {
             mapBounds.extend(marker.getPosition());
             if (mapPoint.IsSelected) {
                 marker.setIcon('/Images/green-dot.png');
+                marker.setZIndex(1);
             }
             else {
                 marker.setIcon('/Images/red-dot.png');
+                marker.setZIndex(-1);
             }
         }
     })
