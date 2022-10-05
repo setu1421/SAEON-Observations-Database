@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace SAEON.Observations.WebAPI
 {
@@ -164,7 +165,7 @@ namespace SAEON.Observations.WebAPI
                     });
                     services.AddControllers().AddJsonOptions(options =>
                     {
-                        options.JsonSerializerOptions.IgnoreNullValues = true;
+                        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                     });
                     services.AddControllersWithViews();
                     services.AddOData();

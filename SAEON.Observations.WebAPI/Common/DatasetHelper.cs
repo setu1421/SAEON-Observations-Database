@@ -185,12 +185,10 @@ namespace SAEON.Observations.WebAPI
                         var stopwatch = new Stopwatch();
                         stopwatch.Start();
                         await AddLineAsync($"{dataset.Code} {dataset.Name}");
-                        var folder = $"{DateTime.Now:yyyy-MM}";
-                        Directory.CreateDirectory(Path.Combine(config[DatasetsFolderConfigKey], folder));
-                        var fileName = Path.Combine(folder, dataset.FileName);
-                        dataset.CSVFileName = $"{fileName}.csv";
-                        dataset.ExcelFileName = $"{fileName}.xlsx";
-                        dataset.NetCDFFileName = $"{fileName}.nc";
+                        Directory.CreateDirectory(config[DatasetsFolderConfigKey]);
+                        dataset.CSVFileName = $"{dataset.FileName}.csv";
+                        dataset.ExcelFileName = $"{dataset.FileName}.xlsx";
+                        dataset.NetCDFFileName = $"{dataset.FileName}.nc";
                         var observations = await LoadFromDatabaseAsync(dbContext, dataset, false);
                         EnsureCSV();
                         var vDataset = dbContext.VDatasetsExpansion.First(i => i.Id == dataset.Id);

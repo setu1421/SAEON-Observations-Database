@@ -64,7 +64,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="[5.0.2,6.0.0)" />
-    <PackageReference Include="SAEON.AspNetCore.Formatters" Version="1.0.47" />
+    <PackageReference Include="SAEON.AspNetCore.Formatters" Version="1.0.49" />
     <PackageReference Include="SAEON.Observations.Auth" Version="1.0.52" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.4.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.4.0" />
