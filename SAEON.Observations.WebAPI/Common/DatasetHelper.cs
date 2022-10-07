@@ -313,7 +313,7 @@ namespace SAEON.Observations.WebAPI
                         Offering = i.OfferingName,
                         Unit = i.UnitName,
                         UnitSymbol = i.UnitSymbol,
-                        Date = i.ValueDate,
+                        Date = DateTime.SpecifyKind(i.ValueDate, DateTimeKind.Local),
                         Value = i.DataValue,
                         Instrument = i.InstrumentName,
                         Sensor = i.SensorName,
