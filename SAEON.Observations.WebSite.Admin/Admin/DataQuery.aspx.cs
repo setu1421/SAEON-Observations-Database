@@ -1,4 +1,5 @@
 ﻿using Ext.Net;
+using Newtonsoft.Json;
 using SAEON.Core;
 using SAEON.CSV;
 using SAEON.Logs;
@@ -94,11 +95,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 Ext.Net.TreeNode nodeSensor = null;
                 Ext.Net.TreeNode phenomenonNode = null;
                 Ext.Net.TreeNode offeringNode = null;
-                foreach (var dataset in vInventorySensors)
+                foreach (var sensor in vInventorySensors)
                 {
-                    if (organisationName != dataset.OrganisationName)
+                    if (organisationName != sensor.OrganisationName)
                     {
-                        organisationName = dataset.OrganisationName;
+                        organisationName = sensor.OrganisationName;
                         siteName = null;
                         stationName = null;
                         instrumentName = null;
@@ -106,88 +107,88 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         phenomenonName = null;
                         offeringName = null;
                         //SAEONLogs.Verbose("Organisation: {name}", organisationName);
-                        nodeOrganisation = new Ext.Net.TreeNode("Organisation_" + dataset.OrganisationID.ToString(), dataset.OrganisationName, Icon.ResultsetNext);
+                        nodeOrganisation = new Ext.Net.TreeNode("Organisation_" + sensor.OrganisationID.ToString(), sensor.OrganisationName, Icon.ResultsetNext);
                         rootOrganisations.Nodes.Add(nodeOrganisation);
-                        rootSites = new Ext.Net.TreeNode("Sites_" + dataset.OrganisationID.ToString() + "|" + nodeOrganisation.NodeID, "Sites",
+                        rootSites = new Ext.Net.TreeNode("Sites_" + sensor.OrganisationID.ToString() + "|" + nodeOrganisation.NodeID, "Sites",
                             (Icon)new ModuleX("A5C81FF7-69D6-4344-8548-E3EF7F08C4E7").Icon);
                         nodeOrganisation.Nodes.Add(rootSites);
                     }
-                    if (siteName != dataset.SiteName)
+                    if (siteName != sensor.SiteName)
                     {
-                        siteName = dataset.SiteName;
+                        siteName = sensor.SiteName;
                         stationName = null;
                         instrumentName = null;
                         sensorName = null;
                         phenomenonName = null;
                         offeringName = null;
                         //SAEONLogs.Verbose("Site: {name}", siteName);
-                        nodeSite = new Ext.Net.TreeNode("Site_" + dataset.SiteID.ToString() + "|" + nodeOrganisation.NodeID, dataset.SiteName, Icon.ResultsetNext)
+                        nodeSite = new Ext.Net.TreeNode("Site_" + sensor.SiteID.ToString() + "|" + nodeOrganisation.NodeID, sensor.SiteName, Icon.ResultsetNext)
                         {
                             Checked = ThreeStateBool.False
                         };
                         rootSites.Nodes.Add(nodeSite);
-                        rootStations = new Ext.Net.TreeNode("Stations_" + dataset.SiteID.ToString() + "|" + nodeSite.NodeID, "Stations",
+                        rootStations = new Ext.Net.TreeNode("Stations_" + sensor.SiteID.ToString() + "|" + nodeSite.NodeID, "Stations",
                             (Icon)new ModuleX("0585e63d-0f9f-4dda-98ec-7de9397dc614").Icon);
                         nodeSite.Nodes.Add(rootStations);
                     }
-                    if (stationName != dataset.StationName)
+                    if (stationName != sensor.StationName)
                     {
-                        stationName = dataset.StationName;
+                        stationName = sensor.StationName;
                         instrumentName = null;
                         sensorName = null;
                         phenomenonName = null;
                         offeringName = null;
                         //SAEONLogs.Verbose("Station: {name}", stationName);
-                        nodeStation = new Ext.Net.TreeNode("Station_" + dataset.StationID.ToString() + "|" + nodeSite.NodeID, dataset.StationName, Icon.ResultsetNext)
+                        nodeStation = new Ext.Net.TreeNode("Station_" + sensor.StationID.ToString() + "|" + nodeSite.NodeID, sensor.StationName, Icon.ResultsetNext)
                         {
                             Checked = ThreeStateBool.False
                         };
                         rootStations.Nodes.Add(nodeStation);
-                        rootInstruments = new Ext.Net.TreeNode("Instruments_" + dataset.StationID.ToString() + "|" + nodeStation.NodeID, "Instruments",
+                        rootInstruments = new Ext.Net.TreeNode("Instruments_" + sensor.StationID.ToString() + "|" + nodeStation.NodeID, "Instruments",
                             (Icon)new ModuleX("2610866B-8CBF-44E1-9A38-6511B31A8350").Icon);
                         nodeStation.Nodes.Add(rootInstruments);
                     }
-                    if (instrumentName != dataset.InstrumentName)
+                    if (instrumentName != sensor.InstrumentName)
                     {
-                        instrumentName = dataset.InstrumentName;
+                        instrumentName = sensor.InstrumentName;
                         sensorName = null;
                         phenomenonName = null;
                         offeringName = null;
                         //SAEONLogs.Verbose("Instrument: {name}", instrumentName);
-                        nodeInstrument = new Ext.Net.TreeNode("Instrument_" + dataset.InstrumentID.ToString() + "|" + nodeStation.NodeID, dataset.InstrumentName, Icon.ResultsetNext)
+                        nodeInstrument = new Ext.Net.TreeNode("Instrument_" + sensor.InstrumentID.ToString() + "|" + nodeStation.NodeID, sensor.InstrumentName, Icon.ResultsetNext)
                         {
                             Checked = ThreeStateBool.False
                         };
                         rootInstruments.Nodes.Add(nodeInstrument);
-                        rootSensors = new Ext.Net.TreeNode("Sensors_" + dataset.InstrumentID.ToString() + "|" + nodeInstrument.NodeID, "Sensors",
+                        rootSensors = new Ext.Net.TreeNode("Sensors_" + sensor.InstrumentID.ToString() + "|" + nodeInstrument.NodeID, "Sensors",
                             (Icon)new ModuleX("9992ba10-cb0c-4a22-841c-1d695e8293d5").Icon);
                         nodeInstrument.Nodes.Add(rootSensors);
                     }
-                    if (sensorName != dataset.SensorName)
+                    if (sensorName != sensor.SensorName)
                     {
-                        sensorName = dataset.SensorName;
+                        sensorName = sensor.SensorName;
                         phenomenonName = null;
                         offeringName = null;
                         //SAEONLogs.Verbose("Sensor: {name}", sensorName);
-                        nodeSensor = new Ext.Net.TreeNode("Sensor_" + dataset.SensorID.ToString() + "|" + nodeInstrument.NodeID, dataset.SensorName, Icon.ResultsetNext)
+                        nodeSensor = new Ext.Net.TreeNode("Sensor_" + sensor.SensorID.ToString() + "|" + nodeInstrument.NodeID, sensor.SensorName, Icon.ResultsetNext)
                         {
                             Checked = ThreeStateBool.False
                         };
                         nodeInstrument.Nodes.Add(nodeSensor);
                     }
-                    if (phenomenonName != dataset.PhenomenonName)
+                    if (phenomenonName != sensor.PhenomenonName)
                     {
-                        phenomenonName = dataset.PhenomenonName;
+                        phenomenonName = sensor.PhenomenonName;
                         offeringName = null;
                         //SAEONLogs.Verbose("Phenomenon: {name}", phenomenonName);
-                        phenomenonNode = new Ext.Net.TreeNode("Phenomenon_" + dataset.PhenomenonOfferingID.ToString() + "|" + nodeSensor.NodeID, dataset.PhenomenonName, Icon.ResultsetNext);
+                        phenomenonNode = new Ext.Net.TreeNode("Phenomenon_" + sensor.PhenomenonOfferingID.ToString() + "|" + nodeSensor.NodeID, sensor.PhenomenonName, Icon.ResultsetNext);
                         nodeSensor.Nodes.Add(phenomenonNode);
                     }
-                    if (offeringName != dataset.OfferingName)
+                    if (offeringName != sensor.OfferingName)
                     {
-                        offeringName = dataset.OfferingName;
+                        offeringName = sensor.OfferingName;
                         //SAEONLogs.Verbose("Offering: {name}", offeringName);
-                        offeringNode = new Ext.Net.TreeNode("Offering_" + dataset.PhenomenonOfferingID.ToString() + "|" + phenomenonNode.NodeID, dataset.OfferingName, Icon.ResultsetNext)
+                        offeringNode = new Ext.Net.TreeNode("Offering_" + sensor.PhenomenonOfferingID.ToString() + "|" + phenomenonNode.NodeID, sensor.OfferingName, Icon.ResultsetNext)
                         {
                             Leaf = true,
                             Checked = ThreeStateBool.False
@@ -223,6 +224,27 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             var sortCol = sortSplits[0];
             var sortDir = sortSplits[1].ToLowerInvariant() == "desc" ? Ext.Net.SortDirection.DESC : Ext.Net.SortDirection.DESC;
             var filters = GridData.Text;
+            var visCols = VisCols.Value.ToString();
+            var hidCols = HiddenCols.Value.ToString();
+            SAEONLogs.Verbose("VisCols: {VisCols} HidCols: {HidCols}", visCols, hidCols);
+            var ignoreColumns = new List<string> { "Variable", "Latitude", "Longitude" };
+            var hiddenCols = JsonConvert.DeserializeObject<Dictionary<string, string>>(hidCols);
+            foreach (var key in hiddenCols.Keys)
+            {
+                switch (key.ToLowerInvariant())
+                {
+                    case "unit of measure":
+                        ignoreColumns.Add("Unit");
+                        break;
+                    case "symbol":
+                        ignoreColumns.Add("UnitSymbol");
+                        break;
+                    default:
+                        ignoreColumns.Add(key);
+                        break;
+                }
+            }
+            SAEONLogs.Verbose("IgnoreColumns: {IgnoreColumns}", ignoreColumns);
             var observations = LoadData(sortCol, sortDir, filters);
             Response.Clear();
             byte[] bytes = null;
@@ -231,12 +253,12 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 case "csv": //ExportTypes.Csv:
                     Response.ContentType = "text/csv";
                     Response.AddHeader("Content-Disposition", "attachment; filename=Data Query.csv");
-                    bytes = Encoding.UTF8.GetBytes(observations.ToCSV());
+                    bytes = Encoding.UTF8.GetBytes(observations.ToCSV(ignoreColumns));
                     break;
                 case "exc": //ExportTypes.Excel
                     Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                     Response.AddHeader("Content-Disposition", "attachment; filename=Data Query.xlsx");
-                    bytes = observations.ToExcel(true);
+                    bytes = observations.ToExcel(true, ignoreColumns);
                     break;
             }
             Response.AddHeader("Content-Length", bytes.Length.ToString());

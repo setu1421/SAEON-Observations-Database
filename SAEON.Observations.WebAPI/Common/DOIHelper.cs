@@ -129,46 +129,48 @@ namespace SAEON.Observations.WebAPI
                             var doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code == inventoryDataset.Code);
                             if (doi is null)
                             {
-                                // @@ Remove once all SACTN recycled
-                                // Recycle SACTN hourly
-                                doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_H~DEGC"));
-                                UpdateDOI();
-                                // Recycle SACTN daily
-                                if (doi is null)
-                                {
-                                    doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_D~DEGC"));
-                                    UpdateDOI();
-                                }
-                                // Recycle SACTN monthly
-                                if (doi is null)
-                                {
-                                    doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_M~DEGC"));
-                                    UpdateDOI();
-                                }
-                                // Recycle SACTN yearly
-                                if (doi is null)
-                                {
-                                    doi = await dbContext.DigitalObjectIdentifiers.SingleOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_Y~DEGC"));
-                                    UpdateDOI();
-                                }
-                                // None to recycle
-                                if (doi is null)
-                                    doi = await AddDOI(DOIType.Dataset, inventoryDataset.Code, inventoryDataset.Name);
+                                doi = await AddDOI(DOIType.Dataset, inventoryDataset.Code, inventoryDataset.Name);
                                 await dbContext.SaveChangesAsync();
+                                //// @@ Remove once all SACTN recycled
+                                //// Recycle SACTN hourly
+                                //doi = await dbContext.DigitalObjectIdentifiers.FirstOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_H~DEGC"));
+                                //UpdateDOI();
+                                //// Recycle SACTN daily
+                                //if (doi is null)
+                                //{
+                                //    doi = await dbContext.DigitalObjectIdentifiers.FirstOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_D~DEGC"));
+                                //    UpdateDOI();
+                                //}
+                                //// Recycle SACTN monthly
+                                //if (doi is null)
+                                //{
+                                //    doi = await dbContext.DigitalObjectIdentifiers.FirstOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_M~DEGC"));
+                                //    UpdateDOI();
+                                //}
+                                //// Recycle SACTN yearly
+                                //if (doi is null)
+                                //{
+                                //    doi = await dbContext.DigitalObjectIdentifiers.FirstOrDefaultAsync(i => i.DOIType == DOIType.Dataset && i.Code.StartsWith("SACTN ") && i.Code.EndsWith("SAEON~WTMP~AVE_Y~DEGC"));
+                                //    UpdateDOI();
+                                //}
+                                //// None to recycle
+                                //if (doi is null)
+                                //    doi = await AddDOI(DOIType.Dataset, inventoryDataset.Code, inventoryDataset.Name);
+                                //await dbContext.SaveChangesAsync();
                             }
                             return doi;
 
-                            void UpdateDOI()
-                            {
-                                if (doi is not null)
-                                {
-                                    doi.Code = inventoryDataset.Code;
-                                    doi.Name = inventoryDataset.Name;
-                                    doi.ODPMetadataNeedsUpdate = true;
-                                    doi.ODPMetadataIsValid = false;
-                                    doi.ODPMetadataIsPublished = false;
-                                }
-                            }
+                            //void UpdateDOI()
+                            //{
+                            //    if (doi is not null)
+                            //    {
+                            //        doi.Code = inventoryDataset.Code;
+                            //        doi.Name = inventoryDataset.Name;
+                            //        doi.ODPMetadataNeedsUpdate = true;
+                            //        doi.ODPMetadataIsValid = false;
+                            //        doi.ODPMetadataIsPublished = false;
+                            //    }
+                            //}
                         }
 
                         foreach (var inventoryDataset in await dbContext.VInventoryDatasets

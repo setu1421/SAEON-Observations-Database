@@ -71,22 +71,21 @@ namespace SAEON.Observations.WebAPI
                     {
                         if ((ElevationMinimum < 0) && (ElevationMaximum < 0))
                         {
-                            elevation += $"between {-ElevationMinimum:f2}m and {-ElevationMaximum:f2}m below sea level ";
+                            elevation += $"between {-ElevationMinimum:f2}m and {-ElevationMaximum:f2}m below sea level";
                         }
                         else if ((ElevationMinimum == 0) && (ElevationMaximum == 0))
                         {
-                            elevation += $"at sea level ";
+                            elevation += $"at sea level";
                         }
                         else if ((ElevationMinimum > 0) && (ElevationMaximum > 0))
                         {
-                            elevation += $"between {ElevationMinimum:f2}m and {ElevationMaximum:f2}m above sea level ";
+                            elevation += $"between {ElevationMinimum:f2}m and {ElevationMaximum:f2}m above sea level";
                         }
                         else
                         {
-                            elevation += $"between {-ElevationMinimum:f2}m below sea level and {ElevationMaximum:f2}m above sea level ";
+                            elevation += $"between {-ElevationMinimum:f2}m below sea level and {ElevationMaximum:f2}m above sea level";
                         }
                     }
-                    elevation += " ";
                 }
                 return elevation;
             }
@@ -100,22 +99,22 @@ namespace SAEON.Observations.WebAPI
                     {
                         if (isTitle)
                         {
-                            dates += $" on {StartDate.Value:yyyy-MM-dd}";
+                            dates += $"on {StartDate.Value:yyyy-MM-dd}";
                         }
                         else
                         {
-                            dates += $" on {StartDate.Value.ToJsonDate()}";
+                            dates += $"on {StartDate.Value.ToJsonDate()}";
                         }
                     }
                     else
                     {
                         if (isTitle)
                         {
-                            dates += $" from {StartDate.Value:yyyy-MM-dd} to {EndDate.Value:yyyy-MM-dd}";
+                            dates += $"from {StartDate.Value:yyyy-MM-dd} to {EndDate.Value:yyyy-MM-dd}";
                         }
                         else
                         {
-                            dates += $" from {StartDate.Value.ToJsonDate()} to {EndDate.Value.ToJsonDate()}";
+                            dates += $"from {StartDate.Value.ToJsonDate()} to {EndDate.Value.ToJsonDate()}";
                         }
                     }
                 }
@@ -129,11 +128,11 @@ namespace SAEON.Observations.WebAPI
                 {
                     if ((LatitudeNorth == LatitudeSouth) && (LongitudeWest == LongitudeEast))
                     {
-                        boundingBox += $" at {LatitudeNorth:f5},{LongitudeWest:f5} (+N-S,-W+E)";
+                        boundingBox += $"at {LatitudeNorth:f5},{LongitudeWest:f5} (+N-S,-W+E)";
                     }
                     else
                     {
-                        boundingBox += $" in area {LatitudeNorth:f5},{LongitudeWest:f5} (N,W) {LatitudeSouth:f5},{LongitudeEast:f5} (S,E) (+N-S,-W+E)";
+                        boundingBox += $"in area {LatitudeNorth:f5},{LongitudeWest:f5} (N,W) {LatitudeSouth:f5},{LongitudeEast:f5} (S,E) (+N-S,-W+E)";
                     }
                 }
                 return boundingBox;
@@ -155,15 +154,13 @@ namespace SAEON.Observations.WebAPI
             {
                 Title = $"{variable} for {station}";
             }
-            //Title = CleanText($"{Title} {Elevation()}{Dates(true)} in the SAEON Observations Database");
-            Title = CleanText($"{Title} {Elevation()}{Dates(true)}");
+            Title = CleanText($"{Title} {Elevation()} {Dates(true)}");
             // Description
             if (string.IsNullOrWhiteSpace(Description))
             {
                 Description = $"{variable} for {station}";
             }
-            //Description = CleanText($"{Description} {Elevation()}{Dates(false)}{BoundingBox()} in the SAEON Observations Database");
-            Description = CleanText($"{Description} {Elevation()}{Dates(false)}{BoundingBox()}");
+            Description = CleanText($"{Description} {Elevation()} {Dates(false)} {BoundingBox()}");
             // Citation
             if (string.IsNullOrEmpty(Citation) || Citation == DOIHelper.BlankText) Citation = GenerateCitation();
             if (string.IsNullOrEmpty(CitationHtml) || CitationHtml == DOIHelper.BlankHtml) CitationHtml = GenerateCitationHtml();

@@ -2,11 +2,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Hubs;
 using SAEON.OpenXML;
 using System;
+using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,7 +26,8 @@ namespace SAEON.Observations.WebAPI
                 {
                     if (dbContext is null) throw new System.ArgumentNullException(nameof(dbContext));
                     if (fileData is null) throw new System.ArgumentNullException(nameof(fileData));
-
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
                     var sb = new StringBuilder();
                     await AddLineAsync($"Importing setup from {fileData.FileName}");
                     using (var stream = fileData.OpenReadStream())
@@ -518,7 +522,7 @@ namespace SAEON.Observations.WebAPI
                             }
                         }
                     }
-                    await AddLineAsync("Done");
+                    await AddLineAsync($"Done in {stopwatch.Elapsed.TimeStr()}");
                     return sb.ToString();
 
                     async Task AddLineAsync(string line)
@@ -532,8 +536,12 @@ namespace SAEON.Observations.WebAPI
                     {
                         try
                         {
+                            if (array[row, col] is double d)
+                            {
+                                return DateTime.FromOADate(d);
+                            }
                             string result = array[row, col].ToString();
-                            return string.IsNullOrWhiteSpace(result) ? default(DateTime?) : DateTime.FromOADate(double.Parse(result));
+                            return string.IsNullOrWhiteSpace(result) ? default(DateTime?) : DateTime.FromOADate(double.Parse(result, CultureInfo.InvariantCulture));
                         }
                         catch (Exception ex)
                         {
@@ -542,12 +550,16 @@ namespace SAEON.Observations.WebAPI
                         }
                     }
 
-                    Double? GetDouble(object[,] array, int row, int col)
+                    double? GetDouble(object[,] array, int row, int col)
                     {
                         try
                         {
+                            if (array[row, col] is double d)
+                            {
+                                return d;
+                            }
                             string result = array[row, col].ToString();
-                            return string.IsNullOrWhiteSpace(result) ? default(double?) : double.Parse(result);
+                            return string.IsNullOrWhiteSpace(result) ? default(double?) : double.Parse(result, CultureInfo.InvariantCulture);
                         }
                         catch (Exception ex)
                         {
@@ -559,7 +571,7 @@ namespace SAEON.Observations.WebAPI
                         }
                     }
 
-                    Double? GetLatitude(object[,] array, int row, int col)
+                    double? GetLatitude(object[,] array, int row, int col)
                     {
                         var latitude = GetDouble(array, row, col);
                         if (latitude.HasValue)
@@ -569,7 +581,7 @@ namespace SAEON.Observations.WebAPI
                         return latitude;
                     }
 
-                    Double? GetLongitude(object[,] array, int row, int col)
+                    double? GetLongitude(object[,] array, int row, int col)
                     {
                         var longitude = GetDouble(array, row, col);
                         if (longitude.HasValue)

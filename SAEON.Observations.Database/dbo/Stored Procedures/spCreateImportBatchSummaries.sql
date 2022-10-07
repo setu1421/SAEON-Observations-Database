@@ -46,9 +46,22 @@ BEGIN
         group by
           ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID
 	    COMMIT TRANSACTION 
+ 		Print 'Committed transaction'
     END TRY
     BEGIN CATCH
+        --SELECT
+        --    ERROR_NUMBER() AS ErrorNumber,
+        --    ERROR_STATE() AS ErrorState,
+        --    ERROR_SEVERITY() AS ErrorSeverity,
+        --    ERROR_PROCEDURE() AS ErrorProcedure,
+        --    ERROR_LINE() AS ErrorLine,
+        --    ERROR_MESSAGE() AS ErrorMessage;
+        Print 'Error Number: '+Cast(Error_Number() as VarChar(100))+' State: '+Cast(Error_State()as VarChar(100))+
+            ' Severity: '+Cast(Error_Severity() as VarChar(100))+' Procedure: '+Coalesce(Error_Procedure(),'None')+
+            ' Line: '+Cast(Error_Line() as VarChar(100))+' Message: '+Error_Message()
         ROLLBACK TRANSACTION;
+	    Print 'Rolled back transaction';
+        --Throw;
     END CATCH
     Select top(1) * from ImportBatchSummary;
 END

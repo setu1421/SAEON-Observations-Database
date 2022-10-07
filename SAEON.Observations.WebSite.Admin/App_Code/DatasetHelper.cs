@@ -129,7 +129,7 @@ public static class DatasetHelper
                         Offering = observation.OfferingName,
                         Unit = observation.UnitOfMeasureUnit,
                         UnitSymbol = observation.UnitOfMeasureSymbol,
-                        Date = observation.ValueDate,
+                        Date = DateTime.SpecifyKind(observation.ValueDate, DateTimeKind.Local),
                         Value = observation.DataValue,
                         Instrument = observation.InstrumentName,
                         Sensor = observation.SensorName,

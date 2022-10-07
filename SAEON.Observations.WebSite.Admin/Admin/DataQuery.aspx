@@ -38,11 +38,12 @@
                 GridData.setValue(Ext.encode(GridFilters1.buildQuery(GridFilters1.getFilterData())));
                 var viscolsNew = makenewJsonForExport(ObservationsGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
                 VisCols.setValue(viscolsNew);
+                var hidCols = makenewJsonForExport(ObservationsGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return this.isHidden(colIndex); }))
+                HiddenCols.setValue(hidCols);
                 FormatType.setValue(format);
                 SortInfo.setValue(GridFilters1.store.sortInfo.field + "|" + GridFilters1.store.sortInfo.direction);
                 ObservationsGrid.submitData(false);
             }
-
         };
 
     </script>
@@ -50,6 +51,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="HiddenCols" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
     <ext:Viewport ID="ViewPort1" runat="server">

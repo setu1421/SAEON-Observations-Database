@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CommunityToolkit.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Toolkit.Diagnostics;
 using SAEON.AspNet.Auth;
 using SAEON.Core;
 using SAEON.CSV;
@@ -185,12 +185,10 @@ namespace SAEON.Observations.WebAPI
                         var stopwatch = new Stopwatch();
                         stopwatch.Start();
                         await AddLineAsync($"{dataset.Code} {dataset.Name}");
-                        var folder = $"{DateTime.Now:yyyy-MM}";
-                        Directory.CreateDirectory(Path.Combine(config[DatasetsFolderConfigKey], folder));
-                        var fileName = Path.Combine(folder, dataset.FileName);
-                        dataset.CSVFileName = $"{fileName}.csv";
-                        dataset.ExcelFileName = $"{fileName}.xlsx";
-                        dataset.NetCDFFileName = $"{fileName}.nc";
+                        Directory.CreateDirectory(config[DatasetsFolderConfigKey]);
+                        dataset.CSVFileName = $"{dataset.FileName}.csv";
+                        dataset.ExcelFileName = $"{dataset.FileName}.xlsx";
+                        dataset.NetCDFFileName = $"{dataset.FileName}.nc";
                         var observations = await LoadFromDatabaseAsync(dbContext, dataset, false);
                         EnsureCSV();
                         var vDataset = dbContext.VDatasetsExpansion.First(i => i.Id == dataset.Id);
@@ -315,7 +313,7 @@ namespace SAEON.Observations.WebAPI
                         Offering = i.OfferingName,
                         Unit = i.UnitName,
                         UnitSymbol = i.UnitSymbol,
-                        Date = i.ValueDate,
+                        Date = DateTime.SpecifyKind(i.ValueDate, DateTimeKind.Local),
                         Value = i.DataValue,
                         Instrument = i.InstrumentName,
                         Sensor = i.SensorName,
