@@ -562,9 +562,9 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 foreach (var series in output.ChartSeries)
                 {
-                    series.Data.AddRange(output.Data.Where(o => o.Station == series.Station && o.Phenomenon == series.Phenomenon && o.Offering == series.Offering && o.Unit == series.Unit)
+                    series.Data.AddRange(output.Data.Where(o => o.Station == series.Station && o.Phenomenon == series.Phenomenon && o.Offering == series.Offering && o.Unit == series.Unit && o.Elevation == series.Elevation)
                         .OrderBy(i => i.Date)
-                        .Select(i => new ChartData { Date = i.Date, Value = i.Value }));
+                        .Select(i => new ChartData { Date = i.Date.DateTime, Value = i.Value }));
                 }
             }
         }

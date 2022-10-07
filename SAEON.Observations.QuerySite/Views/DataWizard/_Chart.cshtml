@@ -1,10 +1,9 @@
 ﻿@using SAEON.Observations.QuerySite.Models
 @using Syncfusion.JavaScript.DataVisualization
-@using System.Data
 @model DataWizardModel
 @(Html.EJ().Chart("chartResults")
     .PrimaryXAxis(px => px.ValueType(AxisValueType.Datetime).LabelFormat("dd MMM yyyy"))
-    .PrimaryYAxis(py => py.ValueType(AxisValueType.Double))
+    .PrimaryYAxis(py => py.ValueType(AxisValueType.Double).RangePadding(ChartRangePadding.Round))
     .Series( sr =>
     {
         foreach (var series in Model.DataOutput.ChartSeries)
@@ -18,7 +17,7 @@
         }
     })
     .Size(sz => sz.Width("1600").Height("1200"))
-    .Legend(lgn => lgn.Visible(true))
+    .Legend(lgn => lgn.Visible(true).ColumnCount(1).Alignment(Syncfusion.JavaScript.DataVisualization.TextAlignment.Center))
     .EnableCanvasRendering(true)
     .IsResponsive(true)
     .Zooming(zm => zm
